@@ -1,0 +1,203 @@
+@import "tailwindcss";
+
+:root {
+  --background: var(--color-secondary-50);
+  --foreground: #171717;
+
+  /* Primary Gold / Amber Palette from mount-ijen-tour */
+  --primary-50: #FFFBEA;
+  --primary-100: #FFF4C5;
+  --primary-200: #FFE886;
+  --primary-300: #FFD647;
+  --primary-400: #FFC21D;
+  --primary-500: #FBA102;
+  --primary-600: #E07A00;
+  --primary-700: #BA5403;
+  --primary-800: #974009;
+  --primary-900: #7C350B;
+  --primary-950: #471A01;
+
+  /* Secondary Crater Teal Palette from mount-ijen-tour */
+  --secondary-50: #F1FAFA;
+  --secondary-100: #DCF1F1;
+  --secondary-200: #BEE2E3;
+  --secondary-300: #91CCCF;
+  --secondary-400: #5CAEB4;
+  --secondary-500: #419299;
+  --secondary-600: #387882;
+  --secondary-700: #33636B;
+  --secondary-800: #30535A;
+  --secondary-900: #2C464D;
+  --secondary-950: #1F383F;
+
+  /* Accent & Fire helpers for admin components */
+  --accent-400: #FFC21D;
+  --fire-400: #FBA102;
+  --glow: #FFD647;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-plus-jakarta-sans);
+
+  /* Primary Colors */
+  --color-primary-50: var(--primary-50);
+  --color-primary-100: var(--primary-100);
+  --color-primary-200: var(--primary-200);
+  --color-primary-300: var(--primary-300);
+  --color-primary-400: var(--primary-400);
+  --color-primary-500: var(--primary-500);
+  --color-primary-600: var(--primary-600);
+  --color-primary-700: var(--primary-700);
+  --color-primary-800: var(--primary-800);
+  --color-primary-900: var(--primary-900);
+  --color-primary-950: var(--primary-950);
+
+  /* Secondary Colors */
+  --color-secondary-50: var(--secondary-50);
+  --color-secondary-100: var(--secondary-100);
+  --color-secondary-200: var(--secondary-200);
+  --color-secondary-300: var(--secondary-300);
+  --color-secondary-400: var(--secondary-400);
+  --color-secondary-500: var(--secondary-500);
+  --color-secondary-600: var(--secondary-600);
+  --color-secondary-700: var(--secondary-700);
+  --color-secondary-800: var(--secondary-800);
+  --color-secondary-900: var(--secondary-900);
+  --color-secondary-950: var(--secondary-950);
+
+  /* Accent / Glow Tokens */
+  --color-accent-400: #FFC21D;
+  --color-fire-500: #FBA102;
+  --color-glow: #FFD647;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+.site-navbar {
+  background-color: rgb(255 255 255 / 0.8);
+  color: #1f383f;
+}
+
+.dark .site-navbar {
+  background-color: rgb(8 20 23 / 0.92) !important;
+  border-color: #30535a !important;
+  color: #f1fafa;
+}
+
+.dark .site-navbar a,
+.dark .site-navbar button {
+  color: #f1fafa;
+}
+
+.dark .site-navbar a:hover,
+.dark .site-navbar button:hover {
+  color: #ffc21d;
+}
+
+/* Device-aware dark theme overrides for the shared Tailwind color tokens. */
+.dark {
+  --background: #102329;
+  --foreground: #f1fafa;
+}
+
+.dark body,
+.dark .bg-secondary-50 {
+  background-color: #102329 !important;
+  color: #f1fafa;
+}
+
+.dark .bg-white {
+  background-color: #18343a !important;
+}
+
+.dark [class*="bg-white/"] {
+  background-color: rgb(24 52 58 / 0.9) !important;
+}
+
+.dark [class*="border-white/"] {
+  border-color: rgb(145 190 195 / 0.3) !important;
+}
+
+.dark .bg-secondary-100 {
+  background-color: #24464d !important;
+}
+
+.dark .bg-secondary-900 {
+  background-color: #0c1c21 !important;
+}
+
+.dark .bg-secondary-950 {
+  background-color: #081417 !important;
+}
+
+.dark .text-secondary-950 {
+  color: #f1fafa !important;
+}
+
+.dark .text-secondary-900,
+.dark .text-secondary-800,
+.dark .text-secondary-700,
+.dark .text-secondary-600 {
+  color: #b9d7da !important;
+}
+
+.dark .text-secondary-500,
+.dark .text-secondary-400 {
+  color: #8fb9be !important;
+}
+
+.dark .border-secondary-100,
+.dark .border-secondary-200 {
+  border-color: #30535a !important;
+}
+
+.dark .border-secondary-300 {
+  border-color: #387882 !important;
+}
+
+.dark .bg-primary-50 {
+  background-color: #33280f !important;
+}
+
+.dark .bg-primary-100 {
+  background-color: #4b3a12 !important;
+}
+
+.dark .packages-gradient {
+  background-image: linear-gradient(to right, #102329, rgb(16 35 41 / 0.5), transparent) !important;
+}
+
+.dark .experience-gradient {
+  background-image: linear-gradient(to left, transparent, rgb(16 35 41 / 0.45), #102329) !important;
+}
+
+.dark .packages-heading,
+.dark .packages-description {
+  color: #f1fafa !important;
+}
+
+.dark .articles-page .text-gray-900,
+.dark .articles-page .text-gray-800 {
+  color: #f1fafa !important;
+}
+
+.dark .articles-page .text-gray-600,
+.dark .articles-page .text-gray-500,
+.dark .articles-page .text-gray-400 {
+  color: #b9d7da !important;
+}
+
+.dark .articles-page .border-gray-100,
+.dark .articles-page .border-gray-200 {
+  border-color: #30535a !important;
+}

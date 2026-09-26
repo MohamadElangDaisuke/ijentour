@@ -1,0 +1,224 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  emailVerified DateTime?
+  passwordHash  String?
+  phone         String?
+  nationality   String?
+  avatarUrl     String?
+  role          String    @default("CUSTOMER") // "CUSTOMER", "CUSTOMER_PRO", "MITRA", "ADMIN"
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  bookings Booking[]
+  reviews  Review[]
+  posts    BlogPost[]
+
+  @@map("users")
+}
+
+model TripPackage {
+  id                   String   @id @default(cuid())
+  title                String
+  slug                 String   @unique
+  category             String   @default("regular") // "regular", "private", "midnight"
+  description          String
+  shortDescription     String?
+  duration             String   @default("1 Hari")
+  durationDays         Int      @default(1)
+  durationNights       Int      @default(0)
+  price                String   @default("Rp 750.000")
+  basePrice            Float    @default(750000)
+  groupDiscountPercent Float    @default(10)
+  minParticipants      Int      @default(1)
+  maxParticipants      Int      @default(15)
+  difficulty           String   @default("Sedang (Trekking 3 Km)")
+  altitude             String?  @default("2.769 mdpl")
+  meetingPoint         String?  @default("Banyuwangi")
+  departureTime        String?  @default("00:00 WIB")
+  badge                String?  @default("Best Seller")
+  rating               Float    @default(5.0)
+  savedCount           String?  @default("1.500K")
+  isTrending           Boolean  @default(true)
+  isRecent             Boolean  @default(true)
+  isFeatured           Boolean  @default(true)
+  isActive             Boolean  @default(true)
+  coverImage           String
+  galleryImages        String   @default("[]") // JSON string array of URLs
+  highlights           String   @default("[]") // JSON string array
+  includedItems        String   @default("[]") // JSON string array
+  excludedItems        String   @default("[]") // JSON string array
+  packingList          String   @default("[]") // JSON string array of objects/items
+  faqs                 String   @default("[]") // JSON string array of {q, a}
+  itineraries          String   @default("[]") // JSON string array of {day, title, desc}
+  sortOrder            Int      @default(0)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  bookings  Booking[]
+  reviews   Review[]
+  schedules TripSchedule[]
+
+  @@map("trip_packages")
+}
+
+model TripSchedule {
+  id             String   @id @default(cuid())
+  tripPackageId  String
+  departureDate  String
+  availableSlots Int      @default(15)
+  bookedSlots    Int      @default(0)
+  status         String   @default("OPEN")
+  createdAt      DateTime @default(now())
+
+  tripPackage TripPackage @relation(fields: [tripPackageId], references: [id], onDelete: Cascade)
+
+  @@map("trip_schedules")
+}
+
+model Booking {
+  id              String    @id @default(cuid())
+  bookingCode     String    @unique // e.g. IJN-20260925-A1B2
+  userId          String?
+  customerName    String
+  customerEmail   String?
+  customerPhone   String?
+  whatsappNumber  String
+  tripPackageId   String?
+  packageName     String
+  departureDate   String
+  numParticipants Int       @default(1)
+  basePrice       Float     @default(0)
+  addons          String    @default("[]") // JSON string
+  addonTotal      Float     @default(0)
+  discountAmount  Float     @default(0)
+  totalPrice      Float
+  specialRequests String?
+  pickupLocation  String?
+  status          String    @default("PENDING") // PENDING, CONFIRMED, COMPLETED, CANCELLED
+  paymentStatus   String    @default("PENDING") // PENDING, PAID, REFUNDED
+  confirmedAt     DateTime?
+  cancelledAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  user        User?        @relation(fields: [userId], references: [id])
+  tripPackage TripPackage? @relation(fields: [tripPackageId], references: [id])
+
+  @@map("bookings")
+}
+
+model GalleryItem {
+  id           String   @id @default(cuid())
+  title        String
+  image        String
+  thumbnailUrl String?
+  caption      String?
+  category     String   @default("crater")
+  isFeatured   Boolean  @default(true)
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  @@map("gallery_items")
+}
+
+model Destination {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String
+  image       String
+  tag         String?
+  isFeatured  Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@map("destinations")
+}
+
+model BlogPost {
+  id         String   @id @default(cuid())
+  title      String
+  slug       String   @unique
+  category   String   @default("Panduan")
+  excerpt    String
+  content    String
+  image      String
+  date       String
+  readTime   String   @default("5 Menit Baca")
+  author     String   @default("Tim Ekspedisi Ijen")
+  isFeatured Boolean  @default(false)
+  authorId   String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  authorUser User? @relation(fields: [authorId], references: [id])
+
+  @@map("blog_posts")
+}
+
+model Contact {
+  id         String   @id @default(cuid())
+  name       String
+  email      String
+  phone      String?
+  subject    String
+  message    String
+  status     String   @default("UNREAD") // UNREAD, READ, REPLIED
+  adminNotes String?
+  createdAt  DateTime @default(now())
+
+  @@map("contacts")
+}
+
+model Notification {
+  id          String   @id @default(cuid())
+  type        String   @default("booking") // "booking", "contact", "user", "system"
+  title       String
+  description String
+  link        String?
+  unread      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  @@map("notifications")
+}
+
+model Faq {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String
+  category  String   @default("general")
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@map("faqs")
+}
+
+model Review {
+  id            String   @id @default(cuid())
+  userId        String?
+  tripPackageId String?
+  authorName    String
+  rating        Int      @default(5)
+  comment       String
+  photoUrls     String   @default("[]")
+  isApproved    Boolean  @default(true)
+  createdAt     DateTime @default(now())
+
+  user        User?        @relation(fields: [userId], references: [id])
+  tripPackage TripPackage? @relation(fields: [tripPackageId], references: [id])
+
+  @@map("reviews")
+}

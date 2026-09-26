@@ -107,7 +107,7 @@ export default function Sidebar({ isOpen, onClose, navigation, currentUser }: Si
                   onClick={onClose}
                   className="block w-full rounded-full bg-primary-500 px-4 py-3 text-center text-sm font-extrabold text-secondary-950 shadow-lg shadow-primary-500/20 transition-all duration-150 hover:bg-primary-400"
                 >
-                  Book a trip
+                  Pesan Tur Sekarang
                 </Link>
                 {currentUser ? (
                   <Link

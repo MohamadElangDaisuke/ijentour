@@ -42,11 +42,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [notifications, setNotifications] = useState<any[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
 
-  // If on admin login page, don't show admin chrome
-  if (pathname === "/admin/login") {
-    return <>{children}</>;
-  }
-
   // Fetch notifications
   const loadNotifications = () => {
     fetch("/api/notifications")
@@ -61,10 +56,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   useEffect(() => {
+    if (pathname === "/admin/login") return;
     loadNotifications();
     const interval = setInterval(loadNotifications, 15000);
     return () => clearInterval(interval);
-  }, []);
+  }, [pathname]);
+
+  // If on admin login page, don't show admin chrome
+  if (pathname === "/admin/login") {
+    return <>{children}</>;
+  }
 
   const handleLogout = async () => {
     try {

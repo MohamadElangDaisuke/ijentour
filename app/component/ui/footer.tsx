@@ -33,7 +33,10 @@ export default function Footer() {
             <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-secondary-950">Tautan Cepat</h4>
             <ul className="space-y-2.5 text-sm">
               <li><Link href="/" className="hover:text-primary-400 transition-colors">Beranda</Link></li>
-              <li><Link href="/packages" className="hover:text-primary-400 transition-colors">Daftar Paket</Link></li>
+              <li><Link href="/packages" className="hover:text-primary-400 transition-colors">Paket Wisata</Link></li>
+              <li><Link href="/destinations" className="hover:text-primary-400 transition-colors">Destinasi</Link></li>
+              <li><Link href="/gallery" className="hover:text-primary-400 transition-colors">Galeri Wisata</Link></li>
+              <li><Link href="/booking" className="hover:text-primary-400 transition-colors">Cek Status Booking</Link></li>
               <li><Link href="/about" className="hover:text-primary-400 transition-colors">Tentang Kami</Link></li>
               <li><Link href="/blog" className="hover:text-primary-400 transition-colors">Blog</Link></li>
               <li><Link href="/contact" className="hover:text-primary-400 transition-colors">Kontak</Link></li>

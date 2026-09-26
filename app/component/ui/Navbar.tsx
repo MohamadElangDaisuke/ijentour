@@ -9,13 +9,13 @@ import Sidebar from './sidebar'
 import ThemeToggle from './themeToggle'
 
 const navigation = [
-  { name: 'Home', href: '/' },
-  { name: 'Packages', href: '/packages' },
+  { name: 'Beranda', href: '/' },
+  { name: 'Paket Wisata', href: '/packages' },
   { name: 'Destinasi', href: '/destinations' },
-  { name: 'Gallery', href: '/gallery' },
-  { name: 'About', href: '/about' },
+  { name: 'Galeri', href: '/gallery' },
+  { name: 'Tentang Kami', href: '/about' },
   { name: 'Blog', href: '/blog' },
-  { name: 'Contact', href: '/contact' },
+  { name: 'Kontak', href: '/contact' },
 ]
 
 export default function Navbar() {
@@ -196,7 +196,7 @@ export default function Navbar() {
                   href="/packages"
                   className="rounded-full border border-secondary-300 px-5 py-2 text-xs font-bold text-secondary-950 shadow-xs hover:bg-primary-500 hover:border-primary-500 transition-all duration-300 hover:scale-105 active:scale-95"
                 >
-                  Book a trip
+                  Pesan Tur
                 </Link>
               </div>
             </div>

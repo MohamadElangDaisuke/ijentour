@@ -6,26 +6,23 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("🌱 Starting database seed...");
 
-  // Clean existing tables
-  await prisma.review.deleteMany({});
-  await prisma.booking.deleteMany({});
-  await prisma.tripSchedule.deleteMany({});
-  await prisma.tripPackage.deleteMany({});
-  await prisma.destination.deleteMany({});
-  await prisma.galleryItem.deleteMany({});
-  await prisma.blogPost.deleteMany({});
-  await prisma.contact.deleteMany({});
-  await prisma.notification.deleteMany({});
-  await prisma.faq.deleteMany({});
-  await prisma.user.deleteMany({});
-
-  // 1. Create Users for all roles: ADMIN, CUSTOMER, CUSTOMER_PRO, MITRA
+  // 1. Create / Upsert Users for all roles: ADMIN, CUSTOMER, CUSTOMER_PRO, MITRA
+  // Idempotent: Can be run multiple times safely without duplicate errors
   const adminPass = await bcrypt.hash("admin123", 10);
   const custPass = await bcrypt.hash("customer123", 10);
   const mitraPass = await bcrypt.hash("mitra123", 10);
 
-  const admin = await prisma.user.create({
-    data: {
+  const admin = await prisma.user.upsert({
+    where: { email: "admin@ijentour.com" },
+    update: {
+      name: "Ijen Tour Administrator",
+      passwordHash: adminPass,
+      phone: "6281234567890",
+      role: "ADMIN",
+      nationality: "Indonesia",
+      isActive: true,
+    },
+    create: {
       name: "Ijen Tour Administrator",
       email: "admin@ijentour.com",
       passwordHash: adminPass,
@@ -36,8 +33,17 @@ async function main() {
     },
   });
 
-  const customerPro = await prisma.user.create({
-    data: {
+  const customerPro = await prisma.user.upsert({
+    where: { email: "pro@ijentour.com" },
+    update: {
+      name: "Budi Santoso (Pro Member)",
+      passwordHash: custPass,
+      phone: "6281234567801",
+      role: "CUSTOMER_PRO",
+      nationality: "Indonesia",
+      isActive: true,
+    },
+    create: {
       name: "Budi Santoso (Pro Member)",
       email: "pro@ijentour.com",
       passwordHash: custPass,
@@ -48,8 +54,17 @@ async function main() {
     },
   });
 
-  const customer = await prisma.user.create({
-    data: {
+  const customer = await prisma.user.upsert({
+    where: { email: "john@example.com" },
+    update: {
+      name: "John Traveler",
+      passwordHash: custPass,
+      phone: "6281234567802",
+      role: "CUSTOMER",
+      nationality: "United States",
+      isActive: true,
+    },
+    create: {
       name: "John Traveler",
       email: "john@example.com",
       passwordHash: custPass,
@@ -60,8 +75,17 @@ async function main() {
     },
   });
 
-  const mitra = await prisma.user.create({
-    data: {
+  const mitra = await prisma.user.upsert({
+    where: { email: "mitra@ijentour.com" },
+    update: {
+      name: "Pak Slamet (Local Guide Mitra)",
+      passwordHash: mitraPass,
+      phone: "6281234567803",
+      role: "MITRA",
+      nationality: "Indonesia",
+      isActive: true,
+    },
+    create: {
       name: "Pak Slamet (Local Guide Mitra)",
       email: "mitra@ijentour.com",
       passwordHash: mitraPass,
@@ -133,7 +157,11 @@ async function main() {
   ];
 
   for (const dest of destinationsData) {
-    await prisma.destination.create({ data: dest });
+    await prisma.destination.upsert({
+      where: { slug: dest.slug },
+      update: dest,
+      create: dest,
+    });
   }
   console.log("✅ Seeded Destinations");
 
@@ -471,19 +499,28 @@ async function main() {
 
   const createdPackages: any[] = [];
   for (const pkg of packages) {
-    const created = await prisma.tripPackage.create({ data: pkg });
+    const created = await prisma.tripPackage.upsert({
+      where: { slug: pkg.slug },
+      update: pkg,
+      create: pkg,
+    });
     createdPackages.push(created);
 
-    // Create a schedule for each package
-    await prisma.tripSchedule.create({
-      data: {
-        tripPackageId: created.id,
-        departureDate: "2026-10-01",
-        availableSlots: 15,
-        bookedSlots: 3,
-        status: "OPEN",
-      },
+    // Create a schedule for each package if not already exists
+    const existingSchedule = await prisma.tripSchedule.findFirst({
+      where: { tripPackageId: created.id, departureDate: "2026-10-01" },
     });
+    if (!existingSchedule) {
+      await prisma.tripSchedule.create({
+        data: {
+          tripPackageId: created.id,
+          departureDate: "2026-10-01",
+          availableSlots: 15,
+          bookedSlots: 3,
+          status: "OPEN",
+        },
+      });
+    }
   }
   console.log("✅ Seeded Trip Packages & Schedules");
 
@@ -556,7 +593,12 @@ async function main() {
   ];
 
   for (const item of galleryItems) {
-    await prisma.galleryItem.create({ data: item });
+    const existing = await prisma.galleryItem.findFirst({
+      where: { title: item.title },
+    });
+    if (!existing) {
+      await prisma.galleryItem.create({ data: item });
+    }
   }
   console.log("✅ Seeded Gallery Moments");
 
@@ -604,16 +646,22 @@ async function main() {
   ];
 
   for (const art of articles) {
-    await prisma.blogPost.create({ data: art });
+    await prisma.blogPost.upsert({
+      where: { slug: art.slug },
+      update: art,
+      create: art,
+    });
   }
   console.log("✅ Seeded Blog Posts");
 
-  // 6. Seed Initial Bookings
+  // 6. Seed Initial Bookings (upsert by bookingCode)
   const firstPkg = createdPackages[0];
   const secondPkg = createdPackages[1];
 
-  await prisma.booking.create({
-    data: {
+  await prisma.booking.upsert({
+    where: { bookingCode: "IJN-20260925-B101" },
+    update: {},
+    create: {
       bookingCode: "IJN-20260925-B101",
       userId: customerPro.id,
       customerName: customerPro.name,
@@ -636,8 +684,10 @@ async function main() {
     },
   });
 
-  await prisma.booking.create({
-    data: {
+  await prisma.booking.upsert({
+    where: { bookingCode: "IJN-20260925-C202" },
+    update: {},
+    create: {
       bookingCode: "IJN-20260925-C202",
       userId: customer.id,
       customerName: customer.name,
@@ -662,48 +712,56 @@ async function main() {
   console.log("✅ Seeded Sample Bookings");
 
   // 7. Seed Notifications
-  await prisma.notification.create({
-    data: {
+  const initialNotifs = [
+    {
       type: "booking",
       title: "Booking Baru Diterima",
       description: "Budi Santoso memesan 'Midnight Expedition Blue Fire Ijen' untuk 2 pax. Kode: IJN-20260925-B101",
       link: "/admin/bookings",
       unread: true,
     },
-  });
-
-  await prisma.notification.create({
-    data: {
+    {
       type: "booking",
       title: "Permintaan Konfirmasi Pembayaran",
       description: "John Traveler memesan 'Bromo & Ijen Crater Sunrise Combo' (4 pax). Menunggu verifikasi deposit.",
       link: "/admin/bookings",
       unread: true,
     },
-  });
-
-  await prisma.notification.create({
-    data: {
+    {
       type: "contact",
       title: "Pesan Kontak Masuk",
       description: "Pertanyaan mengenai ketersediaan paket overland Bali return akhir bulan.",
       link: "/admin/contacts",
       unread: false,
     },
-  });
+  ];
+
+  for (const n of initialNotifs) {
+    const existing = await prisma.notification.findFirst({
+      where: { title: n.title },
+    });
+    if (!existing) {
+      await prisma.notification.create({ data: n });
+    }
+  }
   console.log("✅ Seeded Notifications");
 
   // 8. Seed Contact Inbox
-  await prisma.contact.create({
-    data: {
-      name: "Sarah Miller",
-      email: "sarah.m@gmail.com",
-      phone: "+61 412 345 678",
-      subject: "Private Tour Ijen untuk Keluarga dengan Anak 8 Tahun",
-      message: "Halo Ijen Tour, kami berencana datang ke Banyuwangi tanggal 15 Oktober bersama anak 8 tahun. Apakah aman untuk naik troli dan apakah bisa penjemputan dari Pelabuhan Ketapang setelah tiba dari Bali?",
-      status: "UNREAD",
-    },
+  const existingContact = await prisma.contact.findFirst({
+    where: { email: "sarah.m@gmail.com" },
   });
+  if (!existingContact) {
+    await prisma.contact.create({
+      data: {
+        name: "Sarah Miller",
+        email: "sarah.m@gmail.com",
+        phone: "+61 412 345 678",
+        subject: "Private Tour Ijen untuk Keluarga dengan Anak 8 Tahun",
+        message: "Halo Ijen Tour, kami berencana datang ke Banyuwangi tanggal 15 Oktober bersama anak 8 tahun. Apakah aman untuk naik troli dan apakah bisa penjemputan dari Pelabuhan Ketapang setelah tiba dari Bali?",
+        status: "UNREAD",
+      },
+    });
+  }
 
   // 9. Seed FAQs
   const faqs = [
@@ -734,7 +792,12 @@ async function main() {
   ];
 
   for (const f of faqs) {
-    await prisma.faq.create({ data: f });
+    const existing = await prisma.faq.findFirst({
+      where: { question: f.question },
+    });
+    if (!existing) {
+      await prisma.faq.create({ data: f });
+    }
   }
   console.log("✅ Seeded FAQs");
 

@@ -28,7 +28,7 @@ export default function ContactPage() {
           setFaqs(data.faqs);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -123,7 +123,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h4 className="font-bold text-white mb-1">Telepon / WhatsApp</h4>
-                  <p className="text-secondary-200 text-sm leading-relaxed">+62 812-3456-7890<br />+62 898-7654-3210</p>
+                  <p className="text-secondary-200 text-sm leading-relaxed">+62 822-6817-7188<br />+62 898-7654-3210</p>
                 </div>
               </div>
 
@@ -329,9 +329,8 @@ export default function ContactPage() {
                   >
                     <span className="text-sm sm:text-base leading-snug">{faq.question}</span>
                     <ChevronDown
-                      className={`w-5 h-5 shrink-0 text-secondary-400 transition-transform duration-300 ${
-                        isOpen ? "rotate-180 text-primary-600" : ""
-                      }`}
+                      className={`w-5 h-5 shrink-0 text-secondary-400 transition-transform duration-300 ${isOpen ? "rotate-180 text-primary-600" : ""
+                        }`}
                     />
                   </button>
                   {isOpen && (

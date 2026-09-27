@@ -7,6 +7,10 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
+    const existing = await prisma.faq.findUnique({ where: { id } });
+    if (!existing) {
+      return NextResponse.json({ error: "FAQ tidak ditemukan atau sudah dihapus." }, { status: 404 });
+    }
     await prisma.faq.delete({
       where: { id },
     });
@@ -23,6 +27,10 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
+    const existing = await prisma.faq.findUnique({ where: { id } });
+    if (!existing) {
+      return NextResponse.json({ error: "FAQ tidak ditemukan." }, { status: 404 });
+    }
     const body = await request.json();
     const { question, answer, category, sortOrder, isActive } = body;
 

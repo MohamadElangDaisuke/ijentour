@@ -32,6 +32,14 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
+    const existing = await prisma.booking.findFirst({
+      where: { OR: [{ id }, { bookingCode: id }] },
+    });
+
+    if (!existing) {
+      return NextResponse.json({ error: "Booking tidak ditemukan." }, { status: 404 });
+    }
+
     const body = await request.json();
 
     const dataToUpdate: any = {};
@@ -45,7 +53,7 @@ export async function PUT(
     if (body.pickupLocation !== undefined) dataToUpdate.pickupLocation = body.pickupLocation;
 
     const updated = await prisma.booking.update({
-      where: { id },
+      where: { id: existing.id },
       data: dataToUpdate,
     });
 
@@ -69,7 +77,15 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    await prisma.booking.delete({ where: { id } });
+    const existing = await prisma.booking.findFirst({
+      where: { OR: [{ id }, { bookingCode: id }] },
+    });
+
+    if (!existing) {
+      return NextResponse.json({ error: "Booking tidak ditemukan atau sudah dihapus." }, { status: 404 });
+    }
+
+    await prisma.booking.delete({ where: { id: existing.id } });
     return NextResponse.json({ success: true, message: "Reservasi berhasil dihapus." });
   } catch (error: any) {
     console.error("DELETE /api/bookings/[id] error:", error);

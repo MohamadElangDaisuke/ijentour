@@ -7,6 +7,11 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
+    const existing = await prisma.user.findUnique({ where: { id } });
+    if (!existing) {
+      return NextResponse.json({ error: "Pengguna tidak ditemukan." }, { status: 404 });
+    }
+
     const body = await request.json();
 
     const dataToUpdate: any = {};
@@ -48,6 +53,11 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
+    const existing = await prisma.user.findUnique({ where: { id } });
+    if (!existing) {
+      return NextResponse.json({ error: "Pengguna tidak ditemukan atau sudah dihapus." }, { status: 404 });
+    }
+
     await prisma.user.delete({ where: { id } });
     return NextResponse.json({ success: true, message: "Pengguna berhasil dihapus." });
   } catch (error: any) {

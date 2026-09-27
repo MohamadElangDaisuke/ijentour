@@ -53,6 +53,14 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
+    const existing = await prisma.tripPackage.findFirst({
+      where: { OR: [{ id }, { slug: id }] },
+    });
+
+    if (!existing) {
+      return NextResponse.json({ error: "Paket tidak ditemukan." }, { status: 404 });
+    }
+
     const body = await request.json();
 
     const dataToUpdate: any = {};
@@ -77,7 +85,7 @@ export async function PUT(
     if (body.excluded) dataToUpdate.excludedItems = JSON.stringify(body.excluded);
 
     const updated = await prisma.tripPackage.update({
-      where: { id },
+      where: { id: existing.id },
       data: dataToUpdate,
     });
 
@@ -101,7 +109,15 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    await prisma.tripPackage.delete({ where: { id } });
+    const existing = await prisma.tripPackage.findFirst({
+      where: { OR: [{ id }, { slug: id }] },
+    });
+
+    if (!existing) {
+      return NextResponse.json({ error: "Paket tidak ditemukan atau sudah dihapus." }, { status: 404 });
+    }
+
+    await prisma.tripPackage.delete({ where: { id: existing.id } });
     return NextResponse.json({ success: true, message: "Paket berhasil dihapus." });
   } catch (error: any) {
     console.error("DELETE /api/trips/[id] error:", error);

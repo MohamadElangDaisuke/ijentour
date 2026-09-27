@@ -88,7 +88,7 @@ export default function PackageDetailPage({ params }: PageProps) {
           });
         }
       })
-      .catch(() => {});
+      .catch(() => { });
 
     // 2. Load from localStorage if present
     const saved = window.localStorage.getItem(packagesStorageKey);
@@ -117,7 +117,7 @@ export default function PackageDetailPage({ params }: PageProps) {
           if (data.user.phone) setWhatsappNumber(data.user.phone);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, [packageId]);
 
   // Set default tomorrow date for booking
@@ -180,11 +180,11 @@ export default function PackageDetailPage({ params }: PageProps) {
   const galleryList = currentPkg.gallery && currentPkg.gallery.length > 0
     ? currentPkg.gallery
     : [
-        currentPkg.image || '/images/pkg-bluefire.png',
-        '/images/the-best-view-of-kawah.webp',
-        '/images/pkg-crater.png',
-        '/images/pkg-waterfall.png'
-      ];
+      currentPkg.image || '/images/pkg-bluefire.png',
+      '/images/the-best-view-of-kawah.webp',
+      '/images/pkg-crater.png',
+      '/images/pkg-waterfall.png'
+    ];
 
   const activePhoto = galleryList[activeImageIndex] || galleryList[0];
 
@@ -195,7 +195,7 @@ export default function PackageDetailPage({ params }: PageProps) {
           title: currentPkg.title,
           text: `Cek paket ${currentPkg.title} di Ijen Tour Banyuwangi!`,
           url: window.location.href
-        }).catch(() => {});
+        }).catch(() => { });
       } else {
         navigator.clipboard.writeText(window.location.href);
         setCopiedLink(true);
@@ -220,7 +220,7 @@ ${selectedAddonNames ? `✨ *Add-on Tambahan*: ${selectedAddonNames}\n` : ''}
 Mohon info ketersediaan slot guide dan armadanya. Terima kasih!`;
 
     const encoded = encodeURIComponent(message);
-    window.open(`https://wa.me/6281234567890?text=${encoded}`, '_blank');
+    window.open(`https://wa.me/6282268177188?text=${encoded}`, '_blank');
   };
 
   const handleOnlineBookingSubmit = async (e: React.FormEvent) => {
@@ -275,7 +275,7 @@ Mohon info ketersediaan slot guide dan armadanya. Terima kasih!`;
 
   return (
     <div className="bg-secondary-50 text-secondary-950 min-h-screen pb-24 selection:bg-primary-500 selection:text-secondary-950">
-      
+
       {/* BREADCRUMBS & TOP ACTION BAR */}
       <div className="border-b border-secondary-200/80 bg-white/70 backdrop-blur-md sticky top-16 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
@@ -301,7 +301,7 @@ Mohon info ketersediaan slot guide dan armadanya. Terima kasih!`;
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8">
-        
+
         {/* PACKAGE HEADER TITLE & BADGES */}
         <div className="mb-6 sm:mb-8">
           <div className="flex flex-wrap items-center gap-2.5 mb-3">
@@ -379,11 +379,10 @@ Mohon info ketersediaan slot guide dan armadanya. Terima kasih!`;
               <div
                 key={idx}
                 onClick={() => setActiveImageIndex(idx)}
-                className={`relative aspect-16/9 lg:aspect-auto lg:h-27 rounded-2xl overflow-hidden border-2 cursor-pointer transition-all shadow-sm ${
-                  activeImageIndex === idx
+                className={`relative aspect-16/9 lg:aspect-auto lg:h-27 rounded-2xl overflow-hidden border-2 cursor-pointer transition-all shadow-sm ${activeImageIndex === idx
                     ? 'border-primary-500 ring-3 ring-primary-500/30 scale-[1.02]'
                     : 'border-white/80 hover:border-secondary-300 opacity-80 hover:opacity-100'
-                }`}
+                  }`}
               >
                 <img
                   src={imgUrl}
@@ -426,10 +425,10 @@ Mohon info ketersediaan slot guide dan armadanya. Terima kasih!`;
 
         {/* MAIN BODY: LEFT CONTENT (TABS & SECTIONS) & RIGHT BOOKING STICKY SIDEBAR */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          
+
           {/* LEFT 8 COLUMNS: INTERACTIVE TABS & CONTENT */}
           <div className="lg:col-span-8 space-y-8">
-            
+
             {/* TABS SELECTOR */}
             <div className="flex items-center gap-2 border-b border-secondary-200/80 overflow-x-auto pb-px">
               {[
@@ -442,11 +441,10 @@ Mohon info ketersediaan slot guide dan armadanya. Terima kasih!`;
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`px-4 py-3 text-xs sm:text-sm font-extrabold transition-all border-b-2 whitespace-nowrap cursor-pointer ${
-                    activeTab === tab.id
+                  className={`px-4 py-3 text-xs sm:text-sm font-extrabold transition-all border-b-2 whitespace-nowrap cursor-pointer ${activeTab === tab.id
                       ? 'border-primary-500 text-primary-700 bg-primary-50/50 rounded-t-xl'
                       : 'border-transparent text-secondary-600 hover:text-secondary-950 hover:border-secondary-300'
-                  }`}
+                    }`}
                 >
                   {tab.label}
                 </button>
@@ -766,7 +764,7 @@ Mohon info ketersediaan slot guide dan armadanya. Terima kasih!`;
           {/* RIGHT 4 COLUMNS: INTERACTIVE BOOKING CALCULATOR (STICKY) */}
           <div className="lg:col-span-4 sticky top-28">
             <div className="bg-white rounded-3xl p-6 sm:p-7 border border-secondary-200/90 shadow-xl space-y-6">
-              
+
               {/* Price Banner */}
               <div className="pb-4 border-b border-secondary-100">
                 <span className="text-[11px] font-extrabold uppercase tracking-wider text-secondary-500 block mb-1">
@@ -830,11 +828,10 @@ Mohon info ketersediaan slot guide dan armadanya. Terima kasih!`;
                   {ADDONS.map((addon) => (
                     <label
                       key={addon.id}
-                      className={`flex items-start gap-3 p-3 rounded-xl border transition cursor-pointer ${
-                        selectedAddons[addon.id]
+                      className={`flex items-start gap-3 p-3 rounded-xl border transition cursor-pointer ${selectedAddons[addon.id]
                           ? 'border-primary-500 bg-primary-50/30'
                           : 'border-secondary-200/80 bg-white hover:border-secondary-300'
-                      }`}
+                        }`}
                     >
                       <input
                         type="checkbox"
@@ -1004,9 +1001,8 @@ Mohon info ketersediaan slot guide dan armadanya. Terima kasih!`;
               <button
                 key={i}
                 onClick={() => setActiveImageIndex(i)}
-                className={`w-16 h-12 rounded-lg overflow-hidden border-2 transition cursor-pointer ${
-                  activeImageIndex === i ? 'border-primary-500 scale-110' : 'border-white/40 opacity-60'
-                }`}
+                className={`w-16 h-12 rounded-lg overflow-hidden border-2 transition cursor-pointer ${activeImageIndex === i ? 'border-primary-500 scale-110' : 'border-white/40 opacity-60'
+                  }`}
               >
                 <img src={img} alt="thumb" className="w-full h-full object-cover" />
               </button>
@@ -1180,7 +1176,7 @@ Mohon info ketersediaan slot guide dan armadanya. Terima kasih!`;
 
             <div className="space-y-3">
               <a
-                href={`https://wa.me/6281234567890?text=${encodeURIComponent(
+                href={`https://wa.me/6282268177188?text=${encodeURIComponent(
                   `Halo Admin Ijen Tour! Saya sudah melakukan reservasi dengan Kode Booking: *${confirmedBooking.bookingCode}* untuk paket *${confirmedBooking.packageName}* tanggal ${confirmedBooking.departureDate}. Mohon konfirmasi ketersediaan armadanya. Terima kasih!`
                 )}`}
                 target="_blank"

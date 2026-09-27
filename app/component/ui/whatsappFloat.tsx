@@ -4,7 +4,7 @@ import { FaWhatsapp } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const whatsappNumber = '6281234567890';
+const whatsappNumber = '6282268177188';
 const whatsappMessage = encodeURIComponent('Halo Ijen Tour, saya ingin bertanya tentang paket wisata Kawah Ijen.');
 
 export default function WhatsAppFloat() {

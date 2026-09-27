@@ -25,7 +25,7 @@ function PackagesContent() {
           setPackagesData(data.packages);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
 
     const saved = window.localStorage.getItem(packagesStorageKey);
     if (saved) {
@@ -148,11 +148,10 @@ function PackagesContent() {
                 <button
                   key={tab.id}
                   onClick={() => setSelectedCategory(tab.id)}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                    selectedCategory === tab.id
+                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${selectedCategory === tab.id
                       ? 'bg-secondary-950 text-white shadow-sm'
                       : 'bg-secondary-50 text-secondary-700 hover:bg-secondary-100'
-                  }`}
+                    }`}
                 >
                   {tab.label}
                 </button>
@@ -168,11 +167,10 @@ function PackagesContent() {
                 <div
                   key={pkg.id}
                   onClick={() => setSelectedPackageId(pkg.id)}
-                  className={`group relative rounded-2xl border p-4 transition-all cursor-pointer overflow-hidden flex flex-col justify-between ${
-                    isSelected
+                  className={`group relative rounded-2xl border p-4 transition-all cursor-pointer overflow-hidden flex flex-col justify-between ${isSelected
                       ? 'border-primary-500 bg-primary-50/20 ring-2 ring-primary-500/20 shadow-md'
                       : 'border-secondary-100 bg-white hover:border-secondary-300 hover:shadow-sm'
-                  }`}
+                    }`}
                 >
                   <div>
                     <div className="relative aspect-16/10 rounded-xl overflow-hidden mb-3 bg-secondary-100">
@@ -207,11 +205,10 @@ function PackagesContent() {
                         <span>Detail</span>
                         <ExternalLink size={12} />
                       </Link>
-                      <span className={`text-xs font-bold px-3 py-1.5 rounded-lg transition ${
-                        isSelected
+                      <span className={`text-xs font-bold px-3 py-1.5 rounded-lg transition ${isSelected
                           ? 'bg-primary-500 text-secondary-950'
                           : 'bg-secondary-100 text-secondary-800 group-hover:bg-secondary-950 group-hover:text-white'
-                      }`}>
+                        }`}>
                         {isSelected ? 'Terpilih ✓' : 'Pilih'}
                       </span>
                     </div>
@@ -351,7 +348,7 @@ function PackagesContent() {
               </div>
 
               <a
-                href={`https://wa.me/6281234567890?text=${whatsappMessage}`}
+                href={`https://wa.me/6282268177188?text=${whatsappMessage}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full bg-primary-500 hover:bg-primary-600 text-secondary-950 font-black py-4 rounded-2xl shadow-xs hover:shadow transition duration-200 flex items-center justify-center space-x-2 text-center"

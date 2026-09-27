@@ -29,7 +29,7 @@ Tambahkan variabel lingkungan berikut:
 | `JWT_SECRET` | `ijen-tour-secret-key-super-secure-fullstack-2026` | Kunci rahasia enkripsi token sesi login |
 | `NEXTAUTH_URL` | `https://your-domain.vercel.app` | URL domain Vercel Anda |
 | `NEXT_PUBLIC_APP_URL` | `https://your-domain.vercel.app` | URL domain publik |
-| `ADMIN_WHATSAPP_NUMBER` | `6281234567890` | Nomor WhatsApp admin untuk pemesanan langsung |
+| `ADMIN_WHATSAPP_NUMBER` | `6282268177188` | Nomor WhatsApp admin untuk pemesanan langsung |
 
 ### 4. Build & Output Settings
 - **Build Command**: `prisma generate && next build` (sudah tersetel otomatis di `package.json`).

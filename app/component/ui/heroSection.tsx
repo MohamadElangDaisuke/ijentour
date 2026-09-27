@@ -56,7 +56,7 @@ export default function HeroSection() {
               Jelajahi paket <ArrowRight className="h-4 w-4" />
             </Link>
             <a
-              href={`https://wa.me/6281234567890?text=${encodeURIComponent('Halo Ijen Tour, saya ingin memesan paket wisata (Book via WhatsApp).')}`}
+              href={`https://wa.me/6282268177188?text=${encodeURIComponent('Halo Ijen Tour, saya ingin memesan paket wisata (Book via WhatsApp).')}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-full border border-secondary-300 bg-white/70 px-5 py-3.5 text-sm font-bold text-secondary-800 transition hover:border-[#25D366] hover:bg-white hover:text-[#25D366]"

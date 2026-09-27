@@ -17,7 +17,7 @@ async function main() {
     update: {
       name: "Ijen Tour Administrator",
       passwordHash: adminPass,
-      phone: "6281234567890",
+      phone: "6282268177188",
       role: "ADMIN",
       nationality: "Indonesia",
       isActive: true,
@@ -26,7 +26,7 @@ async function main() {
       name: "Ijen Tour Administrator",
       email: "admin@ijentour.com",
       passwordHash: adminPass,
-      phone: "6281234567890",
+      phone: "6282268177188",
       role: "ADMIN",
       nationality: "Indonesia",
       isActive: true,

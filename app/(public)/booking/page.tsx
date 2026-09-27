@@ -155,15 +155,14 @@ export default function BookingLookupPage() {
               </div>
               <div>
                 <span
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider ${
-                    booking.status === "CONFIRMED"
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider ${booking.status === "CONFIRMED"
                       ? "bg-emerald-100 text-emerald-800"
                       : booking.status === "COMPLETED"
-                      ? "bg-blue-100 text-blue-800"
-                      : booking.status === "CANCELLED"
-                      ? "bg-red-100 text-red-800"
-                      : "bg-amber-100 text-amber-800"
-                  }`}
+                        ? "bg-blue-100 text-blue-800"
+                        : booking.status === "CANCELLED"
+                          ? "bg-red-100 text-red-800"
+                          : "bg-amber-100 text-amber-800"
+                    }`}
                 >
                   {booking.status === "CONFIRMED" && <CheckCircle2 className="w-3.5 h-3.5" />}
                   {booking.status === "PENDING" && <Clock className="w-3.5 h-3.5" />}
@@ -200,7 +199,7 @@ export default function BookingLookupPage() {
 
             <div className="pt-4 border-t border-secondary-100 flex flex-col sm:flex-row gap-3 justify-end">
               <a
-                href={`https://wa.me/6281234567890?text=${encodeURIComponent(
+                href={`https://wa.me/6282268177188?text=${encodeURIComponent(
                   `Halo Admin Ijen Tour! Saya menanyakan update reservasi dengan Kode Booking: *${booking.bookingCode}*. Terima kasih.`
                 )}`}
                 target="_blank"

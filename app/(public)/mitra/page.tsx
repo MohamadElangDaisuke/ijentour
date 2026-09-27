@@ -98,7 +98,7 @@ export default function MitraDashboardPage() {
 
           <div className="flex items-center gap-3">
             <a
-              href="https://wa.me/6281234567890?text=Halo%20Admin%20Operasional,%20saya%20siap%20bertugas."
+              href="https://wa.me/6282268177188?text=Halo%20Admin%20Operasional,%20saya%20siap%20bertugas."
               target="_blank"
               rel="noopener noreferrer"
               className="px-5 py-2.5 rounded-full bg-primary-500 hover:bg-primary-400 text-secondary-950 font-bold text-xs transition shadow-sm"
@@ -189,7 +189,7 @@ export default function MitraDashboardPage() {
                   </div>
 
                   <a
-                    href={`https://wa.me/6281234567890?text=${encodeURIComponent(
+                    href={`https://wa.me/6282268177188?text=${encodeURIComponent(
                       `Halo Admin, saya konfirmasi siap bertugas memandu rombongan ${trip.leader} (${trip.title}).`
                     )}`}
                     target="_blank"

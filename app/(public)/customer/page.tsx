@@ -137,7 +137,7 @@ export default function CustomerDashboardPage() {
               </p>
             </div>
             <a
-              href="https://wa.me/6281234567890?text=Halo%20Admin%20Ijen%20Tour,%20saya%20ingin%20upgrade%20akun%20menjadi%20Customer%20Pro"
+              href="https://wa.me/6282268177188?text=Halo%20Admin%20Ijen%20Tour,%20saya%20ingin%20upgrade%20akun%20menjadi%20Customer%20Pro"
               target="_blank"
               rel="noopener noreferrer"
               className="px-5 py-2.5 rounded-full bg-secondary-100 hover:bg-primary-500 hover:text-secondary-950 text-secondary-800 font-bold text-xs transition whitespace-nowrap text-center"
@@ -189,15 +189,14 @@ export default function CustomerDashboardPage() {
                         {booking.bookingCode}
                       </span>
                       <span
-                        className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                          booking.status === "CONFIRMED"
+                        className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${booking.status === "CONFIRMED"
                             ? "bg-emerald-100 text-emerald-800"
                             : booking.status === "COMPLETED"
-                            ? "bg-blue-100 text-blue-800"
-                            : booking.status === "CANCELLED"
-                            ? "bg-red-100 text-red-800"
-                            : "bg-amber-100 text-amber-800"
-                        }`}
+                              ? "bg-blue-100 text-blue-800"
+                              : booking.status === "CANCELLED"
+                                ? "bg-red-100 text-red-800"
+                                : "bg-amber-100 text-amber-800"
+                          }`}
                       >
                         {booking.status}
                       </span>
@@ -223,7 +222,7 @@ export default function CustomerDashboardPage() {
                     </div>
 
                     <a
-                      href={`https://wa.me/6281234567890?text=${encodeURIComponent(
+                      href={`https://wa.me/6282268177188?text=${encodeURIComponent(
                         `Halo Admin Ijen Tour, saya ingin menanyakan reservasi ${booking.bookingCode} atas nama ${user.name}.`
                       )}`}
                       target="_blank"

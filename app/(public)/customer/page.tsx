@@ -7,6 +7,7 @@ import {
   User, Crown, Calendar, MapPin, CheckCircle2, Clock, XCircle, LogOut, Sparkles, AlertCircle
 } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 
 export default function CustomerDashboardPage() {
   const router = useRouter();
@@ -137,7 +138,7 @@ export default function CustomerDashboardPage() {
               </p>
             </div>
             <a
-              href="https://wa.me/6282268177188?text=Halo%20Admin%20Ijen%20Tour,%20saya%20ingin%20upgrade%20akun%20menjadi%20Customer%20Pro"
+              href={getWhatsAppLink("Halo Admin Ijen Tour, saya ingin upgrade akun menjadi Customer Pro")}
               target="_blank"
               rel="noopener noreferrer"
               className="px-5 py-2.5 rounded-full bg-secondary-100 hover:bg-primary-500 hover:text-secondary-950 text-secondary-800 font-bold text-xs transition whitespace-nowrap text-center"
@@ -222,9 +223,9 @@ export default function CustomerDashboardPage() {
                     </div>
 
                     <a
-                      href={`https://wa.me/6282268177188?text=${encodeURIComponent(
+                      href={getWhatsAppLink(
                         `Halo Admin Ijen Tour, saya ingin menanyakan reservasi ${booking.bookingCode} atas nama ${user.name}.`
-                      )}`}
+                      )}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="px-4 py-2 rounded-xl bg-white border border-secondary-300 hover:border-primary-500 text-secondary-800 text-xs font-bold transition shadow-2xs"

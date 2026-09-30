@@ -4,6 +4,8 @@ import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save, Plus, Trash2, AlertCircle } from "lucide-react";
+import ImageUpload from "@/app/component/ui/ImageUpload";
+import MultiImageUpload from "@/app/component/ui/MultiImageUpload";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -25,6 +27,7 @@ export default function EditTripPage({ params }: PageProps) {
   const [basePrice, setBasePrice] = useState(0);
   const [badge, setBadge] = useState("");
   const [image, setImage] = useState("");
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
   const [description, setDescription] = useState("");
   const [highlights, setHighlights] = useState<string[]>([]);
   const [newHighlight, setNewHighlight] = useState("");
@@ -45,7 +48,10 @@ export default function EditTripPage({ params }: PageProps) {
           setPrice(p.price || "");
           setBasePrice(p.basePrice || 0);
           setBadge(p.badge || "");
-          setImage(p.image || p.coverImage || "");
+          const mainImg = p.image || p.coverImage || "";
+          setImage(mainImg);
+          const rawGallery = Array.isArray(p.gallery) ? p.gallery : [];
+          setGalleryImages(rawGallery.filter((g: string) => g && g !== mainImg));
           setDescription(p.description || "");
           setHighlights(Array.isArray(p.highlights) ? p.highlights : []);
           setIncluded(Array.isArray(p.included) ? p.included : []);
@@ -64,6 +70,7 @@ export default function EditTripPage({ params }: PageProps) {
     setError("");
 
     try {
+      const allGallery = galleryImages.length > 0 ? (image ? [image, ...galleryImages] : galleryImages) : [image || "/images/pkg-bluefire.png"];
       const res = await fetch(`/api/trips/${tripId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -74,7 +81,8 @@ export default function EditTripPage({ params }: PageProps) {
           price,
           basePrice: Number(basePrice),
           badge,
-          image,
+          image: image || "/images/pkg-bluefire.png",
+          gallery: allGallery,
           description,
           highlights,
           included,
@@ -194,16 +202,26 @@ export default function EditTripPage({ params }: PageProps) {
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
+          </div>
 
-            <div>
-              <label className="block text-xs font-bold text-secondary-800 mb-2">URL Foto Sampul</label>
-              <input
-                type="text"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-                className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+            <ImageUpload
+              value={image}
+              onChange={(url) => setImage(url)}
+              folder="trips"
+              label="Foto Sampul Tur (Cover Image - Supabase)"
+              required
+              aspectRatio="video"
+              helperText="Upload foto utama untuk kartu dan banner tur (Maks. 5 MB)."
+            />
+
+            <MultiImageUpload
+              value={galleryImages}
+              onChange={(urls) => setGalleryImages(urls)}
+              folder="trips"
+              label="Galeri Foto Tur (Multiple Upload - Supabase)"
+              maxFiles={8}
+            />
           </div>
 
           <div>

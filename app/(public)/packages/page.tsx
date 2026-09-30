@@ -7,6 +7,7 @@ import {
   Star, Check, XCircle, ChevronLeft, ChevronRight, Clock, Sparkles, ArrowRight, ExternalLink
 } from 'lucide-react';
 import { TourPackage, defaultPackages, packagesStorageKey } from '../../lib/packagesStorage';
+import { getWhatsAppLink } from '@/lib/whatsapp';
 
 function PackagesContent() {
   const searchParams = useSearchParams();
@@ -348,7 +349,7 @@ function PackagesContent() {
               </div>
 
               <a
-                href={`https://wa.me/6282268177188?text=${whatsappMessage}`}
+                href={getWhatsAppLink(decodeURIComponent(whatsappMessage))}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full bg-primary-500 hover:bg-primary-600 text-secondary-950 font-black py-4 rounded-2xl shadow-xs hover:shadow transition duration-200 flex items-center justify-center space-x-2 text-center"

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Search, Calendar, MapPin, CheckCircle2, Clock, XCircle, AlertCircle, ArrowRight } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { formatCurrency } from "@/lib/utils";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 
 export default function BookingLookupPage() {
   const [bookingCode, setBookingCode] = useState("");
@@ -199,9 +200,9 @@ export default function BookingLookupPage() {
 
             <div className="pt-4 border-t border-secondary-100 flex flex-col sm:flex-row gap-3 justify-end">
               <a
-                href={`https://wa.me/6282268177188?text=${encodeURIComponent(
+                href={getWhatsAppLink(
                   `Halo Admin Ijen Tour! Saya menanyakan update reservasi dengan Kode Booking: *${booking.bookingCode}*. Terima kasih.`
-                )}`}
+                )}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-5 py-3 rounded-2xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer"

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { MapPin, Phone, Mail } from 'lucide-react';
 import { FaInstagram, FaFacebook, FaYoutube } from 'react-icons/fa';
+import { getAdminWhatsAppNumber, getWhatsAppLink, WhatsAppTemplates } from '@/lib/whatsapp';
 
 export default function Footer() {
   const pathname = usePathname();
@@ -38,6 +39,7 @@ export default function Footer() {
               <li><Link href="/gallery" className="hover:text-primary-400 transition-colors">Galeri Wisata</Link></li>
               <li><Link href="/booking" className="hover:text-primary-400 transition-colors">Cek Status Booking</Link></li>
               <li><Link href="/about" className="hover:text-primary-400 transition-colors">Tentang Kami</Link></li>
+              <li><Link href="/about#faq" className="hover:text-primary-400 transition-colors">FAQ</Link></li>
               <li><Link href="/blog" className="hover:text-primary-400 transition-colors">Blog</Link></li>
               <li><Link href="/contact" className="hover:text-primary-400 transition-colors">Kontak</Link></li>
             </ul>
@@ -53,11 +55,20 @@ export default function Footer() {
               </li>
               <li className="flex items-center">
                 <Phone size={18} className="mr-3 shrink-0 text-primary-500" />
-                <span>+62 822-6817-7188</span>
+                <a
+                  href={getWhatsAppLink(WhatsAppTemplates.generalInquiry())}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-primary-500 transition-colors"
+                >
+                  +{getAdminWhatsAppNumber()} (WhatsApp 24/7)
+                </a>
               </li>
               <li className="flex items-center">
                 <Mail size={18} className="mr-3 shrink-0 text-primary-500" />
-                <span>info@ijentour.com</span>
+                <a href="mailto:info@ijentour.com" className="hover:text-primary-500 transition-colors">
+                  info@ijentour.com
+                </a>
               </li>
             </ul>
           </div>

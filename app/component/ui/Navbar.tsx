@@ -10,11 +10,12 @@ import ThemeToggle from './themeToggle'
 
 const navigation = [
   { name: 'Beranda', href: '/' },
-  { name: 'Paket Wisata', href: '/packages' },
+  { name: 'Paket Tur', href: '/packages' },
   { name: 'Destinasi', href: '/destinations' },
   { name: 'Galeri', href: '/gallery' },
-  { name: 'Tentang Kami', href: '/about' },
   { name: 'Blog', href: '/blog' },
+  { name: 'Tentang', href: '/about' },
+  { name: 'FAQ', href: '/about#faq' },
   { name: 'Kontak', href: '/contact' },
 ]
 

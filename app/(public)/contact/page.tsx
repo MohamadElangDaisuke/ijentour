@@ -5,6 +5,7 @@ import {
   MapPin, Phone, Mail, Clock, Send, CheckCircle2, AlertCircle, Loader2, HelpCircle, ChevronDown
 } from "lucide-react";
 import { FaInstagram, FaFacebook, FaYoutube } from "react-icons/fa";
+import { getAdminWhatsAppNumber, getWhatsAppLink, WhatsAppTemplates } from "@/lib/whatsapp";
 
 export default function ContactPage() {
   const [name, setName] = useState("");
@@ -123,7 +124,14 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h4 className="font-bold text-white mb-1">Telepon / WhatsApp</h4>
-                  <p className="text-secondary-200 text-sm leading-relaxed">+62 822-6817-7188<br />+62 898-7654-3210</p>
+                  <a
+                    href={getWhatsAppLink(WhatsAppTemplates.generalInquiry())}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-secondary-200 hover:text-primary-400 text-sm leading-relaxed block transition"
+                  >
+                    +{getAdminWhatsAppNumber()} (Chat 24 Jam)
+                  </a>
                 </div>
               </div>
 

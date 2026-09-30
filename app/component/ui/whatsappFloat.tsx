@@ -3,9 +3,7 @@
 import { FaWhatsapp } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-
-const whatsappNumber = '6282268177188';
-const whatsappMessage = encodeURIComponent('Halo Ijen Tour, saya ingin bertanya tentang paket wisata Kawah Ijen.');
+import { getWhatsAppLink, WhatsAppTemplates } from '@/lib/whatsapp';
 
 export default function WhatsAppFloat() {
   const [heroVisible, setHeroVisible] = useState(true);
@@ -23,11 +21,13 @@ export default function WhatsAppFloat() {
     return () => observer.disconnect();
   }, []);
 
+  const whatsappHref = getWhatsAppLink(WhatsAppTemplates.generalInquiry("paket wisata Kawah Ijen"));
+
   return (
     <AnimatePresence>
       {!heroVisible && (
         <motion.a
-          href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
+          href={whatsappHref}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Hubungi Ijen Tour melalui WhatsApp"

@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { defaultArticles, Article } from "@/app/lib/articlesStorage";
 import { defaultPackages } from "@/app/lib/packagesStorage";
+import MarkdownRenderer from "@/app/component/ui/MarkdownRenderer";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -209,40 +210,8 @@ export default function BlogDetailPage({ params }: PageProps) {
             </div>
           )}
 
-          <div className="space-y-6 text-secondary-800 text-sm sm:text-base leading-relaxed">
-            {articleContent.split("\n\n").map((para: string, idx: number) => {
-              const trimmed = para.trim();
-              if (trimmed.startsWith("### ")) {
-                return (
-                  <h3 key={idx} className="text-xl sm:text-2xl font-black text-secondary-950 pt-4">
-                    {trimmed.replace("### ", "")}
-                  </h3>
-                );
-              }
-              if (trimmed.startsWith("## ")) {
-                return (
-                  <h2 key={idx} className="text-2xl sm:text-3xl font-black text-secondary-950 pt-6 pb-1 border-b border-secondary-100">
-                    {trimmed.replace("## ", "")}
-                  </h2>
-                );
-              }
-              if (trimmed.startsWith("1. ") || trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
-                return (
-                  <ul key={idx} className="space-y-2.5 pl-6 list-disc text-secondary-700">
-                    {trimmed.split("\n").map((item: string, i: number) => (
-                      <li key={i} className="pl-1">
-                        {item.replace(/^(\d+\.|\-|\*)\s+/, "")}
-                      </li>
-                    ))}
-                  </ul>
-                );
-              }
-              return (
-                <p key={idx} className="text-secondary-700">
-                  {trimmed}
-                </p>
-              );
-            })}
+          <div className="text-secondary-800 text-sm sm:text-base leading-relaxed">
+            <MarkdownRenderer content={articleContent} />
           </div>
 
           {/* Call to action inside article */}

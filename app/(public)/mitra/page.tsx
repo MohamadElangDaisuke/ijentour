@@ -7,6 +7,7 @@ import {
   Users, Calendar, Compass, ShieldCheck, DollarSign, CheckCircle2, Clock, LogOut, ArrowRight
 } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
+import { getWhatsAppLink } from "@/lib/whatsapp";
 
 export default function MitraDashboardPage() {
   const router = useRouter();
@@ -98,7 +99,7 @@ export default function MitraDashboardPage() {
 
           <div className="flex items-center gap-3">
             <a
-              href="https://wa.me/6282268177188?text=Halo%20Admin%20Operasional,%20saya%20siap%20bertugas."
+              href={getWhatsAppLink("Halo Admin Operasional Ijen Tour, saya siap bertugas.")}
               target="_blank"
               rel="noopener noreferrer"
               className="px-5 py-2.5 rounded-full bg-primary-500 hover:bg-primary-400 text-secondary-950 font-bold text-xs transition shadow-sm"
@@ -189,9 +190,9 @@ export default function MitraDashboardPage() {
                   </div>
 
                   <a
-                    href={`https://wa.me/6282268177188?text=${encodeURIComponent(
+                    href={getWhatsAppLink(
                       `Halo Admin, saya konfirmasi siap bertugas memandu rombongan ${trip.leader} (${trip.title}).`
-                    )}`}
+                    )}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="px-4 py-2 rounded-xl bg-secondary-950 hover:bg-primary-500 hover:text-secondary-950 text-white text-xs font-bold transition shadow-xs"

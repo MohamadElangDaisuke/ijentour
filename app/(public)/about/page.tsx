@@ -3,6 +3,8 @@ import {
   ShieldCheck, Map, HeartHandshake, Award
 } from 'lucide-react';
 import { defaultFeatures } from '../../lib/featuresStorage';
+import FaqSection from '@/app/component/ui/faqSection';
+import FinalCta from '@/app/component/ui/finalCta';
 
 const iconMap = {
   Map: <Map size={32} className="text-secondary-600" />,
@@ -94,7 +96,12 @@ export default function AboutPage() {
             ))}
           </div>
         </section>
+
+        {/* FAQ ACCORDION SECTION */}
+        <FaqSection />
       </main>
+
+      <FinalCta />
     </div>
   );
 }

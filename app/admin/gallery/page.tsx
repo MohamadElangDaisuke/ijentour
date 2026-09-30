@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Plus, Trash2, Image as ImageIcon, Sparkles, AlertCircle } from "lucide-react";
 import { defaultStories, Story } from "@/app/lib/stories";
+import ImageUpload from "@/app/component/ui/ImageUpload";
 
 export default function AdminGalleryPage() {
   const [items, setItems] = useState<Story[]>(defaultStories);
@@ -35,7 +36,7 @@ export default function AdminGalleryPage() {
   const handleAddPhoto = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !image) {
-      setError("Judul dan URL gambar wajib diisi.");
+      setError("Judul dan file foto gambar wajib diunggah.");
       return;
     }
 
@@ -91,7 +92,7 @@ export default function AdminGalleryPage() {
           Kelola Galeri Momen
         </h1>
         <p className="text-xs sm:text-sm text-secondary-600 mt-1">
-          Unggah atau perbarui foto-foto dokumentasi keindahan Ijen yang ditampilkan pada website publik.
+          Unggah atau perbarui foto-foto dokumentasi keindahan Ijen yang disimpan langsung di Supabase Storage.
         </p>
       </div>
 
@@ -108,57 +109,59 @@ export default function AdminGalleryPage() {
           </div>
         )}
 
-        <form onSubmit={handleAddPhoto} className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-xs font-bold text-secondary-800 mb-1.5">Judul Foto *</label>
-              <input
-                type="text"
-                required
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Contoh: Danau Toska Kawah Ijen"
-                className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
-              />
+        <form onSubmit={handleAddPhoto} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-secondary-800 mb-1.5">Judul Foto *</label>
+                <input
+                  type="text"
+                  required
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Contoh: Danau Toska Kawah Ijen"
+                  className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-secondary-800 mb-1.5">Kategori</label>
+                <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-800 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                >
+                  <option value="blue-fire">Blue Fire</option>
+                  <option value="crater">Danau Kawah</option>
+                  <option value="sunrise">Sunrise</option>
+                  <option value="miners">Penambang Belerang</option>
+                  <option value="destination">Destinasi Banyuwangi</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-secondary-800 mb-1.5">Keterangan / Caption</label>
+                <textarea
+                  rows={3}
+                  value={caption}
+                  onChange={(e) => setCaption(e.target.value)}
+                  placeholder="Deskripsi singkat momen petualangan ini..."
+                  className="w-full px-4 py-2 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                />
+              </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-secondary-800 mb-1.5">URL / Link Gambar *</label>
-              <input
-                type="text"
-                required
+              <ImageUpload
                 value={image}
-                onChange={(e) => setImage(e.target.value)}
-                placeholder="/images/pkg-bluefire.png atau https://..."
-                className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                onChange={(url) => setImage(url)}
+                folder="gallery"
+                label="Unggah File Foto (Supabase Storage)"
+                required
+                aspectRatio="video"
+                helperText="Pilih file JPG, PNG, atau WebP dari perangkat Anda (Maks. 5 MB)."
               />
             </div>
-
-            <div>
-              <label className="block text-xs font-bold text-secondary-800 mb-1.5">Kategori</label>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-800 focus:outline-none focus:ring-2 focus:ring-primary-500"
-              >
-                <option value="blue-fire">Blue Fire</option>
-                <option value="crater">Danau Kawah</option>
-                <option value="sunrise">Sunrise</option>
-                <option value="miners">Penambang Belerang</option>
-                <option value="destination">Destinasi Banyuwangi</option>
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-secondary-800 mb-1.5">Keterangan / Caption</label>
-            <input
-              type="text"
-              value={caption}
-              onChange={(e) => setCaption(e.target.value)}
-              placeholder="Deskripsi singkat foto..."
-              className="w-full px-4 py-2 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
-            />
           </div>
 
           <div className="flex justify-end">

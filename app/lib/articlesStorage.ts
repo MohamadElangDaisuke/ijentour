@@ -1,5 +1,6 @@
 export interface Article {
   id: string;
+  slug?: string;
   title: string;
   category: string;
   date: string;

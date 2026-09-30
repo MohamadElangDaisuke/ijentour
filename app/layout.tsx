@@ -4,32 +4,64 @@ import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
   variable: "--font-plus-jakarta-sans",
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://ijentour.vercel.app"),
   title: {
-    default: "Ijen Tour | Wisata Kawah Ijen Banyuwangi",
+    default: "Ijen Tour | Wisata Kawah Ijen & Blue Fire Banyuwangi",
     template: "%s | Ijen Tour Banyuwangi",
   },
-  description: "Paket wisata Kawah Ijen Banyuwangi, blue fire, Djawatan, Green Island, Red Island, Taman Nasional Baluran, dan Kawah Wurung bersama pemandu lokal.",
+  description: "Paket wisata Kawah Ijen Banyuwangi, fenomena langka blue fire, golden sunrise, Taman Nasional Baluran, dan Hutan De Djawatan bersama pemandu lokal berlisensi.",
   keywords: [
     "wisata Kawah Ijen",
     "tour Banyuwangi",
     "blue fire Ijen",
-    "Djawatan",
-    "Green Island Banyuwangi",
-    "Red Island Banyuwangi",
-    "Taman Nasional Baluran",
-    "Kawah Wurung",
+    "midnight trip Ijen",
+    "kawah wurung",
+    "taman nasional baluran",
+    "de djawatan banyuwangi",
+    "paket wisata banyuwangi",
+    "open trip kawah ijen",
+    "private tour ijen",
   ],
-  authors: [{ name: "Ijen Tour" }],
+  authors: [{ name: "Ijen Tour Expedition" }],
+  creator: "Ijen Tour",
+  publisher: "Ijen Tour",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
-    title: "Ijen Tour | Wisata Kawah Ijen Banyuwangi",
-    description: "Jelajahi Kawah Ijen dan destinasi terbaik Banyuwangi bersama pemandu lokal.",
-    type: "website",
+    title: "Ijen Tour | Wisata Kawah Ijen & Blue Fire Banyuwangi",
+    description: "Jelajahi keajaiban api biru Kawah Ijen dan panorama terbaik Banyuwangi bersama pemandu lokal berlisensi.",
+    url: "https://ijentour.vercel.app",
+    siteName: "Ijen Tour Banyuwangi",
+    images: [
+      {
+        url: "/images/HeroSection.webp",
+        width: 1200,
+        height: 630,
+        alt: "Eksplorasi Kawah Ijen Banyuwangi",
+      },
+    ],
     locale: "id_ID",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Ijen Tour | Wisata Kawah Ijen & Blue Fire Banyuwangi",
+    description: "Paket tur resmi Kawah Ijen dengan masker respirator, guide lokal, dan antar-jemput.",
+    images: ["/images/HeroSection.webp"],
   },
 };
 

@@ -27,6 +27,7 @@ import {
   Maximize2
 } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
+import { getWhatsAppLink } from '@/lib/whatsapp';
 import {
   TourPackage,
   defaultPackages,
@@ -219,8 +220,7 @@ export default function PackageDetailPage({ params }: PageProps) {
 ${selectedAddonNames ? `✨ *Add-on Tambahan*: ${selectedAddonNames}\n` : ''}
 Mohon info ketersediaan slot guide dan armadanya. Terima kasih!`;
 
-    const encoded = encodeURIComponent(message);
-    window.open(`https://wa.me/6282268177188?text=${encoded}`, '_blank');
+    window.open(getWhatsAppLink(message), '_blank');
   };
 
   const handleOnlineBookingSubmit = async (e: React.FormEvent) => {
@@ -1176,9 +1176,9 @@ Mohon info ketersediaan slot guide dan armadanya. Terima kasih!`;
 
             <div className="space-y-3">
               <a
-                href={`https://wa.me/6282268177188?text=${encodeURIComponent(
+                href={getWhatsAppLink(
                   `Halo Admin Ijen Tour! Saya sudah melakukan reservasi dengan Kode Booking: *${confirmedBooking.bookingCode}* untuk paket *${confirmedBooking.packageName}* tanggal ${confirmedBooking.departureDate}. Mohon konfirmasi ketersediaan armadanya. Terima kasih!`
-                )}`}
+                )}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full py-3.5 px-6 rounded-2xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-black text-sm flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"

@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save, Plus, Trash2, Sparkles, AlertCircle } from "lucide-react";
+import ImageUpload from "@/app/component/ui/ImageUpload";
+import MultiImageUpload from "@/app/component/ui/MultiImageUpload";
 
 export default function CreateTripPage() {
   const router = useRouter();
@@ -15,7 +17,10 @@ export default function CreateTripPage() {
   const [basePrice, setBasePrice] = useState(750000);
   const [rating, setRating] = useState(5.0);
   const [badge, setBadge] = useState("Paket Rekomendasi");
-  const [image, setImage] = useState("/images/pkg-bluefire.png");
+  const [image, setImage] = useState("");
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [meetingPoint, setMeetingPoint] = useState("Banyuwangi (Stasiun/Bandara/Hotel)");
+  const [shortDescription, setShortDescription] = useState("");
   const [description, setDescription] = useState("");
 
   const [highlights, setHighlights] = useState<string[]>([
@@ -96,7 +101,10 @@ export default function CreateTripPage() {
           basePrice: Number(basePrice),
           rating: Number(rating),
           badge,
-          image,
+          image: image || "/images/pkg-bluefire.png",
+          gallery: galleryImages.length > 0 ? (image ? [image, ...galleryImages] : galleryImages) : [image || "/images/pkg-bluefire.png"],
+          meetingPoint,
+          shortDescription: shortDescription || description.slice(0, 140),
           description,
           highlights,
           included,
@@ -225,15 +233,46 @@ export default function CreateTripPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-secondary-800 mb-2">URL Foto Sampul</label>
+              <label className="block text-xs font-bold text-secondary-800 mb-2">Titik Kumpul (Meeting Point)</label>
               <input
                 type="text"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-                placeholder="/images/pkg-bluefire.png"
+                value={meetingPoint}
+                onChange={(e) => setMeetingPoint(e.target.value)}
+                placeholder="Contoh: Banyuwangi (Stasiun/Bandara/Hotel)"
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+            <ImageUpload
+              value={image}
+              onChange={(url) => setImage(url)}
+              folder="trips"
+              label="Foto Sampul Tur (Cover Image - Supabase)"
+              required
+              aspectRatio="video"
+              helperText="Upload foto utama untuk kartu dan banner tur (Maks. 5 MB)."
+            />
+
+            <MultiImageUpload
+              value={galleryImages}
+              onChange={(urls) => setGalleryImages(urls)}
+              folder="trips"
+              label="Galeri Foto Tur (Multiple Upload - Supabase)"
+              maxFiles={8}
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-secondary-800 mb-2">Ringkasan Singkat (Short Description)</label>
+            <input
+              type="text"
+              value={shortDescription}
+              onChange={(e) => setShortDescription(e.target.value)}
+              placeholder="Ringkasan 1-2 kalimat untuk preview card..."
+              className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            />
           </div>
 
           <div>

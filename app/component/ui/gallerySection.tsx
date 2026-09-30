@@ -2,16 +2,13 @@
 
 import { ArrowRight, X } from "lucide-react";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { defaultStories, storiesStorageKey, type Story } from "../../lib/stories";
 
 export default function GallerySection() {
   const [stories, setStories] = useState<Story[]>(defaultStories);
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
-  const contentY = useTransform(scrollYProgress, [0, 1], [20, -20]);
 
   useEffect(() => {
     let isMounted = true;
@@ -66,7 +63,15 @@ export default function GallerySection() {
   }, [selectedStory]);
 
   return (
-    <motion.section id="gallery" ref={sectionRef} aria-labelledby="gallery-heading" style={{ y: contentY }} className="relative w-full overflow-hidden bg-secondary-50 px-5 py-20 md:px-10 md:py-28">
+    <motion.section
+      id="gallery"
+      aria-labelledby="gallery-heading"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.6 }}
+      className="relative w-full overflow-hidden bg-secondary-50 px-5 py-20 md:px-10 md:py-28"
+    >
       <div className="relative z-10 mx-auto max-w-7xl">
         <div className="mb-12 flex flex-col justify-between gap-5 text-center sm:flex-row sm:items-end sm:text-left">
           <div>
@@ -90,7 +95,7 @@ export default function GallerySection() {
                 key={story.id}
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.2 }}
+                viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.45, delay: index * 0.08 }}
                 whileHover={{ y: -6 }}
                 className={`group relative overflow-hidden rounded-3xl bg-secondary-100 text-left ${index === 0 ? 'col-span-2 row-span-2' : ''} ${index === 1 ? 'sm:col-start-3 sm:row-start-1' : ''} ${index === 2 ? 'sm:col-start-4 sm:row-start-1 sm:row-span-2' : ''} ${index === 3 ? 'sm:col-start-3 sm:row-start-2' : ''}`}

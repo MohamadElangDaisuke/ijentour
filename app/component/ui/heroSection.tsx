@@ -3,17 +3,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Compass, Play } from 'lucide-react';
-import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { defaultHeroStats, defaultDestinations } from '../../lib/destinationsStorage';
 
 export default function HeroSection() {
   const [activeDestination, setActiveDestination] = useState(0);
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] });
-  const contentY = useTransform(scrollYProgress, [0, 1], [0, 70]);
-  const imageY = useTransform(scrollYProgress, [0, 1], [0, -55]);
   const destination = defaultDestinations[activeDestination] || defaultDestinations[0];
 
   const changeDestination = (direction: number) => {
@@ -29,7 +25,6 @@ export default function HeroSection() {
 
   return (
     <section
-      ref={sectionRef}
       id="hero"
       className="group relative isolate overflow-hidden bg-secondary-50 px-5 pb-16 pt-28 sm:px-8 sm:pb-20 sm:pt-32 lg:min-h-screen lg:px-12 lg:pb-12 lg:pt-32"
     >
@@ -37,9 +32,8 @@ export default function HeroSection() {
 
       <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[0.88fr_1.12fr] lg:gap-16">
         <motion.div
-          style={{ y: contentY }}
-          initial={{ opacity: 0, x: -32 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, x: -32, y: 15 }}
+          animate={{ opacity: 1, x: 0, y: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="relative z-10 max-w-xl text-center sm:text-left"
         >
@@ -77,9 +71,8 @@ export default function HeroSection() {
         </motion.div>
 
         <motion.div
-          style={{ y: imageY }}
-          initial={{ opacity: 0, scale: 0.96, x: 24 }}
-          animate={{ opacity: 1, scale: 1, x: 0 }}
+          initial={{ opacity: 0, scale: 0.96, x: 24, y: 25 }}
+          animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
           whileHover={{ scale: 1.015 }}
           transition={{ duration: 0.8, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
           className="relative min-h-80 sm:min-h-136 lg:min-h-156"

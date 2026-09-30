@@ -22,7 +22,7 @@ export default function TestimonialSection() {
     <motion.section
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, amount: 0.2 }}
+      viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.65 }}
       aria-labelledby="testimonial-heading"
       className="relative w-full overflow-hidden bg-secondary-50 px-5 py-20 md:px-10 md:py-28"

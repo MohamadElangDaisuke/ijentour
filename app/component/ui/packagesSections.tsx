@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence, useScroll, useTransform, easeIn } from 'framer-motion';
+import { motion, AnimatePresence, easeIn } from 'framer-motion';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -14,17 +14,6 @@ import { TourPackage, defaultPackages, packagesStorageKey } from '../../lib/pack
 export default function PackagesSections() {
   const [packagesData, setPackagesData] = useState<TourPackage[]>(defaultPackages);
   const [activeIndex, setActiveIndex] = useState(0);
-
-  // Reference & Motion Hooks untuk Efek Parallax
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end start']
-  });
-
-  // Parallax Transformasi: Background & Konten bergeser perlahan saat halaman di-scroll
-  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '25%'], { ease: easeIn });
-  const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '15%'], { ease: easeIn });
 
   // Sinkronisasi data paket dari Database API / LocalStorage
   useEffect(() => {
@@ -100,16 +89,16 @@ export default function PackagesSections() {
 
   return (
     <motion.section
-      ref={sectionRef}
       id="packages"
       aria-labelledby="packages-heading"
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.8, ease: easeIn }}
       className="relative w-full overflow-hidden bg-secondary-50 text-secondary-950 flex items-center justify-center px-4 sm:px-8 py-20 sm:py-24 lg:py-28 select-none"
     >
-      {/* 1. DYNAMIC FULL BACKGROUND (Foto aktif memenuhi seluruh latar belakang tanpa warna solid/gradient khusus mobile) */}
-      <motion.div style={{ y: bgY }} className="absolute inset-0 z-0 overflow-hidden pointer-events-none flex">
+      {/* 1. DYNAMIC FULL BACKGROUND */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none flex">
         {/* Sisi Kiri (Desktop Only): Solid bg-secondary-50, Sisi Kanan: Full foto */}
         <div className="hidden lg:block lg:w-1/2 h-full bg-secondary-50" />
 
@@ -128,15 +117,14 @@ export default function PackagesSections() {
           </AnimatePresence>
           <div className="packages-gradient hidden lg:block absolute inset-y-0 left-0 w-1/2 bg-linear-to-r from-secondary-50 via-secondary-50/45 to-transparent" />
         </div>
-      </motion.div>
+      </div>
 
       {/* 2. PACKAGES MAIN CONTENT WRAPPER */}
       <motion.div
-        style={{ y: contentY }}
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.2 }}
+        viewport={{ once: true, amount: 0.2 }}
         className="relative z-10 mx-auto max-w-7xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
       >
         {/* LEFT COLUMN: Headline, Deskripsi, & Tombol See More */}

@@ -3,10 +3,9 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Bars3Icon, MagnifyingGlassIcon, XMarkIcon, UserIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon } from '@heroicons/react/24/outline'
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
 import Sidebar from './sidebar'
-import ThemeToggle from './themeToggle'
 
 const navigation = [
   { name: 'Beranda', href: '/' },
@@ -22,7 +21,6 @@ export default function Navbar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [hidden, setHidden] = useState(false)
-  const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [currentUser, setCurrentUser] = useState<any>(null)
   const pathname = usePathname()
   const { scrollY } = useScroll()
@@ -73,12 +71,12 @@ export default function Navbar() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="relative flex items-center justify-between">
 
-              {/* Mobile Hamburger Trigger */}
-              <div className="flex items-center sm:hidden">
+              {/* Mobile / Tablet Hamburger Trigger */}
+              <div className="flex items-center lg:hidden">
                 <button
                   type="button"
                   onClick={() => setIsSidebarOpen(true)}
-                  className="rounded-lg p-2 text-secondary-700 hover:bg-secondary-100 hover:text-secondary-950 focus:outline-hidden transition-colors"
+                  className="rounded-lg p-2 text-secondary-700 hover:bg-secondary-100 hover:text-secondary-950 focus:outline-hidden transition-colors cursor-pointer"
                   aria-label="Open mobile menu"
                 >
                   <Bars3Icon className="w-6 h-6" />
@@ -96,7 +94,7 @@ export default function Navbar() {
               </div>
 
               {/* Desktop Center Navigation Links */}
-              <div className="hidden sm:flex sm:items-center sm:justify-center">
+              <div className="hidden lg:flex lg:items-center lg:justify-center">
                 <div className="flex space-x-8">
                   {navigation.map((item) => {
                     const isActive =
@@ -128,73 +126,11 @@ export default function Navbar() {
                 </div>
               </div>
 
-              {/* Right Side Actions: Search & Book a trip Button */}
-              <div className="flex items-center space-x-4">
-                <ThemeToggle />
-                {isSearchOpen ? (
-                  <form action="/blog" className="flex items-center overflow-hidden rounded-full border border-primary-500 bg-white/90 shadow-sm">
-                    <MagnifyingGlassIcon className="ml-3 h-4 w-4 shrink-0 text-primary-600" />
-                    <input
-                      type="search"
-                      name="q"
-                      autoFocus
-                      placeholder="Cari artikel..."
-                      aria-label="Cari artikel dan destinasi"
-                      className="w-32 bg-transparent px-2 py-2 text-xs text-secondary-950 outline-none placeholder:text-secondary-500 sm:w-44"
-                    />
-                    <button type="button" onClick={() => setIsSearchOpen(false)} aria-label="Tutup pencarian" title="Tutup pencarian" className="mr-1 rounded-full p-1 text-secondary-500 transition hover:bg-secondary-100 hover:text-secondary-950">
-                      <XMarkIcon className="h-4 w-4" />
-                    </button>
-                  </form>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setIsSearchOpen(true)}
-                    aria-label="Buka pencarian"
-                    title="Cari artikel dan destinasi"
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-secondary-200 bg-white/80 text-secondary-700 shadow-sm transition hover:border-primary-500 hover:bg-primary-50 hover:text-primary-600 cursor-pointer"
-                  >
-                    <MagnifyingGlassIcon className="w-5 h-5" />
-                  </button>
-                )}
-
-                {currentUser ? (
-                  <Link
-                    href={
-                      currentUser.role === "ADMIN"
-                        ? "/admin/dashboard"
-                        : currentUser.role === "MITRA"
-                        ? "/mitra"
-                        : "/customer"
-                    }
-                    title="Akses Dashboard / Portal Anda"
-                    className="flex items-center gap-1.5 rounded-full border border-primary-500 bg-primary-50 dark:bg-secondary-900 px-3.5 py-1.5 text-xs font-bold text-secondary-950 dark:text-primary-300 hover:bg-primary-500 hover:text-secondary-950 transition shadow-xs"
-                  >
-                    <UserIcon className="w-4 h-4 text-primary-600 dark:text-primary-400" />
-                    <span className="hidden sm:inline">
-                      {currentUser.role === "ADMIN"
-                        ? "Admin Panel"
-                        : currentUser.role === "MITRA"
-                        ? "Mitra Guide"
-                        : currentUser.role === "CUSTOMER_PRO"
-                        ? `VIP ${currentUser.name.split(" ")[0]}`
-                        : currentUser.name.split(" ")[0]}
-                    </span>
-                  </Link>
-                ) : (
-                  <Link
-                    href="/login"
-                    title="Masuk / Akun / Portal"
-                    className="flex items-center gap-1.5 rounded-full border border-secondary-200 bg-white/80 dark:bg-secondary-900 px-3.5 py-1.5 text-xs font-semibold text-secondary-800 dark:text-secondary-200 hover:border-primary-500 hover:text-primary-600 transition shadow-xs"
-                  >
-                    <UserIcon className="w-4 h-4 text-primary-600" />
-                    <span className="hidden sm:inline">Masuk</span>
-                  </Link>
-                )}
-
+              {/* Right Side Actions: Book a trip Button */}
+              <div className="flex items-center">
                 <Link
                   href="/packages"
-                  className="rounded-full border border-secondary-300 px-5 py-2 text-xs font-bold text-secondary-950 shadow-xs hover:bg-primary-500 hover:border-primary-500 transition-all duration-300 hover:scale-105 active:scale-95"
+                  className="inline-flex items-center justify-center rounded-full bg-primary-500 px-5 py-2.5 text-xs font-bold text-secondary-950 shadow-sm transition-all duration-300 hover:bg-primary-400 hover:shadow-md hover:scale-105 active:scale-95"
                 >
                   Pesan Tur
                 </Link>

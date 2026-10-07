@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Bars3Icon, MagnifyingGlassIcon, XMarkIcon, UserIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
 import Sidebar from './sidebar'
 import ThemeToggle from './themeToggle'
@@ -24,22 +24,8 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [hidden, setHidden] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
-  const [currentUser, setCurrentUser] = useState<any>(null)
   const pathname = usePathname()
   const { scrollY } = useScroll()
-
-  useEffect(() => {
-    fetch('/api/auth/me')
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.authenticated && data.user) {
-          setCurrentUser(data.user)
-        } else {
-          setCurrentUser(null)
-        }
-      })
-      .catch(() => setCurrentUser(null))
-  }, [pathname])
 
   // Track scroll position to toggle transparency & hide/show motion effect
   useMotionValueEvent(scrollY, 'change', (current) => {
@@ -159,40 +145,6 @@ export default function Navbar() {
                   </button>
                 )}
 
-                {currentUser ? (
-                  <Link
-                    href={
-                      currentUser.role === "ADMIN"
-                        ? "/admin/dashboard"
-                        : currentUser.role === "MITRA"
-                        ? "/mitra"
-                        : "/customer"
-                    }
-                    title="Akses Dashboard / Portal Anda"
-                    className="flex items-center gap-1.5 rounded-full border border-primary-500 bg-primary-50 dark:bg-secondary-900 px-3.5 py-1.5 text-xs font-bold text-secondary-950 dark:text-primary-300 hover:bg-primary-500 hover:text-secondary-950 transition shadow-xs"
-                  >
-                    <UserIcon className="w-4 h-4 text-primary-600 dark:text-primary-400" />
-                    <span className="hidden sm:inline">
-                      {currentUser.role === "ADMIN"
-                        ? "Admin Panel"
-                        : currentUser.role === "MITRA"
-                        ? "Mitra Guide"
-                        : currentUser.role === "CUSTOMER_PRO"
-                        ? `VIP ${currentUser.name.split(" ")[0]}`
-                        : currentUser.name.split(" ")[0]}
-                    </span>
-                  </Link>
-                ) : (
-                  <Link
-                    href="/login"
-                    title="Masuk / Akun / Portal"
-                    className="flex items-center gap-1.5 rounded-full border border-secondary-200 bg-white/80 dark:bg-secondary-900 px-3.5 py-1.5 text-xs font-semibold text-secondary-800 dark:text-secondary-200 hover:border-primary-500 hover:text-primary-600 transition shadow-xs"
-                  >
-                    <UserIcon className="w-4 h-4 text-primary-600" />
-                    <span className="hidden sm:inline">Masuk</span>
-                  </Link>
-                )}
-
                 <Link
                   href="/packages"
                   className="rounded-full border border-secondary-300 px-5 py-2 text-xs font-bold text-secondary-950 shadow-xs hover:bg-primary-500 hover:border-primary-500 transition-all duration-300 hover:scale-105 active:scale-95"
@@ -209,7 +161,6 @@ export default function Navbar() {
       <Sidebar
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
-        currentUser={currentUser}
         navigation={navigation.map((item) => ({
           ...item,
           current: item.href === '/' ? pathname === '/' : pathname === item.href

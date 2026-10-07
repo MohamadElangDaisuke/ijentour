@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma, safeJsonParse } from "@/lib/prisma";
 import { generateBookingCode } from "@/lib/utils";
-import { cookies } from "next/headers";
-import { verifyAuthToken } from "@/lib/auth";
 
 export async function GET(request: Request) {
   try {
@@ -63,21 +61,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // Check if user is logged in
-    const cookieStore = await cookies();
-    const token = cookieStore.get("auth_token")?.value;
-    let userId: string | null = null;
-    let isCustomerPro = false;
-
-    if (token) {
-      const session = await verifyAuthToken(token);
-      if (session) {
-        userId = session.userId;
-        if (session.role === "CUSTOMER_PRO") {
-          isCustomerPro = true;
-        }
-      }
-    }
+    const userId: string | null = null;
+    const isCustomerPro = false;
 
     // Calculate Addon Total
     const addonList = Array.isArray(addons) ? addons : [];

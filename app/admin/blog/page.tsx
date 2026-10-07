@@ -328,7 +328,11 @@ export default function AdminBlogPage() {
                 <option value="Tips & Trik">Tips & Trik</option>
                 <option value="Edukasi Ijen">Edukasi Ijen</option>
                 <option value="Budaya Lokal">Budaya Lokal</option>
+                <option value="Destinasi">Destinasi</option>
                 <option value="Kuliner">Kuliner</option>
+                {category && !["Panduan", "Tips & Trik", "Edukasi Ijen", "Budaya Lokal", "Destinasi", "Kuliner"].includes(category) && (
+                  <option value={category}>{category}</option>
+                )}
               </select>
             </div>
           </div>
@@ -664,6 +668,7 @@ export default function AdminBlogPage() {
         isOpen={isAiModalOpen}
         onClose={() => setIsAiModalOpen(false)}
         onApplyArticle={handleApplyAiArticle}
+        initialCategory={category}
       />
     </div>
   );

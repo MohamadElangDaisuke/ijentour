@@ -27,9 +27,14 @@ function isRateLimited(ip: string): boolean {
 
 export interface GenerateBlogRequest {
   topic: string;
-  language?: "English" | "Indonesian";
+  category?: string;
+  focus?: string;
+  targetAudience?: string | string[];
+  purpose?: string;
   writingStyle?: "Travel Blog" | "Informative" | "Promotional" | "Storytelling";
-  articleLength?: "500 words" | "800 words" | "1200 words" | "1500 words" | "Short" | "Medium" | "Long";
+  articleLength?: "500 words" | "800 words" | "1200 words" | "1500 words" | "Short" | "Medium" | "Long" | "Comprehensive";
+  primaryKeyword?: string;
+  secondaryKeywords?: string[];
   seoOptions?: {
     generateTitle?: boolean;
     generateMetaDescription?: boolean;
@@ -196,9 +201,14 @@ export async function POST(request: Request) {
 
     const {
       topic,
-      language = "English",
+      category = "",
+      focus = "",
+      targetAudience = "",
+      purpose = "",
       writingStyle = "Travel Blog",
       articleLength = "800 words",
+      primaryKeyword = "",
+      secondaryKeywords = [],
       seoOptions = {
         generateTitle: true,
         generateMetaDescription: true,
@@ -231,23 +241,27 @@ export async function POST(request: Request) {
       );
     }
 
+    const audienceStr = Array.isArray(targetAudience)
+      ? targetAudience.join(", ")
+      : targetAudience;
+
     // Map length
     let targetWordCount = "800 words";
     if (articleLength === "Short" || articleLength === "500 words") targetWordCount = "500 words";
     else if (articleLength === "Medium" || articleLength === "800 words") targetWordCount = "800 words";
     else if (articleLength === "Long" || articleLength === "1200 words") targetWordCount = "1200 words";
-    else if (articleLength === "1500 words") targetWordCount = "1500 words";
+    else if (articleLength === "Comprehensive" || articleLength === "1500 words") targetWordCount = "1500 words";
 
     // 4. Construct System Instruction & Prompt
     const systemInstruction = `You are a senior travel content writer and SEO specialist for "Ijen Tour" (ijentour.com), the premier expedition and tour operator for Mount Ijen (Kawah Ijen Volcano) in Banyuwangi, East Java, Indonesia.
 
 Your writing standards:
 1. Tone & Persona: Natural, engaging, inspiring, and informative. The content must feel human-crafted by seasoned local expedition guides and travel writers, NEVER robotic or generic AI text.
-2. Target Audience: International travelers, adventure seekers, photographers, and nature enthusiasts planning trips to Indonesia.
-3. Language Quality:
-   - If language requested is English: Write in natural, idiomatic, world-class travel publication English (like Lonely Planet or National Geographic Traveler). Avoid awkward literal translations.
-   - If language requested is Indonesian: Write in fluent, communicative, and professional travel journalism Indonesian.
-4. Factual Accuracy & Integrity:
+2. Tone of Voice & Style: Follow the requested style ("${writingStyle}").
+${focus ? `3. Focal Angle: Strictly align the perspective with: "${focus}".` : ""}
+${audienceStr ? `4. Target Audience: Tailor explanations, tips, and difficulty notes specifically for: "${audienceStr}".` : ""}
+${purpose ? `5. Editorial Intent: Structure the flow to serve as a high-value "${purpose}".` : ""}
+6. Factual Accuracy & Integrity:
    - ALWAYS adhere to authentic facts about Mount Ijen:
      * Located on the border between Banyuwangi and Bondowoso regencies, East Java.
      * World-famous for the electric Blue Fire (natural sulfuric gas combustion at high temperatures, visible only in complete darkness between ~02:00 AM and 04:30 AM before sunrise).
@@ -258,9 +272,9 @@ Your writing standards:
      * Required safety equipment: professional certified gas mask (respirator with gas filters for toxic sulfur dioxide / SO2 vapors), headlamp, layered clothing (temperatures can drop to 8-12°C before dawn), and sturdy trekking boots.
      * Accessible via Banyuwangi (train station / airport) or from Bali via Ketapang-Gilimanuk ferry.
    - NEVER invent fictional prices, fake departure schedules, false regulations, or imaginary attractions. If pricing or park operating hours vary, mention that they follow official BKSDA park policies or suggest consulting Ijen Tour for the latest updates.
-   - Absolutely NO keyword stuffing. Ensure natural keyword integration.
+   - Natural SEO Integration: ${primaryKeyword ? `Naturally incorporate the primary keyword "${primaryKeyword}" in the title, the introduction, and relevant subheadings.` : "Natural keyword integration."} No keyword stuffing.
 
-5. STRICT MARKDOWN FORMATTING RULES FOR "content":
+7. STRICT MARKDOWN FORMATTING RULES FOR "content":
    - STRICTLY PURE MARKDOWN ONLY. NEVER use raw HTML tags (NO <h2>, <p>, <ul>, <li>, <div>, <br>, etc.).
    - NEVER output a top-level H1 title (e.g., "# Title") inside "content" because the title is stored separately in the "title" field.
    - Use "## " for main sections (e.g., "## Why Visit Mount Ijen?").
@@ -281,17 +295,17 @@ Your writing standards:
      * Clear concluding section ("## Conclusion" or "## Kesimpulan")
    - Adapt depth to the requested target length (${targetWordCount}).
 
-6. FAQ SEPARATION RULE:
+8. FAQ SEPARATION RULE:
    - Do NOT duplicate or append the FAQ section inside the "content" markdown field.
    - The FAQ questions and answers must ONLY be placed in the dedicated "faq" JSON array in the response schema.
 
-7. Call-to-Action (CTA):
+9. Call-to-Action (CTA):
    - ${
      includeCta
        ? `Include an organic, helpful Call-to-Action at the end of the conclusion in "content", inviting travelers to join an all-inclusive guided Ijen Tour expedition (with certified local guides, safety respirators, and roundtrip hotel transfers). Keep it tasteful and professional.`
        : `Do not include promotional sales pitches or commercial booking CTAs.`
    }
-8. Frequently Asked Questions (FAQ):
+10. Frequently Asked Questions (FAQ):
    - ${
      seoOptions.generateFaq !== false
        ? `Generate 3 to 5 realistic, high-value FAQ questions and thorough answers addressing common traveler concerns regarding this specific topic in the "faq" array.`
@@ -299,11 +313,16 @@ Your writing standards:
    }
 `;
 
-    const userPrompt = `Generate a complete, high-ranking, engaging blog post about the following topic:
+    const userPrompt = `Generate a complete, high-ranking, engaging blog post about the following:
 Topic: "${trimmedTopic}"
-Language: ${language}
+${category ? `Category: "${category}"` : ""}
+${focus ? `Focal Angle: "${focus}"` : ""}
+${audienceStr ? `Target Audience: "${audienceStr}"` : ""}
+${purpose ? `Article Purpose: "${purpose}"` : ""}
 Writing Style: ${writingStyle}
 Target Length: Approximately ${targetWordCount}
+${primaryKeyword ? `Primary Keyword: "${primaryKeyword}"` : ""}
+${secondaryKeywords && secondaryKeywords.length > 0 ? `Secondary Keywords: ${secondaryKeywords.join(", ")}` : ""}
 
 SEO Preferences:
 - SEO Title: ${seoOptions.generateTitle !== false ? "Yes" : "Standard"}
@@ -314,15 +333,7 @@ SEO Preferences:
 - FAQ Section: ${seoOptions.generateFaq !== false ? "Yes (3-5 items in faq array only)" : "No"}
 - Include Ijen Tour Booking CTA: ${includeCta ? "Yes" : "No"}
 
-Categories available in system:
-- "Panduan" (Comprehensive guides, how-to, preparation)
-- "Tips & Trik" (Photography tips, packing hacks, safety advice)
-- "Edukasi Ijen" (Geology, blue flame science, sulfur mining history)
-- "Budaya Lokal" (Osing culture, Banyuwangi traditions, local people)
-- "Kuliner" (Banyuwangi culinary recommendations, food stops)
-
-Select the most suitable category for this topic.
-Estimated reading time should be formatted as "X Menit Baca" or "X min read" matching the language.
+Write the article in the natural language matching the topic title provided.
 Remember: "content" must be clean, structured PURE MARKDOWN without HTML and without repeating the H1 title.`;
 
     // 5. Initialize Google Gen AI client
@@ -342,7 +353,7 @@ Remember: "content" must be clean, structured PURE MARKDOWN without HTML and wit
         },
         category: {
           type: Type.STRING,
-          description: "Category matching one of: Panduan, Tips & Trik, Edukasi Ijen, Budaya Lokal, or Kuliner",
+          description: "Category matching or reflecting the topic/category specified",
         },
         excerpt: {
           type: Type.STRING,
@@ -389,15 +400,14 @@ Remember: "content" must be clean, structured PURE MARKDOWN without HTML and wit
 
     // Priority fallback model chain verified via models.list() and direct generateContent tests
     const modelsToTry = [
+      "gemini-flash-lite-latest",
       "gemini-flash-latest",
       "gemini-3.5-flash-lite",
       "gemini-3.1-flash-lite",
-      "gemini-3-flash-preview",
-      "gemini-flash-lite-latest",
       "gemini-3.8-flash",
-      "gemini-3.7-flash",
-      "gemini-3.6-flash",
       "gemini-3.5-flash",
+      "gemini-3.7-flash",
+      "gemini-pro-latest",
     ];
 
     let rawText = "";
@@ -537,8 +547,10 @@ Remember: "content" must be clean, structured PURE MARKDOWN without HTML and wit
     }
 
     // 7. Sanitize and validate fields
-    const validCategories = ["Panduan", "Tips & Trik", "Edukasi Ijen", "Budaya Lokal", "Kuliner"];
-    const resolvedCategory = validCategories.includes(parsedData.category)
+    const validCategories = ["Panduan", "Tips & Trik", "Edukasi Ijen", "Budaya Lokal", "Kuliner", "Destinasi"];
+    const resolvedCategory = (category && category.trim())
+      ? category.trim()
+      : validCategories.includes(parsedData.category)
       ? parsedData.category
       : "Panduan";
 
@@ -563,15 +575,35 @@ Remember: "content" must be clean, structured PURE MARKDOWN without HTML and wit
       );
     }
 
+    // Merge primary and secondary keywords uniquely
+    const keywordsSet = new Set<string>();
+    if (primaryKeyword && primaryKeyword.trim()) {
+      keywordsSet.add(primaryKeyword.trim());
+    }
+    if (Array.isArray(secondaryKeywords)) {
+      secondaryKeywords.forEach((kw) => {
+        if (kw && typeof kw === "string" && kw.trim()) keywordsSet.add(kw.trim());
+      });
+    }
+    if (Array.isArray(parsedData.keywords)) {
+      parsedData.keywords.forEach((kw) => {
+        if (kw && typeof kw === "string" && kw.trim()) keywordsSet.add(kw.trim());
+      });
+    }
+
+    const wordCount = cleanContent.split(/\s+/).filter(Boolean).length;
+    const computedReadMinutes = Math.max(1, Math.ceil(wordCount / 180));
+    const finalReadTime = parsedData.readTime || `${computedReadMinutes} Menit Baca`;
+
     const finalResponse: GeneratedBlogResponse = {
       title: parsedData.title || trimmedTopic,
       slug: cleanSlug,
       category: resolvedCategory,
       excerpt: parsedData.excerpt || parsedData.metaDescription || "",
       metaDescription: parsedData.metaDescription || parsedData.excerpt || "",
-      readTime: parsedData.readTime || (language === "English" ? "5 min read" : "5 Menit Baca"),
+      readTime: finalReadTime,
       content: cleanContent,
-      keywords: Array.isArray(parsedData.keywords) ? parsedData.keywords : [],
+      keywords: Array.from(keywordsSet),
       tags: Array.isArray(parsedData.tags) ? parsedData.tags : [],
       faq: Array.isArray(parsedData.faq) ? parsedData.faq : [],
     };

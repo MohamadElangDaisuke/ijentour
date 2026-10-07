@@ -107,18 +107,6 @@ export default function PackageDetailPage({ params }: PageProps) {
         console.error('Failed to load packages from localStorage:', e);
       }
     }
-
-    // 3. Check if user is logged in to prefill form
-    fetch('/api/auth/me')
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.authenticated && data.user) {
-          setCustomerName(data.user.name || '');
-          setCustomerEmail(data.user.email || '');
-          if (data.user.phone) setWhatsappNumber(data.user.phone);
-        }
-      })
-      .catch(() => { });
   }, [packageId]);
 
   // Set default tomorrow date for booking
@@ -1188,10 +1176,10 @@ Mohon info ketersediaan slot guide dan armadanya. Terima kasih!`;
               </a>
 
               <Link
-                href="/customer"
+                href="/booking"
                 className="block w-full py-3 px-6 rounded-2xl bg-secondary-100 hover:bg-secondary-200 text-secondary-800 font-bold text-xs transition"
               >
-                Lihat di Dashboard Traveler
+                Lacak Status Reservasi
               </Link>
             </div>
           </div>

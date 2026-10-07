@@ -3,10 +3,13 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+<<<<<<< HEAD
 import { Bars3Icon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
+=======
+import { Bars3Icon } from '@heroicons/react/24/outline'
+>>>>>>> 9251a895be99aa4c586e3f8332fa5250e53ee20b
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
 import Sidebar from './sidebar'
-import ThemeToggle from './themeToggle'
 
 const navigation = [
   { name: 'Beranda', href: '/' },
@@ -23,7 +26,11 @@ export default function Navbar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [hidden, setHidden] = useState(false)
+<<<<<<< HEAD
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+=======
+  const [currentUser, setCurrentUser] = useState<any>(null)
+>>>>>>> 9251a895be99aa4c586e3f8332fa5250e53ee20b
   const pathname = usePathname()
   const { scrollY } = useScroll()
 
@@ -60,12 +67,12 @@ export default function Navbar() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="relative flex items-center justify-between">
 
-              {/* Mobile Hamburger Trigger */}
-              <div className="flex items-center sm:hidden">
+              {/* Mobile / Tablet Hamburger Trigger */}
+              <div className="flex items-center lg:hidden">
                 <button
                   type="button"
                   onClick={() => setIsSidebarOpen(true)}
-                  className="rounded-lg p-2 text-secondary-700 hover:bg-secondary-100 hover:text-secondary-950 focus:outline-hidden transition-colors"
+                  className="rounded-lg p-2 text-secondary-700 hover:bg-secondary-100 hover:text-secondary-950 focus:outline-hidden transition-colors cursor-pointer"
                   aria-label="Open mobile menu"
                 >
                   <Bars3Icon className="w-6 h-6" />
@@ -83,7 +90,7 @@ export default function Navbar() {
               </div>
 
               {/* Desktop Center Navigation Links */}
-              <div className="hidden sm:flex sm:items-center sm:justify-center">
+              <div className="hidden lg:flex lg:items-center lg:justify-center">
                 <div className="flex space-x-8">
                   {navigation.map((item) => {
                     const isActive =
@@ -115,6 +122,7 @@ export default function Navbar() {
                 </div>
               </div>
 
+<<<<<<< HEAD
               {/* Right Side Actions: Search & Book a trip Button */}
               <div className="flex items-center space-x-4">
                 <ThemeToggle />
@@ -145,9 +153,13 @@ export default function Navbar() {
                   </button>
                 )}
 
+=======
+              {/* Right Side Actions: Book a trip Button */}
+              <div className="flex items-center">
+>>>>>>> 9251a895be99aa4c586e3f8332fa5250e53ee20b
                 <Link
                   href="/packages"
-                  className="rounded-full border border-secondary-300 px-5 py-2 text-xs font-bold text-secondary-950 shadow-xs hover:bg-primary-500 hover:border-primary-500 transition-all duration-300 hover:scale-105 active:scale-95"
+                  className="inline-flex items-center justify-center rounded-full bg-primary-500 px-5 py-2.5 text-xs font-bold text-secondary-950 shadow-sm transition-all duration-300 hover:bg-primary-400 hover:shadow-md hover:scale-105 active:scale-95"
                 >
                   Pesan Tur
                 </Link>

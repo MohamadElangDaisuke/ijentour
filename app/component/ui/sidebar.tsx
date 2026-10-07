@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { motion, AnimatePresence, PanInfo } from 'framer-motion'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import ThemeToggle from './themeToggle'
 
 interface SidebarProps {
@@ -29,7 +29,7 @@ export default function Sidebar({ isOpen, onClose, navigation }: SidebarProps) {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35, ease: 'easeOut' }}
             onClick={onClose}
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs sm:hidden"
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs lg:hidden"
           />
 
           {/* Panel Sidebar dengan Drag Gesture */}
@@ -42,17 +42,17 @@ export default function Sidebar({ isOpen, onClose, navigation }: SidebarProps) {
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 220, mass: 0.8 }}
-            className="fixed inset-y-0 left-0 z-50 flex w-72 flex-col justify-between border-r border-secondary-200 bg-white/95 p-6 text-secondary-950 shadow-2xl backdrop-blur-xl touch-none select-none sm:hidden"
+            className="fixed inset-y-0 left-0 z-50 flex w-72 flex-col justify-between border-r border-secondary-200 bg-white/95 dark:bg-secondary-950/95 p-6 text-secondary-950 dark:text-white shadow-2xl backdrop-blur-xl touch-none select-none lg:hidden"
           >
             <div>
-              <div className="absolute top-1/2 -right-3 -translate-y-1/2 w-1.5 h-12 bg-white/20 rounded-full sm:hidden" />
+              <div className="absolute top-1/2 -right-3 -translate-y-1/2 w-1.5 h-12 bg-white/20 rounded-full lg:hidden" />
 
-              {/* Header Sidebar: Logo & Close Button */}
-              <div className="flex items-center justify-between border-b border-secondary-200 pb-6">
+              {/* Header Sidebar: Logo, Theme Mode, & Close Button */}
+              <div className="flex items-center justify-between border-b border-secondary-200 dark:border-secondary-800 pb-5">
                 <Link
                   href="/"
                   onClick={onClose}
-                  className="text-xl font-black tracking-tight text-secondary-950"
+                  className="text-xl font-black tracking-tight text-secondary-950 dark:text-white"
                 >
                   Ijen<span className="text-primary-500 font-extrabold">Tour</span>
                 </Link>
@@ -61,7 +61,7 @@ export default function Sidebar({ isOpen, onClose, navigation }: SidebarProps) {
                   <button
                     type="button"
                     onClick={onClose}
-                    className="rounded-full p-2 text-secondary-500 transition-colors hover:bg-secondary-100 hover:text-secondary-950"
+                    className="rounded-full p-2 text-secondary-500 hover:bg-secondary-100 dark:hover:bg-secondary-800 hover:text-secondary-950 dark:hover:text-white transition-colors cursor-pointer"
                     aria-label="Close navigation"
                   >
                     <XMarkIcon className="w-6 h-6" />
@@ -69,8 +69,20 @@ export default function Sidebar({ isOpen, onClose, navigation }: SidebarProps) {
                 </div>
               </div>
 
+              {/* Search Bar di Sidebar */}
+              <form action="/blog" onSubmit={onClose} className="mt-5 flex items-center overflow-hidden rounded-2xl border border-secondary-200 dark:border-secondary-800 bg-secondary-50 dark:bg-secondary-900 px-3.5 py-2.5 transition focus-within:border-primary-500 focus-within:bg-white dark:focus-within:bg-secondary-900 focus-within:ring-2 focus-within:ring-primary-500/20">
+                <MagnifyingGlassIcon className="h-4 w-4 shrink-0 text-secondary-400 dark:text-secondary-500" />
+                <input
+                  type="search"
+                  name="q"
+                  placeholder="Cari artikel & paket..."
+                  aria-label="Cari artikel dan paket"
+                  className="w-full bg-transparent pl-2.5 text-xs text-secondary-950 dark:text-white outline-none placeholder:text-secondary-400 dark:placeholder:text-secondary-500"
+                />
+              </form>
+
               {/* Navigasi Rute Public */}
-              <nav className="mt-6 space-y-1">
+              <nav className="mt-5 space-y-1">
                 {navigation.map((item, index) => (
                   <motion.div
                     key={item.name}

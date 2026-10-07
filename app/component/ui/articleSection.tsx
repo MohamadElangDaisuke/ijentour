@@ -59,7 +59,7 @@ export default function ArticleSection() {
                 key={article.id || article.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.2 }}
+                viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.45, delay: index * 0.08 }}
                 whileHover={{ y: -6 }}
                 className="overflow-hidden rounded-3xl border border-secondary-100 bg-secondary-50 shadow-sm group"

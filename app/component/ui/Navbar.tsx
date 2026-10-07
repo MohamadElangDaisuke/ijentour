@@ -3,13 +3,10 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-<<<<<<< HEAD
 import { Bars3Icon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
-=======
-import { Bars3Icon } from '@heroicons/react/24/outline'
->>>>>>> 9251a895be99aa4c586e3f8332fa5250e53ee20b
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
 import Sidebar from './sidebar'
+import ThemeToggle from './themeToggle'
 
 const navigation = [
   { name: 'Beranda', href: '/' },
@@ -26,11 +23,7 @@ export default function Navbar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [hidden, setHidden] = useState(false)
-<<<<<<< HEAD
   const [isSearchOpen, setIsSearchOpen] = useState(false)
-=======
-  const [currentUser, setCurrentUser] = useState<any>(null)
->>>>>>> 9251a895be99aa4c586e3f8332fa5250e53ee20b
   const pathname = usePathname()
   const { scrollY } = useScroll()
 
@@ -60,7 +53,7 @@ export default function Navbar() {
         <nav
           className={`site-navbar w-full transition-all duration-300 ${
             scrolled
-              ? 'bg-white/90 dark:bg-secondary-950/90 backdrop-blur-md border-b border-secondary-100 shadow-sm py-3'
+              ? 'bg-white/90 dark:bg-secondary-950/90 backdrop-blur-md border-b border-secondary-100 dark:border-secondary-800 shadow-sm py-3'
               : 'bg-white/80 dark:bg-secondary-950/80 backdrop-blur-sm py-4'
           }`}
         >
@@ -72,18 +65,18 @@ export default function Navbar() {
                 <button
                   type="button"
                   onClick={() => setIsSidebarOpen(true)}
-                  className="rounded-lg p-2 text-secondary-700 hover:bg-secondary-100 hover:text-secondary-950 focus:outline-hidden transition-colors cursor-pointer"
+                  className="rounded-lg p-2 text-secondary-700 dark:text-secondary-200 hover:bg-secondary-100 dark:hover:bg-secondary-800 hover:text-secondary-950 dark:hover:text-white focus:outline-hidden transition-colors cursor-pointer"
                   aria-label="Open mobile menu"
                 >
                   <Bars3Icon className="w-6 h-6" />
                 </button>
               </div>
 
-              {/* Logo: IjenTour (Ijen in White, Tour in Gold/Primary) */}
+              {/* Logo: IjenTour */}
               <div className="flex items-center">
                 <Link
                   href="/"
-                    className="text-2xl font-black tracking-tight text-secondary-950 transition-transform duration-200 hover:scale-105"
+                  className="text-2xl font-black tracking-tight text-secondary-950 dark:text-white transition-transform duration-200 hover:scale-105"
                 >
                   Ijen<span className="text-primary-500 font-extrabold">Tour</span>
                 </Link>
@@ -104,8 +97,8 @@ export default function Navbar() {
                         href={item.href}
                         className={`relative text-sm font-semibold transition-colors duration-200 py-1 ${
                           isActive
-                            ? 'text-primary-600 font-bold'
-                            : 'text-secondary-700 hover:text-primary-600'
+                            ? 'text-primary-600 dark:text-primary-400 font-bold'
+                            : 'text-secondary-700 dark:text-secondary-300 hover:text-primary-600 dark:hover:text-primary-400'
                         }`}
                       >
                         {item.name}
@@ -122,22 +115,21 @@ export default function Navbar() {
                 </div>
               </div>
 
-<<<<<<< HEAD
-              {/* Right Side Actions: Search & Book a trip Button */}
+              {/* Right Side Actions: ThemeToggle, Search & Book a trip Button */}
               <div className="flex items-center space-x-4">
                 <ThemeToggle />
                 {isSearchOpen ? (
-                  <form action="/blog" className="flex items-center overflow-hidden rounded-full border border-primary-500 bg-white/90 shadow-sm">
-                    <MagnifyingGlassIcon className="ml-3 h-4 w-4 shrink-0 text-primary-600" />
+                  <form action="/blog" className="flex items-center overflow-hidden rounded-full border border-primary-500 bg-white/90 dark:bg-secondary-900/90 shadow-sm">
+                    <MagnifyingGlassIcon className="ml-3 h-4 w-4 shrink-0 text-primary-600 dark:text-primary-400" />
                     <input
                       type="search"
                       name="q"
                       autoFocus
                       placeholder="Cari artikel..."
                       aria-label="Cari artikel dan destinasi"
-                      className="w-32 bg-transparent px-2 py-2 text-xs text-secondary-950 outline-none placeholder:text-secondary-500 sm:w-44"
+                      className="w-32 bg-transparent px-2 py-2 text-xs text-secondary-950 dark:text-white outline-none placeholder:text-secondary-500 sm:w-44"
                     />
-                    <button type="button" onClick={() => setIsSearchOpen(false)} aria-label="Tutup pencarian" title="Tutup pencarian" className="mr-1 rounded-full p-1 text-secondary-500 transition hover:bg-secondary-100 hover:text-secondary-950">
+                    <button type="button" onClick={() => setIsSearchOpen(false)} aria-label="Tutup pencarian" title="Tutup pencarian" className="mr-1 rounded-full p-1 text-secondary-500 transition hover:bg-secondary-100 dark:hover:bg-secondary-800 hover:text-secondary-950 dark:hover:text-white cursor-pointer">
                       <XMarkIcon className="h-4 w-4" />
                     </button>
                   </form>
@@ -147,16 +139,12 @@ export default function Navbar() {
                     onClick={() => setIsSearchOpen(true)}
                     aria-label="Buka pencarian"
                     title="Cari artikel dan destinasi"
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-secondary-200 bg-white/80 text-secondary-700 shadow-sm transition hover:border-primary-500 hover:bg-primary-50 hover:text-primary-600 cursor-pointer"
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-secondary-200 dark:border-secondary-800 bg-white/80 dark:bg-secondary-900 text-secondary-700 dark:text-secondary-300 shadow-sm transition hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-secondary-800 hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer"
                   >
                     <MagnifyingGlassIcon className="w-5 h-5" />
                   </button>
                 )}
 
-=======
-              {/* Right Side Actions: Book a trip Button */}
-              <div className="flex items-center">
->>>>>>> 9251a895be99aa4c586e3f8332fa5250e53ee20b
                 <Link
                   href="/packages"
                   className="inline-flex items-center justify-center rounded-full bg-primary-500 px-5 py-2.5 text-xs font-bold text-secondary-950 shadow-sm transition-all duration-300 hover:bg-primary-400 hover:shadow-md hover:scale-105 active:scale-95"

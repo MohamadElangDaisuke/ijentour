@@ -27,12 +27,11 @@ export default function Navbar() {
   const pathname = usePathname()
   const { scrollY } = useScroll()
 
-  // Track scroll position to toggle transparency & hide/show motion effect
+
   useMotionValueEvent(scrollY, 'change', (current) => {
     const previous = scrollY.getPrevious() ?? 0
     setScrolled(current > 20)
-    
-    // Hide navbar when scrolling down past 150px, show when scrolling up
+
     if (current > previous && current > 150) {
       setHidden(true)
     } else {
@@ -51,11 +50,10 @@ export default function Navbar() {
         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
       >
         <nav
-          className={`site-navbar w-full transition-all duration-300 ${
-            scrolled
-              ? 'bg-white/90 dark:bg-secondary-950/90 backdrop-blur-md border-b border-secondary-100 dark:border-secondary-800 shadow-sm py-3'
-              : 'bg-white/80 dark:bg-secondary-950/80 backdrop-blur-sm py-4'
-          }`}
+          className={`site-navbar w-full transition-all duration-300 ${scrolled
+            ? 'bg-white/90 dark:bg-secondary-950/90 backdrop-blur-md border-b border-secondary-100 dark:border-secondary-800 shadow-sm py-3'
+            : 'bg-white/80 dark:bg-secondary-950/80 backdrop-blur-sm py-4'
+            }`}
         >
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="relative flex items-center justify-between">
@@ -76,12 +74,7 @@ export default function Navbar() {
               <div className="flex items-center">
                 <Link
                   href="/"
-<<<<<<< HEAD
-                  className="text-2xl font-black tracking-tight text-secondary-950 transition-transform duration-200 hover:scale-105"
-=======
-                  className="text-2xl font-black tracking-tight text-secondary-950 dark:text-white transition-transform duration-200 hover:scale-105"
->>>>>>> 793f440217785225fbb2d38a7475f7a504def5b4
-                >
+                  className="text-2xl font-black tracking-tight text-secondary-950 dark:text-white transition-transform duration-200 hover:scale-105">
                   Ijen<span className="text-primary-500 font-extrabold">Tour</span>
                 </Link>
               </div>
@@ -99,11 +92,10 @@ export default function Navbar() {
                       <Link
                         key={item.name}
                         href={item.href}
-                        className={`relative text-sm font-semibold transition-colors duration-200 py-1 ${
-                          isActive
-                            ? 'text-primary-600 dark:text-primary-400 font-bold'
-                            : 'text-secondary-700 dark:text-secondary-300 hover:text-primary-600 dark:hover:text-primary-400'
-                        }`}
+                        className={`relative text-sm font-semibold transition-colors duration-200 py-1 ${isActive
+                          ? 'text-primary-600 dark:text-primary-400 font-bold'
+                          : 'text-secondary-700 dark:text-secondary-300 hover:text-primary-600 dark:hover:text-primary-400'
+                          }`}
                       >
                         {item.name}
                         {isActive && (
@@ -118,15 +110,11 @@ export default function Navbar() {
                   })}
                 </div>
               </div>
-
-<<<<<<< HEAD
-              {/* Right Side Actions: ThemeToggle & Book a trip Button */}
-              <div className="flex items-center gap-3">
-                <div className="hidden sm:block">
-                  <ThemeToggle />
-                </div>
-=======
-              {/* Right Side Actions: ThemeToggle, Search & Book a trip Button */}
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="hidden sm:block">
+                <ThemeToggle />
+              </div>
               <div className="flex items-center space-x-4">
                 <ThemeToggle />
                 {isSearchOpen ? (
@@ -155,8 +143,6 @@ export default function Navbar() {
                     <MagnifyingGlassIcon className="w-5 h-5" />
                   </button>
                 )}
-
->>>>>>> 793f440217785225fbb2d38a7475f7a504def5b4
                 <Link
                   href="/packages"
                   className="inline-flex items-center justify-center rounded-full bg-primary-500 px-5 py-2.5 text-xs font-bold text-secondary-950 shadow-sm transition-all duration-300 hover:bg-primary-400 hover:shadow-md hover:scale-105 active:scale-95"
@@ -165,18 +151,21 @@ export default function Navbar() {
                 </Link>
               </div>
             </div>
-          </div>
-        </nav>
-      </motion.header>
+          </div >
+        </nav >
+      </motion.header >
 
       {/* Mobile Drawer Sidebar */}
-      <Sidebar
+      < Sidebar
         isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
-        navigation={navigation.map((item) => ({
-          ...item,
-          current: item.href === '/' ? pathname === '/' : pathname === item.href
-        }))}
+        onClose={() => setIsSidebarOpen(false)
+        }
+        navigation={
+          navigation.map((item) => ({
+            ...item,
+            current: item.href === '/' ? pathname === '/' : pathname === item.href
+          }))
+        }
       />
     </>
   )

@@ -47,9 +47,6 @@ export default function BookingLookupPage() {
         </div>
 
         <div className="relative z-10 max-w-3xl mx-auto px-4 mt-8">
-          <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary-400 mb-2">
-            Layanan Pelanggan
-          </p>
           <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
             Cek Status Reservasi Anda
           </h1>

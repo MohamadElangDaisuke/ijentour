@@ -130,29 +130,22 @@ export default function PackagesSections() {
         {/* LEFT COLUMN: Headline, Deskripsi, & Tombol See More */}
         <div className="col-span-1 lg:col-span-5 flex flex-col justify-center items-center lg:items-start space-y-5 sm:space-y-6 text-center lg:text-left">
           <div className="space-y-4">
-            <motion.p variants={itemVariants} className="text-xs font-bold uppercase tracking-[0.3em] text-primary-600">
-              Paket pilihan traveler
-            </motion.p>
-            <motion.h2
+            <h2
               id="packages-heading"
               className="text-2xl sm:text-4xl lg:text-5xl font-black text-secondary-950 leading-tight tracking-tight"
-              variants={itemVariants}
             >
               Paket wisata Kawah Ijen dan Banyuwangi
-            </motion.h2>
+            </h2>
 
-            <motion.p
-              variants={itemVariants}
-              className="text-sm sm:text-base font-normal leading-relaxed text-secondary-700 max-w-lg lg:max-w-none"
-            >
+            <p className="text-sm sm:text-base font-normal leading-relaxed text-secondary-700 max-w-lg mx-auto lg:mx-0">
               Pilih paket perjalanan yang dirancang untuk menikmati Ijen, blue fire, dan lanskap Jawa Timur dengan lebih dekat.
-            </motion.p>
+            </p>
           </div>
 
           {/* Tombol See More (Lihat Selengkapnya) */}
           <Link
             href="/packages"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-primary-500 px-6 py-3.5 text-secondary-950 text-sm font-bold transition-all hover:bg-primary-400 hover:shadow-lg cursor-pointer transform hover:-translate-y-0.5"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-primary-500 px-6 py-3.5 text-secondary-950 text-sm font-bold transition-all hover:bg-primary-400 hover:shadow-lg cursor-pointer transform hover:-translate-y-0.5 mx-auto lg:mx-0"
           >
             <span>Lihat Selengkapnya</span>
             <ArrowRightIcon className="hidden sm:inline-block w-4 h-4 stroke-[2.5]" />

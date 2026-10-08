@@ -27,26 +27,25 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="group relative isolate overflow-hidden bg-secondary-50 px-5 pb-16 pt-28 sm:px-8 sm:pb-20 sm:pt-32 lg:min-h-screen lg:px-12 lg:pb-12 lg:pt-32"
+      className="group relative isolate overflow-hidden bg-secondary-50 px-5 pb-16 pt-28 sm:px-8 sm:pb-20 sm:pt-32 lg:-mt-16 lg:h-screen lg:px-12 lg:pb-6 lg:pt-24"
     >
       <div className="pointer-events-none absolute right-0 top-0 -z-10 hidden h-136 w-1/2 rounded-bl-[8rem] bg-primary-50 lg:block" />
 
-      <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[0.88fr_1.12fr] lg:gap-16">
+      <div className="mx-auto grid max-w-7xl items-center gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:gap-12">
         <motion.div
           initial={{ opacity: 0, x: -32, y: 15 }}
           animate={{ opacity: 1, x: 0, y: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="relative z-10 max-w-xl text-center sm:text-left"
+          className="relative z-10 max-w-xl text-center sm:text-left mx-auto sm:mx-0"
         >
-          <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary-600">The Ijen Expedition Experience</p>
-          <h1 className="mt-5 text-3xl font-black leading-tight tracking-tight text-secondary-950 sm:text-5xl lg:text-6xl">
+          <h1 className="text-3xl font-black leading-tight tracking-tight text-secondary-950 sm:text-5xl lg:text-5xl">
             Jelajahi Kawah Ijen dan <span translate="no" className="notranslate">Banyuwangi</span>.
           </h1>
-          <p className="mt-6 max-w-md text-sm leading-relaxed text-secondary-700 sm:text-base">
+          <p className="mt-4 max-w-md mx-auto sm:mx-0 text-sm leading-relaxed text-secondary-700 sm:text-base">
             Temukan sisi paling liar dari Jawa Timur bersama pemandu lokal yang tahu kapan harus berhenti, berjalan, dan menikmati keajaiban alam Blue Fire.
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:justify-start">
+          <div className="mt-5 flex flex-wrap items-center justify-center sm:justify-start gap-3">
             <Link href="/packages" className="inline-flex items-center gap-2 rounded-full bg-primary-500 px-6 py-3.5 text-sm font-bold text-secondary-950 transition hover:-translate-y-0.5 hover:bg-primary-400 hover:shadow-lg hover:shadow-primary-500/20">
               Jelajahi Paket Tur <ArrowRight className="h-4 w-4" />
             </Link>
@@ -61,17 +60,17 @@ export default function HeroSection() {
           </div>
 
           {/* Trust Badges */}
-          <div className="mt-6 flex flex-wrap items-center justify-center sm:justify-start gap-2.5 text-[11px] font-semibold text-secondary-600">
+          <div className="mt-4 flex flex-wrap items-center justify-center sm:justify-start gap-2.5 text-[11px] font-semibold text-secondary-600">
             <span className="px-3 py-1 rounded-full bg-white border border-secondary-200 shadow-2xs">✓ Local Guide Berlisensi</span>
             <span className="px-3 py-1 rounded-full bg-white border border-secondary-200 shadow-2xs">✓ Free Masker Gas & Senter</span>
             <span className="px-3 py-1 rounded-full bg-white border border-secondary-200 shadow-2xs">✓ 24/7 WhatsApp Support</span>
           </div>
 
-          <div className="mx-auto mt-12 grid max-w-lg grid-cols-3 gap-4 border-t border-secondary-200 pt-5 sm:mx-0">
+          <div className="mx-auto mt-7 grid max-w-lg grid-cols-3 gap-4 border-t border-secondary-200 pt-4 text-center sm:text-left sm:mx-0">
             {defaultHeroStats.map((stat) => (
               <div key={stat.value}>
                 <p className="text-xl font-black text-secondary-950 sm:text-2xl">{stat.value}</p>
-                <p className="mt-1 max-w-24 text-[10px] leading-relaxed text-secondary-600 sm:text-xs">{stat.label}</p>
+                <p className="mt-1 max-w-24 mx-auto sm:mx-0 text-[10px] leading-relaxed text-secondary-600 sm:text-xs">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -83,7 +82,7 @@ export default function HeroSection() {
           animate={{ opacity: 1, scale: 1, x: 0, y: 0 }}
           whileHover={{ scale: 1.015 }}
           transition={{ duration: 0.8, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-          className="relative min-h-80 sm:min-h-136 lg:min-h-156"
+          className="relative h-80 sm:h-112 lg:h-[min(72svh,38rem)]"
         >
           <div className="absolute inset-0 rounded-[2.5rem] bg-secondary-100 sm:rounded-[3.5rem]" />
           <div className="absolute -bottom-4 -left-4 -z-10 h-32 w-32 rounded-4xl bg-primary-200 sm:-bottom-6 sm:-left-6" />
@@ -113,7 +112,7 @@ export default function HeroSection() {
                   alt={`${destination.name}, destinasi wisata Banyuwangi`}
                   fill
                   priority
-                  sizes="(max-width: 1024px) 100vw, 55vw"
+                  sizes="(max-width: 1024px) 100vw, 60vw"
                   className="pointer-events-none object-cover object-center"
                 />
               </motion.div>

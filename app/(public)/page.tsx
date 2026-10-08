@@ -47,9 +47,6 @@ export default function Home() {
       {/* 4. Experience / Destination */}
       <ExperienceSections />
 
-      {/* 5. How It Works */}
-      <HowItWorks />
-
       {/* 6. Gallery */}
       <GallerySection />
 

@@ -47,11 +47,8 @@ export default function FaqSection() {
   return (
     <section id="faq" className="relative overflow-hidden bg-white px-4 py-20 sm:px-8 sm:py-24 lg:py-28">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center max-w-2xl mx-auto mb-14">
-          <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary-600">
-            Pertanyaan Umum (FAQ)
-          </p>
-          <h2 className="mt-4 text-2xl sm:text-4xl lg:text-5xl font-black text-secondary-950 tracking-tight leading-tight">
+        <div className="mb-14 max-w-2xl text-center sm:text-left mx-auto sm:mx-0">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-secondary-950 tracking-tight leading-tight">
             Hal yang Sering Ditanyakan
           </h2>
           <p className="mt-4 text-sm sm:text-base text-secondary-700 leading-relaxed">
@@ -71,9 +68,9 @@ export default function FaqSection() {
                   type="button"
                   onClick={() => toggle(idx)}
                   aria-expanded={isOpen}
-                  className="w-full px-6 py-4.5 text-left flex items-center justify-between gap-4 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+                  className="w-full px-6 py-4.5 flex items-center justify-between gap-4 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
                 >
-                  <span className="font-bold text-sm sm:text-base text-secondary-950">
+                  <span className="font-bold text-sm sm:text-base text-secondary-950 flex-1 text-center sm:text-left">
                     {faq.q}
                   </span>
                   <div
@@ -86,7 +83,7 @@ export default function FaqSection() {
                 </button>
 
                 {isOpen && (
-                  <div className="px-6 pb-5 pt-1 text-xs sm:text-sm text-secondary-600 leading-relaxed border-t border-secondary-200/60 mt-1">
+                  <div className="px-6 pb-5 pt-1 text-xs sm:text-sm text-secondary-600 leading-relaxed border-t border-secondary-200/60 mt-1 text-center sm:text-left">
                     {faq.a}
                   </div>
                 )}
@@ -96,8 +93,8 @@ export default function FaqSection() {
         </div>
 
         {/* WhatsApp Help Banner */}
-        <div className="mt-12 p-6 sm:p-7 rounded-3xl bg-secondary-900 text-white flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl border border-secondary-800">
-          <div className="flex items-center gap-3.5 text-center sm:text-left">
+        <div className="mt-12 p-6 sm:p-7 rounded-3xl bg-secondary-900 text-white flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl border border-secondary-800 text-center sm:text-left">
+          <div className="flex flex-col sm:flex-row items-center gap-3.5 text-center sm:text-left">
             <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-[#25D366] flex items-center justify-center shrink-0">
               <FaWhatsapp className="w-6 h-6 text-[#25D366]" />
             </div>
@@ -110,7 +107,7 @@ export default function FaqSection() {
             href={getWhatsAppLink(WhatsAppTemplates.generalInquiry("perjalanan Kawah Ijen"))}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs transition shadow-md shrink-0 hover:scale-105 active:scale-95"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs transition shadow-md shrink-0 hover:scale-105 active:scale-95 mx-auto sm:mx-0"
           >
             <FaWhatsapp className="w-4 h-4" />
             <span>Chat CS WhatsApp</span>
@@ -120,4 +117,3 @@ export default function FaqSection() {
     </section>
   );
 }
-

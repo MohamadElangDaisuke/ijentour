@@ -28,19 +28,18 @@ export default function TestimonialSection() {
       className="relative w-full overflow-hidden bg-secondary-50 px-4 py-20 sm:px-8 sm:py-24 lg:py-28"
     >
       <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24">
-        <div className="text-center lg:text-left">
-          <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary-600">Testimonials</p>
-          <h2 id="testimonial-heading" className="mt-4 text-2xl sm:text-4xl lg:text-5xl font-black leading-tight tracking-tight text-secondary-950">
+        <div className="text-center lg:text-left mx-auto lg:mx-0">
+          <h2 id="testimonial-heading" className="text-2xl sm:text-4xl lg:text-5xl font-black leading-tight tracking-tight text-secondary-950">
             What people say about us.
           </h2>
-          <p className="mx-auto mt-5 max-w-md text-sm sm:text-base leading-relaxed text-secondary-700 lg:mx-0">
+          <p className="mt-5 max-w-md mx-auto lg:mx-0 text-sm sm:text-base leading-relaxed text-secondary-700">
             Cerita dari traveler yang sudah merasakan perjalanan bersama tim lokal IjenTour.
           </p>
         </div>
 
         {featuredTestimonial ? (
-          <article className="grid items-center gap-6 rounded-4xl bg-white border border-secondary-200/80 p-6 sm:p-8 text-center shadow-xl shadow-secondary-900/5 sm:grid-cols-[0.8fr_1.2fr] sm:text-left">
-            <div className="aspect-square overflow-hidden rounded-3xl bg-secondary-100">
+          <article className="grid items-center gap-6 rounded-4xl bg-white border border-secondary-200/80 p-6 sm:p-8 text-center sm:text-left shadow-xl shadow-secondary-900/5 sm:grid-cols-[0.8fr_1.2fr]">
+            <div className="aspect-square overflow-hidden rounded-3xl bg-secondary-100 max-w-[260px] sm:max-w-none mx-auto sm:mx-0 w-full">
               {featuredTestimonial.image ? (
                 <img
                   src={featuredTestimonial.image}
@@ -58,7 +57,7 @@ export default function TestimonialSection() {
             </div>
           </article>
         ) : (
-          <p className="rounded-2xl border border-dashed border-secondary-200 p-10 text-center text-sm text-secondary-500">
+          <p className="rounded-2xl border border-dashed border-secondary-200 p-10 text-center sm:text-left text-sm text-secondary-500">
             Belum ada cerita perjalanan.
           </p>
         )}
@@ -66,4 +65,3 @@ export default function TestimonialSection() {
     </motion.section>
   );
 }
-

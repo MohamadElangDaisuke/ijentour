@@ -72,16 +72,15 @@ export default function GallerySection() {
       className="relative w-full overflow-hidden bg-white px-4 py-20 sm:px-8 sm:py-24 lg:py-28"
     >
       <div className="relative z-10 mx-auto max-w-7xl">
-        <div className="mb-12 flex flex-col justify-between gap-5 text-center sm:flex-row sm:items-end sm:text-left">
+        <div className="mb-12 flex flex-col items-center justify-between gap-5 text-center sm:text-left sm:flex-row sm:items-end">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary-600">Gallery moments</p>
-            <h2 id="gallery-heading" className="mt-3 text-2xl sm:text-4xl lg:text-5xl font-black leading-tight tracking-tight text-secondary-950">
+            <h2 id="gallery-heading" className="text-2xl sm:text-4xl lg:text-5xl font-black leading-tight tracking-tight text-secondary-950">
               Galeri wisata Banyuwangi dan Kawah Ijen.
             </h2>
           </div>
           <Link
             href="/gallery"
-            className="mx-auto inline-flex items-center gap-2 rounded-full border border-secondary-300 bg-secondary-50 px-5 py-3 text-sm font-bold text-secondary-800 transition hover:border-primary-500 hover:bg-primary-500 hover:text-secondary-950 sm:mx-0"
+            className="inline-flex items-center gap-2 rounded-full border border-secondary-300 bg-secondary-50 px-5 py-3 text-sm font-bold text-secondary-800 transition hover:border-primary-500 hover:bg-primary-500 hover:text-secondary-950 mx-auto sm:mx-0 shrink-0"
           >
             Lihat semua gallery
             <ArrowRight className="h-4 w-4" />
@@ -155,4 +154,3 @@ export default function GallerySection() {
     </motion.section>
   );
 }
-

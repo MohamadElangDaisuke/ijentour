@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { Compass, CalendarCheck2, ShieldCheck, Sparkles, ArrowRight } from "lucide-react";
+import React, { useState } from "react";
+import { Compass, CalendarCheck2, ShieldCheck, Sparkles, ArrowRight, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -41,17 +41,19 @@ const steps = [
 ];
 
 export default function HowItWorks() {
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  const toggle = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
   return (
     <section className="relative overflow-hidden bg-secondary-50 px-4 py-20 sm:px-8 sm:py-24 lg:py-28">
       {/* Subtle background glow */}
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-100/40 blur-3xl" />
 
       <div className="relative z-10 mx-auto max-w-7xl">
-        <div className="mx-auto mb-14 max-w-2xl text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary-600">
-            Alur Perjalanan
-          </p>
-          <h2 className="mt-4 text-2xl sm:text-4xl lg:text-5xl font-black leading-tight tracking-tight text-secondary-950">
+        <div className="mb-14 max-w-2xl text-center md:text-left mx-auto md:mx-0">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black leading-tight tracking-tight text-secondary-950">
             Bagaimana Cara Memulai Petualangan?
           </h2>
           <p className="mt-4 text-sm sm:text-base leading-relaxed text-secondary-700">
@@ -59,7 +61,65 @@ export default function HowItWorks() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+        {/* MOBILE VIEW: Row Memanjang with Title Only & Dropdown Description */}
+        <div className="md:hidden space-y-3">
+          {steps.map((item, index) => {
+            const Icon = item.icon;
+            const isOpen = openIndex === index;
+            return (
+              <div
+                key={index}
+                className="overflow-hidden rounded-2xl border border-secondary-200/80 bg-white shadow-2xs transition-all duration-200"
+              >
+                <button
+                  type="button"
+                  onClick={() => toggle(index)}
+                  aria-expanded={isOpen}
+                  className="flex w-full items-center justify-between gap-3 px-5 py-4 cursor-pointer focus:outline-none"
+                >
+                  <div className="flex items-center justify-center gap-3.5 min-w-0 flex-1 text-center">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-100 text-xs font-black text-primary-700">
+                      {item.step}
+                    </span>
+                    <span className="font-bold text-sm text-secondary-950 truncate">
+                      {item.title}
+                    </span>
+                  </div>
+                  <div
+                    className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-secondary-100 transition-transform duration-200 ${
+                      isOpen ? "rotate-180 bg-primary-500 text-secondary-950" : "text-secondary-600"
+                    }`}
+                  >
+                    <ChevronDown className="h-4 w-4" />
+                  </div>
+                </button>
+
+                {isOpen && (
+                  <div className="border-t border-secondary-100 px-5 pt-3 pb-5 text-xs text-secondary-600 leading-relaxed space-y-2.5 text-center">
+                    <div className="flex items-center justify-center gap-2">
+                      <span className="rounded-full bg-primary-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary-700">
+                        {item.badge}
+                      </span>
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-secondary-500">
+                        {item.subtitle}
+                      </span>
+                    </div>
+                    <p className="text-secondary-700 text-xs sm:text-sm leading-relaxed max-w-md mx-auto">
+                      {item.description}
+                    </p>
+                    <div className="pt-1 flex items-center justify-center text-xs font-bold text-primary-600">
+                      <Icon className="mr-1.5 h-3.5 w-3.5" />
+                      <span>Langkah {item.step}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* DESKTOP VIEW: Grid of Cards */}
+        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {steps.map((item, index) => {
             const Icon = item.icon;
             return (
@@ -106,7 +166,7 @@ export default function HowItWorks() {
           })}
         </div>
 
-        <div className="mt-14 text-center">
+        <div className="mt-14 text-center md:text-left">
           <Link
             href="/packages"
             className="inline-flex items-center gap-2 rounded-full bg-primary-500 px-7 py-3.5 text-sm font-bold text-secondary-950 shadow-lg shadow-primary-500/20 transition hover:-translate-y-0.5 hover:bg-primary-400"
@@ -119,4 +179,3 @@ export default function HowItWorks() {
     </section>
   );
 }
-

@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: var(--color-secondary-50);
   --foreground: #171717;
@@ -75,12 +77,17 @@
 
 html {
   scroll-behavior: smooth;
+  font-family: var(--font-plus-jakarta-sans), var(--font-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-plus-jakarta-sans), var(--font-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+button, input, textarea, select, optgroup {
+  font-family: inherit;
 }
 
 .site-navbar {
@@ -118,6 +125,7 @@ body {
 
 .dark .bg-white {
   background-color: #18343a !important;
+  color: #f1fafa;
 }
 
 .dark [class*="bg-white/"] {
@@ -173,12 +181,17 @@ body {
   background-color: #4b3a12 !important;
 }
 
+.dark .text-primary-700,
+.dark .text-primary-600 {
+  color: #ffd647 !important;
+}
+
 .dark .packages-gradient {
   background-image: linear-gradient(to right, #102329, rgb(16 35 41 / 0.5), transparent) !important;
 }
 
 .dark .experience-gradient {
-  background-image: linear-gradient(to left, transparent, rgb(16 35 41 / 0.45), #102329) !important;
+  background-image: linear-gradient(to left, transparent, rgb(24 52 58 / 0.45), #18343a) !important;
 }
 
 .dark .packages-heading,

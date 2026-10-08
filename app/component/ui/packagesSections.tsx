@@ -129,13 +129,13 @@ export default function PackagesSections() {
       >
         {/* LEFT COLUMN: Headline, Deskripsi, & Tombol See More */}
         <div className="col-span-1 lg:col-span-5 flex flex-col justify-center items-center lg:items-start space-y-5 sm:space-y-6 text-center lg:text-left">
-          <div className="space-y-3">
-            <motion.p variants={itemVariants} className="text-xs font-bold uppercase tracking-[0.28em] text-primary-600">
+          <div className="space-y-4">
+            <motion.p variants={itemVariants} className="text-xs font-bold uppercase tracking-[0.3em] text-primary-600">
               Paket pilihan traveler
             </motion.p>
             <motion.h2
               id="packages-heading"
-              className="packages-heading text-2xl sm:text-4xl lg:text-5xl font-black text-secondary-50 lg:text-secondary-950 leading-tight tracking-tight drop-shadow-2xl"
+              className="text-2xl sm:text-4xl lg:text-5xl font-black text-secondary-950 leading-tight tracking-tight"
               variants={itemVariants}
             >
               Paket wisata Kawah Ijen dan Banyuwangi
@@ -143,7 +143,7 @@ export default function PackagesSections() {
 
             <motion.p
               variants={itemVariants}
-              className="packages-description text-secondary-50 lg:text-secondary-900 text-sm sm:text-base font-normal leading-relaxed drop-shadow-md max-w-lg lg:max-w-none"
+              className="text-sm sm:text-base font-normal leading-relaxed text-secondary-700 max-w-lg lg:max-w-none"
             >
               Pilih paket perjalanan yang dirancang untuk menikmati Ijen, blue fire, dan lanskap Jawa Timur dengan lebih dekat.
             </motion.p>

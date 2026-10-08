@@ -18,7 +18,6 @@ export default function GallerySection() {
         if (res.ok) {
           const data = await res.json();
           if (data.gallery && Array.isArray(data.gallery) && data.gallery.length > 0) {
-            // Map to Story structure if needed
             const mapped = data.gallery.map((g: any) => ({
               id: g.id,
               title: g.title,
@@ -70,22 +69,29 @@ export default function GallerySection() {
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.6 }}
-      className="relative w-full overflow-hidden bg-secondary-50 px-5 py-20 md:px-10 md:py-28"
+      className="relative w-full overflow-hidden bg-white px-4 py-20 sm:px-8 sm:py-24 lg:py-28"
     >
       <div className="relative z-10 mx-auto max-w-7xl">
         <div className="mb-12 flex flex-col justify-between gap-5 text-center sm:flex-row sm:items-end sm:text-left">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary-600">Gallery moments</p>
-            <h2 id="gallery-heading" className="mt-3 text-2xl font-black leading-tight text-secondary-950 md:text-5xl">Galeri wisata Banyuwangi dan Kawah Ijen.</h2>
+            <h2 id="gallery-heading" className="mt-3 text-2xl sm:text-4xl lg:text-5xl font-black leading-tight tracking-tight text-secondary-950">
+              Galeri wisata Banyuwangi dan Kawah Ijen.
+            </h2>
           </div>
-          <Link href="/gallery" className="mx-auto inline-flex items-center gap-2 rounded-full border border-secondary-300 px-5 py-3 text-sm font-bold text-secondary-800 transition hover:border-primary-500 hover:bg-primary-500 hover:text-secondary-950 sm:mx-0">
+          <Link
+            href="/gallery"
+            className="mx-auto inline-flex items-center gap-2 rounded-full border border-secondary-300 bg-secondary-50 px-5 py-3 text-sm font-bold text-secondary-800 transition hover:border-primary-500 hover:bg-primary-500 hover:text-secondary-950 sm:mx-0"
+          >
             Lihat semua gallery
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
         {stories.length === 0 ? (
-          <p className="rounded-2xl border border-dashed border-secondary-200 p-12 text-center text-sm text-secondary-500">Belum ada foto galeri momen yang ditambahkan.</p>
+          <p className="rounded-2xl border border-dashed border-secondary-200 p-12 text-center text-sm text-secondary-500">
+            Belum ada foto galeri momen yang ditambahkan.
+          </p>
         ) : (
           <div className="grid auto-rows-40 grid-cols-2 gap-3 sm:auto-rows-52 sm:grid-cols-4 sm:gap-5">
             {stories.map((story, index) => (
@@ -98,7 +104,7 @@ export default function GallerySection() {
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.45, delay: index * 0.08 }}
                 whileHover={{ y: -6 }}
-                className={`group relative overflow-hidden rounded-3xl bg-secondary-100 text-left ${index === 0 ? 'col-span-2 row-span-2' : ''} ${index === 1 ? 'sm:col-start-3 sm:row-start-1' : ''} ${index === 2 ? 'sm:col-start-4 sm:row-start-1 sm:row-span-2' : ''} ${index === 3 ? 'sm:col-start-3 sm:row-start-2' : ''}`}
+                className={`group relative overflow-hidden rounded-3xl bg-secondary-100 text-left cursor-pointer ${index === 0 ? 'col-span-2 row-span-2' : ''} ${index === 1 ? 'sm:col-start-3 sm:row-start-1' : ''} ${index === 2 ? 'sm:col-start-4 sm:row-start-1 sm:row-span-2' : ''} ${index === 3 ? 'sm:col-start-3 sm:row-start-2' : ''}`}
               >
                 {story.image ? (
                   <img
@@ -116,7 +122,9 @@ export default function GallerySection() {
                     <h3 className="text-sm font-bold text-white sm:text-base">{story.title}</h3>
                   </div>
                 </div>
-                <span className="absolute right-4 top-4 rounded-full bg-white/85 px-3 py-1 text-[10px] font-bold text-secondary-950 opacity-0 backdrop-blur transition group-hover:opacity-100">Open photo</span>
+                <span className="absolute right-4 top-4 rounded-full bg-white/85 px-3 py-1 text-[10px] font-bold text-secondary-950 opacity-0 backdrop-blur transition group-hover:opacity-100">
+                  Lihat foto
+                </span>
               </motion.button>
             ))}
           </div>
@@ -124,9 +132,9 @@ export default function GallerySection() {
       </div>
 
       {selectedStory && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-secondary-950/80 p-5 backdrop-blur-sm" onClick={() => setSelectedStory(null)}>
-          <motion.div initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }} className="relative max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-3xl bg-secondary-950 shadow-2xl" onClick={(event) => event.stopPropagation()}>
-            <button type="button" onClick={() => setSelectedStory(null)} aria-label="Tutup foto" className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-secondary-950 transition hover:bg-primary-500">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-5 backdrop-blur-sm" onClick={() => setSelectedStory(null)}>
+          <motion.div initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }} className="relative max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-3xl bg-secondary-950 text-white shadow-2xl border border-secondary-800" onClick={(event) => event.stopPropagation()}>
+            <button type="button" onClick={() => setSelectedStory(null)} aria-label="Tutup foto" className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-secondary-950 transition hover:bg-primary-500 cursor-pointer">
               <X className="h-5 w-5" />
             </button>
             {selectedStory.image && (
@@ -137,10 +145,14 @@ export default function GallerySection() {
                 className="max-h-[75vh] w-full object-contain"
               />
             )}
-            <div className="px-5 py-4"><h3 className="font-bold text-white">{selectedStory.title}</h3><p className="mt-1 text-xs text-secondary-300"><span translate="no" className="notranslate">Banyuwangi</span>, East Java</p></div>
+            <div className="px-5 py-4">
+              <h3 className="font-bold text-white text-lg">{selectedStory.title}</h3>
+              <p className="mt-1 text-xs text-secondary-300"><span translate="no" className="notranslate">Banyuwangi</span>, East Java</p>
+            </div>
           </motion.div>
         </div>
       )}
     </motion.section>
   );
 }
+

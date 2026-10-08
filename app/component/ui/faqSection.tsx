@@ -45,16 +45,16 @@ export default function FaqSection() {
   };
 
   return (
-    <section id="faq" className="py-20 sm:py-24 bg-secondary-50 dark:bg-secondary-950 border-t border-secondary-200/60 dark:border-secondary-800">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-50 dark:bg-secondary-800 border border-primary-200 text-xs font-bold text-primary-700 dark:text-primary-300 uppercase tracking-widest mb-3">
-            <HelpCircle className="w-3.5 h-3.5" /> Pertanyaan Umum (FAQ)
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-secondary-950 dark:text-white tracking-tight">
+    <section id="faq" className="relative overflow-hidden bg-white px-4 py-20 sm:px-8 sm:py-24 lg:py-28">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center max-w-2xl mx-auto mb-14">
+          <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary-600">
+            Pertanyaan Umum (FAQ)
+          </p>
+          <h2 className="mt-4 text-2xl sm:text-4xl lg:text-5xl font-black text-secondary-950 tracking-tight leading-tight">
             Hal yang Sering Ditanyakan
           </h2>
-          <p className="mt-3 text-sm sm:text-base text-secondary-600 dark:text-secondary-300">
+          <p className="mt-4 text-sm sm:text-base text-secondary-700 leading-relaxed">
             Semua informasi penting yang perlu Anda ketahui sebelum menaklukkan Kawah Ijen.
           </p>
         </div>
@@ -65,7 +65,7 @@ export default function FaqSection() {
             return (
               <div
                 key={idx}
-                className="bg-white dark:bg-secondary-900 rounded-2xl border border-secondary-200 dark:border-secondary-800 overflow-hidden shadow-2xs transition-all duration-200"
+                className="bg-secondary-50 rounded-2xl border border-secondary-200/80 overflow-hidden shadow-2xs transition-all duration-200"
               >
                 <button
                   type="button"
@@ -73,12 +73,12 @@ export default function FaqSection() {
                   aria-expanded={isOpen}
                   className="w-full px-6 py-4.5 text-left flex items-center justify-between gap-4 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
                 >
-                  <span className="font-bold text-sm sm:text-base text-secondary-950 dark:text-white">
+                  <span className="font-bold text-sm sm:text-base text-secondary-950">
                     {faq.q}
                   </span>
                   <div
-                    className={`w-7 h-7 rounded-full bg-secondary-100 dark:bg-secondary-800 flex items-center justify-center shrink-0 transition-transform duration-200 ${
-                      isOpen ? "rotate-180 bg-primary-500 text-secondary-950" : "text-secondary-600"
+                    className={`w-7 h-7 rounded-full bg-secondary-200/70 flex items-center justify-center shrink-0 transition-transform duration-200 ${
+                      isOpen ? "rotate-180 bg-primary-500 text-secondary-950" : "text-secondary-700"
                     }`}
                   >
                     <ChevronDown className="w-4 h-4" />
@@ -86,7 +86,7 @@ export default function FaqSection() {
                 </button>
 
                 {isOpen && (
-                  <div className="px-6 pb-5 pt-1 text-xs sm:text-sm text-secondary-600 dark:text-secondary-300 leading-relaxed border-t border-secondary-100/60 dark:border-secondary-800/80 mt-1">
+                  <div className="px-6 pb-5 pt-1 text-xs sm:text-sm text-secondary-600 leading-relaxed border-t border-secondary-200/60 mt-1">
                     {faq.a}
                   </div>
                 )}
@@ -96,7 +96,7 @@ export default function FaqSection() {
         </div>
 
         {/* WhatsApp Help Banner */}
-        <div className="mt-12 p-6 rounded-3xl bg-secondary-900 text-white flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+        <div className="mt-12 p-6 sm:p-7 rounded-3xl bg-secondary-900 text-white flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl border border-secondary-800">
           <div className="flex items-center gap-3.5 text-center sm:text-left">
             <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-[#25D366] flex items-center justify-center shrink-0">
               <FaWhatsapp className="w-6 h-6 text-[#25D366]" />
@@ -120,3 +120,4 @@ export default function FaqSection() {
     </section>
   );
 }
+

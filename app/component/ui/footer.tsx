@@ -17,7 +17,7 @@ export default function Footer() {
   return (
     <>
       {/* Global Footer */}
-      <footer className="mt-auto border-t border-secondary-100 bg-white pt-16 pb-8 text-secondary-600">
+      <footer className="mt-auto border-t border-secondary-200/80 bg-white pt-16 pb-8 text-secondary-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Brand Col */}
           <div className="col-span-1 md:col-span-1">
@@ -33,15 +33,15 @@ export default function Footer() {
           <div>
             <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-secondary-950">Tautan Cepat</h4>
             <ul className="space-y-2.5 text-sm">
-              <li><Link href="/" className="hover:text-primary-400 transition-colors">Beranda</Link></li>
-              <li><Link href="/packages" className="hover:text-primary-400 transition-colors">Paket Wisata</Link></li>
-              <li><Link href="/destinations" className="hover:text-primary-400 transition-colors">Destinasi</Link></li>
-              <li><Link href="/gallery" className="hover:text-primary-400 transition-colors">Galeri Wisata</Link></li>
-              <li><Link href="/booking" className="hover:text-primary-400 transition-colors">Cek Status Booking</Link></li>
-              <li><Link href="/about" className="hover:text-primary-400 transition-colors">Tentang Kami</Link></li>
-              <li><Link href="/about#faq" className="hover:text-primary-400 transition-colors">FAQ</Link></li>
-              <li><Link href="/blog" className="hover:text-primary-400 transition-colors">Blog</Link></li>
-              <li><Link href="/contact" className="hover:text-primary-400 transition-colors">Kontak</Link></li>
+              <li><Link href="/" className="hover:text-primary-500 transition-colors">Beranda</Link></li>
+              <li><Link href="/packages" className="hover:text-primary-500 transition-colors">Paket Wisata</Link></li>
+              <li><Link href="/destinations" className="hover:text-primary-500 transition-colors">Destinasi</Link></li>
+              <li><Link href="/gallery" className="hover:text-primary-500 transition-colors">Galeri Wisata</Link></li>
+              <li><Link href="/booking" className="hover:text-primary-500 transition-colors">Cek Status Booking</Link></li>
+              <li><Link href="/about" className="hover:text-primary-500 transition-colors">Tentang Kami</Link></li>
+              <li><Link href="/about#faq" className="hover:text-primary-500 transition-colors">FAQ</Link></li>
+              <li><Link href="/blog" className="hover:text-primary-500 transition-colors">Blog</Link></li>
+              <li><Link href="/contact" className="hover:text-primary-500 transition-colors">Kontak</Link></li>
             </ul>
           </div>
 
@@ -77,20 +77,20 @@ export default function Footer() {
           <div>
             <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-secondary-950">Ikuti Kami</h4>
             <div className="flex space-x-3">
-              <a href="#" aria-label="Instagram" className="flex h-9 w-9 items-center justify-center rounded-full border border-secondary-200 bg-secondary-50 hover:border-primary-500 hover:bg-primary-500 hover:text-secondary-950 transition-all">
+              <a href="#" aria-label="Instagram" className="flex h-9 w-9 items-center justify-center rounded-full border border-secondary-200 bg-secondary-50 text-secondary-700 hover:border-primary-500 hover:bg-primary-500 hover:text-secondary-950 transition-all">
                 <FaInstagram size={16} />
               </a>
-              <a href="#" aria-label="Facebook" className="flex h-9 w-9 items-center justify-center rounded-full border border-secondary-200 bg-secondary-50 hover:border-primary-500 hover:bg-primary-500 hover:text-secondary-950 transition-all">
+              <a href="#" aria-label="Facebook" className="flex h-9 w-9 items-center justify-center rounded-full border border-secondary-200 bg-secondary-50 text-secondary-700 hover:border-primary-500 hover:bg-primary-500 hover:text-secondary-950 transition-all">
                 <FaFacebook size={16} />
               </a>
-              <a href="#" aria-label="Youtube" className="flex h-9 w-9 items-center justify-center rounded-full border border-secondary-200 bg-secondary-50 hover:border-primary-500 hover:bg-primary-500 hover:text-secondary-950 transition-all">
+              <a href="#" aria-label="Youtube" className="flex h-9 w-9 items-center justify-center rounded-full border border-secondary-200 bg-secondary-50 text-secondary-700 hover:border-primary-500 hover:bg-primary-500 hover:text-secondary-950 transition-all">
                 <FaYoutube size={16} />
               </a>
             </div>
           </div>
         </div>
 
-        <div className="mx-auto max-w-7xl border-t border-secondary-100 px-4 pt-6 text-center text-xs text-secondary-500 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl border-t border-secondary-200/80 px-4 pt-6 text-center text-xs text-secondary-500 sm:px-6 lg:px-8">
           <p>© {new Date().getFullYear()} IjenTour. All rights reserved.</p>
         </div>
       </footer>

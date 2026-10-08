@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { Bars3Icon } from '@heroicons/react/24/outline'
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
 import Sidebar from './sidebar'
+import ThemeToggle from './themeToggle'
 
 const navigation = [
   { name: 'Beranda', href: '/' },
@@ -84,11 +85,11 @@ export default function Navbar() {
                 </button>
               </div>
 
-              {/* Logo: IjenTour (Ijen in White, Tour in Gold/Primary) */}
+              {/* Logo: IjenTour */}
               <div className="flex items-center">
                 <Link
                   href="/"
-                    className="text-2xl font-black tracking-tight text-secondary-950 transition-transform duration-200 hover:scale-105"
+                  className="text-2xl font-black tracking-tight text-secondary-950 transition-transform duration-200 hover:scale-105"
                 >
                   Ijen<span className="text-primary-500 font-extrabold">Tour</span>
                 </Link>
@@ -127,8 +128,11 @@ export default function Navbar() {
                 </div>
               </div>
 
-              {/* Right Side Actions: Book a trip Button */}
-              <div className="flex items-center">
+              {/* Right Side Actions: ThemeToggle & Book a trip Button */}
+              <div className="flex items-center gap-3">
+                <div className="hidden sm:block">
+                  <ThemeToggle />
+                </div>
                 <Link
                   href="/packages"
                   className="inline-flex items-center justify-center rounded-full bg-primary-500 px-5 py-2.5 text-xs font-bold text-secondary-950 shadow-sm transition-all duration-300 hover:bg-primary-400 hover:shadow-md hover:scale-105 active:scale-95"

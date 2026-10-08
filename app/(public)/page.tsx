@@ -59,8 +59,7 @@ export default function Home() {
       {/* 8. FAQ Accordion */}
       <FaqSection />
 
-      {/* 9. Final CTA */}
-      <FinalCta />
+
     </>
   );
 }

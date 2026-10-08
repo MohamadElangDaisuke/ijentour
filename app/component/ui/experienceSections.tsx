@@ -38,8 +38,8 @@ export default function ExperienceSections() {
           </p>
         </div>
 
-        {/* MOBILE VIEW: Row Memanjang with Title Only & Dropdown Description */}
-        <div className="sm:hidden space-y-3">
+        {/* MOBILE VIEW: Row Memanjang with Title Only & Dropdown Description - Centered Container, Left-Aligned Content */}
+        <div className="sm:hidden space-y-3 max-w-lg mx-auto">
           {defaultExperienceSteps.map((stepItem, index) => {
             const isOpen = openIndex === index;
             return (
@@ -53,11 +53,11 @@ export default function ExperienceSections() {
                   aria-expanded={isOpen}
                   className="flex w-full items-center justify-between gap-3 px-4 py-3.5 cursor-pointer focus:outline-none"
                 >
-                  <div className="flex items-center justify-center gap-3 min-w-0 flex-1 text-center">
+                  <div className="flex items-center justify-start gap-3 min-w-0 flex-1 text-left">
                     <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-xs font-black shadow-xs ${stepItem.colorClass}`}>
                       {stepItem.step}
                     </span>
-                    <span className="font-bold text-sm text-secondary-950 truncate">
+                    <span className="font-bold text-sm text-secondary-950 truncate text-left">
                       {stepItem.title}
                     </span>
                   </div>
@@ -71,7 +71,7 @@ export default function ExperienceSections() {
                 </button>
 
                 {isOpen && (
-                  <div className="border-t border-secondary-200/60 px-4 pt-2.5 pb-4 text-xs sm:text-sm text-secondary-700 leading-relaxed text-center">
+                  <div className="border-t border-secondary-200/60 px-4 pt-2.5 pb-4 text-xs sm:text-sm text-secondary-700 leading-relaxed text-left">
                     {stepItem.description}
                   </div>
                 )}

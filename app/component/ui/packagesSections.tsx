@@ -169,7 +169,7 @@ export default function PackagesSections() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               transition={{ ease: easeIn, duration: 0.2 }}
-              className="absolute -left-12 sm:-left-16 top-1/2 -translate-y-1/2 z-40 flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-secondary-300 bg-white/90 text-secondary-950 shadow-lg transition-colors hover:border-primary-500 hover:bg-primary-500 cursor-pointer"
+              className="absolute -left-12 sm:-left-16 top-1/2 -translate-y-1/2 z-40 flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white text-secondary-950 shadow-md hover:shadow-xl transition-all hover:bg-primary-500 cursor-pointer"
             >
               <ChevronLeftIcon className="w-5 h-5 stroke-[2.5]" />
             </motion.button>
@@ -183,7 +183,7 @@ export default function PackagesSections() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               transition={{ ease: easeIn, duration: 0.2 }}
-              className="absolute -right-12 sm:-right-16 top-1/2 -translate-y-1/2 z-40 flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-secondary-300 bg-white/90 text-secondary-950 shadow-lg transition-colors hover:border-primary-500 hover:bg-primary-500 cursor-pointer"
+              className="absolute -right-12 sm:-right-16 top-1/2 -translate-y-1/2 z-40 flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white text-secondary-950 shadow-md hover:shadow-xl transition-all hover:bg-primary-500 cursor-pointer"
             >
               <ChevronRightIcon className="w-5 h-5 stroke-[2.5]" />
             </motion.button>

@@ -77,13 +77,13 @@ export default function Footer() {
           <div>
             <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-secondary-950">Ikuti Kami</h4>
             <div className="flex space-x-3">
-              <a href="#" aria-label="Instagram" className="flex h-9 w-9 items-center justify-center rounded-full border border-secondary-200 bg-secondary-50 text-secondary-700 hover:border-primary-500 hover:bg-primary-500 hover:text-secondary-950 transition-all">
+              <a href="#" aria-label="Instagram" className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary-100 text-secondary-700 hover:bg-primary-500 hover:text-secondary-950 transition-all shadow-2xs">
                 <FaInstagram size={16} />
               </a>
-              <a href="#" aria-label="Facebook" className="flex h-9 w-9 items-center justify-center rounded-full border border-secondary-200 bg-secondary-50 text-secondary-700 hover:border-primary-500 hover:bg-primary-500 hover:text-secondary-950 transition-all">
+              <a href="#" aria-label="Facebook" className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary-100 text-secondary-700 hover:bg-primary-500 hover:text-secondary-950 transition-all shadow-2xs">
                 <FaFacebook size={16} />
               </a>
-              <a href="#" aria-label="Youtube" className="flex h-9 w-9 items-center justify-center rounded-full border border-secondary-200 bg-secondary-50 text-secondary-700 hover:border-primary-500 hover:bg-primary-500 hover:text-secondary-950 transition-all">
+              <a href="#" aria-label="Youtube" className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary-100 text-secondary-700 hover:bg-primary-500 hover:text-secondary-950 transition-all shadow-2xs">
                 <FaYoutube size={16} />
               </a>
             </div>

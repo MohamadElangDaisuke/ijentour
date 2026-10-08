@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
-  Search, Calendar, Clock, ArrowRight
+  Search, Calendar, Clock, ArrowRight, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import {
   defaultArticles,
@@ -16,6 +16,8 @@ export default function ArticlesPage() {
   const [articlesList, setArticlesList] = useState<Article[]>(defaultArticles);
   const [selectedCategory, setSelectedCategory] = useState<string>('Semua');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 3;
 
   useEffect(() => {
     // 1. Fetch real blog posts from database
@@ -57,6 +59,26 @@ export default function ArticlesPage() {
       article.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+
+  // Reset ke halaman 1 saat kategori atau pencarian berubah
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory, searchQuery]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredArticles.length / itemsPerPage));
+  const paginatedArticles = filteredArticles.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handlePageChange = (page: number) => {
+    if (page < 1 || page > totalPages || page === currentPage) return;
+    setCurrentPage(page);
+    const targetElement = document.getElementById('articles-grid-container');
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   return (
     <div className="articles-page min-h-screen bg-secondary-50 text-secondary-950">
@@ -159,8 +181,8 @@ export default function ArticlesPage() {
             <p className="text-secondary-500 font-medium">Tidak ada artikel yang sesuai dengan pencarian "{searchQuery}".</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredArticles.map((article) => {
+          <div id="articles-grid-container" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {paginatedArticles.map((article) => {
               const targetSlug = (article as any).slug || article.id;
               return (
                 <article key={article.id || article.title} className="group flex flex-col overflow-hidden rounded-2xl border border-secondary-100 bg-white text-center shadow-sm transition duration-300 hover:shadow-md lg:text-left justify-between">
@@ -208,12 +230,68 @@ export default function ArticlesPage() {
           </div>
         )}
 
-        {/* Pagination Dummy */}
-        <div className="flex justify-center mt-12 space-x-2">
-          <button className="w-10 h-10 rounded-xl bg-secondary-950 text-white font-bold flex items-center justify-center">1</button>
-          <button className="w-10 h-10 rounded-xl bg-white text-secondary-700 border border-secondary-200 hover:bg-secondary-100 font-bold flex items-center justify-center transition cursor-pointer">2</button>
-          <button className="w-10 h-10 rounded-xl bg-white text-secondary-700 border border-secondary-200 hover:bg-secondary-100 font-bold flex items-center justify-center transition cursor-pointer">3</button>
-        </div>
+        {/* Dynamic Pagination */}
+        {filteredArticles.length > 0 && totalPages > 1 && (
+          <div className="flex flex-col items-center justify-center mt-12 gap-3">
+            <div className="flex items-center justify-center space-x-2">
+              {/* Tombol Sebelumnya */}
+              <button
+                type="button"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                aria-label="Halaman sebelumnya"
+                className={`flex items-center justify-center h-10 px-3 rounded-xl text-sm font-bold transition ${
+                  currentPage === 1
+                    ? 'bg-secondary-100 text-secondary-400 cursor-not-allowed opacity-50'
+                    : 'bg-white text-secondary-800 hover:bg-secondary-100 shadow-2xs cursor-pointer active:scale-95'
+                }`}
+              >
+                <ChevronLeft size={16} className="mr-1" />
+                <span className="hidden sm:inline">Prev</span>
+              </button>
+
+              {/* Tombol Nomor Halaman */}
+              {Array.from({ length: totalPages }).map((_, index) => {
+                const pageNumber = index + 1;
+                const isActive = currentPage === pageNumber;
+                return (
+                  <button
+                    key={pageNumber}
+                    type="button"
+                    onClick={() => handlePageChange(pageNumber)}
+                    className={`w-10 h-10 rounded-xl font-bold text-sm flex items-center justify-center transition-all ${
+                      isActive
+                        ? 'bg-secondary-950 text-white shadow-md scale-105'
+                        : 'bg-white text-secondary-700 hover:bg-secondary-100 hover:text-secondary-950 shadow-2xs cursor-pointer active:scale-95'
+                    }`}
+                  >
+                    {pageNumber}
+                  </button>
+                );
+              })}
+
+              {/* Tombol Selanjutnya */}
+              <button
+                type="button"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                aria-label="Halaman selanjutnya"
+                className={`flex items-center justify-center h-10 px-3 rounded-xl text-sm font-bold transition ${
+                  currentPage === totalPages
+                    ? 'bg-secondary-100 text-secondary-400 cursor-not-allowed opacity-50'
+                    : 'bg-white text-secondary-800 hover:bg-secondary-100 shadow-2xs cursor-pointer active:scale-95'
+                }`}
+              >
+                <span className="hidden sm:inline">Next</span>
+                <ChevronRight size={16} className="ml-1" />
+              </button>
+            </div>
+
+            <p className="text-xs text-secondary-500 font-medium">
+              Menampilkan {paginatedArticles.length} dari {filteredArticles.length} artikel (Halaman {currentPage} dari {totalPages})
+            </p>
+          </div>
+        )}
 
       </main>
     </div>

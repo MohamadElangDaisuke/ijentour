@@ -17,6 +17,49 @@ function PackagesContent() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedPackageId, setSelectedPackageId] = useState<string>('');
 
+  // Calendar state
+  const [selectedDate, setSelectedDate] = useState<Date>(() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow;
+  });
+  const [viewDate, setViewDate] = useState<Date>(() => new Date());
+
+  const MONTH_NAMES = [
+    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+  ];
+  const DAY_NAMES = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+
+  const currentYear = viewDate.getFullYear();
+  const currentMonth = viewDate.getMonth();
+  const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const handlePrevMonth = () => {
+    setViewDate(new Date(currentYear, currentMonth - 1, 1));
+  };
+
+  const handleNextMonth = () => {
+    setViewDate(new Date(currentYear, currentMonth + 1, 1));
+  };
+
+  const isPrevDisabled =
+    currentYear < today.getFullYear() ||
+    (currentYear === today.getFullYear() && currentMonth <= today.getMonth());
+
+  const formattedSelectedDate = selectedDate
+    ? selectedDate.toLocaleDateString('id-ID', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      })
+    : '';
+
   // Synchronize data from API and localStorage
   useEffect(() => {
     fetch('/api/trips')
@@ -69,7 +112,7 @@ function PackagesContent() {
   ];
 
   const whatsappMessage = encodeURIComponent(
-    `Halo Ijen Tour, saya ingin memesan paket "${activePackage.title}" (${activePackage.price}). Mohon informasi ketersediaan tanggal.`
+    `Halo Ijen Tour, saya ingin memesan paket "${activePackage.title}" (${activePackage.price})${formattedSelectedDate ? ` untuk tanggal keberangkatan ${formattedSelectedDate}` : ''}. Mohon informasi ketersediaan tanggal dan slot pemandu.`
   );
 
   return (
@@ -319,33 +362,111 @@ function PackagesContent() {
               </div>
 
               <div className="mb-6">
-                <h4 className="font-extrabold text-secondary-950 mb-3 text-sm">Pilih Tanggal Keberangkatan</h4>
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-extrabold text-secondary-950 text-sm">Pilih Tanggal Keberangkatan</h4>
+                  {selectedDate && (
+                    <span className="text-xs text-primary-700 font-bold bg-primary-100 px-2 py-0.5 rounded-md">
+                      {selectedDate.getDate()} {MONTH_NAMES[selectedDate.getMonth()]}
+                    </span>
+                  )}
+                </div>
 
-                {/* Kalender Mock */}
+                {/* Kalender Interaktif */}
                 <div className="bg-secondary-50 p-4 rounded-2xl border border-secondary-200">
                   <div className="flex justify-between items-center mb-4 text-sm font-bold text-secondary-800">
-                    <span>Juni 2026</span>
-                    <div className="flex gap-2 text-secondary-400">
-                      <ChevronLeft size={16} className="cursor-pointer hover:text-secondary-700 transition" />
-                      <ChevronRight size={16} className="cursor-pointer hover:text-secondary-700 transition" />
+                    <span className="capitalize">{MONTH_NAMES[currentMonth]} {currentYear}</span>
+                    <div className="flex gap-1 text-secondary-600">
+                      <button
+                        type="button"
+                        onClick={handlePrevMonth}
+                        disabled={isPrevDisabled}
+                        title="Bulan Sebelumnya"
+                        aria-label="Bulan Sebelumnya"
+                        className={`p-1.5 rounded-lg transition ${
+                          isPrevDisabled
+                            ? 'text-secondary-300 cursor-not-allowed opacity-40'
+                            : 'hover:bg-secondary-200 hover:text-secondary-900 cursor-pointer active:scale-95'
+                        }`}
+                      >
+                        <ChevronLeft size={16} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleNextMonth}
+                        title="Bulan Berikutnya"
+                        aria-label="Bulan Berikutnya"
+                        className="p-1.5 rounded-lg hover:bg-secondary-200 hover:text-secondary-900 transition cursor-pointer active:scale-95"
+                      >
+                        <ChevronRight size={16} />
+                      </button>
                     </div>
                   </div>
-                  <div className="grid grid-cols-7 text-center text-xs text-secondary-500 gap-y-2 mb-2 font-medium">
-                    <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
-                    <div className="text-secondary-300">1</div><div className="text-secondary-300">2</div>
-                    <div className="text-secondary-300">3</div><div className="text-secondary-300">4</div>
-                    <div className="text-secondary-300">5</div><div className="text-secondary-300">6</div>
-                    <div className="text-secondary-300">7</div>
-                    <div className="text-secondary-800">8</div><div className="text-secondary-800">9</div><div className="text-secondary-800">10</div><div className="text-secondary-800">11</div><div className="text-secondary-800">12</div><div className="text-secondary-800">13</div>
-                    <div className="bg-primary-500 text-secondary-950 font-bold rounded-md py-1">14</div>
-                    <div className="text-secondary-800">15</div><div className="text-secondary-800">16</div><div className="text-secondary-800">17</div><div className="text-secondary-800">18</div><div className="text-secondary-800">19</div><div className="text-secondary-800">20</div><div className="text-secondary-800">21</div>
+
+                  {/* Header Hari */}
+                  <div className="grid grid-cols-7 text-center text-[11px] text-secondary-500 gap-y-2 mb-2 font-bold uppercase tracking-wider">
+                    {DAY_NAMES.map((day) => (
+                      <div key={day} className="py-0.5">{day}</div>
+                    ))}
+                  </div>
+
+                  {/* Grid Tanggal */}
+                  <div className="grid grid-cols-7 gap-1 text-center text-xs">
+                    {/* Placeholder hari kosong sebelum tanggal 1 */}
+                    {Array.from({ length: firstDayOfMonth }).map((_, index) => (
+                      <div key={`empty-${index}`} className="h-8 w-8 mx-auto" />
+                    ))}
+
+                    {/* Hari-hari dalam bulan */}
+                    {Array.from({ length: daysInMonth }).map((_, index) => {
+                      const dayNumber = index + 1;
+                      const cellDate = new Date(currentYear, currentMonth, dayNumber);
+                      cellDate.setHours(0, 0, 0, 0);
+
+                      const isPast = cellDate < today;
+                      const isSelected =
+                        selectedDate &&
+                        selectedDate.getFullYear() === currentYear &&
+                        selectedDate.getMonth() === currentMonth &&
+                        selectedDate.getDate() === dayNumber;
+
+                      return (
+                        <button
+                          key={dayNumber}
+                          type="button"
+                          disabled={isPast}
+                          onClick={() => setSelectedDate(cellDate)}
+                          className={`h-8 w-8 mx-auto rounded-lg text-xs font-semibold flex items-center justify-center transition-all ${
+                            isSelected
+                              ? 'bg-primary-500 text-secondary-950 font-black shadow-xs ring-2 ring-primary-400 scale-105'
+                              : isPast
+                              ? 'text-secondary-300 cursor-not-allowed opacity-40'
+                              : 'text-secondary-800 hover:bg-primary-100 hover:text-primary-800 cursor-pointer active:scale-95'
+                          }`}
+                        >
+                          {dayNumber}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
 
-              <div className="bg-secondary-100 border border-secondary-200 text-secondary-900 text-xs px-3.5 py-2.5 rounded-xl flex items-center mb-6 font-medium">
-                <Check size={16} className="mr-2 text-secondary-700 shrink-0" />
-                Paket & kuota pemandu tersedia untuk tanggal pilihan!
+              <div className="bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs px-3.5 py-2.5 rounded-xl flex items-center justify-between mb-6 font-medium">
+                <div className="flex items-center gap-2">
+                  <Check size={16} className="text-emerald-600 shrink-0" />
+                  <span>
+                    {selectedDate ? (
+                      <>
+                        Keberangkatan: <strong className="font-bold text-emerald-950">{formattedSelectedDate}</strong>
+                      </>
+                    ) : (
+                      'Silakan tentukan tanggal pilihan Anda'
+                    )}
+                  </span>
+                </div>
+                <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-md shrink-0">
+                  Tersedia
+                </span>
               </div>
 
               <a

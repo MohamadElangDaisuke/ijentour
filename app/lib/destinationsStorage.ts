@@ -18,10 +18,10 @@ export const defaultHeroStats: HeroStat[] = [
 ];
 
 export const defaultDestinations: Destination[] = [
-  { id: 'dest-ijen', name: 'Ijen', description: 'Blue fire dan sunrise', image: '/images/pkg-crater.png', tag: 'Gunung Berapi' },
+  { id: 'dest-ijen', name: 'Kawah Ijen', description: 'Blue fire dan sunrise', image: '/images/the-best-view-of-kawah.webp', tag: 'Gunung Berapi' },
   { id: 'dest-djawatan', name: 'Djawatan', description: 'Hutan trembesi ikonik', image: '/images/djawatan.png', tag: 'Hutan Magis' },
-  { id: 'dest-green-island', name: 'Green Island', description: 'Pesisir hijau Banyuwangi', image: '/images/pkg-bali.png', tag: 'Pantai Tropis' },
-  { id: 'dest-red-island', name: 'Red Island', description: 'Pantai dan bukit merah', image: '/images/pkg-bali.png', tag: 'Sunset Spot' },
   { id: 'dest-baluran', name: 'TN Baluran', description: 'Savana Africa van Java', image: '/images/pkg-crater.png', tag: 'Safari Liar' },
+  { id: 'dest-red-island', name: 'Pulau Merah', description: 'Pantai dan bukit merah', image: '/images/pkg-bali.png', tag: 'Sunset Spot' },
+  { id: 'dest-green-island', name: 'Teluk Ijo', description: 'Pesisir hijau Banyuwangi', image: '/images/pkg-waterfall.png', tag: 'Pantai Tropis' },
   { id: 'dest-kawah-wurung', name: 'Kawah Wurung', description: 'Padang bukit yang tenang', image: '/images/pkg-bluefire.png', tag: 'Perbukitan Hijau' }
 ];

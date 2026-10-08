@@ -79,8 +79,8 @@ export default function ChooseUs() {
             </div>
           </div>
 
-          {/* Elongated Rows with Title & Dropdown Description */}
-          <div className="space-y-2.5">
+          {/* Elongated Rows with Title & Dropdown Description - Centered Container, Left-Aligned Content */}
+          <div className="space-y-2.5 max-w-lg mx-auto">
             {defaultFeatures.map((feature, index) => {
               const isOpen = openIndex === index;
               return (
@@ -94,11 +94,11 @@ export default function ChooseUs() {
                     aria-expanded={isOpen}
                     className="flex w-full items-center justify-between gap-3 px-4 py-3 cursor-pointer focus:outline-none"
                   >
-                    <div className="flex items-center justify-center gap-2.5 min-w-0 flex-1 text-center">
+                    <div className="flex items-center justify-start gap-3 min-w-0 flex-1 text-left">
                       <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary-100 dark:bg-primary-950/60 text-[11px] font-black text-primary-700 dark:text-primary-400">
                         {`0${index + 1}`}
                       </span>
-                      <span className="font-bold text-xs sm:text-sm text-secondary-950 dark:text-white truncate">
+                      <span className="font-bold text-xs sm:text-sm text-secondary-950 dark:text-white truncate text-left">
                         {feature.title}
                       </span>
                     </div>
@@ -112,13 +112,13 @@ export default function ChooseUs() {
                   </button>
 
                   {isOpen && (
-                    <div className="border-t border-secondary-200/60 dark:border-secondary-800 px-4 pt-2.5 pb-3.5 text-xs text-secondary-600 dark:text-secondary-300 leading-relaxed space-y-1 text-center">
+                    <div className="border-t border-secondary-200/60 dark:border-secondary-800 px-4 pt-2.5 pb-3.5 text-xs text-secondary-600 dark:text-secondary-300 leading-relaxed space-y-1 text-left">
                       {feature.subtitle && (
-                        <p className="text-[10px] font-semibold text-secondary-800 dark:text-secondary-200 uppercase tracking-wider">
+                        <p className="text-[10px] font-semibold text-secondary-800 dark:text-secondary-200 uppercase tracking-wider text-left">
                           {feature.subtitle}
                         </p>
                       )}
-                      <p className="text-secondary-600 dark:text-secondary-300 text-xs leading-relaxed max-w-md mx-auto">
+                      <p className="text-secondary-600 dark:text-secondary-300 text-xs leading-relaxed text-left">
                         {feature.description}
                       </p>
                     </div>

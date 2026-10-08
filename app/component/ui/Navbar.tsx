@@ -27,11 +27,12 @@ export default function Navbar() {
   const pathname = usePathname()
   const { scrollY } = useScroll()
 
-
+  // Track scroll position to toggle transparency & hide/show motion effect
   useMotionValueEvent(scrollY, 'change', (current) => {
     const previous = scrollY.getPrevious() ?? 0
     setScrolled(current > 20)
 
+    // Hide navbar when scrolling down past 150px, show when scrolling up
     if (current > previous && current > 150) {
       setHidden(true)
     } else {
@@ -74,7 +75,8 @@ export default function Navbar() {
               <div className="flex items-center">
                 <Link
                   href="/"
-                  className="text-2xl font-black tracking-tight text-secondary-950 dark:text-white transition-transform duration-200 hover:scale-105">
+                  className="text-2xl font-black tracking-tight text-secondary-950 dark:text-white transition-transform duration-200 hover:scale-105"
+                >
                   Ijen<span className="text-primary-500 font-extrabold">Tour</span>
                 </Link>
               </div>
@@ -110,11 +112,8 @@ export default function Navbar() {
                   })}
                 </div>
               </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="hidden sm:block">
-                <ThemeToggle />
-              </div>
+
+              {/* Right Side Actions: ThemeToggle, Search & Book a trip Button */}
               <div className="flex items-center space-x-4">
                 <ThemeToggle />
                 {isSearchOpen ? (
@@ -138,11 +137,12 @@ export default function Navbar() {
                     onClick={() => setIsSearchOpen(true)}
                     aria-label="Buka pencarian"
                     title="Cari artikel dan destinasi"
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-secondary-200 dark:border-secondary-800 bg-white/80 dark:bg-secondary-900 text-secondary-700 dark:text-secondary-300 shadow-sm transition hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-secondary-800 hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer"
+                    className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary-100/80 dark:bg-secondary-900 text-secondary-700 dark:text-secondary-300 shadow-2xs transition hover:bg-primary-50 dark:hover:bg-secondary-800 hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer"
                   >
                     <MagnifyingGlassIcon className="w-5 h-5" />
                   </button>
                 )}
+
                 <Link
                   href="/packages"
                   className="inline-flex items-center justify-center rounded-full bg-primary-500 px-5 py-2.5 text-xs font-bold text-secondary-950 shadow-sm transition-all duration-300 hover:bg-primary-400 hover:shadow-md hover:scale-105 active:scale-95"
@@ -151,21 +151,18 @@ export default function Navbar() {
                 </Link>
               </div>
             </div>
-          </div >
-        </nav >
-      </motion.header >
+          </div>
+        </nav>
+      </motion.header>
 
       {/* Mobile Drawer Sidebar */}
-      < Sidebar
+      <Sidebar
         isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)
-        }
-        navigation={
-          navigation.map((item) => ({
-            ...item,
-            current: item.href === '/' ? pathname === '/' : pathname === item.href
-          }))
-        }
+        onClose={() => setIsSidebarOpen(false)}
+        navigation={navigation.map((item) => ({
+          ...item,
+          current: item.href === '/' ? pathname === '/' : pathname === item.href
+        }))}
       />
     </>
   )

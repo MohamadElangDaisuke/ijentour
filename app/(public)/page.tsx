@@ -1,6 +1,7 @@
 import HeroSection from "../component/ui/heroSection";
 import ChooseUs from "../component/ui/chooseUs";
 import Packages from "../component/ui/packagesSections";
+import DestinationInspiration from "../component/ui/destinationInspiration";
 import ExperienceSections from "../component/ui/experienceSections";
 import HowItWorks from "../component/ui/howItWorks";
 import GallerySection from "../component/ui/gallerySection";
@@ -44,7 +45,10 @@ export default function Home() {
       {/* 3. Featured Tours */}
       <Packages />
 
-      {/* 4. Experience / Destination */}
+      {/* 4. Get Inspired - Destination Carousel */}
+      <DestinationInspiration />
+
+      {/* 5. Experience / Destination */}
       <ExperienceSections />
 
       {/* 6. Gallery */}

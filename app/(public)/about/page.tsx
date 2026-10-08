@@ -51,7 +51,7 @@ export default function AboutPage() {
             <p className="text-secondary-700 leading-relaxed">
               Visi kami adalah memberikan pengalaman wisata alam yang otentik dan berkelanjutan. Kami berkomitmen untuk memberdayakan komunitas lokal, termasuk para penambang belerang dan pemandu wisata daerah, sekaligus menjaga kelestarian lingkungan Kawah Ijen untuk generasi mendatang.
             </p>
-            <div className="grid grid-cols-2 gap-6 pt-4">
+            <div className=" grid-cols-2 gap-6 pt-4">
               <div className="border-l-4 border-primary-500 pl-4">
                 <p className="text-3xl font-black text-secondary-950">5+</p>
                 <p className="text-sm text-secondary-600 font-medium">Tahun Pengalaman</p>

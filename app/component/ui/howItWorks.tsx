@@ -61,8 +61,8 @@ export default function HowItWorks() {
           </p>
         </div>
 
-        {/* MOBILE VIEW: Row Memanjang with Title Only & Dropdown Description */}
-        <div className="md:hidden space-y-3">
+        {/* MOBILE VIEW: Row Memanjang with Title Only & Dropdown Description - Centered Container, Left-Aligned Content */}
+        <div className="md:hidden space-y-3 max-w-lg mx-auto">
           {steps.map((item, index) => {
             const Icon = item.icon;
             const isOpen = openIndex === index;
@@ -77,11 +77,11 @@ export default function HowItWorks() {
                   aria-expanded={isOpen}
                   className="flex w-full items-center justify-between gap-3 px-5 py-4 cursor-pointer focus:outline-none"
                 >
-                  <div className="flex items-center justify-center gap-3.5 min-w-0 flex-1 text-center">
+                  <div className="flex items-center justify-start gap-3.5 min-w-0 flex-1 text-left">
                     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-100 text-xs font-black text-primary-700">
                       {item.step}
                     </span>
-                    <span className="font-bold text-sm text-secondary-950 truncate">
+                    <span className="font-bold text-sm text-secondary-950 truncate text-left">
                       {item.title}
                     </span>
                   </div>
@@ -95,8 +95,8 @@ export default function HowItWorks() {
                 </button>
 
                 {isOpen && (
-                  <div className="border-t border-secondary-100 px-5 pt-3 pb-5 text-xs text-secondary-600 leading-relaxed space-y-2.5 text-center">
-                    <div className="flex items-center justify-center gap-2">
+                  <div className="border-t border-secondary-100 px-5 pt-3 pb-5 text-xs text-secondary-600 leading-relaxed space-y-2.5 text-left">
+                    <div className="flex items-center justify-start gap-2">
                       <span className="rounded-full bg-primary-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary-700">
                         {item.badge}
                       </span>
@@ -104,10 +104,10 @@ export default function HowItWorks() {
                         {item.subtitle}
                       </span>
                     </div>
-                    <p className="text-secondary-700 text-xs sm:text-sm leading-relaxed max-w-md mx-auto">
+                    <p className="text-secondary-700 text-xs sm:text-sm leading-relaxed text-left">
                       {item.description}
                     </p>
-                    <div className="pt-1 flex items-center justify-center text-xs font-bold text-primary-600">
+                    <div className="pt-1 flex items-center justify-start text-xs font-bold text-primary-600">
                       <Icon className="mr-1.5 h-3.5 w-3.5" />
                       <span>Langkah {item.step}</span>
                     </div>
@@ -137,7 +137,7 @@ export default function HowItWorks() {
                     <span className="text-3xl font-black text-primary-500/60 transition-colors group-hover:text-primary-500">
                       {item.step}
                     </span>
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-secondary-200 bg-secondary-50 text-primary-600 shadow-xs transition-all group-hover:scale-110 group-hover:bg-primary-500 group-hover:text-secondary-950">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-100/70 text-primary-700 shadow-2xs transition-all group-hover:scale-110 group-hover:bg-primary-500 group-hover:text-secondary-950">
                       <Icon className="h-6 w-6" />
                     </div>
                   </div>

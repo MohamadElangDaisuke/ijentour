@@ -9,10 +9,9 @@ interface SidebarProps {
   isOpen: boolean
   onClose: () => void
   navigation: Array<{ name: string; href: string; current: boolean }>
-  currentUser?: any
 }
 
-export default function Sidebar({ isOpen, onClose, navigation, currentUser }: SidebarProps) {
+export default function Sidebar({ isOpen, onClose, navigation }: SidebarProps) {
   const handleDragEnd = (_: unknown, info: PanInfo) => {
     if (info.offset.x < -80 || info.velocity.x < -300) {
       onClose()
@@ -107,8 +106,8 @@ export default function Sidebar({ isOpen, onClose, navigation, currentUser }: Si
               </nav>
             </div>
 
-            {/* Tombol Book a trip & Login */}
-            <div className="border-t border-secondary-200 pt-6 space-y-2">
+            {/* Tombol Pesan Tur */}
+            <div className="border-t border-secondary-200 pt-6">
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -121,33 +120,6 @@ export default function Sidebar({ isOpen, onClose, navigation, currentUser }: Si
                 >
                   Pesan Tur Sekarang
                 </Link>
-                {currentUser ? (
-                  <Link
-                    href={
-                      currentUser.role === "ADMIN"
-                        ? "/admin/dashboard"
-                        : currentUser.role === "MITRA"
-                        ? "/mitra"
-                        : "/customer"
-                    }
-                    onClick={onClose}
-                    className="mt-2 block w-full rounded-full border border-primary-500 bg-primary-50 dark:bg-secondary-900 px-4 py-2.5 text-center text-xs font-bold text-secondary-900 dark:text-primary-300 transition-all hover:bg-primary-500 hover:text-secondary-950"
-                  >
-                    {currentUser.role === "ADMIN"
-                      ? "👑 Buka Admin Dashboard"
-                      : currentUser.role === "MITRA"
-                      ? "🧭 Buka Portal Mitra Guide"
-                      : `👤 Dashboard (${currentUser.name.split(" ")[0]})`}
-                  </Link>
-                ) : (
-                  <Link
-                    href="/login"
-                    onClick={onClose}
-                    className="mt-2 block w-full rounded-full border border-secondary-300 px-4 py-2.5 text-center text-xs font-bold text-secondary-900 transition-all hover:bg-secondary-100"
-                  >
-                    Portal Akun / Masuk
-                  </Link>
-                )}
               </motion.div>
             </div>
           </motion.aside>

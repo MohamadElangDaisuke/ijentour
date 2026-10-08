@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase, supabaseAdmin } from "@/lib/supabase";
-import { verifyAuthToken } from "@/lib/auth";
 import path from "path";
 import fs from "fs/promises";
 
@@ -15,27 +14,7 @@ const ALLOWED_MIME_TYPES = [
 
 export async function POST(request: NextRequest) {
   try {
-    // 1. Verify admin/authenticated session
-    const token =
-      request.cookies.get("admin_token")?.value ||
-      request.cookies.get("auth_token")?.value;
-
-    if (!token) {
-      return NextResponse.json(
-        { success: false, error: "Akses ditolak. Sesi tidak ditemukan." },
-        { status: 401 }
-      );
-    }
-
-    const session = await verifyAuthToken(token);
-    if (!session || (session.role !== "ADMIN" && session.role !== "MITRA")) {
-      return NextResponse.json(
-        { success: false, error: "Akses ditolak. Hanya admin/mitra yang diizinkan mengunggah." },
-        { status: 403 }
-      );
-    }
-
-    // 2. Parse FormData
+    // 1. Parse FormData
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
     const rawFolder = (formData.get("folder") as string) || "general";
@@ -155,19 +134,6 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const token =
-      request.cookies.get("admin_token")?.value ||
-      request.cookies.get("auth_token")?.value;
-
-    if (!token) {
-      return NextResponse.json({ success: false, error: "Akses ditolak." }, { status: 401 });
-    }
-
-    const session = await verifyAuthToken(token);
-    if (!session || session.role !== "ADMIN") {
-      return NextResponse.json({ success: false, error: "Akses ditolak." }, { status: 403 });
-    }
-
     const { searchParams } = new URL(request.url);
     const storagePath = searchParams.get("path");
 

@@ -4,21 +4,16 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  Mountain,
   LayoutDashboard,
   Compass,
   HelpCircle,
   BookOpen,
-  LogOut,
   Menu,
   X,
-  User,
   Bell,
   Calendar,
   Image as ImageIcon,
-  Users,
   Mail,
-  ShieldAlert,
   ArrowLeft,
 } from "lucide-react";
 
@@ -27,7 +22,6 @@ const SIDEBAR_ITEMS = [
   { label: "Kelola Reservasi", href: "/admin/bookings", icon: <Calendar className="h-5 w-5" /> },
   { label: "Kelola Paket Tur", href: "/admin/trips", icon: <Compass className="h-5 w-5" /> },
   { label: "Kelola Galeri", href: "/admin/gallery", icon: <ImageIcon className="h-5 w-5" /> },
-  { label: "Kelola Pengguna & Role", href: "/admin/users", icon: <Users className="h-5 w-5" /> },
   { label: "Pusat Notifikasi", href: "/admin/notifications", icon: <Bell className="h-5 w-5" /> },
   { label: "Pesan Kontak Masuk", href: "/admin/contacts", icon: <Mail className="h-5 w-5" /> },
   { label: "Kelola Artikel Blog", href: "/admin/blog", icon: <BookOpen className="h-5 w-5" /> },
@@ -56,26 +50,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   useEffect(() => {
-    if (pathname === "/admin/login") return;
     loadNotifications();
     const interval = setInterval(loadNotifications, 15000);
     return () => clearInterval(interval);
   }, [pathname]);
-
-  // If on admin login page, don't show admin chrome
-  if (pathname === "/admin/login") {
-    return <>{children}</>;
-  }
-
-  const handleLogout = async () => {
-    try {
-      await fetch("/api/auth/logout", { method: "POST" });
-      router.push("/admin/login");
-      router.refresh();
-    } catch (e) {
-      console.error(e);
-    }
-  };
 
   const handleMarkAsRead = async (id: string, link?: string) => {
     await fetch("/api/notifications", {
@@ -170,20 +148,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
           <Link
             href="/"
-            className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-secondary-300 hover:border-primary-500 hover:bg-primary-50 text-secondary-800 font-bold text-xs transition"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-secondary-300 hover:border-primary-500 hover:bg-primary-50 text-secondary-800 font-bold text-xs transition"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Ke Website</span>
           </Link>
-
-          <button
-            onClick={handleLogout}
-            className="p-2 sm:px-3.5 sm:py-2 rounded-xl bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer"
-            title="Logout"
-          >
-            <LogOut className="w-4 h-4" />
-            <span className="hidden sm:inline">Logout</span>
-          </button>
         </div>
       </header>
 
@@ -217,10 +186,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
           <div className="pt-4 border-t border-secondary-100">
             <div className="p-3 bg-secondary-50 rounded-2xl border border-secondary-200 text-xs">
-              <span className="text-[10px] text-secondary-500 block uppercase font-bold">Logged as:</span>
-              <p className="font-black text-secondary-950 truncate">Administrator Ijen</p>
+              <span className="text-[10px] text-secondary-500 block uppercase font-bold">Portal:</span>
+              <p className="font-black text-secondary-950 truncate">Administrator CMS</p>
               <span className="inline-block mt-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-primary-200 text-primary-800">
-                Super Admin
+                Akses Langsung Aktif
               </span>
             </div>
           </div>
@@ -265,13 +234,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 </div>
               </div>
 
-              <button
-                onClick={handleLogout}
-                className="w-full py-2.5 rounded-2xl bg-red-50 text-red-700 font-bold text-xs flex items-center justify-center gap-2 border border-red-200"
+              <Link
+                href="/"
+                onClick={() => setIsSidebarOpen(false)}
+                className="w-full py-2.5 rounded-2xl bg-secondary-100 text-secondary-800 font-bold text-xs flex items-center justify-center gap-2 border border-secondary-200"
               >
-                <LogOut className="w-4 h-4" />
-                <span>Logout</span>
-              </button>
+                <ArrowLeft className="w-4 h-4" />
+                <span>Kembali ke Website</span>
+              </Link>
             </div>
           </div>
         )}

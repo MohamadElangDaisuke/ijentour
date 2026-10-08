@@ -25,26 +25,26 @@ import { formatCurrency } from "@/lib/utils";
 export default function AdminDashboardPage() {
   const [bookings, setBookings] = useState<any[]>([]);
   const [packages, setPackages] = useState<any[]>([]);
-  const [users, setUsers] = useState<any[]>([]);
+  const [destinations, setDestinations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
 
   const loadData = async () => {
     try {
-      const [resBookings, resTrips, resUsers] = await Promise.all([
+      const [resBookings, resTrips, resDestinations] = await Promise.all([
         fetch("/api/bookings"),
         fetch("/api/trips"),
-        fetch("/api/users"),
+        fetch("/api/destinations"),
       ]);
 
       const dataBookings = await resBookings.json();
       const dataTrips = await resTrips.json();
-      const dataUsers = await resUsers.json();
+      const dataDestinations = await resDestinations.json();
 
       if (dataBookings.success) setBookings(dataBookings.bookings || []);
       if (dataTrips.success) setPackages(dataTrips.packages || []);
-      if (dataUsers.success) setUsers(dataUsers.users || []);
+      if (dataDestinations.success) setDestinations(dataDestinations.destinations || []);
     } catch (e) {
       console.error("Dashboard fetch error:", e);
     } finally {
@@ -138,18 +138,18 @@ export default function AdminDashboardPage() {
 
       {/* STAT CARDS - 6 METRIC PRODUCTION GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-        {/* Total Users */}
+        {/* Total Destinasi */}
         <div className="bg-white rounded-2xl p-5 border border-secondary-200/80 shadow-xs">
           <div className="flex items-center justify-between mb-2">
             <span className="text-[11px] font-bold text-secondary-500 uppercase tracking-wider">
-              Total Users
+              Destinasi
             </span>
             <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
-              <Users className="w-4 h-4" />
+              <Sparkles className="w-4 h-4" />
             </div>
           </div>
-          <p className="text-2xl font-black text-secondary-950">{users.length}</p>
-          <p className="text-[10px] text-secondary-500 font-semibold mt-1">Akun terdaftar</p>
+          <p className="text-2xl font-black text-secondary-950">{destinations.length}</p>
+          <p className="text-[10px] text-secondary-500 font-semibold mt-1">Spot wisata Ijen</p>
         </div>
 
         {/* Total Trips */}

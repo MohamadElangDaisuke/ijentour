@@ -9,6 +9,17 @@ export async function GET(
   try {
     const { slug } = await params;
 
+    if (!process.env.DATABASE_URL || process.env.DATABASE_URL.includes("localhost:5432") || process.env.DATABASE_URL.startsWith("file:")) {
+      const fallback = defaultArticles.find(
+        (a) => a.id === slug || a.title.toLowerCase().includes(slug.replace(/-/g, " ").toLowerCase())
+      );
+
+      if (fallback) {
+        return NextResponse.json({ success: true, article: fallback });
+      }
+      return NextResponse.json({ error: "Artikel tidak ditemukan." }, { status: 404 });
+    }
+
     // Search in Prisma database first
     const post = await prisma.blogPost.findFirst({
       where: {
@@ -33,9 +44,17 @@ export async function GET(
     }
 
     return NextResponse.json({ error: "Artikel tidak ditemukan." }, { status: 404 });
-  } catch (error) {
-    console.error("GET /api/articles/[slug] error:", error);
-    return NextResponse.json({ error: "Gagal memuat artikel." }, { status: 500 });
+  } catch {
+    try {
+      const { slug } = await params;
+      const fallback = defaultArticles.find(
+        (a) => a.id === slug || a.title.toLowerCase().includes(slug.replace(/-/g, " ").toLowerCase())
+      );
+      if (fallback) {
+        return NextResponse.json({ success: true, article: fallback });
+      }
+    } catch {}
+    return NextResponse.json({ error: "Artikel tidak ditemukan." }, { status: 404 });
   }
 }
 

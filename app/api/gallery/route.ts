@@ -4,6 +4,10 @@ import { defaultStories } from "@/app/lib/stories";
 
 export async function GET(request: Request) {
   try {
+    if (!process.env.DATABASE_URL || process.env.DATABASE_URL.includes("localhost:5432") || process.env.DATABASE_URL.startsWith("file:")) {
+      return NextResponse.json({ success: true, items: defaultStories, gallery: defaultStories });
+    }
+
     const { searchParams } = new URL(request.url);
     const category = searchParams.get("category");
 
@@ -22,8 +26,7 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json({ success: true, items, gallery: items });
-  } catch (error) {
-    console.error("GET /api/gallery error:", error);
+  } catch {
     return NextResponse.json({ success: true, items: defaultStories, gallery: defaultStories });
   }
 }

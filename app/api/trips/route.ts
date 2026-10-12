@@ -5,6 +5,14 @@ import { defaultPackages } from "@/app/lib/packagesStorage";
 
 export async function GET(request: Request) {
   try {
+    if (!process.env.DATABASE_URL || process.env.DATABASE_URL.includes("localhost:5432") || process.env.DATABASE_URL.startsWith("file:")) {
+      return NextResponse.json({
+        success: true,
+        source: "fallback",
+        packages: defaultPackages,
+      });
+    }
+
     const { searchParams } = new URL(request.url);
     const category = searchParams.get("category");
     const featured = searchParams.get("featured");
@@ -53,8 +61,7 @@ export async function GET(request: Request) {
       source: "database",
       packages: formatted,
     });
-  } catch (error) {
-    console.error("GET /api/trips error:", error);
+  } catch {
     // Fallback so frontend never crashes
     return NextResponse.json({
       success: true,

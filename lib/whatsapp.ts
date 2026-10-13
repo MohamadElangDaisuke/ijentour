@@ -60,3 +60,51 @@ export const WhatsAppTemplates = {
   customTourRequest: () =>
     `Halo Tim Ijen Expedition, saya ingin menanyakan paket custom private tour untuk rombongan keluarga/perusahaan.`,
 };
+
+export interface TourBookingInquiryData {
+  fullName: string;
+  nationality: string;
+  email: string;
+  whatsapp: string;
+  packageName: string;
+  tourDate: string;
+  participants: number | string;
+  pickupLocation: string;
+  specialRequests?: string;
+}
+
+/**
+ * Creates formatted WhatsApp message matching the requested booking form fields
+ */
+export function createTourBookingWhatsAppMessage(data: TourBookingInquiryData): string {
+  const parts = [
+    `*BOOK YOUR TOUR - RESERVATION INQUIRY*`,
+    `Halo Tim Ijen Tour Banyuwangi, saya ingin melakukan pemesanan tur dengan rincian berikut:`,
+    ``,
+    `👤 *Full Name*: ${data.fullName.trim()}`,
+    `🌍 *Nationality*: ${data.nationality.trim()}`,
+    `📧 *Email Address*: ${data.email.trim()}`,
+    `📱 *WhatsApp Number*: ${data.whatsapp.trim()}`,
+    ``,
+    `🗺️ *Tour Package*: ${data.packageName}`,
+    `📅 *Tour Date*: ${data.tourDate}`,
+    `👥 *Participants*: ${data.participants} Orang`,
+    `📍 *Pickup Location*: ${data.pickupLocation.trim()}`,
+  ];
+
+  if (data.specialRequests && data.specialRequests.trim()) {
+    parts.push(
+      ``,
+      `📝 *Special Requests*:`,
+      `${data.specialRequests.trim()}`
+    );
+  }
+
+  parts.push(
+    ``,
+    `Mohon info ketersediaan slot guide lokal, kuota pendakian, dan konfirmasi penjemputan. Terima kasih!`
+  );
+
+  return parts.join('\n');
+}
+

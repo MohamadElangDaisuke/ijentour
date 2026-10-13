@@ -6,12 +6,15 @@ import { useSearchParams } from 'next/navigation';
 import {
   Star, Check, XCircle, ChevronLeft, ChevronRight, Clock, Sparkles, ArrowRight, ExternalLink
 } from 'lucide-react';
+import { FaWhatsapp } from 'react-icons/fa';
 import { TourPackage, defaultPackages, packagesStorageKey } from '../../lib/packagesStorage';
 import { getWhatsAppLink } from '@/lib/whatsapp';
+import { useBookingModal } from '@/lib/bookingModalStore';
 
 function PackagesContent() {
   const searchParams = useSearchParams();
   const packageIdFromUrl = searchParams.get('id');
+  const { openBookingModal } = useBookingModal();
 
   const [packagesData, setPackagesData] = useState<TourPackage[]>(defaultPackages);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -469,15 +472,22 @@ function PackagesContent() {
                 </span>
               </div>
 
-              <a
-                href={getWhatsAppLink(decodeURIComponent(whatsappMessage))}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full bg-primary-500 hover:bg-primary-600 text-secondary-950 font-black py-4 rounded-2xl shadow-xs hover:shadow transition duration-200 flex items-center justify-center space-x-2 text-center"
+              <button
+                type="button"
+                onClick={() => {
+                  const rawDate = selectedDate ? selectedDate.toISOString().split('T')[0] : '';
+                  openBookingModal({
+                    packageName: activePackage.title,
+                    tourDate: rawDate,
+                    participants: 2,
+                  });
+                }}
+                className="w-full bg-primary-500 hover:bg-primary-600 text-secondary-950 font-black py-4 rounded-2xl shadow-xs hover:shadow transition duration-200 flex items-center justify-center space-x-2 text-center cursor-pointer"
               >
+                <FaWhatsapp size={20} className="text-secondary-950" />
                 <span>PESAN SEKARANG VIA WHATSAPP</span>
                 <ArrowRight size={18} />
-              </a>
+              </button>
 
               <Link
                 href={`/packages/${activePackage.id}`}

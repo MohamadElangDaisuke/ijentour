@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { getWhatsAppLink } from '@/lib/whatsapp';
+import { useBookingModal } from '@/lib/bookingModalStore';
 import {
   TourPackage,
   defaultPackages,
@@ -43,6 +44,7 @@ export default function PackageDetailPage({ params }: PageProps) {
   const resolvedParams = use(params);
   const packageId = resolvedParams.id;
   const router = useRouter();
+  const { openBookingModal } = useBookingModal();
 
   const [packagesData, setPackagesData] = useState<TourPackage[]>(defaultPackages);
   const [activeTab, setActiveTab] = useState<'overview' | 'itinerary' | 'facilities' | 'packing' | 'faq'>('overview');
@@ -199,16 +201,12 @@ export default function PackageDetailPage({ params }: PageProps) {
       .map((a) => a.name)
       .join(', ');
 
-    const message = `Halo Admin Ijen Tour, saya ingin memesan paket wisata:
-*${currentPkg.title}*
-
-📅 *Tanggal*: ${selectedDate || 'Segera'}
-👥 *Jumlah Peserta*: ${selectedPax} Orang
-🏷️ *Estimasi Total*: ${formattedTotal}
-${selectedAddonNames ? `✨ *Add-on Tambahan*: ${selectedAddonNames}\n` : ''}
-Mohon info ketersediaan slot guide dan armadanya. Terima kasih!`;
-
-    window.open(getWhatsAppLink(message), '_blank');
+    openBookingModal({
+      packageName: currentPkg.title,
+      tourDate: selectedDate || '',
+      participants: selectedPax,
+      specialRequests: selectedAddonNames ? `Add-on tambahan: ${selectedAddonNames}` : '',
+    });
   };
 
   const handleOnlineBookingSubmit = async (e: React.FormEvent) => {

@@ -3,10 +3,11 @@
 import { FaWhatsapp } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getWhatsAppLink, WhatsAppTemplates } from '@/lib/whatsapp';
+import { useBookingModal } from '@/lib/bookingModalStore';
 
 export default function WhatsAppFloat() {
   const [heroVisible, setHeroVisible] = useState(true);
+  const { openBookingModal } = useBookingModal();
 
   useEffect(() => {
     const hero = document.getElementById('hero');
@@ -21,17 +22,14 @@ export default function WhatsAppFloat() {
     return () => observer.disconnect();
   }, []);
 
-  const whatsappHref = getWhatsAppLink(WhatsAppTemplates.generalInquiry("paket wisata Kawah Ijen"));
-
   return (
     <AnimatePresence>
       {!heroVisible && (
-        <motion.a
-          href={whatsappHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Hubungi Ijen Tour melalui WhatsApp"
-          title="Chat WhatsApp Ijen Tour"
+        <motion.button
+          type="button"
+          onClick={() => openBookingModal()}
+          aria-label="Pesan tur melalui WhatsApp"
+          title="Pesan Tur via WhatsApp"
           initial={{ opacity: 0, scale: 0.7, y: 30 }}
           animate={{
             opacity: 1,
@@ -50,11 +48,11 @@ export default function WhatsAppFloat() {
           }}
           whileHover={{ scale: 1.06 }}
           whileTap={{ scale: 0.95 }}
-          className="fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-3 text-sm font-bold text-white shadow-xl shadow-[#25D366]/30 transition-colors hover:bg-[#1ebe5b] hover:shadow-2xl hover:shadow-[#25D366]/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366] sm:bottom-6 sm:right-6"
+          className="fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-3 text-sm font-bold text-white shadow-xl shadow-[#25D366]/30 transition-colors hover:bg-[#1ebe5b] hover:shadow-2xl hover:shadow-[#25D366]/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366] sm:bottom-6 sm:right-6 cursor-pointer"
         >
           <FaWhatsapp className="h-5 w-5" aria-hidden="true" />
-          <span className="hidden sm:inline">Chat WhatsApp</span>
-        </motion.a>
+          <span className="hidden sm:inline">Book via WhatsApp</span>
+        </motion.button>
       )}
     </AnimatePresence>
   );

@@ -8,8 +8,10 @@ import { useEffect, useState } from 'react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { defaultHeroStats, defaultDestinations } from '../../lib/destinationsStorage';
 import { getWhatsAppLink, WhatsAppTemplates } from '@/lib/whatsapp';
+import { useBookingModal } from '@/lib/bookingModalStore';
 
 export default function HeroSection() {
+  const { openBookingModal } = useBookingModal();
   const [activeDestination, setActiveDestination] = useState(0);
   const destination = defaultDestinations[activeDestination] || defaultDestinations[0];
 
@@ -49,14 +51,13 @@ export default function HeroSection() {
             <Link href="/packages" className="inline-flex items-center gap-2 rounded-full bg-primary-500 px-6 py-3.5 text-sm font-bold text-secondary-950 transition hover:-translate-y-0.5 hover:bg-primary-400 hover:shadow-lg hover:shadow-primary-500/20">
               Jelajahi Paket Tur <ArrowRight className="h-4 w-4" />
             </Link>
-            <a
-              href={getWhatsAppLink(WhatsAppTemplates.generalInquiry("Paket Wisata Kawah Ijen"))}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-secondary-300 bg-white/70 px-5 py-3.5 text-sm font-bold text-secondary-800 transition hover:border-[#25D366] hover:bg-white hover:text-[#25D366]"
+            <button
+              type="button"
+              onClick={() => openBookingModal()}
+              className="inline-flex items-center gap-2 rounded-full border border-secondary-300 bg-white/70 px-5 py-3.5 text-sm font-bold text-secondary-800 transition hover:border-[#25D366] hover:bg-white hover:text-[#25D366] cursor-pointer"
             >
               <FaWhatsapp className="h-4 w-4 text-[#25D366]" /> Chat WhatsApp
-            </a>
+            </button>
           </div>
 
           {/* Trust Badges */}

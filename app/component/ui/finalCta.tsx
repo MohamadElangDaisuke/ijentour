@@ -5,8 +5,11 @@ import Link from "next/link";
 import { ArrowRight, Flame, ShieldCheck, Clock, Users, Compass } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { getWhatsAppLink, WhatsAppTemplates } from "@/lib/whatsapp";
+import { useBookingModal } from "@/lib/bookingModalStore";
 
 export default function FinalCta() {
+  const { openBookingModal } = useBookingModal();
+
   return (
     <section className="relative overflow-hidden bg-secondary-950 py-20 px-4 sm:px-8 sm:py-24 lg:py-28 text-white">
       {/* Background Volcanic Glow & Gradients */}
@@ -33,15 +36,14 @@ export default function FinalCta() {
             <ArrowRight className="h-4 w-4" />
           </Link>
 
-          <a
-            href={getWhatsAppLink(WhatsAppTemplates.generalInquiry("Kawah Ijen Banyuwangi"))}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-7 py-4 text-sm font-bold text-white backdrop-blur-sm transition hover:border-[#25D366] hover:bg-white/20 hover:text-[#25D366]"
+          <button
+            type="button"
+            onClick={() => openBookingModal()}
+            className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-7 py-4 text-sm font-bold text-white backdrop-blur-sm transition hover:border-[#25D366] hover:bg-white/20 hover:text-[#25D366] cursor-pointer"
           >
             <FaWhatsapp className="h-5 w-5 text-[#25D366]" />
             <span>Tanya via WhatsApp</span>
-          </a>
+          </button>
         </div>
 
         {/* Trust Indicators */}

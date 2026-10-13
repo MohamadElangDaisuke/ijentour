@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { ChevronDown, HelpCircle } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { getWhatsAppLink, WhatsAppTemplates } from "@/lib/whatsapp";
+import { useBookingModal } from "@/lib/bookingModalStore";
 
 interface FaqItem {
   q: string;
@@ -38,6 +39,7 @@ const defaultFaqs: FaqItem[] = [
 ];
 
 export default function FaqSection() {
+  const { openBookingModal } = useBookingModal();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const toggle = (index: number) => {
@@ -103,15 +105,14 @@ export default function FaqSection() {
               <p className="text-xs text-secondary-300">Tim pemandu lokal kami siap menjawab via WhatsApp 24/7.</p>
             </div>
           </div>
-          <a
-            href={getWhatsAppLink(WhatsAppTemplates.generalInquiry("perjalanan Kawah Ijen"))}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs transition shadow-md shrink-0 hover:scale-105 active:scale-95 mx-auto sm:mx-0"
+          <button
+            type="button"
+            onClick={() => openBookingModal()}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs transition shadow-md shrink-0 hover:scale-105 active:scale-95 mx-auto sm:mx-0 cursor-pointer"
           >
             <FaWhatsapp className="w-4 h-4" />
             <span>Chat CS WhatsApp</span>
-          </a>
+          </button>
         </div>
       </div>
     </section>

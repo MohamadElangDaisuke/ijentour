@@ -29,18 +29,18 @@ export default function AdminContactsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-primary-600">
-            Inbox Masuk
+            Inbox
           </span>
           <h1 className="text-2xl sm:text-3xl font-black text-secondary-950 tracking-tight">
-            Pesan Kontak & Pertanyaan
+            Contact Messages & Inquiries
           </h1>
           <p className="text-xs sm:text-sm text-secondary-600 mt-1">
-            Pesan pertanyaan yang dikirimkan oleh pengunjung melalui formulir kontak website.
+            Inquiries and questions submitted by visitors through the website contact form.
           </p>
         </div>
 
         <span className="text-xs font-bold bg-secondary-100 text-secondary-800 px-3 py-1 rounded-full self-start sm:self-auto">
-          {contacts.length} Pesan Masuk
+          {contacts.length} Inbound Messages
         </span>
       </div>
 
@@ -51,7 +51,7 @@ export default function AdminContactsPage() {
           </div>
         ) : contacts.length === 0 ? (
           <div className="py-20 text-center text-xs text-secondary-400">
-            Belum ada pesan kontak yang diterima.
+            No contact messages received yet.
           </div>
         ) : (
           <div className="space-y-4">
@@ -65,17 +65,17 @@ export default function AdminContactsPage() {
                     <h3 className="font-bold text-base text-secondary-950">{c.name}</h3>
                     <div className="flex items-center gap-3 text-xs text-secondary-500 mt-0.5">
                       <span>Email: {c.email}</span>
-                      {c.phone && <span>• Telp: {c.phone}</span>}
+                      {c.phone && <span>• Phone: {c.phone}</span>}
                     </div>
                   </div>
                   <span className="text-[10px] text-secondary-400">
-                    {new Date(c.createdAt).toLocaleString("id-ID")}
+                    {new Date(c.createdAt).toLocaleString("en-US")}
                   </span>
                 </div>
 
                 <div>
                   <span className="text-xs font-bold text-primary-700 block mb-1">
-                    Subjek: {c.subject}
+                    Subject: {c.subject}
                   </span>
                   <p className="text-xs sm:text-sm text-secondary-700 leading-relaxed bg-white p-4 rounded-xl border border-secondary-200/60">
                     "{c.message}"
@@ -84,11 +84,11 @@ export default function AdminContactsPage() {
 
                 <div className="flex justify-end gap-2 pt-1">
                   <a
-                    href={`mailto:${c.email}?subject=Balasan:%20${encodeURIComponent(c.subject)}`}
+                    href={`mailto:${c.email}?subject=Reply:%20${encodeURIComponent(c.subject)}`}
                     className="px-4 py-2 rounded-xl bg-secondary-950 hover:bg-secondary-900 text-white font-bold text-xs flex items-center gap-1.5 transition"
                   >
                     <Mail className="w-3.5 h-3.5" />
-                    <span>Balas via Email</span>
+                    <span>Reply via Email</span>
                   </a>
                   {c.phone && (
                     <a
@@ -98,7 +98,7 @@ export default function AdminContactsPage() {
                       className="px-4 py-2 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs flex items-center gap-1.5 transition"
                     >
                       <FaWhatsapp className="w-3.5 h-3.5" />
-                      <span>Chat WhatsApp</span>
+                      <span>Chat via WhatsApp</span>
                     </a>
                   )}
                 </div>

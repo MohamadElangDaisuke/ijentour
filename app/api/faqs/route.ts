@@ -33,7 +33,7 @@ export async function POST(request: Request) {
 
     if (!question || !answer) {
       return NextResponse.json(
-        { error: "Pertanyaan dan jawaban wajib diisi." },
+        { error: "Question and answer are required." },
         { status: 400 }
       );
     }
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error("POST /api/faqs error:", error);
     return NextResponse.json(
-      { error: error.message || "Gagal membuat FAQ." },
+      { error: error.message || "Failed to create FAQ." },
       { status: 500 }
     );
   }

@@ -32,10 +32,10 @@ export default function DestinationsPage() {
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 mt-8">
           <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-            Destinasi Wisata Unggulan
+            Featured Destinations
           </h1>
           <p className="text-sm text-secondary-200 mt-2 max-w-xl mx-auto">
-            Jelajahi keajaiban kawah vulkanik, savana liar, hingga hutan magis di The Sunrise of Java.
+            Explore volcanic crater wonders, wild savannas, and magical ancient forests in The Sunrise of Java.
           </p>
         </div>
       </section>
@@ -70,7 +70,7 @@ export default function DestinationsPage() {
                   <div className="p-6">
                     <div className="flex items-center gap-1.5 text-xs text-secondary-500 font-semibold mb-2">
                       <MapPin className="w-3.5 h-3.5 text-primary-600" />
-                      <span>Banyuwangi, Jawa Timur</span>
+                      <span>Banyuwangi, East Java</span>
                     </div>
                     <Link href={`/destinations/${slug}`}>
                       <h3 className="text-xl font-black text-secondary-950 group-hover:text-primary-600 transition mb-2">
@@ -88,7 +88,7 @@ export default function DestinationsPage() {
                     href={`/destinations/${slug}`}
                     className="inline-flex items-center gap-1 text-xs font-bold text-secondary-700 hover:text-primary-600 transition"
                   >
-                    <span>Informasi Destinasi</span>
+                    <span>Destination Info</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
 
@@ -96,7 +96,7 @@ export default function DestinationsPage() {
                     href="/packages"
                     className="px-4 py-2 rounded-xl bg-secondary-950 hover:bg-primary-500 hover:text-secondary-950 text-white text-xs font-bold transition shadow-xs"
                   >
-                    Cari Paket Tur
+                    Explore Tour Packages
                   </Link>
                 </div>
               </div>

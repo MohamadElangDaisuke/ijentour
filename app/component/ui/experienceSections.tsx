@@ -21,7 +21,7 @@ export default function ExperienceSections() {
       <div className="pointer-events-none absolute inset-y-0 right-0 -z-10 w-full md:w-1/2">
         <Image
           src="/images/HeroSection.webp"
-          alt="Pemandangan Kawah Ijen dari jalur pendakian Banyuwangi"
+          alt="Mount Ijen crater view from the trekking path in Banyuwangi"
           fill
           sizes="(max-width: 768px) 100vw, 66vw"
           className="object-cover object-center opacity-20 mask-[linear-gradient(to_left,black_35%,transparent_100%)]"
@@ -31,10 +31,10 @@ export default function ExperienceSections() {
       <div className="relative z-10 mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-20">
         <div className="text-center lg:text-left mx-auto lg:mx-0">
           <h2 id="experience-heading" className="text-2xl sm:text-4xl lg:text-5xl font-black leading-tight tracking-tight text-secondary-950">
-            Cara menikmati wisata Kawah Ijen
+            How to Experience Mount Ijen
           </h2>
           <p className="mt-5 max-w-md mx-auto lg:mx-0 text-sm sm:text-base leading-relaxed text-secondary-700">
-            Semua kebutuhan perjalanan kami siapkan agar kamu bisa fokus menikmati lanskap dan cerita di sepanjang perjalanan.
+            We take care of every travel detail so you can focus completely on enjoying the breathtaking landscapes and stories along the journey.
           </p>
         </div>
 

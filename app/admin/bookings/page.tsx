@@ -45,7 +45,7 @@ export default function AdminBookingsPage() {
           setSelectedBooking((prev: any) => ({ ...prev, status }));
         }
       } else {
-        alert("Gagal memperbarui status.");
+        alert("Failed to update status.");
       }
     } catch (e) {
       console.error(e);
@@ -53,7 +53,7 @@ export default function AdminBookingsPage() {
   };
 
   const handleDelete = async (id: string, code: string) => {
-    if (!confirm(`Hapus reservasi dengan kode ${code}?`)) return;
+    if (!confirm(`Delete reservation with code ${code}?`)) return;
     try {
       const res = await fetch(`/api/bookings/${id}`, { method: "DELETE" });
       if (res.ok) {
@@ -80,19 +80,19 @@ export default function AdminBookingsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-primary-600">
-            Transaksi Masuk
+            Incoming Bookings
           </span>
           <h1 className="text-2xl sm:text-3xl font-black text-secondary-950 tracking-tight">
-            Kelola Reservasi & Pemesanan
+            Manage Reservations & Bookings
           </h1>
           <p className="text-xs sm:text-sm text-secondary-600 mt-1">
-            Konfirmasi slot perjalanan, ubah status keberangkatan, dan koordinasi dengan wisatawan.
+            Confirm tour slots, update departure statuses, and coordinate with travelers.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
           <span className="text-xs font-bold bg-primary-100 text-primary-800 px-3.5 py-1.5 rounded-full">
-            Total {bookings.length} Reservasi
+            Total {bookings.length} Reservations
           </span>
         </div>
       </div>
@@ -101,7 +101,7 @@ export default function AdminBookingsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-3xl border border-secondary-200 shadow-xs">
         <div className="flex gap-1.5 overflow-x-auto pb-1 sm:pb-0">
           {[
-            { label: "Semua", val: "ALL" },
+            { label: "All", val: "ALL" },
             { label: "Pending", val: "PENDING" },
             { label: "Confirmed", val: "CONFIRMED" },
             { label: "Completed", val: "COMPLETED" },
@@ -126,7 +126,7 @@ export default function AdminBookingsPage() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Cari kode, nama, tur..."
+            placeholder="Search code, name, tour..."
             className="w-full pl-9 pr-4 py-2 bg-secondary-50 border border-secondary-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
           <Search className="w-3.5 h-3.5 text-secondary-400 absolute left-3 top-3" />
@@ -141,20 +141,20 @@ export default function AdminBookingsPage() {
           </div>
         ) : filtered.length === 0 ? (
           <div className="py-20 text-center text-xs text-secondary-500">
-            Tidak ada reservasi yang cocok dengan kriteria pencarian.
+            No reservations match your search criteria.
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
                 <tr className="bg-secondary-50 border-b border-secondary-100 text-[11px] font-bold text-secondary-500 uppercase tracking-wider">
-                  <th className="py-4 px-6">Kode & Pemesan</th>
-                  <th className="py-4 px-6">Paket Wisata</th>
-                  <th className="py-4 px-6">Jadwal</th>
+                  <th className="py-4 px-6">Code & Customer</th>
+                  <th className="py-4 px-6">Tour Package</th>
+                  <th className="py-4 px-6">Schedule</th>
                   <th className="py-4 px-6 text-center">Pax</th>
-                  <th className="py-4 px-6">Total Biaya</th>
+                  <th className="py-4 px-6">Total Price</th>
                   <th className="py-4 px-6">Status</th>
-                  <th className="py-4 px-6 text-right">Ubah Status / Aksi</th>
+                  <th className="py-4 px-6 text-right">Update Status / Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-secondary-100">
@@ -210,7 +210,7 @@ export default function AdminBookingsPage() {
                           onClick={() => handleUpdateStatus(b.id, "CONFIRMED")}
                           className="px-2.5 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-[10px] transition cursor-pointer"
                         >
-                          Konfirmasi
+                          Confirm
                         </button>
                       )}
                       {b.status === "CONFIRMED" && (
@@ -218,7 +218,7 @@ export default function AdminBookingsPage() {
                           onClick={() => handleUpdateStatus(b.id, "COMPLETED")}
                           className="px-2.5 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-bold text-[10px] transition cursor-pointer"
                         >
-                          Selesai
+                          Complete
                         </button>
                       )}
                       {b.status !== "CANCELLED" && (
@@ -226,20 +226,20 @@ export default function AdminBookingsPage() {
                           onClick={() => handleUpdateStatus(b.id, "CANCELLED")}
                           className="px-2.5 py-1.5 bg-secondary-100 hover:bg-red-50 hover:text-red-600 text-secondary-700 rounded-lg font-bold text-[10px] transition cursor-pointer"
                         >
-                          Batal
+                          Cancel
                         </button>
                       )}
                       <button
                         onClick={() => setSelectedBooking(b)}
                         className="p-1.5 rounded-lg bg-secondary-100 hover:bg-secondary-200 text-secondary-800 transition cursor-pointer inline-block"
-                        title="Lihat Detail Lengkap"
+                        title="View Full Details"
                       >
                         <Eye className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={() => handleDelete(b.id, b.bookingCode)}
                         className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 transition cursor-pointer inline-block"
-                        title="Hapus Reservasi"
+                        title="Delete Reservation"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -265,7 +265,7 @@ export default function AdminBookingsPage() {
             <div className="flex items-center justify-between pb-4 border-b border-secondary-100 mb-4">
               <div>
                 <span className="text-[10px] font-bold text-secondary-500 uppercase tracking-wider block">
-                  Detail Rincian Reservasi
+                  Reservation Details
                 </span>
                 <h3 className="text-xl font-black text-secondary-950">{selectedBooking.bookingCode}</h3>
               </div>
@@ -277,12 +277,12 @@ export default function AdminBookingsPage() {
             <div className="space-y-3">
               <div className="p-3.5 bg-secondary-50 rounded-2xl space-y-1">
                 <p className="font-bold text-sm text-secondary-950">{selectedBooking.packageName}</p>
-                <p className="text-secondary-600">Jadwal: {selectedBooking.departureDate} • {selectedBooking.numParticipants} Orang</p>
+                <p className="text-secondary-600">Schedule: {selectedBooking.departureDate} • {selectedBooking.numParticipants} Guests</p>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="p-3 bg-secondary-50 rounded-2xl">
-                  <span className="text-secondary-500 block mb-0.5">Pemesan</span>
+                  <span className="text-secondary-500 block mb-0.5">Customer</span>
                   <p className="font-bold text-secondary-950">{selectedBooking.customerName}</p>
                   <p className="text-secondary-600">{selectedBooking.customerEmail || "-"}</p>
                 </div>
@@ -293,19 +293,19 @@ export default function AdminBookingsPage() {
               </div>
 
               <div className="p-3 bg-secondary-50 rounded-2xl">
-                <span className="text-secondary-500 block mb-0.5">Titik Penjemputan</span>
-                <p className="font-bold text-secondary-950">{selectedBooking.pickupLocation || "Belum ditentukan"}</p>
+                <span className="text-secondary-500 block mb-0.5">Pickup Location</span>
+                <p className="font-bold text-secondary-950">{selectedBooking.pickupLocation || "Not specified"}</p>
               </div>
 
               {selectedBooking.specialRequests && (
                 <div className="p-3 bg-amber-50 border border-amber-200 rounded-2xl text-amber-900">
-                  <span className="font-bold block mb-0.5">Permintaan Khusus:</span>
+                  <span className="font-bold block mb-0.5">Special Requests:</span>
                   <p>{selectedBooking.specialRequests}</p>
                 </div>
               )}
 
               <div className="p-3.5 bg-primary-50 rounded-2xl border border-primary-200 flex justify-between items-baseline">
-                <span className="font-bold text-secondary-900">Total Pembayaran:</span>
+                <span className="font-bold text-secondary-900">Total Amount:</span>
                 <span className="text-base font-black text-primary-700">{formatCurrency(selectedBooking.totalPrice)}</span>
               </div>
             </div>
@@ -313,14 +313,14 @@ export default function AdminBookingsPage() {
             <div className="mt-6 pt-4 border-t border-secondary-100 flex justify-end gap-2">
               <a
                 href={`https://wa.me/${selectedBooking.whatsappNumber}?text=${encodeURIComponent(
-                  `Halo ${selectedBooking.customerName}, kami dari Ijen Tour ingin mengonfirmasi jadwal pemesanan Anda (${selectedBooking.bookingCode}).`
+                  `Hello ${selectedBooking.customerName}, we from Ijen Tour would like to confirm your booking schedule (${selectedBooking.bookingCode}).`
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-4 py-2.5 rounded-xl bg-[#25D366] text-white font-bold text-xs flex items-center gap-1.5"
               >
                 <FaWhatsapp className="w-4 h-4" />
-                <span>Chat Pelanggan</span>
+                <span>Chat with Customer</span>
               </a>
             </div>
           </div>

@@ -69,19 +69,19 @@ export default function Sidebar({ isOpen, onClose, navigation }: SidebarProps) {
                 </div>
               </div>
 
-              {/* Search Bar di Sidebar */}
+              {/* Search Bar in Sidebar */}
               <form action="/blog" onSubmit={onClose} className="mt-5 flex items-center overflow-hidden rounded-2xl border border-secondary-200 dark:border-secondary-800 bg-secondary-50 dark:bg-secondary-900 px-3.5 py-2.5 transition focus-within:border-primary-500 focus-within:bg-white dark:focus-within:bg-secondary-900 focus-within:ring-2 focus-within:ring-primary-500/20">
                 <MagnifyingGlassIcon className="h-4 w-4 shrink-0 text-secondary-400 dark:text-secondary-500" />
                 <input
                   type="search"
                   name="q"
-                  placeholder="Cari artikel & paket..."
-                  aria-label="Cari artikel dan paket"
+                  placeholder="Search articles & packages..."
+                  aria-label="Search articles and packages"
                   className="w-full bg-transparent pl-2.5 text-xs text-secondary-950 dark:text-white outline-none placeholder:text-secondary-400 dark:placeholder:text-secondary-500"
                 />
               </form>
 
-              {/* Navigasi Rute Public */}
+              {/* Public Route Navigation */}
               <nav className="mt-5 space-y-1">
                 {navigation.map((item, index) => (
                   <motion.div
@@ -106,7 +106,7 @@ export default function Sidebar({ isOpen, onClose, navigation }: SidebarProps) {
               </nav>
             </div>
 
-            {/* Tombol Pesan Tur */}
+            {/* Book Tour CTA Button */}
             <div className="border-t border-secondary-200 pt-6">
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
@@ -118,7 +118,7 @@ export default function Sidebar({ isOpen, onClose, navigation }: SidebarProps) {
                   onClick={onClose}
                   className="block w-full rounded-full bg-primary-500 px-4 py-3 text-center text-sm font-extrabold text-secondary-950 shadow-lg shadow-primary-500/20 transition-all duration-150 hover:bg-primary-400"
                 >
-                  Pesan Tur Sekarang
+                  Book Tour Now
                 </Link>
               </motion.div>
             </div>

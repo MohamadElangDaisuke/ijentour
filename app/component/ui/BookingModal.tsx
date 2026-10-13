@@ -39,12 +39,12 @@ interface TourPackageOption {
 }
 
 const DEFAULT_PACKAGE_OPTIONS: TourPackageOption[] = [
-  { id: 'midnight', title: 'Midnight Expedition Blue Fire Ijen', duration: '1 Hari' },
-  { id: 'private-sunrise', title: 'Private Sunrise & Kawah Ijen Trekking', duration: '1 Hari' },
-  { id: '2d1n-heritage', title: '2D1N Banyuwangi & Kawah Ijen Heritage', duration: '2D1N' },
+  { id: 'midnight', title: 'Midnight Expedition Blue Fire Ijen', duration: '1 Day' },
+  { id: 'private-sunrise', title: 'Private Sunrise & Kawah Ijen Trekking', duration: '1 Day' },
+  { id: '2d1n-heritage', title: '2D1N Banyuwangi & Mount Ijen Heritage', duration: '2D1N' },
   { id: 'baluran-safari', title: 'Ijen Crater & Baluran National Park Safari', duration: '2D1N' },
   { id: 'bromo-overland', title: 'Banyuwangi - Ijen - Bromo Volcano Overland', duration: '3D2N' },
-  { id: 'custom-private', title: 'Custom Private Tour / Group Trip', duration: 'Fleksibel' },
+  { id: 'custom-private', title: 'Custom Private Tour / Group Trip', duration: 'Flexible' },
 ];
 
 const POPULAR_NATIONALITIES = [
@@ -59,11 +59,11 @@ const POPULAR_NATIONALITIES = [
 ];
 
 const QUICK_PICKUPS = [
-  'Hotel di Banyuwangi',
-  'Bandara Banyuwangi (BWX)',
-  'Stasiun Ketapang',
-  'Stasiun Banyuwangi Kota',
-  'Pelabuhan Ketapang (Ferry Bali)',
+  'Hotel in Banyuwangi',
+  'Banyuwangi Airport (BWX)',
+  'Ketapang Train Station',
+  'Banyuwangi Kota Station',
+  'Ketapang Ferry Port (from Bali)',
 ];
 
 export default function BookingModal() {
@@ -111,7 +111,7 @@ export default function BookingModal() {
           // Combine and preserve custom tour option
           const combined = [
             ...mapped,
-            { id: 'custom-private', title: 'Custom Private Tour / Group Trip', duration: 'Fleksibel' },
+            { id: 'custom-private', title: 'Custom Private Tour / Group Trip', duration: 'Flexible' },
           ];
           setPackageOptions(combined);
         }
@@ -188,7 +188,7 @@ export default function BookingModal() {
         return `${day}/${month}/${year}`;
       }
       const d = new Date(dateString);
-      return d.toLocaleDateString('id-ID', {
+      return d.toLocaleDateString('en-US', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
@@ -205,7 +205,7 @@ export default function BookingModal() {
     email: email || '(Email address)',
     whatsapp: whatsapp || '(WhatsApp number)',
     packageName: selectedPackage || '(Tour Package)',
-    tourDate: getFormattedDateDisplay(tourDate) || '(dd/mm/tttt)',
+    tourDate: getFormattedDateDisplay(tourDate) || '(dd/mm/yyyy)',
     participants: participants || 1,
     pickupLocation: pickupLocation || '(Pickup location)',
     specialRequests: specialRequests || '',
@@ -216,32 +216,32 @@ export default function BookingModal() {
     const newErrors: Record<string, string> = {};
 
     if (!fullName.trim()) {
-      newErrors.fullName = 'Full Name wajib diisi.';
+      newErrors.fullName = 'Full Name is required.';
     }
     if (!nationality.trim()) {
-      newErrors.nationality = 'Nationality wajib diisi.';
+      newErrors.nationality = 'Nationality is required.';
     }
     if (!email.trim()) {
-      newErrors.email = 'Email Address wajib diisi.';
+      newErrors.email = 'Email Address is required.';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      newErrors.email = 'Format email tidak valid.';
+      newErrors.email = 'Invalid email address format.';
     }
     if (!whatsapp.trim()) {
-      newErrors.whatsapp = 'WhatsApp Number wajib diisi.';
+      newErrors.whatsapp = 'WhatsApp Number is required.';
     } else if (whatsapp.replace(/[^0-9]/g, '').length < 8) {
-      newErrors.whatsapp = 'Nomor WhatsApp minimal 8 digit.';
+      newErrors.whatsapp = 'WhatsApp number must be at least 8 digits.';
     }
     if (!selectedPackage.trim()) {
-      newErrors.selectedPackage = 'Silakan pilih paket wisata.';
+      newErrors.selectedPackage = 'Please select a tour package.';
     }
     if (!tourDate) {
-      newErrors.tourDate = 'Tour Date wajib ditentukan.';
+      newErrors.tourDate = 'Tour Date is required.';
     }
     if (!participants || Number(participants) < 1) {
-      newErrors.participants = 'Jumlah peserta minimal 1 orang.';
+      newErrors.participants = 'Number of participants must be at least 1.';
     }
     if (!pickupLocation.trim()) {
-      newErrors.pickupLocation = 'Pickup Location wajib diisi.';
+      newErrors.pickupLocation = 'Pickup Location is required.';
     }
 
     setErrors(newErrors);
@@ -358,14 +358,14 @@ export default function BookingModal() {
                   Book Your Tour
                 </h2>
                 <p className="text-xs sm:text-sm text-secondary-600 dark:text-secondary-300">
-                  Lengkapi data berikut untuk reservasi langsung dengan Tim Guide & Koordinator Ijen Tour Banyuwangi.
+                  Fill in the details below to reserve directly with the Ijen Tour guide and coordinator team.
                 </p>
               </div>
 
               <button
                 type="button"
                 onClick={closeBookingModal}
-                aria-label="Tutup form booking"
+                aria-label="Close booking form"
                 className="p-2 sm:p-2.5 rounded-2xl bg-secondary-100 dark:bg-secondary-800 hover:bg-secondary-200 dark:hover:bg-secondary-700 text-secondary-500 hover:text-secondary-950 dark:hover:text-white transition cursor-pointer shrink-0"
               >
                 <X className="w-5 h-5" />
@@ -387,12 +387,12 @@ export default function BookingModal() {
 
                   <div className="space-y-2 max-w-md mx-auto">
                     <h3 className="text-2xl font-black text-secondary-950 dark:text-white">
-                      Membuka WhatsApp...
+                      Opening WhatsApp...
                     </h3>
                     <p className="text-xs sm:text-sm text-secondary-600 dark:text-secondary-300">
-                      Rincian petualangan Anda atas nama{' '}
-                      <strong className="text-secondary-950 dark:text-white">{fullName}</strong> telah disiapkan.
-                      Jika aplikasi WhatsApp tidak otomatis terbuka, silakan klik tombol di bawah.
+                      Your adventure details for{' '}
+                      <strong className="text-secondary-950 dark:text-white">{fullName}</strong> have been prepared.
+                      If WhatsApp does not open automatically, please click the button below.
                     </p>
                   </div>
 
@@ -402,10 +402,10 @@ export default function BookingModal() {
                       <span>{selectedPackage}</span>
                     </p>
                     <p className="text-secondary-600 dark:text-secondary-300">
-                      📅 Tanggal: {getFormattedDateDisplay(tourDate)} • 👥 {participants} Peserta
+                      📅 Date: {getFormattedDateDisplay(tourDate)} • 👥 {participants} Participants
                     </p>
                     <p className="text-secondary-600 dark:text-secondary-300">
-                      📍 Penjemputan: {pickupLocation}
+                      📍 Pickup: {pickupLocation}
                     </p>
                   </div>
 
@@ -417,14 +417,14 @@ export default function BookingModal() {
                       className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-[#25D366] hover:bg-[#1ebe5b] text-white font-extrabold text-sm shadow-lg shadow-[#25D366]/25 transition"
                     >
                       <FaWhatsapp className="w-5 h-5" />
-                      <span>Buka Ulang WhatsApp</span>
+                      <span>Open WhatsApp Again</span>
                     </a>
                     <button
                       type="button"
                       onClick={closeBookingModal}
                       className="px-6 py-3.5 rounded-2xl border border-secondary-300 dark:border-secondary-700 hover:bg-secondary-100 dark:hover:bg-secondary-800 text-secondary-700 dark:text-secondary-200 font-bold text-sm transition cursor-pointer"
                     >
-                      Selesai
+                      Done
                     </button>
                   </div>
                 </motion.div>
@@ -499,7 +499,7 @@ export default function BookingModal() {
                     </div>
                     {/* Nationality Quick Click Pills */}
                     <div className="mt-2 flex flex-wrap gap-1.5 items-center">
-                      <span className="text-[11px] text-secondary-500 mr-1 font-medium">Pilihan cepat:</span>
+                      <span className="text-[11px] text-secondary-500 mr-1 font-medium">Quick selection:</span>
                       {POPULAR_NATIONALITIES.map((nation) => (
                         <button
                           key={nation}
@@ -662,7 +662,7 @@ export default function BookingModal() {
                           Tour Date <span className="text-red-500">*</span>
                         </label>
                         <span className="text-[11px] font-mono text-secondary-500 dark:text-secondary-400">
-                          dd/mm/tttt
+                          dd/mm/yyyy
                         </span>
                       </div>
                       <div className="relative">
@@ -679,7 +679,7 @@ export default function BookingModal() {
                             setTourDate(e.target.value);
                             if (errors.tourDate) setErrors((prev) => ({ ...prev, tourDate: '' }));
                           }}
-                          placeholder="dd/mm/tttt"
+                          placeholder="dd/mm/yyyy"
                           className={`w-full pl-10 pr-4 py-3 rounded-2xl text-sm font-medium bg-secondary-50 dark:bg-secondary-800/80 border text-secondary-950 dark:text-white placeholder:text-secondary-400 focus:outline-none focus:ring-2 transition-all ${
                             errors.tourDate
                               ? 'border-red-400 focus:ring-red-400 bg-red-50/30'
@@ -736,7 +736,7 @@ export default function BookingModal() {
                             type="button"
                             onClick={() => handlePaxChange(-1)}
                             className="w-7 h-7 rounded-xl bg-secondary-200/80 dark:bg-secondary-700 hover:bg-secondary-300 dark:hover:bg-secondary-600 text-secondary-700 dark:text-secondary-200 flex items-center justify-center transition cursor-pointer"
-                            aria-label="Kurangi peserta"
+                            aria-label="Decrease participants"
                           >
                             <Minus className="w-3 h-3" />
                           </button>
@@ -744,7 +744,7 @@ export default function BookingModal() {
                             type="button"
                             onClick={() => handlePaxChange(1)}
                             className="w-7 h-7 rounded-xl bg-secondary-200/80 dark:bg-secondary-700 hover:bg-secondary-300 dark:hover:bg-secondary-600 text-secondary-700 dark:text-secondary-200 flex items-center justify-center transition cursor-pointer"
-                            aria-label="Tambah peserta"
+                            aria-label="Increase participants"
                           >
                             <Plus className="w-3 h-3" />
                           </button>
@@ -790,7 +790,7 @@ export default function BookingModal() {
                     </div>
                     {/* Quick Pickup Pills */}
                     <div className="mt-2 flex flex-wrap gap-1.5 items-center">
-                      <span className="text-[11px] text-secondary-500 mr-1 font-medium">Pilihan cepat:</span>
+                      <span className="text-[11px] text-secondary-500 mr-1 font-medium">Quick selection:</span>
                       {QUICK_PICKUPS.map((spot) => (
                         <button
                           key={spot}
@@ -825,7 +825,7 @@ export default function BookingModal() {
                     >
                       Special Requests
                       <span className="text-secondary-400 dark:text-secondary-500 font-normal lowercase ml-1">
-                        (opsional)
+                        (optional)
                       </span>
                     </label>
                     <div className="relative">
@@ -852,7 +852,7 @@ export default function BookingModal() {
                     >
                       <div className="flex items-center gap-2">
                         <Eye className="w-3.5 h-3.5 text-[#25D366]" />
-                        <span>Lihat Format Pesan WhatsApp yang Akan Dikirim</span>
+                        <span>Preview WhatsApp Message</span>
                       </div>
                       <ChevronDown
                         className={`w-4 h-4 transition-transform duration-200 ${
@@ -874,7 +874,7 @@ export default function BookingModal() {
                   <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-secondary-100/70 dark:bg-secondary-800/50 text-[11px] text-secondary-600 dark:text-secondary-400">
                     <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
                     <span>
-                      Data Anda aman. Klik tombol di bawah untuk langsung terhubung ke WhatsApp Admin Ijen Tour resmi.
+                      Your information is safe. Click below to connect directly with official Ijen Tour WhatsApp support.
                     </span>
                   </div>
 
@@ -888,12 +888,12 @@ export default function BookingModal() {
                       {isSubmitting ? (
                         <>
                           <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                          <span>MENYIAPKAN WHATSAPP...</span>
+                          <span>PREPARING WHATSAPP...</span>
                         </>
                       ) : (
                         <>
                           <FaWhatsapp className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                          <span>LANJUTKAN KE WHATSAPP</span>
+                          <span>CONTINUE TO WHATSAPP</span>
                           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </>
                       )}

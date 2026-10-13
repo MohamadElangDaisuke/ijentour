@@ -19,13 +19,13 @@ import {
 
 const SIDEBAR_ITEMS = [
   { label: "Dashboard", href: "/admin/dashboard", icon: <LayoutDashboard className="h-5 w-5" /> },
-  { label: "Kelola Reservasi", href: "/admin/bookings", icon: <Calendar className="h-5 w-5" /> },
-  { label: "Kelola Paket Tur", href: "/admin/trips", icon: <Compass className="h-5 w-5" /> },
-  { label: "Kelola Galeri", href: "/admin/gallery", icon: <ImageIcon className="h-5 w-5" /> },
-  { label: "Pusat Notifikasi", href: "/admin/notifications", icon: <Bell className="h-5 w-5" /> },
-  { label: "Pesan Kontak Masuk", href: "/admin/contacts", icon: <Mail className="h-5 w-5" /> },
-  { label: "Kelola Artikel Blog", href: "/admin/blog", icon: <BookOpen className="h-5 w-5" /> },
-  { label: "Kelola Tanya Jawab (FAQ)", href: "/admin/faqs", icon: <HelpCircle className="h-5 w-5" /> },
+  { label: "Manage Reservations", href: "/admin/bookings", icon: <Calendar className="h-5 w-5" /> },
+  { label: "Manage Tour Packages", href: "/admin/trips", icon: <Compass className="h-5 w-5" /> },
+  { label: "Manage Gallery", href: "/admin/gallery", icon: <ImageIcon className="h-5 w-5" /> },
+  { label: "Notification Center", href: "/admin/notifications", icon: <Bell className="h-5 w-5" /> },
+  { label: "Inbox Messages", href: "/admin/contacts", icon: <Mail className="h-5 w-5" /> },
+  { label: "Manage Blog Articles", href: "/admin/blog", icon: <BookOpen className="h-5 w-5" /> },
+  { label: "Manage FAQs", href: "/admin/faqs", icon: <HelpCircle className="h-5 w-5" /> },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -88,7 +88,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <button
               onClick={() => setIsNotifOpen(!isNotifOpen)}
               className="p-2.5 rounded-xl border border-secondary-200 text-secondary-700 hover:bg-secondary-100 hover:text-secondary-950 relative transition cursor-pointer"
-              title="Notifikasi"
+              title="Notifications"
             >
               <Bell className="w-5 h-5" />
               {unreadCount > 0 && (
@@ -102,10 +102,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white border border-secondary-200 rounded-3xl shadow-2xl z-50 overflow-hidden text-secondary-950">
                 <div className="px-5 py-3.5 bg-secondary-50 border-b border-secondary-200 flex justify-between items-center">
                   <span className="text-xs font-black text-secondary-950 uppercase tracking-wider">
-                    Notifikasi Terbaru
+                    Recent Notifications
                   </span>
                   <span className="text-[10px] font-bold text-primary-700 bg-primary-100 px-2.5 py-0.5 rounded-full">
-                    {unreadCount} Belum Dibaca
+                    {unreadCount} Unread
                   </span>
                 </div>
 
@@ -130,7 +130,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     ))
                   ) : (
                     <div className="py-8 text-center text-xs text-secondary-400">
-                      Tidak ada notifikasi saat ini
+                      No notifications at this time
                     </div>
                   )}
                 </div>
@@ -140,7 +140,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   onClick={() => setIsNotifOpen(false)}
                   className="block text-center py-3 text-xs font-black text-primary-600 hover:bg-secondary-50 border-t border-secondary-100 uppercase tracking-wider"
                 >
-                  Lihat Semua Notifikasi →
+                  View All Notifications →
                 </Link>
               </div>
             )}
@@ -151,7 +151,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-secondary-300 hover:border-primary-500 hover:bg-primary-50 text-secondary-800 font-bold text-xs transition"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Ke Website</span>
+            <span>To Website</span>
           </Link>
         </div>
       </header>
@@ -161,7 +161,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <aside className="hidden lg:flex flex-col w-64 border-r border-secondary-200 bg-white p-4 justify-between shrink-0">
           <div className="space-y-1">
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-secondary-400 px-3 py-2 block">
-              Menu Navigasi
+              Navigation Menu
             </span>
             {SIDEBAR_ITEMS.map((item) => {
               const isActive = pathname === item.href || (item.href !== "/admin/dashboard" && pathname.startsWith(item.href));
@@ -189,7 +189,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <span className="text-[10px] text-secondary-500 block uppercase font-bold">Portal:</span>
               <p className="font-black text-secondary-950 truncate">Administrator CMS</p>
               <span className="inline-block mt-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-primary-200 text-primary-800">
-                Akses Langsung Aktif
+                Live Access Active
               </span>
             </div>
           </div>
@@ -207,7 +207,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             >
               <div>
                 <div className="flex items-center justify-between pb-4 border-b border-secondary-200 mb-4">
-                  <span className="font-black text-base text-secondary-950">Menu Admin</span>
+                  <span className="font-black text-base text-secondary-950">Admin Menu</span>
                   <button onClick={() => setIsSidebarOpen(false)}>
                     <X className="w-5 h-5 text-secondary-500" />
                   </button>
@@ -240,7 +240,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 className="w-full py-2.5 rounded-2xl bg-secondary-100 text-secondary-800 font-bold text-xs flex items-center justify-center gap-2 border border-secondary-200"
               >
                 <ArrowLeft className="w-4 h-4" />
-                <span>Kembali ke Website</span>
+                <span>Back to Website</span>
               </Link>
             </div>
           </div>

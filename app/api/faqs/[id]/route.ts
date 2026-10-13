@@ -9,15 +9,15 @@ export async function DELETE(
     const { id } = await params;
     const existing = await prisma.faq.findUnique({ where: { id } });
     if (!existing) {
-      return NextResponse.json({ error: "FAQ tidak ditemukan atau sudah dihapus." }, { status: 404 });
+      return NextResponse.json({ error: "FAQ not found or already deleted." }, { status: 404 });
     }
     await prisma.faq.delete({
       where: { id },
     });
-    return NextResponse.json({ success: true, message: "FAQ berhasil dihapus." });
+    return NextResponse.json({ success: true, message: "FAQ successfully deleted." });
   } catch (error: any) {
     console.error("DELETE /api/faqs/[id] error:", error);
-    return NextResponse.json({ error: "Gagal menghapus FAQ." }, { status: 500 });
+    return NextResponse.json({ error: "Failed to delete FAQ." }, { status: 500 });
   }
 }
 
@@ -29,7 +29,7 @@ export async function PUT(
     const { id } = await params;
     const existing = await prisma.faq.findUnique({ where: { id } });
     if (!existing) {
-      return NextResponse.json({ error: "FAQ tidak ditemukan." }, { status: 404 });
+      return NextResponse.json({ error: "FAQ not found." }, { status: 404 });
     }
     const body = await request.json();
     const { question, answer, category, sortOrder, isActive } = body;
@@ -49,6 +49,6 @@ export async function PUT(
     return NextResponse.json({ success: true, faq: updated });
   } catch (error: any) {
     console.error("PUT /api/faqs/[id] error:", error);
-    return NextResponse.json({ error: "Gagal memperbarui FAQ." }, { status: 500 });
+    return NextResponse.json({ error: "Failed to update FAQ." }, { status: 500 });
   }
 }

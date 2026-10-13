@@ -28,10 +28,10 @@ export default function AboutPage() {
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full mt-16">
           <h1 className="text-4xl md:text-5xl font-black text-white mb-4 leading-tight">
-            Cerita Perjalanan Kami
+            Our Journey & Story
           </h1>
           <p className="text-lg text-white/80 max-w-2xl mx-auto">
-            Membawa Anda lebih dekat dengan keajaiban alam Kawah Ijen dan pesona ujung timur Pulau Jawa dengan aman, nyaman, dan berkesan.
+            Bringing you closer to the magical wonders of Mount Ijen and East Java's eastern frontier with safety, comfort, and authenticity.
           </p>
         </div>
       </section>
@@ -43,22 +43,22 @@ export default function AboutPage() {
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="order-2 lg:order-1 space-y-6">
             <h2 className="text-3xl font-black text-secondary-950">
-              Lebih Dari Sekadar <span className="text-primary-600">Pemandu Wisata</span>
+              More Than Just <span className="text-primary-600">Tour Guides</span>
             </h2>
             <p className="text-secondary-700 leading-relaxed">
-              Berbasis di <span translate="no" className="notranslate">Banyuwangi</span>, Ijen Expedition lahir dari kecintaan kami terhadap keindahan alam lokal dan keinginan untuk membagikannya kepada dunia. Kami bukan sekadar agen perjalanan; kami adalah warga lokal yang mengenal setiap sudut, rute, dan cerita di balik megahnya Gunung Ijen.
+              Based in <span translate="no" className="notranslate">Banyuwangi</span>, Ijen Tour was founded out of a deep passion for our local volcanic landscapes and a desire to share them with travelers worldwide. We are not just a travel agency; we are local residents who know every trail, sunrise vantage, and historic story behind Mount Ijen.
             </p>
             <p className="text-secondary-700 leading-relaxed">
-              Visi kami adalah memberikan pengalaman wisata alam yang otentik dan berkelanjutan. Kami berkomitmen untuk memberdayakan komunitas lokal, termasuk para penambang belerang dan pemandu wisata daerah, sekaligus menjaga kelestarian lingkungan Kawah Ijen untuk generasi mendatang.
+              Our vision is to deliver authentic and sustainable eco-tourism experiences. We are dedicated to empowering local communities—including sulfur miners and licensed regional guides—while protecting Mount Ijen's fragile volcanic environment for generations to come.
             </p>
-            <div className=" grid-cols-2 gap-6 pt-4">
+            <div className="grid grid-cols-2 gap-6 pt-4">
               <div className="border-l-4 border-primary-500 pl-4">
                 <p className="text-3xl font-black text-secondary-950">5+</p>
-                <p className="text-sm text-secondary-600 font-medium">Tahun Pengalaman</p>
+                <p className="text-sm text-secondary-600 font-medium">Years Experience</p>
               </div>
               <div className="border-l-4 border-secondary-500 pl-4">
                 <p className="text-3xl font-black text-secondary-950">2K+</p>
-                <p className="text-sm text-secondary-600 font-medium">Turis Bahagia</p>
+                <p className="text-sm text-secondary-600 font-medium">Happy Travelers</p>
               </div>
             </div>
           </div>
@@ -67,7 +67,7 @@ export default function AboutPage() {
             <div className="relative rounded-3xl overflow-hidden shadow-xl aspect-[4/3] border border-secondary-100 bg-secondary-100">
               <img
                 src="/images/ijen-expedition-tour.webp"
-                alt="Trekking Ijen"
+                alt="Mount Ijen trekking"
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-secondary-950/40 to-transparent"></div>
@@ -78,9 +78,9 @@ export default function AboutPage() {
         {/* WHY CHOOSE US SECTION */}
         <section className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-secondary-100">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-black text-secondary-950 mb-4">Kenapa Memilih Kami?</h2>
+            <h2 className="text-3xl font-black text-secondary-950 mb-4">Why Choose Us?</h2>
             <p className="text-secondary-700 max-w-2xl mx-auto">
-              Kami memastikan setiap detik petualangan Anda terencana dengan sempurna, mengutamakan keselamatan tanpa mengurangi keseruan.
+              We ensure every detail of your expedition is seamlessly planned, prioritizing safety without compromising the thrill of exploration.
             </p>
           </div>
 

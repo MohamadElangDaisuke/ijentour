@@ -35,7 +35,7 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email || !message) {
-      setError("Silakan lengkapi nama, email, dan pesan Anda.");
+      setError("Please fill in your name, email, and message.");
       return;
     }
 
@@ -50,14 +50,14 @@ export default function ContactPage() {
           name,
           email,
           phone,
-          subject: subject || "Pertanyaan Perjalanan",
+          subject: subject || "Travel Inquiry",
           message,
         }),
       });
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || "Gagal mengirim pesan.");
+        throw new Error(data.error || "Failed to send message.");
       }
 
       setSubmitted(true);
@@ -67,7 +67,7 @@ export default function ContactPage() {
       setSubject("");
       setMessage("");
     } catch (err: any) {
-      setError(err.message || "Terjadi kesalahan, silakan coba lagi.");
+      setError(err.message || "An error occurred, please try again.");
     } finally {
       setLoading(false);
     }
@@ -86,10 +86,10 @@ export default function ContactPage() {
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full mt-12">
           <h1 className="text-4xl md:text-5xl font-black text-white mb-4 leading-tight">
-            Hubungi Kami
+            Contact Us
           </h1>
           <p className="text-lg text-white/80 max-w-2xl mx-auto">
-            Punya pertanyaan seputar paket tur, penyesuaian itinerary, atau butuh bantuan? Tim kami siap membantu petualangan Anda.
+            Have questions about tour packages, custom itineraries, or need assistance? Our team is here to help your adventure.
           </p>
         </div>
       </section>
@@ -97,11 +97,11 @@ export default function ContactPage() {
       {/* MAIN CONTENT */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grow w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 bg-white rounded-3xl shadow-sm border border-secondary-100 overflow-hidden">
-          {/* KOLOM KIRI - INFORMASI KONTAK */}
+          {/* LEFT COLUMN - CONTACT INFORMATION */}
           <div className="bg-secondary-950 text-white p-8 md:p-12">
-            <h2 className="text-3xl font-black text-white mb-6">Informasi Kontak</h2>
+            <h2 className="text-3xl font-black text-white mb-6">Contact Information</h2>
             <p className="text-secondary-200 mb-10 leading-relaxed">
-              Silakan hubungi kami melalui formulir di samping atau melalui kontak di bawah ini. Kami akan membalas pesan Anda sesegera mungkin.
+              Reach out via the form or through our direct channels below. We will respond promptly.
             </p>
 
             <div className="space-y-8 mb-12">
@@ -110,10 +110,10 @@ export default function ContactPage() {
                   <MapPin size={24} className="text-primary-400" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-white mb-1">Alamat Kantor</h4>
+                  <h4 className="font-bold text-white mb-1">Office Address</h4>
                   <p className="text-secondary-200 text-sm leading-relaxed">
                     Jl. Raya Ijen No. 45, Licin<br />
-                    <span translate="no" className="notranslate">Banyuwangi</span>, Jawa Timur 68454
+                    <span translate="no" className="notranslate">Banyuwangi</span>, East Java 68454, Indonesia
                   </p>
                 </div>
               </div>
@@ -123,14 +123,14 @@ export default function ContactPage() {
                   <Phone size={24} className="text-primary-400" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-white mb-1">Telepon / WhatsApp</h4>
+                  <h4 className="font-bold text-white mb-1">Phone / WhatsApp</h4>
                   <a
                     href={getWhatsAppLink(WhatsAppTemplates.generalInquiry())}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-secondary-200 hover:text-primary-400 text-sm leading-relaxed block transition"
                   >
-                    +{getAdminWhatsAppNumber()} (Chat 24 Jam)
+                    +{getAdminWhatsAppNumber()} (24/7 Support)
                   </a>
                 </div>
               </div>
@@ -150,14 +150,14 @@ export default function ContactPage() {
                   <Clock size={24} className="text-primary-400" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-white mb-1">Jam Operasional</h4>
-                  <p className="text-secondary-200 text-sm leading-relaxed">Senin - Minggu: 08:00 - 22:00 WIB<br />Layanan Darurat: 24/7</p>
+                  <h4 className="font-bold text-white mb-1">Operating Hours</h4>
+                  <p className="text-secondary-200 text-sm leading-relaxed">Monday - Sunday: 08:00 - 22:00 WIB<br />Emergency Support: 24/7</p>
                 </div>
               </div>
             </div>
 
             <div className="pt-8 border-t border-secondary-800">
-              <h4 className="font-bold text-white mb-4">Media Sosial</h4>
+              <h4 className="font-bold text-white mb-4">Social Media</h4>
               <div className="flex space-x-4">
                 <a href="#" className="w-10 h-10 rounded-full bg-secondary-900 flex items-center justify-center hover:bg-primary-500 hover:text-secondary-950 transition">
                   <FaInstagram size={18} />
@@ -172,17 +172,17 @@ export default function ContactPage() {
             </div>
           </div>
 
-          {/* KOLOM KANAN - FORMULIR KONTAK DENGAN BACKEND INTEGRATION */}
+          {/* RIGHT COLUMN - CONTACT FORM WITH BACKEND INTEGRATION */}
           <div className="p-8 md:p-12">
-            <h2 className="text-3xl font-black text-secondary-950 mb-6">Kirim Pesan</h2>
+            <h2 className="text-3xl font-black text-secondary-950 mb-6">Send a Message</h2>
 
             {submitted && (
               <div className="mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-start gap-3 animate-fade-in">
                 <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-bold text-sm">Pesan Berhasil Dikirim!</p>
+                  <p className="font-bold text-sm">Message Sent Successfully!</p>
                   <p className="text-xs text-emerald-700 mt-0.5">
-                    Terima kasih telah menghubungi Ijen Tour. Tim konsultan perjalanan kami akan menghubungi Anda via WhatsApp/Email segera.
+                    Thank you for contacting Ijen Tour. Our travel specialists will get in touch with you via WhatsApp/Email shortly.
                   </p>
                 </div>
               </div>
@@ -198,24 +198,24 @@ export default function ContactPage() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-semibold text-secondary-800 mb-2">Nama Lengkap *</label>
+                  <label className="block text-sm font-semibold text-secondary-800 mb-2">Full Name *</label>
                   <input
                     type="text"
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="Contoh: Budi Santoso"
+                    placeholder="e.g. John Doe"
                     className="w-full px-4 py-3 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-900 focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:border-transparent transition"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-secondary-800 mb-2">Alamat Email *</label>
+                  <label className="block text-sm font-semibold text-secondary-800 mb-2">Email Address *</label>
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="budi@example.com"
+                    placeholder="john@example.com"
                     className="w-full px-4 py-3 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-900 focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:border-transparent transition"
                   />
                 </div>
@@ -223,7 +223,7 @@ export default function ContactPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-semibold text-secondary-800 mb-2">Nomor WhatsApp</label>
+                  <label className="block text-sm font-semibold text-secondary-800 mb-2">WhatsApp Number</label>
                   <input
                     type="tel"
                     value={phone}
@@ -233,31 +233,31 @@ export default function ContactPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-secondary-800 mb-2">Pilihan Paket (Opsional)</label>
+                  <label className="block text-sm font-semibold text-secondary-800 mb-2">Select Package (Optional)</label>
                   <select
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
                     className="w-full px-4 py-3 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-700 focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:border-transparent transition"
                   >
-                    <option value="">Pilih Subjek / Paket Tur...</option>
+                    <option value="">Select Subject / Tour Package...</option>
                     <option value="Midnight Expedition Blue Fire Ijen">Midnight Expedition Blue Fire Ijen</option>
                     <option value="Bromo & Ijen Crater Sunrise Combo">Bromo & Ijen Crater Sunrise Combo</option>
                     <option value="Private Crater Lake & Waterfall Tour">Private Crater Lake & Waterfall Tour</option>
                     <option value="Kawah Wurung & Djawatan Green Escape">Kawah Wurung & Djawatan Green Escape</option>
                     <option value="Bali to Ijen Overnight Overland">Bali to Ijen Overnight Overland</option>
-                    <option value="Kustom / Private Tour Spesial">Paket Kustom / Private Tour</option>
+                    <option value="Custom / Special Private Tour">Custom / Special Private Tour</option>
                   </select>
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-secondary-800 mb-2">Pesan atau Pertanyaan *</label>
+                <label className="block text-sm font-semibold text-secondary-800 mb-2">Message or Inquiry *</label>
                 <textarea
                   required
                   rows={4}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Tuliskan pertanyaan atau kebutuhan spesifik perjalanan Anda di sini..."
+                  placeholder="Write your questions or specific travel requirements here..."
                   className="w-full px-4 py-3 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-900 focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:border-transparent transition"
                 ></textarea>
               </div>
@@ -270,11 +270,11 @@ export default function ContactPage() {
                 {loading ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>MENGIRIMKAN PESAN...</span>
+                    <span>SENDING MESSAGE...</span>
                   </>
                 ) : (
                   <>
-                    <span>KIRIM PESAN SEKARANG</span>
+                    <span>SEND MESSAGE NOW</span>
                     <Send size={18} />
                   </>
                 )}
@@ -290,10 +290,10 @@ export default function ContactPage() {
               Frequently Asked Questions
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-secondary-950">
-              Pertanyaan yang Sering Diajukan
+              Frequently Asked Questions
             </h2>
             <p className="text-xs sm:text-sm text-secondary-600 mt-2">
-              Jawaban cepat untuk hal-hal penting seputar pendakian, tiket, dan keselamatan sebelum memulai tur.
+              Quick answers to essential questions regarding the hike, tickets, and safety.
             </p>
           </div>
 
@@ -301,26 +301,26 @@ export default function ContactPage() {
             {(faqs.length > 0 ? faqs : [
               {
                 id: "faq-1",
-                question: "Apakah fenomena Blue Fire selalu bisa dilihat setiap malam?",
-                answer: "Fenomena Blue Fire adalah proses alamiah yang aktif setiap malam sepanjang tahun, asalkan kawah tidak ditutup karena aktivitas vulkanik atau hujan lebat yang memadamkan api. Pemandu kami memantau kondisi PVMBG sebelum berangkat.",
+                question: "Is the Blue Fire phenomenon visible every night?",
+                answer: "The Blue Fire is an active natural phenomenon present year-round, provided the crater is not temporarily closed by authorities for volcanic activity or heavy rains. Our guides monitor official PVMBG volcanic status before every departure.",
                 category: "general"
               },
               {
                 id: "faq-2",
-                question: "Apakah aman mendaki Kawah Ijen bersama anak-anak atau lansia?",
-                answer: "Sangat aman dengan persiapan yang tepat. Jalur pendakian cukup lebar. Tersedia jasa troli dorong lokal (trolley taxi) berlisensi jika tidak kuat mendaki jalan kaki.",
+                question: "Is hiking Mount Ijen safe for children or seniors?",
+                answer: "It is very safe with appropriate preparation. The main trail is wide and well-trodden. Licensed local trolley taxis (gerobak dorong) are also available if walking is difficult.",
                 category: "safety"
               },
               {
                 id: "faq-3",
-                question: "Kapan waktu penjemputan dan apa saja yang perlu kami bawa?",
-                answer: "Penjemputan Midnight Blue Fire dilakukan antara pukul 00:00 - 00:30 WIB dini hari dari hotel di Banyuwangi. Cukup bawa jaket hangat, sepatu kets, dan kartu identitas. Masker respirator dan senter kami sediakan.",
+                question: "What time is pickup and what should we bring?",
+                answer: "Midnight Blue Fire pickups take place between 12:00 AM and 12:30 AM from Banyuwangi hotels. Bring a warm jacket, trekking/running shoes, and an ID card or passport. Certified gas respirators and headlamps are provided.",
                 category: "preparation"
               },
               {
                 id: "faq-4",
-                question: "Bagaimana cara melakukan pemesanan dan konfirmasi pembayaran?",
-                answer: "Pilih paket tur di halaman Packages, lalu klik pesan via WhatsApp atau isi form booking online. Tim kami akan mengirimkan invoice resmi dan tiket digital.",
+                question: "How do I book and confirm payment?",
+                answer: "Select your preferred package on our Tour Packages page and click book via WhatsApp or submit our online booking form. Our team will send an official confirmation invoice and digital voucher.",
                 category: "booking"
               }
             ]).map((faq, idx) => {

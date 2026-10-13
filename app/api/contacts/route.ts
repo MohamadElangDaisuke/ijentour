@@ -9,7 +9,7 @@ export async function GET() {
     return NextResponse.json({ success: true, contacts });
   } catch (error) {
     console.error("GET /api/contacts error:", error);
-    return NextResponse.json({ error: "Gagal memuat pesan kontak." }, { status: 500 });
+    return NextResponse.json({ error: "Failed to load contact messages." }, { status: 500 });
   }
 }
 
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
 
     if (!name || !email || !message) {
       return NextResponse.json(
-        { error: "Nama, email, dan pesan wajib diisi." },
+        { error: "Name, email, and message are required." },
         { status: 400 }
       );
     }
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
         name: name.trim(),
         email: email.trim(),
         phone: phone || null,
-        subject: subject || "Pertanyaan Perjalanan",
+        subject: subject || "Travel Inquiry",
         message: message.trim(),
         status: "UNREAD",
       },
@@ -39,8 +39,8 @@ export async function POST(request: Request) {
     await prisma.notification.create({
       data: {
         type: "contact",
-        title: "Pesan Kontak Baru",
-        description: `Pesan baru dari ${contact.name} (${contact.subject})`,
+        title: "New Contact Message",
+        description: `New message from ${contact.name} (${contact.subject})`,
         link: "/admin/contacts",
         unread: true,
       },
@@ -48,13 +48,13 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: "Terima kasih! Pesan Anda telah kami terima dan akan segera kami balas.",
+      message: "Thank you! Your message has been received and our team will get back to you shortly.",
       contact,
     });
   } catch (error: any) {
     console.error("POST /api/contacts error:", error);
     return NextResponse.json(
-      { error: "Gagal mengirimkan pesan." },
+      { error: "Failed to send message." },
       { status: 500 }
     );
   }

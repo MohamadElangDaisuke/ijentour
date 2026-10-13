@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
 
     if (!file) {
       return NextResponse.json(
-        { success: false, error: "Tidak ada file yang dipilih untuk diunggah." },
+        { success: false, error: "No file selected for upload." },
         { status: 400 }
       );
     }
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     // 3. Validation: Size & MIME type
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        { success: false, error: "File terlalu besar. Batas maksimal ukuran gambar adalah 5 MB." },
+        { success: false, error: "File too large. Maximum image size is 5 MB." },
         { status: 400 }
       );
     }
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Format gambar tidak didukung. Harap pilih gambar berekstensi JPG, JPEG, PNG, atau WebP.",
+          error: "Unsupported image format. Please select JPG, JPEG, PNG, or WebP images.",
         },
         { status: 400 }
       );
@@ -125,7 +125,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        error: error.message || "Gagal memproses unggahan gambar.",
+        error: error.message || "Failed to process image upload.",
       },
       { status: 500 }
     );
@@ -138,7 +138,7 @@ export async function DELETE(request: NextRequest) {
     const storagePath = searchParams.get("path");
 
     if (!storagePath) {
-      return NextResponse.json({ success: false, error: "Parameter path wajib diisi." }, { status: 400 });
+      return NextResponse.json({ success: false, error: "Path parameter is required." }, { status: 400 });
     }
 
     const targetClient = supabaseAdmin || supabase;

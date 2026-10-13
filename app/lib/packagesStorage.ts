@@ -32,22 +32,22 @@ export const defaultPackages: TourPackage[] = [
     id: 'pkg-5',
     title: 'Midnight Expedition Blue Fire Ijen',
     category: 'midnight',
-    duration: '1 Hari (Midnight)',
+    duration: '1 Day (Midnight)',
     savedCount: '4.120K',
     rawSaved: 4120,
     image: '/images/pkg-bluefire.png',
-    price: 'Rp 750.000',
+    price: 'IDR 750,000',
     rating: 5.0,
     badge: 'Best Seller',
     isTrending: true,
     isRecent: true,
-    description: 'Rasakan sensasi petualangan malam hari mendaki puncak Kawah Ijen untuk menyaksikan fenomena kobaran api biru (Blue Fire) elektrik yang hanya ada dua di seluruh dunia. Didampingi pemandu lokal berpengalaman dan mantan penambang belerang asli, Anda akan diajak menikmati momen matahari terbit magis yang menyinari danau kawah asam berwarna toska.',
-    difficulty: 'Sedang (Trekking 3 Km)',
-    altitude: '2.769 mdpl',
-    meetingPoint: 'Hotel / Stasiun / Bandara Banyuwangi (Free Pick-up)',
-    departureTime: '00:00 - 00:30 WIB Dini Hari',
-    groupSize: 'Grup Fleksibel (1 - 15 Orang)',
-    languages: ['Bahasa Indonesia', 'English'],
+    description: 'Experience the thrill of a midnight ascent to the summit of Mount Ijen to witness the electric Blue Fire—a phenomenon found in only two places on earth. Guided by experienced local guides and former sulfur miners, marvel at the magical dawn illuminating the world’s largest acidic turquoise crater lake.',
+    difficulty: 'Moderate (3 Km Hike)',
+    altitude: '2,769m ASL',
+    meetingPoint: 'Hotel / Train Station / Banyuwangi Airport (Free Pickup)',
+    departureTime: '00:00 - 00:30 AM (Midnight)',
+    groupSize: 'Flexible Group (1 - 15 Pax)',
+    languages: ['English', 'Indonesian'],
     gallery: [
       '/images/pkg-bluefire.png',
       '/images/the-best-view-of-kawah.webp',
@@ -55,70 +55,70 @@ export const defaultPackages: TourPackage[] = [
       '/images/HeroSection.webp'
     ],
     highlights: [
-      'Berangkat Jam 00:00 Dini Hari dari Banyuwangi',
-      'Guide Penambang Belerang Lokal Berlisensi',
-      'Masker Respirator Standar Keamanan & Senter Kepala',
-      'Spot Foto Sunrise & Danau Asam Terbesar di Dunia',
-      'Antar-Jemput Privat Armada Ber-AC'
+      'Midnight Departure (00:00 AM) from Banyuwangi',
+      'Licensed Local Guide & Former Sulfur Miner',
+      'Certified Gas Respirator Mask & Headlamp Included',
+      'Spectacular Sunrise & Largest Acidic Lake in the World',
+      'Private Air-Conditioned Vehicle Pickup & Drop-Off'
     ],
     itinerary: [
-      { day: '00:00 WIB', title: 'Penjemputan di Hotel / Stasiun', desc: 'Driver kami akan menjemput Anda di hotel atau stasiun area Banyuwangi dengan armada nyaman ber-AC.' },
-      { day: '01:30 WIB', title: 'Tiba di Basecamp Paltuding', desc: 'Briefing keselamatan dari guide lokal, pembagian masker respirator gas belerang dan senter kepala (headlamp).' },
-      { day: '02:00 WIB', title: 'Mulai Pendakian Jalur Ijen', desc: 'Trekking santai sejauh 3 km menuju bibir kawah. Suasana malam dengan taburan bintang yang memukau.' },
-      { day: '03:45 WIB', title: 'Fenomena Blue Fire Elektrik', desc: 'Turun ke dasar kawah didampingi guide untuk mengagumi nyala api biru yang legendaris secara dekat dan aman.' },
-      { day: '05:15 WIB', title: 'Golden Sunrise Kawah Ijen', desc: 'Naik kembali ke bibir kawah untuk menikmati panorama danau toska berkilau di bawah siraman cahaya fajar.' },
-      { day: '07:00 WIB', title: 'Kembali ke Paltuding & Sarapan Ringan', desc: 'Perjalanan turun santai ke pos awal, rehat sejenak dan menikmati minuman hangat serta kudapan.' },
-      { day: '08:30 WIB', title: 'Transfer Kembali ke Hotel / Stasiun', desc: 'Perjalanan pulang menuju penginapan atau titik drop-off. Tour selesai dengan kenangan tak terlupakan.' }
+      { day: '00:00 AM', title: 'Pickup at Hotel / Train Station', desc: 'Our private driver picks you up from your hotel or station in Banyuwangi in a comfortable AC vehicle.' },
+      { day: '01:30 AM', title: 'Arrival at Paltuding Basecamp', desc: 'Safety briefing by your local guide, distribution of gas respirator masks and headlamps.' },
+      { day: '02:00 AM', title: 'Start of Mount Ijen Trek', desc: 'Enjoyable 3 km trek toward the crater rim under a starry, crisp mountain night sky.' },
+      { day: '03:45 AM', title: 'Electric Blue Fire Phenomenon', desc: 'Descend to the crater floor guided safely to admire the legendary blue flames up close.' },
+      { day: '05:15 AM', title: 'Golden Sunrise at the Crater Rim', desc: 'Ascend to the rim to watch the sunrise cast golden light across the sparkling turquoise lake.' },
+      { day: '07:00 AM', title: 'Return to Paltuding & Warm Refreshments', desc: 'Leisurely descent to basecamp, rest, and enjoy warm tea or coffee with light snacks.' },
+      { day: '08:30 AM', title: 'Transfer Back to Hotel / Station', desc: 'Scenic drive back to your hotel or drop-off point. Tour concludes with unforgettable memories.' }
     ],
     included: [
-      'Transportasi AC PP dari Hotel/Stasiun Banyuwangi',
-      'Tiket Masuk Resmi BKSDA / Kawah Ijen & Asuransi',
-      'Pemandu Lokal Berlisensi (Former Sulfur Miner)',
-      'Masker Gas Respirator Medis Standar Belerang',
-      'Headlamp / Senter Kepala Penerangan',
-      'Air Mineral & Snack Hangat',
-      'P3K Dasar Standar Gunung'
+      'Roundtrip AC Transportation from Banyuwangi Hotel/Station',
+      'Official National Park Entry Ticket & Conservation Insurance',
+      'Licensed Local Guide (Former Sulfur Miner)',
+      'Certified Medical-Grade Gas Respirator Mask',
+      'High-Power LED Headlamp',
+      'Bottled Mineral Water & Warm Tea/Coffee',
+      'Mountain First Aid Kit'
     ],
     excluded: [
-      'Pengeluaran Pribadi di Luar Paket',
-      'Taksi Troly Dorong Kawah (Opsional jika lelah)',
-      'Makan Berat Tambahan',
-      'Tip Sukarela untuk Guide / Driver'
+      'Personal Expenses Outside Itinerary',
+      'Trolley Taxi Service (Optional for tired hikers)',
+      'Heavy Additional Meals',
+      'Voluntary Tips for Guide & Driver'
     ],
     packingList: [
-      { item: 'Jaket Tebal / Windbreaker', note: 'Suhu puncak dini hari bisa mencapai 6°C - 10°C' },
-      { item: 'Sepatu Trekking / Sneakers Anti-Slip', note: 'Jalur berpasir dan sedikit menanjak di awal' },
-      { item: 'Celana Panjang & Kaos Kaki Tebal', note: 'Melindungi dari hawa dingin dan debu' },
-      { item: 'Kamera / Smartphone & Powerbank', note: 'Untuk mengabadikan momen Blue Fire & Sunrise' },
-      { item: 'Uang Tunai Secukupnya', note: 'Untuk membeli cinderamata belerang atau minuman hangat di pos' }
+      { item: 'Warm Jacket / Windbreaker', note: 'Pre-dawn summit temperatures range between 6°C - 10°C' },
+      { item: 'Trekking Shoes / Non-Slip Sneakers', note: 'Trails are sandy with gravel inclines' },
+      { item: 'Long Hiking Pants & Warm Socks', note: 'Protects against cold mountain winds and dust' },
+      { item: 'Camera / Smartphone & Power Bank', note: 'To capture Blue Fire and sunrise photography' },
+      { item: 'Sufficient Local Cash (IDR)', note: 'For warm drinks, snacks, or sulfur souvenirs' }
     ],
     faqs: [
-      { q: 'Apakah pemula atau anak-anak bisa mengikuti tour ini?', a: 'Sangat bisa! Jalur pendakian cukup lebar dan jelas. Jika merasa lelah, tersedia jasa troli dorong lokal (trolley taxi) yang siap mengantar sampai ke puncak.' },
-      { q: 'Kapan waktu terbaik melihat Blue Fire?', a: 'Waktu terbaik adalah antara pukul 03:00 hingga 04:30 WIB saat langit masih gelap pekat. Kami mengatur jadwal agar Anda tiba tepat waktu di spot terbaik.' },
-      { q: 'Apakah bau gas belerang berbahaya?', a: 'Kami menyediakan masker respirator khusus berfilter aktif yang aman menyaring asap belerang. Guide kami juga selalu memantau arah angin demi keamanan Anda.' },
-      { q: 'Bagaimana jika cuaca hujan atau berkabut?', a: 'Jika kawah ditutup sementara oleh otoritas resmi BKSDA karena alasan cuaca ekstrem, kami akan memberikan opsi reschedule atau penyesuaian destinasi alternatif.' }
+      { q: 'Can beginners or children join this tour?', a: 'Yes! The trail is wide and well-marked. For those who feel tired, traditional trolley taxis operated by local miners are available to pull guests to the summit.' },
+      { q: 'When is the best time to see the Blue Fire?', a: 'The ideal window is between 03:00 and 04:30 AM when the sky is completely pitch-black. We time the hike so you arrive at the best viewing spot.' },
+      { q: 'Are sulfur gases dangerous?', a: 'We supply high-filtration active carbon respirator masks that safely filter sulfur fumes. Your guide continually monitors wind direction for safety.' },
+      { q: 'What happens in case of heavy rain or bad weather?', a: 'If the park is temporarily closed by park authorities due to extreme weather, we provide full reschedule options or alternative destination adjustments.' }
     ]
   },
   {
     id: 'pkg-6',
     title: 'Private Tour Ijen & Baluran Savanna',
     category: 'private',
-    duration: '2 Hari 1 Malam',
+    duration: '2 Days 1 Night',
     savedCount: '2.100K',
     rawSaved: 2100,
     image: '/images/pkg-crater.png',
-    price: 'Rp 1.950.000',
+    price: 'IDR 1,950,000',
     rating: 4.9,
-    badge: 'Privat Premium',
+    badge: 'Premium Private',
     isTrending: true,
     isRecent: true,
-    description: 'Kombinasi eksklusif dua mahakarya alam Jawa Timur: petualangan api biru Kawah Ijen dan safari liar padang Savana Bekol di Taman Nasional Baluran yang sering dijuluki "Africa van Java". Paket privat ini memberi fleksibilitas penuh tanpa terburu-buru, cocok untuk keluarga maupun pasangan.',
-    difficulty: 'Mudah - Sedang',
-    altitude: '2.769 mdpl',
-    meetingPoint: 'Banyuwangi Kota / Bandara Blimbingsari / Ketapang',
-    departureTime: 'Fleksibel Sesuai Tiket Kedatangan',
-    groupSize: 'Privat (Mobil Eksklusif)',
-    languages: ['Bahasa Indonesia', 'English'],
+    description: 'An exclusive combination of two natural wonders: the midnight blue fire adventure of Mount Ijen and the wild savanna safari of Baluran National Park, dubbed "Africa van Java". This private package provides complete flexibility and leisurely pacing, perfect for couples and families.',
+    difficulty: 'Easy - Moderate',
+    altitude: '2,769m ASL',
+    meetingPoint: 'Banyuwangi City / Blimbingsari Airport / Ketapang Port',
+    departureTime: 'Flexible According to Arrival Flight/Train',
+    groupSize: 'Private (Exclusive Car)',
+    languages: ['English', 'Indonesian'],
     gallery: [
       '/images/pkg-crater.png',
       '/images/djawatan.png',
@@ -126,62 +126,62 @@ export const defaultPackages: TourPackage[] = [
       '/images/HeroSection.webp'
     ],
     highlights: [
-      'Safari Liar Savana Bekol Baluran & Pantai Bama',
-      'Trekking Eksklusif Kawah Ijen & Blue Fire',
-      'Hutan Trembesi Magis De Djawatan',
-      'Mobil Privat SUV / MPV Nyaman + Driver + BBM',
-      'Kuliner Khas Banyuwangi Pilihan'
+      'Wildlife Safari in Bekol Savanna & Bama Beach',
+      'Exclusive Mount Ijen Trekking & Blue Fire Experience',
+      'Enchanted Trembesi Forest of De Djawatan',
+      'Comfortable Private SUV / MPV + Driver + Fuel',
+      'Authentic Banyuwangi Culinary Tastings'
     ],
     itinerary: [
-      { day: 'Hari 1 - Siang', title: 'Tiba di Banyuwangi & De Djawatan', desc: 'Penjemputan kedatangan, makan siang khas Sego Tempong, lalu eksplorasi magis hutan De Djawatan ala Lord of the Rings.' },
-      { day: 'Hari 1 - Sore', title: 'Safari Savana Baluran & Sunset Bama', desc: 'Menuju TN Baluran melihat kawanan banteng liar, rusa, dan monyet ekor panjang di Savana Bekol, dilanjutkan sunset di Pantai Bama.' },
-      { day: 'Hari 1 - Malam', title: 'Check-in Hotel & Istirahat', desc: 'Check-in hotel di Banyuwangi, makan malam, dan istirahat awal sebelum pendakian dini hari.' },
-      { day: 'Hari 2 - Dini Hari', title: 'Midnight Trekking Ijen Blue Fire', desc: 'Berangkat ke Paltuding pukul 00:30 WIB, trekking ke kawah untuk menyaksikan Blue Fire dan danau toska saat matahari terbit.' },
-      { day: 'Hari 2 - Siang', title: 'Kembali ke Hotel, Oleh-Oleh & Drop Off', desc: 'Bersih-bersih di hotel, belanja oleh-oleh khas Banyuwangi (kopi Osing & batik), lalu diantar ke stasiun/bandara.' }
+      { day: 'Day 1 - Noon', title: 'Arrival in Banyuwangi & De Djawatan', desc: 'Arrival pickup, traditional Sego Tempong lunch, then explore the magical Lord of the Rings-esque De Djawatan forest.' },
+      { day: 'Day 1 - Afternoon', title: 'Baluran Savanna Safari & Bama Sunset', desc: 'Journey to Baluran National Park to view wild water buffalo, deer, and monkeys across Bekol Savanna, followed by coastal sunset at Bama Beach.' },
+      { day: 'Day 1 - Night', title: 'Hotel Check-in & Rest', desc: 'Check into your hotel in Banyuwangi, dinner, and early rest before the midnight ascent.' },
+      { day: 'Day 2 - Midnight', title: 'Midnight Trekking Ijen Blue Fire', desc: 'Depart for Paltuding at 00:30 AM, trek to the crater to admire the Blue Fire and turquoise lake at sunrise.' },
+      { day: 'Day 2 - Noon', title: 'Return to Hotel, Souvenirs & Drop-Off', desc: 'Shower and refresh at hotel, browse authentic Osing coffee and batik souvenirs, followed by airport or station transfer.' }
     ],
     included: [
-      'Armada Privat Mobil AC (Innova/Avanza) + BBM + Driver',
-      'Tiket Masuk Semua Destinasi (Baluran, Djawatan, Kawah Ijen)',
-      'Guide Lokal Privat Berlisensi',
-      'Masker Gas Respirator & Headlamp',
-      'Makan Sesuai Program & Air Mineral Bebas',
-      'Dokumentasi Foto Selama Tour'
+      'Private AC Vehicle (Innova/Avanza) + Fuel + Driver',
+      'Entrance Tickets to All Destinations (Baluran, Djawatan, Ijen)',
+      'Licensed Private Local Guide',
+      'Certified Gas Respirator Mask & Headlamp',
+      'Scheduled Meals & Complimentary Mineral Water',
+      'Full Tour Photo Documentation'
     ],
     excluded: [
-      'Akomodasi Hotel (Bisa dibantu bookingkan)',
-      'Pengeluaran Pribadi & Souvenir',
-      'Tip Driver dan Guide Sukarela'
+      'Hotel Accommodation (Can be added on request)',
+      'Personal Expenses & Souvenirs',
+      'Voluntary Tips for Driver and Guide'
     ],
     packingList: [
-      { item: 'Pakaian Hangat & Kasual', note: 'Jaket tebal untuk Ijen, baju santai/adem untuk Baluran' },
-      { item: 'Kacamata Hitam & Sunscreen', note: 'Savana Baluran cukup terik di siang hari' },
-      { item: 'Sepatu Olahraga / Trekking', note: 'Sangat direkomendasikan untuk kenyamanan bergerak' }
+      { item: 'Warm & Casual Clothing', note: 'Heavy jacket for Ijen, breathable casual wear for Baluran' },
+      { item: 'Sunglasses & Sunscreen', note: 'The Baluran Savanna can be bright and sunny during the day' },
+      { item: 'Athletic / Trekking Shoes', note: 'Highly recommended for easy mobility across terrain' }
     ],
     faqs: [
-      { q: 'Apakah bisa dijemput dari luar Banyuwangi?', a: 'Bisa, kami melayani penjemputan dari Surabaya, Malang, atau Bali dengan biaya tambahan bahan bakar dan tol yang terjangkau.' },
-      { q: 'Apakah jadwal perjalanan bisa disesuaikan?', a: 'Tentu! Karena ini private tour, Anda bebas menyesuaikan durasi di setiap destinasi sesuai keinginan.' }
+      { q: 'Can pickup be arranged outside Banyuwangi?', a: 'Yes, we provide pickup services from Surabaya, Malang, or Bali for an affordable additional fuel and highway surcharge.' },
+      { q: 'Can the itinerary be tailored to our preferences?', a: 'Absolutely! Since this is a private tour, you are free to customize the duration spent at each destination.' }
     ]
   },
   {
     id: 'pkg-1',
-    title: 'Paket Tour Bali 6 Hari 5 Malam',
+    title: 'Bali & Mount Ijen Tour (6 Days 5 Nights)',
     category: 'regular',
-    duration: '6 Hari 5 Malam',
+    duration: '6 Days 5 Nights',
     savedCount: '3.219K',
     rawSaved: 3219,
     image: '/images/pkg-bali.png',
-    price: 'Rp 3.850.000',
+    price: 'IDR 3,850,000',
     rating: 4.9,
-    badge: 'Terpopuler',
+    badge: 'Most Popular',
     isTrending: true,
     isRecent: false,
-    description: 'Eksplorasi mahakarya Jawa Timur dan pesona Pulau Dewata Bali dalam satu paket liburan spektakuler. Mulai dari keajaiban Blue Fire Kawah Ijen hingga pantai pasir putih, pura sakral di atas tebing, dan pusat kebudayaan Ubud Bali.',
-    difficulty: 'Mudah - Santai',
-    altitude: '2.769 mdpl & Dataran Rendah',
-    meetingPoint: 'Bandara Juanda / Banyuwangi / Denpasar Bali',
-    departureTime: 'Sesuai Jadwal Penerbangan',
-    groupSize: 'Terbuka untuk Umum & Privat',
-    languages: ['Bahasa Indonesia', 'English'],
+    description: 'Explore the volcanic masterworks of East Java and the tropical allure of Bali in one spectacular vacation. From Mount Ijen’s electric Blue Fire to white-sand beaches, cliffside sea temples, and the cultural heart of Ubud.',
+    difficulty: 'Easy - Leisurely',
+    altitude: '2,769m ASL & Coastal Lowlands',
+    meetingPoint: 'Surabaya Juanda / Banyuwangi / Denpasar Bali',
+    departureTime: 'Matched to Flight Schedule',
+    groupSize: 'Open Group & Private Available',
+    languages: ['English', 'Indonesian'],
     gallery: [
       '/images/pkg-bali.png',
       '/images/pkg-bluefire.png',
@@ -189,53 +189,53 @@ export const defaultPackages: TourPackage[] = [
       '/images/pkg-waterfall.png'
     ],
     highlights: [
-      'Penjemputan Area Banyuwangi & Tiket Penyeberangan Ferry Bali',
-      'Tur Api Biru (Blue Fire) & Sunrise Kawah Ijen',
-      'Eksplorasi Tanah Lot, Pantai Kuta, dan Uluwatu',
-      'Hotel Pilihan Berbintang & Sarapan Termasuk',
-      'Transportasi Wisata Ber-AC Standar Pariwisata'
+      'Banyuwangi Pickup & Roundtrip Bali Strait Ferry',
+      'Mount Ijen Blue Fire & Golden Sunrise Trek',
+      'Tanah Lot, Kuta Beach, and Uluwatu Cliff Temple',
+      'Selected Starred Hotel Stays with Breakfast Included',
+      'Comfortable Tourism-Standard AC Transport Throughout'
     ],
     itinerary: [
-      { day: 'Hari 1', title: 'Kedatangan di Banyuwangi & Briefing', desc: 'Penjemputan di bandara/stasiun Banyuwangi, istirahat di hotel persiapan mendaki.' },
-      { day: 'Hari 2', title: 'Kawah Ijen Blue Fire & Penyeberangan Bali', desc: 'Trekking Ijen dini hari, kembali ke hotel, lalu menyeberang ke Bali via Pelabuhan Ketapang-Gilimanuk.' },
-      { day: 'Hari 3', title: 'Eksplorasi Pura Ulun Danu Beratan & Tanah Lot', desc: 'Mengunjungi danau pegunungan Bedugul dan pura ikonik Tanah Lot saat senja.' },
-      { day: 'Hari 4', title: 'Budaya Ubud & Kintamani Volcano View', desc: 'Melihat persawahan Tegalalang, pasar seni Ubud, dan makan siang berlatar Gunung Batur.' },
-      { day: 'Hari 5', title: 'Pantai Melasti & Pura Uluwatu Sunset', desc: 'Relaksasi pantai pasir putih tebing kapur dan pertunjukan Tari Kecak spektakuler di Uluwatu.' },
-      { day: 'Hari 6', title: 'Belanja Oleh-Oleh & Transfer Bandara Bali', desc: 'Belanja cinderamata khas Krisna/Joger dan pengantaran ke Bandara Ngurah Rai.' }
+      { day: 'Day 1', title: 'Arrival in Banyuwangi & Briefing', desc: 'Pickup at airport/station in Banyuwangi, hotel check-in, rest and briefing for the midnight hike.' },
+      { day: 'Day 2', title: 'Mount Ijen Blue Fire & Bali Ferry Crossing', desc: 'Pre-dawn Ijen hike, return to hotel to freshen up, then cross to Bali via Ketapang-Gilimanuk ferry.' },
+      { day: 'Day 3', title: 'Ulun Danu Beratan Temple & Tanah Lot', desc: 'Explore highland Bedugul lake and the iconic sea-facing Tanah Lot temple at sunset.' },
+      { day: 'Day 4', title: 'Ubud Culture & Kintamani Volcano View', desc: 'Visit Tegalalang rice terraces, Ubud art market, and enjoy lunch overlooking Mount Batur.' },
+      { day: 'Day 5', title: 'Melasti Beach & Uluwatu Sunset Kecak Dance', desc: 'Relax by limestone beach cliffs and experience the dramatic Kecak Fire Dance performance.' },
+      { day: 'Day 6', title: 'Souvenir Shopping & Bali Airport Transfer', desc: 'Shop for authentic Balinese souvenirs and transfer to Ngurah Rai International Airport.' }
     ],
     included: [
-      'Akomodasi Hotel 5 Malam + Sarapan Pagi',
-      'Tiket Penyeberangan Ferry Ketapang-Gilimanuk PP',
-      'Tiket Masuk Seluruh Objek Wisata Sesuai Jadwal',
-      'Guide Ijen & Driver Tour Bali Berpengalaman',
-      'Masker Respirator Ijen & Transportasi AC Penuh'
+      '5 Nights Hotel Accommodation + Daily Breakfast',
+      'Roundtrip Ketapang-Gilimanuk Ferry Tickets',
+      'All Attraction & Park Entry Tickets on Itinerary',
+      'Experienced Ijen Guide & Bali Tour Driver',
+      'Gas Respirator Mask & Full AC Transportation'
     ],
     excluded: [
-      'Tiket Pesawat Kedatangan & Kepulangan',
-      'Makan Siang & Malam di Luar Program',
-      'Pengeluaran Pribadi'
+      'Domestic or International Flights',
+      'Lunches & Dinners Outside Scheduled Program',
+      'Personal Souvenirs & Expenses'
     ]
   },
   {
     id: 'pkg-2',
-    title: 'Paket Tour Bali 5 Hari 4 Malam',
+    title: 'Bali & Mount Ijen Tour (5 Days 4 Nights)',
     category: 'regular',
-    duration: '5 Hari 4 Malam',
+    duration: '5 Days 4 Nights',
     savedCount: '2.516K',
     rawSaved: 2516,
     image: '/images/pkg-bluefire.png',
-    price: 'Rp 2.950.000',
+    price: 'IDR 2,950,000',
     rating: 4.9,
-    badge: 'Favorit Hemat',
+    badge: 'Best Value',
     isTrending: true,
     isRecent: true,
-    description: 'Pilihan paling ideal bagi Anda yang ingin memadukan petualangan mendaki Kawah Ijen dengan liburan santai di pantai dan tempat wisata terfavorit di Pulau Bali dengan harga ramah kantong.',
-    difficulty: 'Mudah - Sedang',
-    altitude: '2.769 mdpl',
+    description: 'The optimal vacation package combining the thrilling midnight ascent of Mount Ijen with relaxing beach days and cultural highlights across Bali at an affordable rate.',
+    difficulty: 'Easy - Moderate',
+    altitude: '2,769m ASL',
     meetingPoint: 'Banyuwangi / Bali',
-    departureTime: 'Fleksibel',
-    groupSize: 'Min. 2 Orang',
-    languages: ['Bahasa Indonesia', 'English'],
+    departureTime: 'Flexible',
+    groupSize: 'Min. 2 Persons',
+    languages: ['English', 'Indonesian'],
     gallery: [
       '/images/pkg-bluefire.png',
       '/images/pkg-bali.png',
@@ -243,49 +243,49 @@ export const defaultPackages: TourPackage[] = [
       '/images/djawatan.png'
     ],
     highlights: [
-      'Midnight Trekking Kawah Ijen & Blue Fire',
-      'Situs Pura Ulun Danu & Danau Beratan Bali',
-      'Pantai Pandawa & Tebing Uluwatu',
-      'Transportasi AC Privat & Hotel Pilihan Nyaman'
+      'Midnight Mount Ijen Trek & Blue Fire',
+      'Iconic Floating Temple of Lake Beratan',
+      'Pandawa Beach & Uluwatu Coastal Cliffs',
+      'Private AC Tourism Transport & Quality Hotels'
     ],
     itinerary: [
-      { day: 'Hari 1', title: 'Kedatangan Banyuwangi', desc: 'Briefing perjalanan dan istirahat sebelum pendakian malam.' },
-      { day: 'Hari 2', title: 'Kawah Ijen Sunrise & Ferry ke Bali', desc: 'Menikmati pemandangan kawah asam lalu transfer menuju hotel di Bali.' },
-      { day: 'Hari 3', title: 'Bedugul & Tanah Lot Tour', desc: 'Jelajah dataran tinggi Bali yang sejuk dan pura terapung.' },
-      { day: 'Hari 4', title: 'Pantai Pandawa, Melasti & Uluwatu', desc: 'Menikmati pantai eksotis dan matahari terbenam di atas tebing.' },
-      { day: 'Hari 5', title: 'Drop Off Bandara Ngurah Rai', desc: 'Belanja oleh-oleh dan kepulangan.' }
+      { day: 'Day 1', title: 'Arrival in Banyuwangi', desc: 'Tour briefing and hotel check-in before the midnight ascent.' },
+      { day: 'Day 2', title: 'Mount Ijen Sunrise & Ferry to Bali', desc: 'Experience the turquoise crater lake, then cross over to your hotel in Bali.' },
+      { day: 'Day 3', title: 'Bedugul & Tanah Lot Excursion', desc: 'Discover Bali’s refreshing highlands and dramatic coastal temples.' },
+      { day: 'Day 4', title: 'Pandawa, Melasti & Uluwatu', desc: 'Relax along pristine beaches and admire clifftop ocean sunsets.' },
+      { day: 'Day 5', title: 'Ngurah Rai Airport Drop-Off', desc: 'Souvenir shopping and airport transfer.' }
     ],
     included: [
-      'Transportasi Wisata AC Sepanjang Perjalanan',
-      'Hotel 4 Malam + Sarapan',
-      'Tiket Kapal Ferry Selat Bali',
-      'Masker Gas Kawah Ijen & Pemandu Lokal'
+      'AC Tourism Transportation Throughout',
+      '4 Nights Hotel + Daily Breakfast',
+      'Bali Strait Ferry Crossing Tickets',
+      'Gas Respirator Mask & Local Mountain Guide'
     ],
     excluded: [
-      'Tiket Pesawat',
-      'Pengeluaran Pribadi'
+      'Flight Tickets',
+      'Personal Expenses'
     ]
   },
   {
     id: 'pkg-3',
-    title: 'Paket Tour Bali 4 Hari 3 Malam',
+    title: 'Bali & Mount Ijen Tour (4 Days 3 Nights)',
     category: 'regular',
-    duration: '4 Hari 3 Malam',
+    duration: '4 Days 3 Nights',
     savedCount: '1.803K',
     rawSaved: 1803,
     image: '/images/pkg-crater.png',
-    price: 'Rp 2.200.000',
+    price: 'IDR 2,200,000',
     rating: 4.8,
-    badge: 'Paling Laris',
+    badge: 'Top Seller',
     isTrending: false,
     isRecent: true,
-    description: 'Petualangan ringkas namun padat pengalaman: mendaki Kawah Ijen di Banyuwangi dilanjutkan dengan tur pesona alam air terjun tropis dan wisata Bali selatan.',
-    difficulty: 'Sedang',
-    altitude: '2.769 mdpl',
+    description: 'A compact yet immersive adventure: hike Mount Ijen in Banyuwangi followed by refreshing tropical waterfalls and south Bali coastal highlights.',
+    difficulty: 'Moderate',
+    altitude: '2,769m ASL',
     meetingPoint: 'Banyuwangi',
-    departureTime: 'Fleksibel',
-    groupSize: 'Min. 2 Orang',
-    languages: ['Bahasa Indonesia', 'English'],
+    departureTime: 'Flexible',
+    groupSize: 'Min. 2 Persons',
+    languages: ['English', 'Indonesian'],
     gallery: [
       '/images/pkg-crater.png',
       '/images/pkg-waterfall.png',
@@ -293,46 +293,46 @@ export const defaultPackages: TourPackage[] = [
       '/images/the-best-view-of-kawah.webp'
     ],
     highlights: [
-      'Kawah Ijen Blue Fire & Air Terjun Tropis',
-      'Pemandangan Danau Kawah Klorofil Terbesar',
-      'Tiket Masuk & Asuransi Wisata',
-      'Dokumentasi Foto Selama Kegiatan'
+      'Mount Ijen Blue Fire & Tropical Waterfalls',
+      'World’s Largest Acidic Turquoise Crater Lake',
+      'All Entry Tickets & Tour Insurance Included',
+      'Photo Documentation Throughout the Journey'
     ],
     itinerary: [
-      { day: 'Hari 1', title: 'Penyambutan Tamu di Banyuwangi', desc: 'Transfer dari stasiun/bandara ke hotel pilihan dan istirahat.' },
-      { day: 'Hari 2', title: 'Blue Fire & Rim Kawah Ijen', desc: 'Trekking jam 02:00 pagi ke puncak Ijen bersama guide berpengalaman.' },
-      { day: 'Hari 3', title: 'Air Terjun Jagir & Wisata Bali', desc: 'Relaksasi air terjun lalu menyeberang menuju Bali.' },
-      { day: 'Hari 4', title: 'Kepulangan', desc: 'Oleh-oleh khas dan transfer kembali ke bandara.' }
+      { day: 'Day 1', title: 'Banyuwangi Welcome & Check-in', desc: 'Pickup from station/airport to hotel, relaxation and rest.' },
+      { day: 'Day 2', title: 'Blue Fire & Mount Ijen Crater Rim', desc: 'Midnight hike to the summit with your certified guide.' },
+      { day: 'Day 3', title: 'Jagir Waterfall & Crossing to Bali', desc: 'Relax by natural waterfalls before taking the scenic ferry to Bali.' },
+      { day: 'Day 4', title: 'Departure Transfer', desc: 'Local souvenir shopping and airport drop-off.' }
     ],
     included: [
-      'Transportasi AC + Driver + BBM',
-      'Tiket Masuk Objek Wisata',
-      'Guide Pendakian Kawah Ijen & Masker Gas'
+      'AC Transportation + Driver + Fuel',
+      'All Tourist Attraction Entrance Fees',
+      'Mount Ijen Guide & Protective Gas Masks'
     ],
     excluded: [
-      'Pengeluaran Pribadi',
-      'Tip Driver/Guide'
+      'Personal Expenses',
+      'Driver & Guide Gratuities'
     ]
   },
   {
     id: 'pkg-4',
-    title: 'Paket Tour Bali 3 Hari 2 Malam',
+    title: 'Mount Ijen & Banyuwangi Explorer (3 Days 2 Nights)',
     category: 'regular',
-    duration: '3 Hari 2 Malam',
+    duration: '3 Days 2 Nights',
     savedCount: '1.083K',
     rawSaved: 1083,
     image: '/images/pkg-waterfall.png',
-    price: 'Rp 1.450.000',
+    price: 'IDR 1,450,000',
     rating: 4.8,
     isTrending: false,
     isRecent: true,
-    description: 'Paket akhir pekan terbaik untuk melepaskan penat: mendaki Ijen melihat fenomena alam langka dan menikmati kesegaran air terjun alami Banyuwangi.',
-    difficulty: 'Sedang',
-    altitude: '2.769 mdpl',
-    meetingPoint: 'Banyuwangi Kota',
-    departureTime: 'Fleksibel',
-    groupSize: 'Min. 2 Orang',
-    languages: ['Bahasa Indonesia', 'English'],
+    description: 'The ultimate weekend escape: climb Mount Ijen for the rare midnight electric blue flames and soak in the freshness of Banyuwangi’s tropical waterfalls.',
+    difficulty: 'Moderate',
+    altitude: '2,769m ASL',
+    meetingPoint: 'Banyuwangi City',
+    departureTime: 'Flexible',
+    groupSize: 'Min. 2 Persons',
+    languages: ['English', 'Indonesian'],
     gallery: [
       '/images/pkg-waterfall.png',
       '/images/pkg-bluefire.png',
@@ -340,23 +340,23 @@ export const defaultPackages: TourPackage[] = [
       '/images/HeroSection.webp'
     ],
     highlights: [
-      'Paket Singkat Sensasi Ijen Midnight',
-      'Perlengkapan Pendakian Lengkap Standar BKSDA',
-      'Kunjungan Air Terjun Tropis Asri',
-      'Snack & Minuman Hangat'
+      'Short Yet Thrilling Ijen Midnight Experience',
+      'Official Standard Mountain & Safety Equipment',
+      'Lush Tropical Waterfall Visit',
+      'Warm Drinks & Basecamp Snacks'
     ],
     itinerary: [
-      { day: 'Hari 1', title: 'Kedatangan & Persiapan', desc: 'Check-in homestay & persiapan trekking malam.' },
-      { day: 'Hari 2', title: 'Pendakian Ijen & Air Terjun', desc: 'Mengejar fenomena api biru dan relaksasi di air terjun.' },
-      { day: 'Hari 3', title: 'Transfer Keluar', desc: 'Makan pagi dan pengantaran kembali ke stasiun/bandara.' }
+      { day: 'Day 1', title: 'Arrival & Preparation', desc: 'Hotel check-in and preparation for the midnight trek.' },
+      { day: 'Day 2', title: 'Ijen Ascent & Waterfall Excursion', desc: 'Witness the blue flames, sunrise over the lake, and relax by the waterfall.' },
+      { day: 'Day 3', title: 'Outbound Transfer', desc: 'Breakfast and drop-off at Banyuwangi station or airport.' }
     ],
     included: [
-      'Transportasi AC Selama Program',
-      'Tiket Masuk Kawah Ijen & Air Terjun',
-      'Masker Respirator Gas & Guide Lokal'
+      'Full AC Transportation During the Program',
+      'Mount Ijen & Waterfall Entry Tickets',
+      'Certified Gas Respirator Mask & Local Guide'
     ],
     excluded: [
-      'Pengeluaran Pribadi'
+      'Personal Expenses'
     ]
   }
 ];

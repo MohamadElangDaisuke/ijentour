@@ -14,7 +14,7 @@ import {
 
 export default function ArticlesPage() {
   const [articlesList, setArticlesList] = useState<Article[]>(defaultArticles);
-  const [selectedCategory, setSelectedCategory] = useState<string>('Semua');
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 3;
@@ -52,7 +52,7 @@ export default function ArticlesPage() {
 
   const filteredArticles = articlesList.filter((article) => {
     const matchesCategory =
-      selectedCategory === 'Semua' || article.category.toLowerCase().includes(selectedCategory.toLowerCase());
+      selectedCategory === 'All' || article.category.toLowerCase().includes(selectedCategory.toLowerCase());
     const matchesSearch =
       searchQuery === '' ||
       article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -60,7 +60,7 @@ export default function ArticlesPage() {
     return matchesCategory && matchesSearch;
   });
 
-  // Reset ke halaman 1 saat kategori atau pencarian berubah
+  // Reset to page 1 on filter/search change
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedCategory, searchQuery]);
@@ -94,10 +94,10 @@ export default function ArticlesPage() {
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full mt-16">
           <h1 id="articles-heading" className="mb-4 text-4xl font-black leading-tight text-white md:text-5xl">
-            Artikel & Panduan Wisata
+            Articles & Travel Guides
           </h1>
           <p className="text-lg text-white/80 max-w-2xl mx-auto">
-            Temukan inspirasi, tips perjalanan, dan cerita menarik seputar Kawah Ijen dan <span translate="no" className="notranslate">Banyuwangi</span>.
+            Discover inspiration, travel tips, and stories around Mount Ijen and <span translate="no" className="notranslate">Banyuwangi</span>.
           </p>
         </div>
       </section>
@@ -127,7 +127,7 @@ export default function ArticlesPage() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Cari artikel..."
+              placeholder="Search articles..."
               className="w-full pl-10 pr-4 py-2 bg-secondary-50 border border-secondary-200 rounded-full text-sm text-secondary-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
             />
             <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary-400" />
@@ -149,7 +149,7 @@ export default function ArticlesPage() {
               </Link>
               <div className="flex flex-col justify-center p-8 md:p-12 lg:w-1/2">
                 <span className="mx-auto mb-4 w-max rounded-sm bg-primary-500 px-3 py-1 text-xs font-extrabold uppercase text-secondary-950 lg:mx-0">
-                  Artikel Pilihan
+                  Featured Story
                 </span>
                 <Link href={`/blog/${featuredSlug}`}>
                   <h2 className="text-2xl sm:text-3xl font-black text-secondary-950 mb-4 hover:text-primary-600 transition leading-tight">
@@ -167,7 +167,7 @@ export default function ArticlesPage() {
                   href={`/blog/${featuredSlug}`}
                   className="group mx-auto flex w-max items-center font-extrabold text-secondary-950 transition hover:text-primary-600 lg:mx-0"
                 >
-                  <span>Baca Selengkapnya</span>
+                  <span>Read Full Story</span>
                   <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
@@ -178,7 +178,7 @@ export default function ArticlesPage() {
         {/* ARTICLES GRID */}
         {filteredArticles.length === 0 ? (
           <div className="p-12 text-center rounded-3xl bg-white border border-dashed border-secondary-200">
-            <p className="text-secondary-500 font-medium">Tidak ada artikel yang sesuai dengan pencarian "{searchQuery}".</p>
+            <p className="text-secondary-500 font-medium">No articles match your search for "{searchQuery}".</p>
           </div>
         ) : (
           <div id="articles-grid-container" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -220,7 +220,7 @@ export default function ArticlesPage() {
                       href={`/blog/${targetSlug}`}
                       className="group/btn inline-flex items-center text-sm font-extrabold text-secondary-950 transition hover:text-primary-600 cursor-pointer pt-2 border-t border-secondary-100 w-full"
                     >
-                      <span>Baca Artikel</span>
+                      <span>Read Article</span>
                       <ArrowRight size={14} className="ml-1.5 group-hover/btn:translate-x-1 transition-transform" />
                     </Link>
                   </div>
@@ -234,12 +234,12 @@ export default function ArticlesPage() {
         {filteredArticles.length > 0 && totalPages > 1 && (
           <div className="flex flex-col items-center justify-center mt-12 gap-3">
             <div className="flex items-center justify-center space-x-2">
-              {/* Tombol Sebelumnya */}
+              {/* Prev Button */}
               <button
                 type="button"
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                aria-label="Halaman sebelumnya"
+                aria-label="Previous page"
                 className={`flex items-center justify-center h-10 px-3 rounded-xl text-sm font-bold transition ${
                   currentPage === 1
                     ? 'bg-secondary-100 text-secondary-400 cursor-not-allowed opacity-50'
@@ -250,7 +250,7 @@ export default function ArticlesPage() {
                 <span className="hidden sm:inline">Prev</span>
               </button>
 
-              {/* Tombol Nomor Halaman */}
+              {/* Page Numbers */}
               {Array.from({ length: totalPages }).map((_, index) => {
                 const pageNumber = index + 1;
                 const isActive = currentPage === pageNumber;
@@ -270,12 +270,12 @@ export default function ArticlesPage() {
                 );
               })}
 
-              {/* Tombol Selanjutnya */}
+              {/* Next Button */}
               <button
                 type="button"
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                aria-label="Halaman selanjutnya"
+                aria-label="Next page"
                 className={`flex items-center justify-center h-10 px-3 rounded-xl text-sm font-bold transition ${
                   currentPage === totalPages
                     ? 'bg-secondary-100 text-secondary-400 cursor-not-allowed opacity-50'
@@ -288,7 +288,7 @@ export default function ArticlesPage() {
             </div>
 
             <p className="text-xs text-secondary-500 font-medium">
-              Menampilkan {paginatedArticles.length} dari {filteredArticles.length} artikel (Halaman {currentPage} dari {totalPages})
+              Showing {paginatedArticles.length} of {filteredArticles.length} articles (Page {currentPage} of {totalPages})
             </p>
           </div>
         )}

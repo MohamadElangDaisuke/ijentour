@@ -9,14 +9,14 @@ export async function DELETE(
     const { id } = await params;
     const existing = await prisma.galleryItem.findUnique({ where: { id } });
     if (!existing) {
-      return NextResponse.json({ error: "Foto galeri tidak ditemukan atau sudah dihapus." }, { status: 404 });
+      return NextResponse.json({ error: "Gallery photo not found or already deleted." }, { status: 404 });
     }
     await prisma.galleryItem.delete({ where: { id } });
-    return NextResponse.json({ success: true, message: "Foto galeri berhasil dihapus." });
+    return NextResponse.json({ success: true, message: "Gallery photo successfully deleted." });
   } catch (error: any) {
     console.error("DELETE /api/gallery/[id] error:", error);
     return NextResponse.json(
-      { error: error.message || "Gagal menghapus foto galeri." },
+      { error: error.message || "Failed to delete gallery photo." },
       { status: 500 }
     );
   }

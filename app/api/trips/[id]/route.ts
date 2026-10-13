@@ -25,7 +25,7 @@ export async function GET(
       if (fallback) {
         return NextResponse.json({ success: true, package: fallback });
       }
-      return NextResponse.json({ error: "Paket tidak ditemukan." }, { status: 404 });
+      return NextResponse.json({ error: "Package not found." }, { status: 404 });
     }
 
     const formatted = {
@@ -43,7 +43,7 @@ export async function GET(
     return NextResponse.json({ success: true, package: formatted });
   } catch (error) {
     console.error("GET /api/trips/[id] error:", error);
-    return NextResponse.json({ error: "Gagal memuat paket wisata." }, { status: 500 });
+    return NextResponse.json({ error: "Failed to load trip package." }, { status: 500 });
   }
 }
 
@@ -58,7 +58,7 @@ export async function PUT(
     });
 
     if (!existing) {
-      return NextResponse.json({ error: "Paket tidak ditemukan." }, { status: 404 });
+      return NextResponse.json({ error: "Package not found." }, { status: 404 });
     }
 
     const body = await request.json();
@@ -91,13 +91,13 @@ export async function PUT(
 
     return NextResponse.json({
       success: true,
-      message: "Paket berhasil diperbarui.",
+      message: "Package successfully updated.",
       package: updated,
     });
   } catch (error: any) {
     console.error("PUT /api/trips/[id] error:", error);
     return NextResponse.json(
-      { error: error.message || "Gagal memperbarui paket wisata." },
+      { error: error.message || "Failed to update trip package." },
       { status: 500 }
     );
   }
@@ -114,15 +114,15 @@ export async function DELETE(
     });
 
     if (!existing) {
-      return NextResponse.json({ error: "Paket tidak ditemukan atau sudah dihapus." }, { status: 404 });
+      return NextResponse.json({ error: "Package not found or already deleted." }, { status: 404 });
     }
 
     await prisma.tripPackage.delete({ where: { id: existing.id } });
-    return NextResponse.json({ success: true, message: "Paket berhasil dihapus." });
+    return NextResponse.json({ success: true, message: "Package successfully deleted." });
   } catch (error: any) {
     console.error("DELETE /api/trips/[id] error:", error);
     return NextResponse.json(
-      { error: error.message || "Gagal menghapus paket." },
+      { error: error.message || "Failed to delete package." },
       { status: 500 }
     );
   }

@@ -14,7 +14,7 @@ export default function TestimonialSection() {
     try {
       setTestimonials(JSON.parse(saved));
     } catch (error) {
-      console.error("Gagal memuat testimonial dari localStorage:", error);
+      console.error("Failed to load testimonials from localStorage:", error);
     }
   }, []);
 
@@ -33,7 +33,7 @@ export default function TestimonialSection() {
             What people say about us.
           </h2>
           <p className="mt-5 max-w-md mx-auto lg:mx-0 text-sm sm:text-base leading-relaxed text-secondary-700">
-            Cerita dari traveler yang sudah merasakan perjalanan bersama tim lokal IjenTour.
+            Real stories from travelers who explored Mount Ijen with our local guides.
           </p>
         </div>
 
@@ -44,7 +44,7 @@ export default function TestimonialSection() {
                 <img
                   src={featuredTestimonial.image}
                   onError={(e) => { (e.target as HTMLImageElement).src = '/images/pkg-bluefire.png'; }}
-                  alt={`${featuredTestimonial.name} - pengalaman wisata Banyuwangi`}
+                  alt={`${featuredTestimonial.name} - Banyuwangi travel experience`}
                   className="h-full w-full object-cover"
                 />
               ) : null}
@@ -53,12 +53,12 @@ export default function TestimonialSection() {
               <p className="text-4xl font-black leading-none text-primary-500">“</p>
               <p className="mt-2 text-base font-medium leading-relaxed text-secondary-800">{featuredTestimonial.quote}</p>
               <p className="mt-6 text-base font-bold text-secondary-950">{featuredTestimonial.name}</p>
-              <p className="mt-1 text-xs text-secondary-500">{featuredTestimonial.origin || 'Traveler IjenTour'}</p>
+              <p className="mt-1 text-xs text-secondary-500">{featuredTestimonial.origin || 'IjenTour Traveler'}</p>
             </div>
           </article>
         ) : (
           <p className="rounded-2xl border border-dashed border-secondary-200 p-10 text-center sm:text-left text-sm text-secondary-500">
-            Belum ada cerita perjalanan.
+            No travel stories added yet.
           </p>
         )}
       </div>

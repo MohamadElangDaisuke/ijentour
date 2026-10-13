@@ -166,7 +166,7 @@ export async function POST(request: Request) {
         {
           success: false,
           error:
-            "GEMINI_API_KEY belum dikonfigurasi di server. Silakan tambahkan GEMINI_API_KEY di file .env.local untuk local development atau di Vercel Environment Variables untuk production.",
+            "GEMINI_API_KEY has not been configured on the server. Please add GEMINI_API_KEY to your environment variables.",
         },
         { status: 500 }
       );
@@ -182,7 +182,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          error: "Terlalu banyak permintaan generate dalam waktu singkat. Mohon tunggu 1 menit sebelum mencoba lagi.",
+          error: "Too many generation requests in a short period. Please wait 1 minute before trying again.",
         },
         { status: 429 }
       );
@@ -194,7 +194,7 @@ export async function POST(request: Request) {
       body = await request.json();
     } catch {
       return NextResponse.json(
-        { success: false, error: "Payload JSON tidak valid." },
+        { success: false, error: "Invalid JSON payload." },
         { status: 400 }
       );
     }
@@ -222,21 +222,21 @@ export async function POST(request: Request) {
     const trimmedTopic = topic?.trim();
     if (!trimmedTopic) {
       return NextResponse.json(
-        { success: false, error: "Topik artikel wajib diisi." },
+        { success: false, error: "Article topic is required." },
         { status: 400 }
       );
     }
 
     if (trimmedTopic.length < 3) {
       return NextResponse.json(
-        { success: false, error: "Topik artikel terlalu pendek (minimal 3 karakter)." },
+        { success: false, error: "Article topic is too short (minimum 3 characters)." },
         { status: 400 }
       );
     }
 
     if (trimmedTopic.length > 300) {
       return NextResponse.json(
-        { success: false, error: "Topik artikel maksimal 300 karakter demi keamanan prompt." },
+        { success: false, error: "Article topic exceeds 300 characters limit." },
         { status: 400 }
       );
     }
@@ -292,7 +292,7 @@ ${purpose ? `5. Editorial Intent: Structure the flow to serve as a high-value "$
      * 2-4 comprehensive thematic sections with "## " headings and "### " subsections
      * Preparation or gear section with numbered list ("1. ...") or bullet points ("- ...")
      * Practical travel tips with bullet points ("- ...")
-     * Clear concluding section ("## Conclusion" or "## Kesimpulan")
+     * Clear concluding section ("## Conclusion")
    - Adapt depth to the requested target length (${targetWordCount}).
 
 8. FAQ SEPARATION RULE:
@@ -333,7 +333,7 @@ SEO Preferences:
 - FAQ Section: ${seoOptions.generateFaq !== false ? "Yes (3-5 items in faq array only)" : "No"}
 - Include Ijen Tour Booking CTA: ${includeCta ? "Yes" : "No"}
 
-Write the article in the natural language matching the topic title provided.
+Write the entire article in high-quality, engaging English.
 Remember: "content" must be clean, structured PURE MARKDOWN without HTML and without repeating the H1 title.`;
 
     // 5. Initialize Google Gen AI client
@@ -365,7 +365,7 @@ Remember: "content" must be clean, structured PURE MARKDOWN without HTML and wit
         },
         readTime: {
           type: Type.STRING,
-          description: "Estimated reading time, e.g. '5 Menit Baca' or '6 min read'",
+          description: "Estimated reading time, e.g. '5 min read' or '6 min read'",
         },
         content: {
           type: Type.STRING,
@@ -478,7 +478,7 @@ Remember: "content" must be clean, structured PURE MARKDOWN without HTML and wit
         return NextResponse.json(
           {
             success: false,
-            error: "GEMINI_API_KEY tidak valid atau tidak memiliki izin akses. Periksa kembali API Key Anda.",
+            error: "Invalid GEMINI_API_KEY or unauthorized access. Please verify your API key.",
           },
           { status: 401 }
         );
@@ -488,7 +488,7 @@ Remember: "content" must be clean, structured PURE MARKDOWN without HTML and wit
         return NextResponse.json(
           {
             success: false,
-            error: "Gemini AI sedang mengalami beban tinggi. Silakan coba lagi beberapa saat.",
+            error: "Gemini AI is currently experiencing high traffic. Please try again shortly.",
           },
           { status: 503 }
         );
@@ -498,7 +498,7 @@ Remember: "content" must be clean, structured PURE MARKDOWN without HTML and wit
         return NextResponse.json(
           {
             success: false,
-            error: "Batas kuota Gemini API tercapai (Rate limit). Silakan coba lagi setelah beberapa menit.",
+            error: "Gemini API rate limit reached. Please try again in a few minutes.",
           },
           { status: 429 }
         );
@@ -513,8 +513,8 @@ Remember: "content" must be clean, structured PURE MARKDOWN without HTML and wit
           {
             success: false,
             error: isSafety
-              ? "Konten ditolak oleh sistem keamanan AI Gemini. Mohon sesuaikan topik artikel."
-              : "Permintaan generate artikel tidak valid (400 Bad Request).",
+              ? "Content was flagged by Gemini AI safety filters. Please adjust the article topic."
+              : "Invalid article generation request (400 Bad Request).",
           },
           { status: 400 }
         );
@@ -523,7 +523,7 @@ Remember: "content" must be clean, structured PURE MARKDOWN without HTML and wit
       return NextResponse.json(
         {
           success: false,
-          error: "Gagal menghasilkan artikel dengan Gemini API. Mohon periksa API Key atau coba lagi beberapa saat kemudian.",
+          error: "Failed to generate article with Gemini API. Please check your API Key or try again later.",
         },
         { status: 500 }
       );
@@ -540,19 +540,19 @@ Remember: "content" must be clean, structured PURE MARKDOWN without HTML and wit
       return NextResponse.json(
         {
           success: false,
-          error: "Format respon dari Gemini API tidak dapat diproses. Silakan coba generate kembali.",
+          error: "The response format from Gemini API could not be parsed. Please try generating again.",
         },
         { status: 502 }
       );
     }
 
     // 7. Sanitize and validate fields
-    const validCategories = ["Panduan", "Tips & Trik", "Edukasi Ijen", "Budaya Lokal", "Kuliner", "Destinasi"];
+    const validCategories = ["Guide", "Tips & Tricks", "Ijen Geology & Nature", "Local Culture", "Culinary", "Destinations"];
     const resolvedCategory = (category && category.trim())
       ? category.trim()
       : validCategories.includes(parsedData.category)
       ? parsedData.category
-      : "Panduan";
+      : "Guide";
 
     const cleanSlug = (parsedData.slug || parsedData.title || trimmedTopic)
       .toLowerCase()
@@ -569,7 +569,7 @@ Remember: "content" must be clean, structured PURE MARKDOWN without HTML and wit
       return NextResponse.json(
         {
           success: false,
-          error: "AI tidak berhasil menghasilkan konten artikel yang memadai. Silakan coba generate kembali.",
+          error: "AI did not generate sufficient article content. Please try generating again.",
         },
         { status: 502 }
       );
@@ -593,7 +593,7 @@ Remember: "content" must be clean, structured PURE MARKDOWN without HTML and wit
 
     const wordCount = cleanContent.split(/\s+/).filter(Boolean).length;
     const computedReadMinutes = Math.max(1, Math.ceil(wordCount / 180));
-    const finalReadTime = parsedData.readTime || `${computedReadMinutes} Menit Baca`;
+    const finalReadTime = parsedData.readTime || `${computedReadMinutes} min read`;
 
     const finalResponse: GeneratedBlogResponse = {
       title: parsedData.title || trimmedTopic,
@@ -617,7 +617,7 @@ Remember: "content" must be clean, structured PURE MARKDOWN without HTML and wit
     return NextResponse.json(
       {
         success: false,
-        error: "Terjadi kesalahan internal pada server saat memproses permintaan AI.",
+        error: "Internal server error occurred while processing AI generation request.",
       },
       { status: 500 }
     );

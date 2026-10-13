@@ -28,8 +28,8 @@ export default function WhatsAppFloat() {
         <motion.button
           type="button"
           onClick={() => openBookingModal()}
-          aria-label="Pesan tur melalui WhatsApp"
-          title="Pesan Tur via WhatsApp"
+          aria-label="Book tour via WhatsApp"
+          title="Book Tour via WhatsApp"
           initial={{ opacity: 0, scale: 0.7, y: 30 }}
           animate={{
             opacity: 1,

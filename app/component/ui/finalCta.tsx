@@ -19,11 +19,11 @@ export default function FinalCta() {
 
       <div className="relative z-10 mx-auto max-w-7xl text-left">
         <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight max-w-4xl leading-tight text-white">
-          Siap Menyaksikan Keajaiban <span className="text-primary-400">Blue Fire</span> Kawah Ijen?
+          Ready to Witness the Wonder of Mount Ijen's <span className="text-primary-400">Blue Fire</span>?
         </h2>
 
         <p className="mt-4 text-sm sm:text-base leading-relaxed text-secondary-300 max-w-2xl">
-          Jangan lewatkan momen magis berdiri di atas kawah vulkanik terindah bersama pemandu lokal berpengalaman. Kuota pendakian harian terbatas sesuai regulasi BBKSDA Jawa Timur.
+          Don't miss the magical moment of standing atop one of the world's most breathtaking volcanic craters with experienced local guides. Daily visitor quotas apply per regional forestry regulations.
         </p>
 
         {/* CTA Buttons */}
@@ -32,7 +32,7 @@ export default function FinalCta() {
             href="/packages"
             className="inline-flex items-center gap-2 rounded-full bg-primary-500 px-8 py-4 text-sm font-bold text-secondary-950 shadow-xl shadow-primary-500/25 transition hover:-translate-y-0.5 hover:bg-primary-400"
           >
-            <span>Pesan Petualangan Anda</span>
+            <span>Book Your Adventure</span>
             <ArrowRight className="h-4 w-4" />
           </Link>
 
@@ -42,7 +42,7 @@ export default function FinalCta() {
             className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-7 py-4 text-sm font-bold text-white backdrop-blur-sm transition hover:border-[#25D366] hover:bg-white/20 hover:text-[#25D366] cursor-pointer"
           >
             <FaWhatsapp className="h-5 w-5 text-[#25D366]" />
-            <span>Tanya via WhatsApp</span>
+            <span>Inquire via WhatsApp</span>
           </button>
         </div>
 
@@ -54,7 +54,7 @@ export default function FinalCta() {
             </div>
             <div>
               <p className="text-xs font-bold text-white">Local Guides</p>
-              <p className="text-[11px] text-secondary-400">Warga lokal Banyuwangi</p>
+              <p className="text-[11px] text-secondary-400">Licensed Banyuwangi locals</p>
             </div>
           </div>
 
@@ -63,8 +63,8 @@ export default function FinalCta() {
               <ShieldCheck className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-xs font-bold text-white">Standar Keselamatan</p>
-              <p className="text-[11px] text-secondary-400">Masker respirator gas</p>
+              <p className="text-xs font-bold text-white">Safety Standards</p>
+              <p className="text-[11px] text-secondary-400">Certified gas respirators</p>
             </div>
           </div>
 
@@ -73,8 +73,8 @@ export default function FinalCta() {
               <Clock className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-xs font-bold text-white">Reschedule Mudah</p>
-              <p className="text-[11px] text-secondary-400">Fleksibilitas cuaca</p>
+              <p className="text-xs font-bold text-white">Easy Reschedule</p>
+              <p className="text-[11px] text-secondary-400">Weather & date flexibility</p>
             </div>
           </div>
 
@@ -83,8 +83,8 @@ export default function FinalCta() {
               <Users className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-xs font-bold text-white">Ribuan Wisatawan</p>
-              <p className="text-[11px] text-secondary-400">Ulasan bintang 5</p>
+              <p className="text-xs font-bold text-white">Thousands of Hikers</p>
+              <p className="text-[11px] text-secondary-400">5-star rated reviews</p>
             </div>
           </div>
         </div>

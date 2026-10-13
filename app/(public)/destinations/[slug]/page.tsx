@@ -71,7 +71,7 @@ export default async function DestinationDetailPage({ params }: PageProps) {
             className="inline-flex items-center gap-1.5 text-xs font-bold text-primary-400 hover:text-primary-300 mb-3 transition"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Kembali ke Semua Destinasi</span>
+            <span>Back to All Destinations</span>
           </Link>
           <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
             {dest.name}
@@ -86,28 +86,26 @@ export default async function DestinationDetailPage({ params }: PageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
         <div className="bg-white rounded-3xl p-8 sm:p-12 border border-secondary-200/80 shadow-sm mb-12">
           <span className="text-xs font-bold uppercase tracking-wider text-primary-600 block mb-2">
-            Tentang Destinasi
+            About Destination
           </span>
           <h2 className="text-2xl sm:text-3xl font-black text-secondary-950 mb-4">
-            Eksplorasi Keajaiban {dest.name}
+            Explore the Wonders of {dest.name}
           </h2>
           <p className="text-secondary-700 leading-relaxed text-sm sm:text-base mb-6">
-            Kawasan {dest.name} merupakan salah satu magnet pariwisata terpopuler di kawasan Jawa Timur.
-            Dengan panorama alam yang memikat dan keunikan ekosistem, destinasi ini menawarkan
-            pengalaman liburan autentik baik untuk penjelajah petualang maupun liburan santai keluarga.
+            {dest.name} is one of East Java&apos;s most iconic travel highlights. Featuring breathtaking landscapes and rare natural ecosystems, this destination offers an authentic holiday experience for adventurous explorers and leisure travelers alike.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-secondary-100">
             <div className="p-4 rounded-2xl bg-secondary-50">
-              <span className="text-xs text-secondary-500 block mb-0.5">Lokasi Obyek</span>
-              <span className="font-bold text-sm text-secondary-950">Banyuwangi, Jawa Timur</span>
+              <span className="text-xs text-secondary-500 block mb-0.5">Location</span>
+              <span className="font-bold text-sm text-secondary-950">Banyuwangi, East Java</span>
             </div>
             <div className="p-4 rounded-2xl bg-secondary-50">
-              <span className="text-xs text-secondary-500 block mb-0.5">Kategori</span>
-              <span className="font-bold text-sm text-secondary-950">{dest.tag || "Wisata Alam"}</span>
+              <span className="text-xs text-secondary-500 block mb-0.5">Category</span>
+              <span className="font-bold text-sm text-secondary-950">{dest.tag || "Nature Destination"}</span>
             </div>
             <div className="p-4 rounded-2xl bg-secondary-50">
-              <span className="text-xs text-secondary-500 block mb-0.5">Waktu Kunjungan Terbaik</span>
-              <span className="font-bold text-sm text-secondary-950">Sepanjang Tahun</span>
+              <span className="text-xs text-secondary-500 block mb-0.5">Best Time to Visit</span>
+              <span className="font-bold text-sm text-secondary-950">All Year Round</span>
             </div>
           </div>
         </div>
@@ -117,17 +115,17 @@ export default async function DestinationDetailPage({ params }: PageProps) {
           <div className="flex items-center justify-between mb-6">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-primary-600 block">
-                Paket Perjalanan Terkait
+                Related Tour Packages
               </span>
               <h3 className="text-2xl font-black text-secondary-950">
-                Pilihan Paket Tur ke {dest.name}
+                Featured Tour Packages to {dest.name}
               </h3>
             </div>
             <Link
               href="/packages"
               className="text-xs font-bold text-primary-600 hover:text-primary-700 inline-flex items-center gap-1"
             >
-              <span>Semua Paket</span>
+              <span>All Packages</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -157,7 +155,7 @@ export default async function DestinationDetailPage({ params }: PageProps) {
                     href={`/packages/${pkg.id}`}
                     className="px-4 py-2 rounded-xl bg-primary-500 hover:bg-primary-400 text-secondary-950 font-bold text-xs"
                   >
-                    Detail Paket
+                    Package Details
                   </Link>
                 </div>
               </div>

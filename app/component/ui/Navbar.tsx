@@ -9,14 +9,14 @@ import Sidebar from './sidebar'
 import ThemeToggle from './themeToggle'
 
 const navigation = [
-  { name: 'Beranda', href: '/' },
-  { name: 'Paket Tur', href: '/packages' },
-  { name: 'Destinasi', href: '/destinations' },
-  { name: 'Galeri', href: '/gallery' },
+  { name: 'Home', href: '/' },
+  { name: 'Tour Packages', href: '/packages' },
+  { name: 'Destinations', href: '/destinations' },
+  { name: 'Gallery', href: '/gallery' },
   { name: 'Blog', href: '/blog' },
-  { name: 'Tentang', href: '/about' },
+  { name: 'About Us', href: '/about' },
   { name: 'FAQ', href: '/about#faq' },
-  { name: 'Kontak', href: '/contact' },
+  { name: 'Contact', href: '/contact' },
 ]
 
 export default function Navbar() {
@@ -125,11 +125,11 @@ export default function Navbar() {
                         type="search"
                         name="q"
                         autoFocus
-                        placeholder="Cari artikel..."
-                        aria-label="Cari artikel dan destinasi"
+                        placeholder="Search articles..."
+                        aria-label="Search articles and destinations"
                         className="w-32 bg-transparent px-2 py-2 text-xs text-secondary-950 dark:text-white outline-none placeholder:text-secondary-500 sm:w-44"
                       />
-                      <button type="button" onClick={() => setIsSearchOpen(false)} aria-label="Tutup pencarian" title="Tutup pencarian" className="mr-1 rounded-full p-1 text-secondary-500 transition hover:bg-secondary-100 dark:hover:bg-secondary-800 hover:text-secondary-950 dark:hover:text-white cursor-pointer">
+                      <button type="button" onClick={() => setIsSearchOpen(false)} aria-label="Close search" title="Close search" className="mr-1 rounded-full p-1 text-secondary-500 transition hover:bg-secondary-100 dark:hover:bg-secondary-800 hover:text-secondary-950 dark:hover:text-white cursor-pointer">
                         <XMarkIcon className="h-4 w-4" />
                       </button>
                     </form>
@@ -137,8 +137,8 @@ export default function Navbar() {
                     <button
                       type="button"
                       onClick={() => setIsSearchOpen(true)}
-                      aria-label="Buka pencarian"
-                      title="Cari artikel dan destinasi"
+                      aria-label="Open search"
+                      title="Search articles and destinations"
                       className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary-100/80 dark:bg-secondary-900 text-secondary-700 dark:text-secondary-300 shadow-2xs transition hover:bg-primary-50 dark:hover:bg-secondary-800 hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer"
                     >
                       <MagnifyingGlassIcon className="w-5 h-5" />
@@ -150,7 +150,7 @@ export default function Navbar() {
                   href="/packages"
                   className="inline-flex items-center justify-center rounded-full bg-primary-500 px-4 sm:px-5 py-2 sm:py-2.5 text-xs font-bold text-secondary-950 shadow-sm transition-all duration-300 hover:bg-primary-400 hover:shadow-md hover:scale-105 active:scale-95"
                 >
-                  Pesan Tur
+                  Book Tour
                 </Link>
               </div>
             </div>

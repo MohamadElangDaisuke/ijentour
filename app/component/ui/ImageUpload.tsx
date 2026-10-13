@@ -21,10 +21,10 @@ export default function ImageUpload({
   value,
   onChange,
   folder = "general",
-  label = "Upload Foto",
+  label = "Upload Image",
   required = false,
   aspectRatio = "video",
-  helperText = "Format JPG, PNG, atau WebP. Maksimum 5 MB.",
+  helperText = "JPG, PNG, or WebP format. Maximum 5 MB.",
 }: ImageUploadProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -33,10 +33,10 @@ export default function ImageUpload({
 
   const validateFile = (file: File): string | null => {
     if (!ALLOWED_TYPES.includes(file.type.toLowerCase())) {
-      return "Format gambar tidak didukung. Harap gunakan format JPG, JPEG, PNG, atau WebP.";
+      return "Unsupported image format. Please use JPG, JPEG, PNG, or WebP.";
     }
     if (file.size > MAX_SIZE_MB * 1024 * 1024) {
-      return `File terlalu besar (${(file.size / (1024 * 1024)).toFixed(1)} MB). Batas maksimum adalah ${MAX_SIZE_MB} MB.`;
+      return `File is too large (${(file.size / (1024 * 1024)).toFixed(1)} MB). Maximum limit is ${MAX_SIZE_MB} MB.`;
     }
     return null;
   };
@@ -64,13 +64,13 @@ export default function ImageUpload({
       const data = await res.json();
 
       if (!res.ok || !data.success) {
-        throw new Error(data.error || "Gagal mengunggah gambar ke server.");
+        throw new Error(data.error || "Failed to upload image to server.");
       }
 
       onChange(data.url);
     } catch (err: any) {
       console.error("Upload error:", err);
-      setErrorMessage(err.message || "Terjadi kesalahan saat mengunggah gambar. Silakan coba lagi.");
+      setErrorMessage(err.message || "An error occurred while uploading image. Please try again.");
     } finally {
       setIsUploading(false);
       if (fileInputRef.current) {
@@ -130,7 +130,7 @@ export default function ImageUpload({
         </label>
         {value && !isUploading && (
           <span className="text-[11px] font-semibold text-emerald-600 flex items-center gap-1">
-            <CheckCircle2 className="w-3.5 h-3.5" /> Tersimpan
+            <CheckCircle2 className="w-3.5 h-3.5" /> Saved
           </span>
         )}
       </div>
@@ -163,7 +163,7 @@ export default function ImageUpload({
           <div className="relative w-full h-full">
             <img
               src={value}
-              alt="Preview foto yang diunggah"
+              alt="Uploaded photo preview"
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-secondary-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 backdrop-blur-[2px]">
@@ -175,14 +175,14 @@ export default function ImageUpload({
                 }}
                 className="px-3.5 py-2 rounded-xl bg-white/90 hover:bg-white text-secondary-950 font-bold text-xs shadow-md flex items-center gap-1.5 transition"
               >
-                <RefreshCw className="w-3.5 h-3.5 text-primary-600" /> Ganti Foto
+                <RefreshCw className="w-3.5 h-3.5 text-primary-600" /> Replace Image
               </button>
               <button
                 type="button"
                 onClick={handleRemove}
                 className="px-3.5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs shadow-md flex items-center gap-1.5 transition"
               >
-                <X className="w-3.5 h-3.5" /> Hapus
+                <X className="w-3.5 h-3.5" /> Remove
               </button>
             </div>
           </div>
@@ -197,7 +197,7 @@ export default function ImageUpload({
               <UploadCloud className="w-6 h-6" />
             </div>
             <p className="text-xs font-bold text-secondary-900 mb-1">
-              {isDragging ? "Lepaskan file di sini" : "Klik untuk memilih file atau tarik ke sini"}
+              {isDragging ? "Drop file here" : "Click to select file or drag here"}
             </p>
             <p className="text-[11px] text-secondary-500 max-w-xs">{helperText}</p>
           </div>
@@ -207,8 +207,8 @@ export default function ImageUpload({
         {isUploading && (
           <div className="absolute inset-0 bg-secondary-950/80 backdrop-blur-xs flex flex-col items-center justify-center text-white z-20">
             <Loader2 className="w-8 h-8 animate-spin text-primary-400 mb-2" />
-            <p className="text-xs font-bold tracking-wide">Mengunggah ke Supabase Storage...</p>
-            <span className="text-[10px] text-secondary-300 mt-1">Mohon tunggu sebentar</span>
+            <p className="text-xs font-bold tracking-wide">Uploading to storage...</p>
+            <span className="text-[10px] text-secondary-300 mt-1">Please wait a moment</span>
           </div>
         )}
       </div>

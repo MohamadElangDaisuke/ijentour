@@ -7,12 +7,12 @@ import { ArrowLeft, X, Sparkles, Filter, Camera, ZoomIn } from "lucide-react";
 import { defaultStories, Story } from "@/app/lib/stories";
 
 const CATEGORIES = [
-  { label: "Semua Momen", value: "all" },
+  { label: "All Moments", value: "all" },
   { label: "Blue Fire", value: "blue-fire" },
-  { label: "Danau Kawah", value: "crater" },
+  { label: "Crater Lake", value: "crater" },
   { label: "Golden Sunrise", value: "sunrise" },
-  { label: "Penambang Belerang", value: "miners" },
-  { label: "Destinasi Banyuwangi", value: "destination" },
+  { label: "Sulfur Miners", value: "miners" },
+  { label: "Banyuwangi Destinations", value: "destination" },
 ];
 
 export default function GalleryPage() {
@@ -66,10 +66,10 @@ export default function GalleryPage() {
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 mt-8">
           <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-            Galeri Momen Kawah Ijen
+            Kawah Ijen Moments Gallery
           </h1>
           <p className="text-sm text-secondary-200 mt-2 max-w-xl mx-auto">
-            Kumpulan potret magis kobaran api biru, fajar keemasan, dan keindahan alam Banyuwangi.
+            A curated collection capturing the magical blue flames, golden sunrise, and natural wonders of Banyuwangi.
           </p>
         </div>
       </section>
@@ -106,13 +106,13 @@ export default function GalleryPage() {
           /* EMPTY STATE */
           <div className="text-center py-20 bg-white rounded-3xl border border-secondary-200 my-8 p-8">
             <Camera className="w-12 h-12 text-secondary-400 mx-auto mb-3" />
-            <h3 className="text-base font-bold text-secondary-900">Belum ada foto dalam kategori ini</h3>
-            <p className="text-xs text-secondary-500 mt-1">Pilih kategori lain untuk melihat foto momen wisata lainnya.</p>
+            <h3 className="text-base font-bold text-secondary-900">No photos found in this category</h3>
+            <p className="text-xs text-secondary-500 mt-1">Please select another category to view more travel moments.</p>
             <button
               onClick={() => setSelectedCategory("all")}
               className="mt-4 px-5 py-2 rounded-full bg-primary-500 hover:bg-primary-400 text-secondary-950 font-bold text-xs transition"
             >
-              Tampilkan Semua Foto
+              Show All Photos
             </button>
           </div>
         ) : (
@@ -136,7 +136,7 @@ export default function GalleryPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <span className="text-[10px] font-bold uppercase tracking-wider text-primary-400 mb-1 block">
-                        Banyuwangi Moment
+                        Banyuwangi Moments
                       </span>
                       <h3 className="text-white font-bold text-sm sm:text-base leading-tight group-hover:text-primary-300 transition-colors">
                         {item.title}
@@ -172,7 +172,7 @@ export default function GalleryPage() {
               <button
                 type="button"
                 onClick={() => setSelectedPhoto(null)}
-                aria-label="Tutup preview"
+                aria-label="Close preview"
                 className="absolute top-4 right-4 p-2 rounded-full bg-secondary-950/60 hover:bg-secondary-950 text-white transition cursor-pointer"
               >
                 <X className="w-5 h-5" />
@@ -181,7 +181,7 @@ export default function GalleryPage() {
             <div className="p-6 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <span className="text-[11px] font-bold text-primary-600 uppercase tracking-wider">
-                  Dokumentasi Wisata Ijen
+                  Ijen Tour Documentation
                 </span>
                 <h3 className="text-xl font-black text-secondary-950">{selectedPhoto.title}</h3>
                 {(selectedPhoto as any).caption && (
@@ -195,7 +195,7 @@ export default function GalleryPage() {
                 className="px-5 py-2.5 rounded-full bg-primary-500 hover:bg-primary-400 text-secondary-950 font-bold text-xs inline-flex items-center gap-1.5 transition shadow-sm whitespace-nowrap"
               >
                 <Sparkles className="w-4 h-4" />
-                <span>Lihat Paket Wisata Terkait</span>
+                <span>View Related Tour Packages</span>
               </Link>
             </div>
           </div>

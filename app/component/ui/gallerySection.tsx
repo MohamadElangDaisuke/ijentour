@@ -39,7 +39,7 @@ export default function GallerySection() {
         try {
           setStories(JSON.parse(stored));
         } catch (error) {
-          console.error("Gagal memuat galeri dari localStorage:", error);
+          console.error("Failed to load gallery from localStorage:", error);
         }
       }
     };
@@ -75,21 +75,21 @@ export default function GallerySection() {
         <div className="mb-12 flex flex-col items-center justify-between gap-5 text-center sm:text-left sm:flex-row sm:items-end">
           <div>
             <h2 id="gallery-heading" className="text-2xl sm:text-4xl lg:text-5xl font-black leading-tight tracking-tight text-secondary-950">
-              Galeri wisata Banyuwangi dan Kawah Ijen.
+              Mount Ijen and Banyuwangi Travel Gallery.
             </h2>
           </div>
           <Link
             href="/gallery"
             className="inline-flex items-center gap-2 rounded-full border border-secondary-300 bg-secondary-50 px-5 py-3 text-sm font-bold text-secondary-800 transition hover:border-primary-500 hover:bg-primary-500 hover:text-secondary-950 mx-auto sm:mx-0 shrink-0"
           >
-            Lihat semua gallery
+            View all photos
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
         {stories.length === 0 ? (
           <p className="rounded-2xl border border-dashed border-secondary-200 p-12 text-center text-sm text-secondary-500">
-            Belum ada foto galeri momen yang ditambahkan.
+            No gallery photos added yet.
           </p>
         ) : (
           <div className="grid auto-rows-40 grid-cols-2 gap-3 sm:auto-rows-52 sm:grid-cols-4 sm:gap-5">
@@ -109,11 +109,11 @@ export default function GallerySection() {
                   <img
                     src={story.image}
                     onError={(e) => { (e.target as HTMLImageElement).src = '/images/pkg-bluefire.png'; }}
-                    alt={`${story.title} - galeri wisata Banyuwangi`}
+                    alt={`${story.title} - Banyuwangi travel gallery`}
                     className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                   />
                 ) : (
-                  <div className="flex h-full items-center justify-center p-4 text-center text-xs text-secondary-400">Tidak ada gambar</div>
+                  <div className="flex h-full items-center justify-center p-4 text-center text-xs text-secondary-400">No image available</div>
                 )}
                 <div className="absolute inset-0 flex items-end bg-linear-to-t from-secondary-950/80 via-transparent to-transparent p-4 opacity-90 transition group-hover:from-secondary-950/90 sm:p-5">
                   <div>
@@ -122,7 +122,7 @@ export default function GallerySection() {
                   </div>
                 </div>
                 <span className="absolute right-4 top-4 rounded-full bg-white/85 px-3 py-1 text-[10px] font-bold text-secondary-950 opacity-0 backdrop-blur transition group-hover:opacity-100">
-                  Lihat foto
+                  View photo
                 </span>
               </motion.button>
             ))}
@@ -133,14 +133,14 @@ export default function GallerySection() {
       {selectedStory && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-5 backdrop-blur-sm" onClick={() => setSelectedStory(null)}>
           <motion.div initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }} className="relative max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-3xl bg-secondary-950 text-white shadow-2xl border border-secondary-800" onClick={(event) => event.stopPropagation()}>
-            <button type="button" onClick={() => setSelectedStory(null)} aria-label="Tutup foto" className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-secondary-950 transition hover:bg-primary-500 cursor-pointer">
+            <button type="button" onClick={() => setSelectedStory(null)} aria-label="Close photo" className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-secondary-950 transition hover:bg-primary-500 cursor-pointer">
               <X className="h-5 w-5" />
             </button>
             {selectedStory.image && (
               <img
                 src={selectedStory.image}
                 onError={(e) => { (e.target as HTMLImageElement).src = '/images/pkg-bluefire.png'; }}
-                alt={`${selectedStory.title} - foto perjalanan Kawah Ijen Banyuwangi`}
+                alt={`${selectedStory.title} - Mount Ijen Banyuwangi travel photo`}
                 className="max-h-[75vh] w-full object-contain"
               />
             )}

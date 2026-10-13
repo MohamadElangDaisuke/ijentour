@@ -104,16 +104,16 @@ export default function BlogDetailPage({ params }: PageProps) {
       <div className="min-h-[70vh] bg-secondary-50 flex flex-col items-center justify-center p-6 text-center">
         <div className="max-w-md bg-white p-8 rounded-3xl border border-secondary-200 shadow-md">
           <BookOpen className="w-12 h-12 text-primary-500 mx-auto mb-3" />
-          <h2 className="text-2xl font-black text-secondary-950 mb-2">Artikel Tidak Ditemukan</h2>
+          <h2 className="text-2xl font-black text-secondary-950 mb-2">Article Not Found</h2>
           <p className="text-secondary-600 text-xs sm:text-sm mb-6">
-            Artikel yang Anda cari mungkin telah dipindahkan atau belum dipublikasikan.
+            The article you are looking for may have been moved or is not yet published.
           </p>
           <Link
             href="/blog"
             className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-primary-500 text-secondary-950 font-bold text-xs hover:bg-primary-400 transition"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Kembali ke Katalog Blog</span>
+            <span>Back to Blog Catalog</span>
           </Link>
         </div>
       </div>
@@ -133,22 +133,22 @@ export default function BlogDetailPage({ params }: PageProps) {
             className="inline-flex items-center gap-1.5 text-xs font-bold text-secondary-600 hover:text-primary-600 transition mb-6"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Kembali ke Semua Artikel & Panduan</span>
+            <span>Back to All Articles & Guides</span>
           </Link>
 
           <div className="flex flex-wrap items-center gap-2 mb-4">
             <span className="px-3 py-1 rounded-full text-xs font-black bg-primary-500 text-secondary-950 uppercase tracking-wider shadow-2xs">
-              {article.category || "Panduan"}
+              {article.category || "Guide"}
             </span>
             <span className="text-xs text-secondary-400 font-medium">•</span>
             <span className="text-xs text-secondary-600 font-medium flex items-center gap-1">
               <Calendar className="w-3.5 h-3.5 text-primary-600" />
-              {article.date || "Terbaru"}
+              {article.date || "Recent"}
             </span>
             <span className="text-xs text-secondary-400 font-medium">•</span>
             <span className="text-xs text-secondary-600 font-medium flex items-center gap-1">
               <Clock className="w-3.5 h-3.5 text-primary-600" />
-              {article.readTime || "5 Menit Baca"}
+              {article.readTime || "5 Min Read"}
             </span>
           </div>
 
@@ -162,25 +162,25 @@ export default function BlogDetailPage({ params }: PageProps) {
                 {(article.author || "Ijen").charAt(0)}
               </div>
               <div>
-                <p className="text-xs font-bold text-secondary-950">{article.author || "Tim Ekspedisi Ijen"}</p>
-                <p className="text-[11px] text-secondary-500">Penulis & Spesialis Pariwisata Ijen</p>
+                <p className="text-xs font-bold text-secondary-950">{article.author || "Ijen Tour Team"}</p>
+                <p className="text-[11px] text-secondary-500">Writer & Mount Ijen Travel Specialist</p>
               </div>
             </div>
 
             <button
               onClick={handleShare}
               className="px-3.5 py-2 rounded-xl bg-secondary-100 hover:bg-secondary-200 text-secondary-800 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
-              title="Bagikan artikel ini"
+              title="Share this article"
             >
               {copied ? (
                 <>
                   <Check className="w-3.5 h-3.5 text-emerald-600" />
-                  <span className="text-emerald-700">Link Tersalin!</span>
+                  <span className="text-emerald-700">Link Copied!</span>
                 </>
               ) : (
                 <>
                   <Share2 className="w-3.5 h-3.5" />
-                  <span>Bagikan</span>
+                  <span>Share</span>
                 </>
               )}
             </button>
@@ -218,20 +218,20 @@ export default function BlogDetailPage({ params }: PageProps) {
           <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-secondary-950 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-md">
             <div>
               <span className="text-xs font-bold text-primary-400 uppercase tracking-wider block mb-1">
-                Ingin Mengalami Langsung?
+                Want to Experience It Yourself?
               </span>
               <h4 className="text-xl sm:text-2xl font-black">
-                Jelajahi Kawah Ijen Bersama Pemandu Profesional
+                Explore Mount Ijen with Professional Local Guides
               </h4>
               <p className="text-xs text-secondary-300 mt-1 max-w-lg">
-                Dapatkan paket lengkap tiket resmi, masker gas berstandar internasional, dan penjemputan langsung di hotel Anda.
+                Get all-inclusive packages with official entry tickets, certified gas masks, and direct hotel pickup.
               </p>
             </div>
             <Link
               href="/packages"
               className="px-6 py-3 rounded-2xl bg-primary-500 hover:bg-primary-400 text-secondary-950 font-black text-xs transition whitespace-nowrap shadow-sm text-center"
             >
-              Lihat Paket Tur
+              Explore Tour Packages
             </Link>
           </div>
         </article>
@@ -242,15 +242,15 @@ export default function BlogDetailPage({ params }: PageProps) {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <span className="text-xs font-bold uppercase tracking-wider text-primary-600 block">
-                  Bacaan Lainnya
+                  More Stories
                 </span>
-                <h3 className="text-2xl font-black text-secondary-950">Artikel Terkait</h3>
+                <h3 className="text-2xl font-black text-secondary-950">Related Articles</h3>
               </div>
               <Link
                 href="/blog"
                 className="text-xs font-bold text-primary-600 hover:text-primary-700 inline-flex items-center gap-1"
               >
-                <span>Semua Artikel</span>
+                <span>All Articles</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -287,7 +287,7 @@ export default function BlogDetailPage({ params }: PageProps) {
                     <div className="p-4 pt-0 border-t border-secondary-100 flex items-center justify-between text-[11px] text-secondary-500 mt-2">
                       <span>{item.date}</span>
                       <span className="font-bold text-primary-600 flex items-center gap-1">
-                        Baca <ArrowRight className="w-3 h-3" />
+                        Read <ArrowRight className="w-3 h-3" />
                       </span>
                     </div>
                   </Link>

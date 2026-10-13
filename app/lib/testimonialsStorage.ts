@@ -11,9 +11,9 @@ export interface Testimonial {
 export const defaultTestimonials: Testimonial[] = [
   {
     id: 'testi-1',
-    name: 'Dimas Pratama & Rekan',
+    name: 'Dimas Pratama & Friends',
     origin: 'Jakarta, Indonesia',
-    quote: 'Perjalanan yang hangat, rapi, dan membuat kami bisa menikmati keindahan Kawah Ijen tanpa khawatir mengatur semuanya sendiri.',
+    quote: 'A warm, seamless, and well-organized trip that allowed us to marvel at Mount Ijen without the stress of managing anything ourselves.',
     image: '/images/pkg-bluefire.png',
     rating: 5,
     date: 'September 2026'
@@ -25,16 +25,16 @@ export const defaultTestimonials: Testimonial[] = [
     quote: 'The midnight expedition was breathtaking! Exceptional local guide, safe gas masks, and the blue flame was truly magical.',
     image: '/images/the-best-view-of-kawah.webp',
     rating: 5,
-    date: 'Agustus 2026'
+    date: 'August 2026'
   },
   {
     id: 'testi-3',
-    name: 'Keluarga Hendra Wijaya',
+    name: 'The Hendra Family',
     origin: 'Surabaya, Indonesia',
-    quote: 'Private tour Baluran dan Ijen sangat ramah anak dan lansia. Supir sangat sabar dan mobil bersih ber-AC.',
+    quote: 'Our private tour to Baluran and Mount Ijen was very family-friendly. The driver was patient, and the air-conditioned van was immaculate.',
     image: '/images/ijen-expedition-tour.webp',
     rating: 5,
-    date: 'Juli 2026'
+    date: 'July 2026'
   }
 ];
 

@@ -45,14 +45,14 @@ export default function ArticleSection() {
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary-600">Travel journal</p>
             <h2 id="articles-heading" className="mt-3 text-2xl sm:text-4xl lg:text-5xl font-black leading-tight tracking-tight text-secondary-950">
-              Cerita dan panduan perjalanan.
+              Travel stories and guides.
             </h2>
           </div>
           <Link
             href="/blog"
             className="inline-flex items-center gap-2 rounded-full border border-secondary-300 bg-secondary-50 px-5 py-3 text-sm font-bold text-secondary-800 transition hover:border-primary-500 hover:bg-primary-500 hover:text-secondary-950"
           >
-            Lihat semua artikel <ArrowRight className="h-4 w-4" />
+            View all articles <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
@@ -74,7 +74,7 @@ export default function ArticleSection() {
                     <img
                       src={article.image}
                       onError={(e) => { (e.target as HTMLImageElement).src = '/images/pkg-bluefire.png'; }}
-                      alt={`${article.title} - artikel wisata Banyuwangi`}
+                      alt={`${article.title} - Banyuwangi travel guide`}
                       className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                     />
                   </div>
@@ -88,7 +88,7 @@ export default function ArticleSection() {
                     </p>
                     <div className="mt-5 flex items-center justify-between text-xs text-secondary-500 border-t border-secondary-200/60 pt-3">
                       <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" /> {article.readTime}</span>
-                      <span className="font-bold text-primary-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform">Baca →</span>
+                      <span className="font-bold text-primary-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform">Read →</span>
                     </div>
                   </div>
                 </Link>

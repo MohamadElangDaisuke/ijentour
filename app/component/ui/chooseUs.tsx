@@ -35,7 +35,7 @@ export default function ChooseUs() {
             </h2>
           </div>
           <p className="max-w-md mx-auto sm:mx-0 text-xs leading-relaxed text-secondary-600 sm:text-sm dark:text-secondary-300">
-            Partner lokal resmi dan berpengalaman untuk menjelajahi keindahan Kawah Ijen dan destinasi Jawa Timur dengan jaminan kenyamanan, aman, dan berkesan bersama tim profesional.
+            Official and experienced local partner for exploring Mount Ijen and East Java destinations, ensuring safety, comfort, and memorable adventures with our professional team.
           </p>
         </header>
 
@@ -70,7 +70,7 @@ export default function ChooseUs() {
             >
               <Image
                 src="/images/the-best-view-of-kawah.webp"
-                alt="Pemandangan danau kawah berwarna turquoise di Kawah Ijen"
+                alt="Turquoise acidic crater lake view at Mount Ijen"
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 35vw"
@@ -159,7 +159,7 @@ export default function ChooseUs() {
             >
               <Image
                 src="/images/the-best-view-of-kawah.webp"
-                alt="Pemandangan danau kawah berwarna turquoise di Kawah Ijen"
+                alt="Turquoise acidic crater lake view at Mount Ijen"
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 35vw"
@@ -197,7 +197,7 @@ export default function ChooseUs() {
               <Link
                 href="/packages"
                 className="group relative flex flex-col items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-full border border-dashed border-secondary-400 bg-white transition-all duration-300 shadow-xs hover:shadow-md hover:border-secondary-950 hover:scale-105 dark:bg-secondary-900 dark:border-secondary-600 dark:hover:border-white"
-                aria-label="Jelajahi paket wisata Kawah Ijen"
+                aria-label="Explore Mount Ijen tour packages"
               >
                 <span className="text-xs sm:text-sm font-semibold tracking-wide text-secondary-900 group-hover:text-primary-600 transition-colors dark:text-white dark:group-hover:text-primary-400">
                   Explore

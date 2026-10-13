@@ -8,35 +8,35 @@ import { motion } from "framer-motion";
 const steps = [
   {
     step: "01",
-    title: "Pilih Petualangan Anda",
-    subtitle: "Choose Your Tour",
-    description: "Pilih paket wisata favorit mulai dari Midnight Blue Fire, Sunrise Kawah Ijen, hingga paket overland Baluran & Djawatan.",
+    title: "Choose Your Adventure",
+    subtitle: "Select Tour Package",
+    description: "Pick your preferred tour package, from Midnight Blue Fire and Mount Ijen Sunrise to overland trips covering Baluran & De Djawatan.",
     icon: Compass,
-    badge: "Fleksibel",
+    badge: "Flexible",
   },
   {
     step: "02",
-    title: "Pemesanan Cepat & Mudah",
-    subtitle: "Fast Reservation",
-    description: "Reservasi via website dalam 2 menit atau konsultasi langsung melalui WhatsApp kami untuk jadwal dan custom private trip.",
+    title: "Quick & Easy Booking",
+    subtitle: "Instant Reservation",
+    description: "Book online via our website in under 2 minutes or chat directly with our team on WhatsApp for custom private itineraries.",
     icon: CalendarCheck2,
-    badge: "Konfirmasi Cepat",
+    badge: "Instant Confirmation",
   },
   {
     step: "03",
-    title: "Penjemputan & Briefing",
-    subtitle: "Pickup & Preparation",
-    description: "Kami jemput langsung di hotel, stasiun, atau bandara Banyuwangi. Disediakan masker gas respirator bersertifikat dan senter kepala.",
+    title: "Pickup & Briefing",
+    subtitle: "Preparation & Gear",
+    description: "Enjoy hassle-free pickup from your hotel, train station, or Banyuwangi Airport. Certified respirator gas masks and headlamps are provided.",
     icon: ShieldCheck,
-    badge: "Standar Keamanan",
+    badge: "Safety Standard",
   },
   {
     step: "04",
-    title: "Saksikan Magisnya Api Biru",
+    title: "Witness the Magical Blue Fire",
     subtitle: "Unforgettable Experience",
-    description: "Mendaki bersama pemandu lokal berlisensi dan saksikan fenomena langka Blue Fire serta panorama danau kawah terasam di dunia.",
+    description: "Hike with licensed local guides to witness the rare natural Blue Fire phenomenon and the world's most acidic turquoise crater lake.",
     icon: Sparkles,
-    badge: "Momen Magis",
+    badge: "Magical Moment",
   },
 ];
 
@@ -54,10 +54,10 @@ export default function HowItWorks() {
       <div className="relative z-10 mx-auto max-w-7xl">
         <div className="mb-14 max-w-2xl text-center md:text-left mx-auto md:mx-0">
           <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black leading-tight tracking-tight text-secondary-950">
-            Bagaimana Cara Memulai Petualangan?
+            How Does It Work?
           </h2>
           <p className="mt-4 text-sm sm:text-base leading-relaxed text-secondary-700">
-            Hanya 4 langkah praktis dari pemesanan hingga berdiri di tepi kawah belerang terindah di dunia.
+            Just 4 simple steps from reservation to standing atop one of the world's most breathtaking sulfur craters.
           </p>
         </div>
 
@@ -109,7 +109,7 @@ export default function HowItWorks() {
                     </p>
                     <div className="pt-1 flex items-center justify-start text-xs font-bold text-primary-600">
                       <Icon className="mr-1.5 h-3.5 w-3.5" />
-                      <span>Langkah {item.step}</span>
+                      <span>Step {item.step}</span>
                     </div>
                   </div>
                 )}
@@ -158,7 +158,7 @@ export default function HowItWorks() {
                 </div>
 
                 <div className="mt-6 flex items-center border-t border-secondary-200/60 pt-4 text-xs font-bold text-primary-600 transition-transform group-hover:translate-x-1">
-                  <span>Langkah {item.step}</span>
+                  <span>Step {item.step}</span>
                   <ArrowRight className="ml-1 h-3.5 w-3.5" />
                 </div>
               </motion.div>
@@ -171,7 +171,7 @@ export default function HowItWorks() {
             href="/packages"
             className="inline-flex items-center gap-2 rounded-full bg-primary-500 px-7 py-3.5 text-sm font-bold text-secondary-950 shadow-lg shadow-primary-500/20 transition hover:-translate-y-0.5 hover:bg-primary-400"
           >
-            <span>Pilih Paket Petualangan Sekarang</span>
+            <span>Choose Your Adventure Now</span>
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

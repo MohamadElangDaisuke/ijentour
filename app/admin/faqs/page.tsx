@@ -44,27 +44,27 @@ export default function AdminFaqsPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Gagal menyimpan FAQ.");
+      if (!res.ok) throw new Error(data.error || "Failed to save FAQ.");
 
       setFaqs([...faqs, data.faq]);
       setQuestion("");
       setAnswer("");
     } catch (err: any) {
-      setError(err.message || "Gagal menyimpan FAQ.");
+      setError(err.message || "Failed to save FAQ.");
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Hapus pertanyaan FAQ ini?")) return;
+    if (!confirm("Delete this FAQ entry?")) return;
 
     try {
       const res = await fetch(`/api/faqs/${id}`, { method: "DELETE" });
       if (res.ok) {
         setFaqs(faqs.filter((f) => f.id !== id));
       } else {
-        alert("Gagal menghapus FAQ.");
+        alert("Failed to delete FAQ.");
       }
     } catch (e) {
       console.error(e);
@@ -75,19 +75,19 @@ export default function AdminFaqsPage() {
     <div className="space-y-8 pb-12">
       <div>
         <span className="text-xs font-bold uppercase tracking-wider text-primary-600">
-          Pusat Bantuan
+          Help Center
         </span>
         <h1 className="text-2xl sm:text-3xl font-black text-secondary-950 tracking-tight">
-          Kelola Pertanyaan Umum (FAQ)
+          Manage Frequently Asked Questions (FAQ)
         </h1>
         <p className="text-xs sm:text-sm text-secondary-600 mt-1">
-          Daftar pertanyaan dan jawaban yang membantu wisatawan memahami detail tour sebelum memesan.
+          Questions and answers helping travelers understand tour details before booking.
         </p>
       </div>
 
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-xs">
         <h2 className="text-base font-black text-secondary-950 uppercase tracking-wider pb-3 border-b border-secondary-100 mb-6">
-          Tambah Pertanyaan Baru
+          Add New Question
         </h2>
 
         {error && (
@@ -100,39 +100,39 @@ export default function AdminFaqsPage() {
         <form onSubmit={handleAddFaq} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-2">
-              <label className="block text-xs font-bold text-secondary-800 mb-1.5">Pertanyaan *</label>
+              <label className="block text-xs font-bold text-secondary-800 mb-1.5">Question *</label>
               <input
                 type="text"
                 required
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
-                placeholder="Contoh: Apakah tersedia masker gas?"
+                placeholder="e.g. Are gas masks provided during the hike?"
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-secondary-800 mb-1.5">Kategori</label>
+              <label className="block text-xs font-bold text-secondary-800 mb-1.5">Category</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-800 focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
-                <option value="general">Umum</option>
-                <option value="safety">Keselamatan</option>
-                <option value="preparation">Persiapan</option>
-                <option value="booking">Pemesanan</option>
+                <option value="general">General</option>
+                <option value="safety">Safety</option>
+                <option value="preparation">Preparation</option>
+                <option value="booking">Booking</option>
               </select>
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-secondary-800 mb-1.5">Jawaban Lengkap *</label>
+            <label className="block text-xs font-bold text-secondary-800 mb-1.5">Full Answer *</label>
             <textarea
               required
               rows={3}
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
-              placeholder="Berikan penjelasan informatif dan ramah..."
+              placeholder="Provide an informative and friendly explanation..."
               className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
             ></textarea>
           </div>
@@ -144,7 +144,7 @@ export default function AdminFaqsPage() {
               className="px-6 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-400 text-secondary-950 font-bold text-xs shadow-sm transition flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
             >
               <Plus className="w-4 h-4" />
-              <span>{submitting ? "Menyimpan..." : "Simpan FAQ"}</span>
+              <span>{submitting ? "Saving..." : "Save FAQ"}</span>
             </button>
           </div>
         </form>
@@ -152,7 +152,7 @@ export default function AdminFaqsPage() {
 
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-xs space-y-4">
         <h2 className="text-base font-black text-secondary-950 uppercase tracking-wider pb-3 border-b border-secondary-100">
-          Daftar FAQ Aktif ({faqs.length})
+          Active FAQ List ({faqs.length})
         </h2>
 
         {loading ? (
@@ -161,7 +161,7 @@ export default function AdminFaqsPage() {
           </div>
         ) : faqs.length === 0 ? (
           <div className="py-12 text-center text-xs text-secondary-400">
-            Belum ada FAQ tersimpan. Silakan tambahkan di atas.
+            No FAQs saved yet. Add a new question above.
           </div>
         ) : (
           faqs.map((faq) => (
@@ -176,7 +176,7 @@ export default function AdminFaqsPage() {
               <button
                 onClick={() => handleDelete(faq.id)}
                 className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 shrink-0 cursor-pointer"
-                title="Hapus"
+                title="Delete"
               >
                 <Trash2 className="w-4 h-4" />
               </button>

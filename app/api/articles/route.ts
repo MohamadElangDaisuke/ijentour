@@ -42,12 +42,12 @@ export async function POST(request: Request) {
       content = "",
       image = "/images/pkg-bluefire.png",
       author = "Tim Ekspedisi Ijen",
-      readTime = "5 Menit Baca",
+      readTime = "5 min read",
       isFeatured = false,
     } = body;
 
     if (!title) {
-      return NextResponse.json({ error: "Judul artikel wajib diisi." }, { status: 400 });
+      return NextResponse.json({ error: "Article title is required." }, { status: 400 });
     }
 
     const slug = createSlug(title);
@@ -76,7 +76,7 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error("POST /api/articles error:", error);
     return NextResponse.json(
-      { error: error.message || "Gagal membuat artikel." },
+      { error: error.message || "Failed to create article." },
       { status: 500 }
     );
   }

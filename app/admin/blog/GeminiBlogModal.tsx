@@ -39,12 +39,12 @@ interface GeminiBlogModalProps {
 }
 
 const SYSTEM_CATEGORIES = [
-  "Panduan",
-  "Tips & Trik",
-  "Edukasi Ijen",
-  "Budaya Lokal",
-  "Destinasi",
-  "Kuliner",
+  "Guide",
+  "Tips & Tricks",
+  "Ijen Geology & Nature",
+  "Local Culture",
+  "Destinations",
+  "Culinary",
 ];
 
 const PRESET_AUDIENCES = [
@@ -61,28 +61,28 @@ const PRESET_AUDIENCES = [
 ];
 
 const PRESET_PURPOSES = [
-  { label: "Travel Guide", desc: "Panduan Perjalanan Lengkap" },
-  { label: "Safety Guide", desc: "Panduan Keselamatan & Kesehatan" },
-  { label: "How-To Guide", desc: "Langkah Praktis / Persiapan" },
-  { label: "Packing Guide", desc: "Daftar Perlengkapan Wajib" },
-  { label: "Transportation Guide", desc: "Panduan Akses & Rute" },
-  { label: "Destination Guide", desc: "Eksplorasi Keindahan & Fakta" },
-  { label: "Informational", desc: "Edukatif & Faktual" },
-  { label: "Booking-Oriented", desc: "Konversi Minat Booking Tur" },
+  { label: "Travel Guide", desc: "Comprehensive Travel Guide" },
+  { label: "Safety Guide", desc: "Safety & Health Guidelines" },
+  { label: "How-To Guide", desc: "Practical Steps & Preparation" },
+  { label: "Packing Guide", desc: "Essential Gear Checklist" },
+  { label: "Transportation Guide", desc: "Access, Transit & Routes" },
+  { label: "Destination Guide", desc: "Highlights & Scenery Exploration" },
+  { label: "Informational", desc: "Educational & Factual Context" },
+  { label: "Booking-Oriented", desc: "High-Intent Tour Booking Conversion" },
 ];
 
 export default function GeminiBlogModal({
   isOpen,
   onClose,
   onApplyArticle,
-  initialCategory = "Panduan",
+  initialCategory = "Guide",
 }: GeminiBlogModalProps) {
   // 1. Topic
   const [topic, setTopic] = useState("");
 
   // 2. Category
   const [categoryMode, setCategoryMode] = useState<"select" | "ai" | "manual">("select");
-  const [category, setCategory] = useState(initialCategory || "Panduan");
+  const [category, setCategory] = useState(initialCategory || "Guide");
   const [customCategory, setCustomCategory] = useState("");
 
   // 3. Focus / Angle
@@ -255,7 +255,7 @@ export default function GeminiBlogModal({
   const handleGenerate = async () => {
     const trimmedTopic = topic.trim();
     if (!trimmedTopic) {
-      setErrorMessage("Silakan masukkan topik artikel terlebih dahulu.");
+      setErrorMessage("Please enter an article topic first.");
       return;
     }
 
@@ -294,7 +294,7 @@ export default function GeminiBlogModal({
 
       const data = await res.json();
       if (!res.ok || !data.success) {
-        throw new Error(data.error || "Gagal menghasilkan artikel.");
+        throw new Error(data.error || "Failed to generate article.");
       }
 
       setGeneratedResult(data.data);
@@ -302,7 +302,7 @@ export default function GeminiBlogModal({
     } catch (err: any) {
       setErrorMessage(
         err.message ||
-          "Terjadi gangguan saat menghubungi Gemini AI. Pastikan konfigurasi GEMINI_API_KEY sudah sesuai."
+          "An error occurred while connecting to Gemini AI. Please check your GEMINI_API_KEY configuration."
       );
     } finally {
       setIsGenerating(false);
@@ -357,7 +357,7 @@ export default function GeminiBlogModal({
                 </span>
               </div>
               <p className="text-xs text-secondary-500">
-                AI memberikan rekomendasi ide & sudut pandang. Anda memegang kendali penuh atas artikel akhir.
+                AI provides topic ideas and angles. You maintain full control over the final article.
               </p>
             </div>
           </div>
@@ -365,7 +365,7 @@ export default function GeminiBlogModal({
           <button
             onClick={onClose}
             className="p-2 rounded-xl text-secondary-400 hover:text-secondary-800 hover:bg-secondary-100 transition cursor-pointer"
-            title="Tutup Modal"
+            title="Close Modal"
           >
             <X className="w-5 h-5" />
           </button>
@@ -378,7 +378,7 @@ export default function GeminiBlogModal({
             <div className="p-4 rounded-2xl bg-red-50 border border-red-200 text-red-800 text-xs flex items-start gap-3">
               <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
               <div className="space-y-1">
-                <p className="font-bold">Gagal Membuat Artikel:</p>
+                <p className="font-bold">Failed to Generate Article:</p>
                 <p>{errorMessage}</p>
               </div>
             </div>
@@ -390,7 +390,7 @@ export default function GeminiBlogModal({
               <div className="p-3.5 rounded-2xl bg-primary-500/10 border border-primary-500/30 flex items-start gap-2.5 text-xs text-secondary-800">
                 <Compass className="w-4 h-4 text-primary-600 shrink-0 mt-0.5" />
                 <p>
-                  <strong>Konsep Kerja:</strong> Masukkan topik atau minta rekomendasi AI. Pilih opsi yang paling sesuai di setiap langkah, lalu klik <strong>Generate Article</strong> untuk membuat draft lengkap.
+                  <strong>How it works:</strong> Enter a topic or request AI suggestions. Select the best matching options at each step, then click <strong>Generate Article</strong> to create a full draft.
                 </p>
               </div>
 
@@ -398,7 +398,7 @@ export default function GeminiBlogModal({
               <div className="p-4 rounded-2xl bg-secondary-50/70 border border-secondary-200/80 space-y-3">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <label className="text-xs font-black uppercase tracking-wider text-secondary-900 flex items-center gap-1.5">
-                    <span>1. Topik Artikel *</span>
+                    <span>1. Article Topic *</span>
                   </label>
                   <button
                     type="button"
@@ -426,7 +426,7 @@ export default function GeminiBlogModal({
                   disabled={isGenerating}
                   value={topic}
                   onChange={(e) => setTopic(e.target.value)}
-                  placeholder="Contoh: Best Time to Visit Mount Ijen for Blue Fire"
+                  placeholder="e.g. Best Time to Visit Mount Ijen for Blue Fire"
                   className="w-full px-4 py-2.5 bg-white border border-secondary-200 rounded-xl text-xs sm:text-sm font-medium text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500 transition"
                 />
 
@@ -436,7 +436,7 @@ export default function GeminiBlogModal({
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-black uppercase tracking-wider text-amber-900 flex items-center gap-1.5">
                         <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                        <span>AI Suggested Topics (Klik untuk memilih)</span>
+                        <span>AI Suggested Topics (Click to select)</span>
                       </span>
                       <button
                         type="button"
@@ -445,7 +445,7 @@ export default function GeminiBlogModal({
                         }
                         className="text-[10px] text-secondary-400 hover:text-secondary-700 cursor-pointer"
                       >
-                        Tutup
+                        Close
                       </button>
                     </div>
 
@@ -463,7 +463,7 @@ export default function GeminiBlogModal({
                         >
                           <span className="truncate">{t}</span>
                           <span className="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded bg-secondary-100 text-secondary-700">
-                            {topic === t ? "Terpilih ✓" : "Pilih"}
+                            {topic === t ? "Selected ✓" : "Select"}
                           </span>
                         </button>
                       ))}
@@ -481,7 +481,7 @@ export default function GeminiBlogModal({
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <label className="text-xs font-black uppercase tracking-wider text-secondary-900 flex items-center gap-1.5">
                     <Layers className="w-3.5 h-3.5 text-primary-600" />
-                    <span>2. Kategori</span>
+                    <span>2. Category</span>
                   </label>
 
                   {/* Mode Selector */}
@@ -495,7 +495,7 @@ export default function GeminiBlogModal({
                           : "text-secondary-600 hover:text-secondary-950"
                       }`}
                     >
-                      Pilih Kategori
+                      Select Category
                     </button>
                     <button
                       type="button"
@@ -510,7 +510,7 @@ export default function GeminiBlogModal({
                       }`}
                     >
                       <Sparkles className="w-3 h-3 text-amber-600" />
-                      <span>Saran dari AI</span>
+                      <span>AI Suggestions</span>
                     </button>
                     <button
                       type="button"
@@ -521,7 +521,7 @@ export default function GeminiBlogModal({
                           : "text-secondary-600 hover:text-secondary-950"
                       }`}
                     >
-                      Input Manual / Lainnya
+                      Manual Input / Other
                     </button>
                   </div>
                 </div>
@@ -546,8 +546,8 @@ export default function GeminiBlogModal({
                   <div className="space-y-2.5">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] text-secondary-500">
-                        Kategori terpilih:{" "}
-                        <strong className="text-secondary-950">{category || "Belum dipilih"}</strong>
+                        Selected category:{" "}
+                        <strong className="text-secondary-950">{category || "Not selected"}</strong>
                       </span>
                       <button
                         type="button"
@@ -588,7 +588,7 @@ export default function GeminiBlogModal({
                       </div>
                     ) : (
                       <div className="p-3 bg-white rounded-xl border border-dashed border-secondary-200 text-center text-xs text-secondary-500">
-                        Klik tombol <strong>✨ Get AI Suggestions</strong> untuk mendapatkan rekomendasi kategori yang relevan dengan topik Anda.
+                        Click <strong>✨ Get AI Suggestions</strong> to receive category recommendations relevant to your topic.
                       </div>
                     )}
 
@@ -604,7 +604,7 @@ export default function GeminiBlogModal({
                     type="text"
                     value={customCategory}
                     onChange={(e) => setCustomCategory(e.target.value)}
-                    placeholder="Ketik kategori manual... (misal: Ekowisata, Vulkanologi)"
+                    placeholder="Type custom category... (e.g. Ecotourism, Volcanology)"
                     className="w-full px-4 py-2.5 bg-white border border-secondary-200 rounded-xl text-xs font-medium text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   />
                 )}
@@ -615,7 +615,7 @@ export default function GeminiBlogModal({
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <label className="text-xs font-black uppercase tracking-wider text-secondary-900 flex items-center gap-1.5">
                     <Target className="w-3.5 h-3.5 text-primary-600" />
-                    <span>3. Fokus / Sudut Artikel</span>
+                    <span>3. Focus / Article Angle</span>
                   </label>
 
                   {/* Mode Selector */}
@@ -644,7 +644,7 @@ export default function GeminiBlogModal({
                       }`}
                     >
                       <Sparkles className="w-3 h-3 text-amber-600" />
-                      <span>Saran dari AI</span>
+                      <span>AI Suggestions</span>
                     </button>
                   </div>
                 </div>
@@ -653,7 +653,7 @@ export default function GeminiBlogModal({
                   <div className="space-y-2.5">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] text-secondary-500">
-                        Pilih saran di bawah untuk dimasukkan ke teks fokus:
+                        Select a suggestion below to apply to the focus angle:
                       </span>
                       <button
                         type="button"
@@ -690,14 +690,14 @@ export default function GeminiBlogModal({
                           >
                             <span>○ {item}</span>
                             <span className="text-[10px] px-2 py-0.5 rounded bg-secondary-100 text-secondary-700 shrink-0">
-                              {focus === item ? "Terpilih ✓" : "Gunakan"}
+                              {focus === item ? "Selected ✓" : "Use"}
                             </span>
                           </button>
                         ))}
                       </div>
                     ) : (
                       <div className="p-3 bg-white rounded-xl border border-dashed border-secondary-200 text-center text-xs text-secondary-500">
-                        Tekan <strong>✨ Get AI Suggestions</strong> untuk mendapatkan rekomendasi sudut pandang unik Mount Ijen.
+                        Press <strong>✨ Get AI Suggestions</strong> to receive unique Mount Ijen angles.
                       </div>
                     )}
 
@@ -711,7 +711,7 @@ export default function GeminiBlogModal({
                   rows={2}
                   value={focus}
                   onChange={(e) => setFocus(e.target.value)}
-                  placeholder="Contoh: Fokus pada wisatawan asing yang pertama kali mengunjungi Mount Ijen dan membutuhkan panduan perlengkapan malam hari..."
+                  placeholder="e.g. Focus on international first-time visitors seeking midnight trekking gear advice..."
                   className="w-full px-4 py-2 bg-white border border-secondary-200 rounded-xl text-xs font-medium text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
               </div>
@@ -738,7 +738,7 @@ export default function GeminiBlogModal({
                       }`}
                     >
                       <Sparkles className="w-3 h-3 text-amber-600" />
-                      <span>Saran dari AI</span>
+                      <span>AI Suggestions</span>
                     </button>
                     <button
                       type="button"
@@ -749,7 +749,7 @@ export default function GeminiBlogModal({
                           : "text-secondary-600 hover:text-secondary-950"
                       }`}
                     >
-                      Pilih Manual
+                      Select Preset
                     </button>
                     <button
                       type="button"
@@ -760,7 +760,7 @@ export default function GeminiBlogModal({
                           : "text-secondary-600 hover:text-secondary-950"
                       }`}
                     >
-                      Input Manual / Lainnya
+                      Manual Input / Other
                     </button>
                   </div>
                 </div>
@@ -768,7 +768,7 @@ export default function GeminiBlogModal({
                 {/* Selected Audiences Display */}
                 <div className="flex flex-wrap items-center gap-1.5 min-h-[32px] p-2 bg-white rounded-xl border border-secondary-200">
                   <span className="text-[10px] font-bold text-secondary-400 uppercase tracking-wider px-1">
-                    Audience Terpilih:
+                    Selected Audiences:
                   </span>
                   {selectedAudiences.length > 0 ? (
                     selectedAudiences.map((aud, i) => (
@@ -788,7 +788,7 @@ export default function GeminiBlogModal({
                     ))
                   ) : (
                     <span className="text-xs text-secondary-400 italic">
-                      Belum ada audience dipilih (klik opsi di bawah)
+                      No audience selected yet (click options below)
                     </span>
                   )}
                 </div>
@@ -798,7 +798,7 @@ export default function GeminiBlogModal({
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] text-secondary-500">
-                        Rekomendasi kontekstual berdasarkan topik:
+                        Contextual recommendations based on topic:
                       </span>
                       <button
                         type="button"
@@ -842,7 +842,7 @@ export default function GeminiBlogModal({
                       </div>
                     ) : (
                       <div className="p-3 bg-white rounded-xl border border-dashed border-secondary-200 text-center text-xs text-secondary-500">
-                        Tekan <strong>✨ Get AI Suggestions</strong> untuk mendapatkan target audience yang paling relevan.
+                        Press <strong>✨ Get AI Suggestions</strong> to find the most relevant target audience.
                       </div>
                     )}
                   </div>
@@ -879,7 +879,7 @@ export default function GeminiBlogModal({
                       value={customAudienceInput}
                       onChange={(e) => setCustomAudienceInput(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && handleAddCustomAudience()}
-                      placeholder="Ketik target audience kustom lalu tekan Tambah..."
+                      placeholder="Type custom target audience and press Add..."
                       className="flex-1 px-4 py-2 bg-white border border-secondary-200 rounded-xl text-xs font-medium text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
                     />
                     <button
@@ -887,7 +887,7 @@ export default function GeminiBlogModal({
                       onClick={handleAddCustomAudience}
                       className="px-4 py-2 rounded-xl bg-secondary-900 hover:bg-secondary-800 text-white font-bold text-xs transition cursor-pointer"
                     >
-                      Tambah
+                      Add
                     </button>
                   </div>
                 )}
@@ -897,7 +897,7 @@ export default function GeminiBlogModal({
               <div className="p-4 rounded-2xl bg-secondary-50/70 border border-secondary-200/80 space-y-3">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <label className="text-xs font-black uppercase tracking-wider text-secondary-900 flex items-center gap-1.5">
-                    <span>5. Tujuan Artikel</span>
+                    <span>5. Article Purpose</span>
                   </label>
 
                   {/* Mode Selector */}
@@ -926,7 +926,7 @@ export default function GeminiBlogModal({
                       }`}
                     >
                       <Sparkles className="w-3 h-3 text-amber-600" />
-                      <span>Saran dari AI</span>
+                      <span>AI Suggestions</span>
                     </button>
                   </div>
                 </div>
@@ -949,7 +949,7 @@ export default function GeminiBlogModal({
                   <div className="space-y-2.5">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] text-secondary-500">
-                        Tujuan terpilih:{" "}
+                        Selected purpose:{" "}
                         <strong className="text-secondary-950">{purpose}</strong>
                       </span>
                       <button
@@ -991,7 +991,7 @@ export default function GeminiBlogModal({
                       </div>
                     ) : (
                       <div className="p-3 bg-white rounded-xl border border-dashed border-secondary-200 text-center text-xs text-secondary-500">
-                        Tekan <strong>✨ Get AI Suggestions</strong> untuk rekomendasi tujuan artikel.
+                        Press <strong>✨ Get AI Suggestions</strong> for recommended article objectives.
                       </div>
                     )}
                   </div>
@@ -1003,7 +1003,7 @@ export default function GeminiBlogModal({
                 {/* Gaya Penulisan */}
                 <div className="p-4 rounded-2xl bg-secondary-50/70 border border-secondary-200/80 space-y-2">
                   <label className="block text-xs font-black uppercase tracking-wider text-secondary-900">
-                    6. Gaya Penulisan *
+                    6. Writing Style *
                   </label>
                   <select
                     disabled={isGenerating}
@@ -1011,17 +1011,17 @@ export default function GeminiBlogModal({
                     onChange={(e) => setWritingStyle(e.target.value as any)}
                     className="w-full px-4 py-2.5 bg-white border border-secondary-200 rounded-xl text-xs font-bold text-secondary-900 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   >
-                    <option value="Travel Blog">Travel Blog — Natural & Eksploratif</option>
-                    <option value="Informative">Informative — Faktual & Praktis</option>
-                    <option value="Promotional">Promotional — Menarik Minat Booking</option>
-                    <option value="Storytelling">Storytelling — Narasi Pengalaman</option>
+                    <option value="Travel Blog">Travel Blog — Natural & Explorative</option>
+                    <option value="Informative">Informative — Factual & Practical</option>
+                    <option value="Promotional">Promotional — Tour Booking Focused</option>
+                    <option value="Storytelling">Storytelling — Narrative & Immersive</option>
                   </select>
                 </div>
 
                 {/* Panjang Artikel */}
                 <div className="p-4 rounded-2xl bg-secondary-50/70 border border-secondary-200/80 space-y-2">
                   <label className="block text-xs font-black uppercase tracking-wider text-secondary-900">
-                    7. Panjang Artikel *
+                    7. Article Length *
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     {[
@@ -1070,7 +1070,7 @@ export default function GeminiBlogModal({
                       }`}
                     >
                       <Sparkles className="w-3 h-3 text-amber-600" />
-                      <span>Saran dari AI</span>
+                      <span>AI Suggestions</span>
                     </button>
                     <button
                       type="button"
@@ -1090,7 +1090,7 @@ export default function GeminiBlogModal({
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] text-secondary-500">
-                        Rekomendasi kata kunci utama berdasarkan topik & konteks:
+                        Primary keyword recommendations based on topic & context:
                       </span>
                       <button
                         type="button"
@@ -1131,7 +1131,7 @@ export default function GeminiBlogModal({
                       </div>
                     ) : (
                       <div className="p-3 bg-white rounded-xl border border-dashed border-secondary-200 text-center text-xs text-secondary-500">
-                        Tekan <strong>✨ Get AI Suggestions</strong> untuk menghasilkan saran kata kunci SEO utama.
+                        Press <strong>✨ Get AI Suggestions</strong> to generate primary SEO keyword suggestions.
                       </div>
                     )}
                   </div>
@@ -1141,7 +1141,7 @@ export default function GeminiBlogModal({
                   type="text"
                   value={primaryKeyword}
                   onChange={(e) => setPrimaryKeyword(e.target.value)}
-                  placeholder="Contoh: Mount Ijen blue fire safety (dapat diedit manual)"
+                  placeholder="e.g. Mount Ijen blue fire safety (can be edited manually)"
                   className="w-full px-4 py-2.5 bg-white border border-secondary-200 rounded-xl text-xs font-medium text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
               </div>
@@ -1169,7 +1169,7 @@ export default function GeminiBlogModal({
                       }`}
                     >
                       <Sparkles className="w-3 h-3 text-amber-600" />
-                      <span>Saran dari AI</span>
+                      <span>AI Suggestions</span>
                     </button>
                     <button
                       type="button"
@@ -1180,7 +1180,7 @@ export default function GeminiBlogModal({
                           : "text-secondary-600 hover:text-secondary-950"
                       }`}
                     >
-                      Input Manual
+                      Manual Input
                     </button>
                   </div>
                 </div>
@@ -1188,7 +1188,7 @@ export default function GeminiBlogModal({
                 {/* Secondary Keywords Active List */}
                 <div className="flex flex-wrap items-center gap-1.5 min-h-[36px] p-2 bg-white rounded-xl border border-secondary-200">
                   <span className="text-[10px] font-bold text-secondary-400 uppercase tracking-wider px-1">
-                    Keywords Aktif ({secondaryKeywords.length}):
+                    Active Keywords ({secondaryKeywords.length}):
                   </span>
                   {secondaryKeywords.length > 0 ? (
                     secondaryKeywords.map((kw, i) => (
@@ -1208,7 +1208,7 @@ export default function GeminiBlogModal({
                     ))
                   ) : (
                     <span className="text-xs text-secondary-400 italic">
-                      Belum ada secondary keywords dipilih.
+                      No secondary keywords selected yet.
                     </span>
                   )}
                 </div>
@@ -1217,7 +1217,7 @@ export default function GeminiBlogModal({
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] text-secondary-500">
-                        Klik kata kunci untuk menambah / menghapus dari daftar:
+                        Click keywords to add / remove from the list:
                       </span>
                       <button
                         type="button"
@@ -1262,7 +1262,7 @@ export default function GeminiBlogModal({
                       </div>
                     ) : (
                       <div className="p-3 bg-white rounded-xl border border-dashed border-secondary-200 text-center text-xs text-secondary-500">
-                        Tekan <strong>✨ Get AI Suggestions</strong> untuk mendapatkan ide secondary keywords.
+                        Press <strong>✨ Get AI Suggestions</strong> to generate secondary keyword ideas.
                       </div>
                     )}
                   </div>
@@ -1274,7 +1274,7 @@ export default function GeminiBlogModal({
                     value={manualKeywordInput}
                     onChange={(e) => setManualKeywordInput(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleAddManualKeyword()}
-                    placeholder="Tambah keyword manual lalu tekan Tambah..."
+                    placeholder="Add manual keyword and press Add..."
                     className="flex-1 px-4 py-2 bg-white border border-secondary-200 rounded-xl text-xs font-medium text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   />
                   <button
@@ -1282,7 +1282,7 @@ export default function GeminiBlogModal({
                     onClick={handleAddManualKeyword}
                     className="px-4 py-2 rounded-xl bg-secondary-900 hover:bg-secondary-800 text-white font-bold text-xs transition cursor-pointer"
                   >
-                    Tambah
+                    Add
                   </button>
                 </div>
               </div>
@@ -1292,7 +1292,7 @@ export default function GeminiBlogModal({
                 <div className="flex items-center gap-2 pb-2 border-b border-secondary-200">
                   <Search className="w-4 h-4 text-primary-600" />
                   <span className="text-xs font-black uppercase tracking-wider text-secondary-900">
-                    10. Optimasi Tambahan & CTA
+                    10. Additional Optimization & CTA
                   </span>
                 </div>
 
@@ -1366,7 +1366,7 @@ export default function GeminiBlogModal({
                     Cover Image
                   </span>
                   <span>
-                    Upload gambar sampul sepenuhnya dikontrol Admin melalui Supabase Storage pada form editor setelah draft dihasilkan.
+                    Cover image upload is managed by Admin via Supabase Storage in the editor form after the draft is generated.
                   </span>
                 </div>
               </div>
@@ -1380,10 +1380,10 @@ export default function GeminiBlogModal({
                   </div>
                   <div>
                     <h4 className="text-sm font-black text-white">
-                      Gemini AI Sedang Menulis Artikel Sesuai Preferensi Anda...
+                      Gemini AI is Writing the Article Based on Your Preferences...
                     </h4>
                     <p className="text-xs text-secondary-400 mt-1 max-w-md">
-                      Menerapkan sudut pandang "{focus || topic}", mengoptimalkan kata kunci #{primaryKeyword || "Mount Ijen"}, menyusun markdown terstruktur dan FAQ.
+                      Applying perspective "{focus || topic}", optimizing keyword #{primaryKeyword || "Mount Ijen"}, composing structured Markdown and FAQ.
                     </p>
                   </div>
                 </div>
@@ -1398,10 +1398,10 @@ export default function GeminiBlogModal({
                   <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
                   <div>
                     <h4 className="text-xs font-black text-emerald-950">
-                      Draft Artikel Berhasil Dibuat!
+                      Article Draft Generated Successfully!
                     </h4>
                     <p className="text-[11px] text-emerald-700">
-                      Tinjau hasil di bawah ini. Anda dapat memasukkannya langsung ke form editor untuk diperiksa dan diedit.
+                      Review the result below. You can insert it directly into the editor form to inspect and refine.
                     </p>
                   </div>
                 </div>
@@ -1412,7 +1412,7 @@ export default function GeminiBlogModal({
                   className="px-3 py-1.5 rounded-xl border border-secondary-300 bg-white hover:bg-secondary-100 text-secondary-700 text-xs font-bold transition flex items-center gap-1.5 self-end sm:self-auto cursor-pointer"
                 >
                   <RefreshCw className="w-3.5 h-3.5" />
-                  <span>Ubah Parameter / Regenerate</span>
+                  <span>Modify Parameters / Regenerate</span>
                 </button>
               </div>
 
@@ -1428,7 +1428,7 @@ export default function GeminiBlogModal({
                   }`}
                 >
                   <FileText className="w-3.5 h-3.5" />
-                  <span>Pratinjau Artikel</span>
+                  <span>Article Preview</span>
                 </button>
 
                 <button
@@ -1467,7 +1467,7 @@ export default function GeminiBlogModal({
                     </span>
                     <span className="text-[11px] text-secondary-400 font-medium">•</span>
                     <span className="text-[11px] text-secondary-600 font-semibold">
-                      {generatedResult.readTime || "5 Menit Baca"}
+                      {generatedResult.readTime || "5 Min Read"}
                     </span>
                   </div>
 
@@ -1533,7 +1533,7 @@ export default function GeminiBlogModal({
 
                     <div>
                       <span className="text-[10px] font-bold text-secondary-400 uppercase tracking-wider block mb-1">
-                        Meta Description ({generatedResult.metaDescription?.length || 0} karakter)
+                        Meta Description ({generatedResult.metaDescription?.length || 0} characters)
                       </span>
                       <p className="text-xs text-secondary-700 leading-relaxed">
                         {generatedResult.metaDescription}
@@ -1544,7 +1544,7 @@ export default function GeminiBlogModal({
                   <div className="bg-white p-5 rounded-xl border border-secondary-200/80 space-y-4 shadow-2xs">
                     <div>
                       <span className="text-[10px] font-bold text-secondary-400 uppercase tracking-wider block mb-2">
-                        Keywords Terpilih
+                        Selected Keywords
                       </span>
                       <div className="flex flex-wrap gap-1.5">
                         {generatedResult.keywords && generatedResult.keywords.length > 0 ? (
@@ -1557,7 +1557,7 @@ export default function GeminiBlogModal({
                             </span>
                           ))
                         ) : (
-                          <span className="text-xs text-secondary-400 italic">Tidak ada keyword</span>
+                          <span className="text-xs text-secondary-400 italic">No keywords</span>
                         )}
                       </div>
                     </div>
@@ -1577,7 +1577,7 @@ export default function GeminiBlogModal({
                             </span>
                           ))
                         ) : (
-                          <span className="text-xs text-secondary-400 italic">Tidak ada tags</span>
+                          <span className="text-xs text-secondary-400 italic">No tags</span>
                         )}
                       </div>
                     </div>
@@ -1597,12 +1597,12 @@ export default function GeminiBlogModal({
                       {copiedRaw ? (
                         <>
                           <Check className="w-3.5 h-3.5 text-emerald-600" />
-                          <span className="text-emerald-700">Tersalin ke Clipboard!</span>
+                          <span className="text-emerald-700">Copied to Clipboard!</span>
                         </>
                       ) : (
                         <>
                           <Copy className="w-3.5 h-3.5" />
-                          <span>Salin Markdown</span>
+                          <span>Copy Markdown</span>
                         </>
                       )}
                     </button>
@@ -1621,11 +1621,11 @@ export default function GeminiBlogModal({
           <div className="text-[11px] text-secondary-500">
             {generatedResult ? (
               <span>
-                Hasil AI akan dimasukkan ke form sebagai <strong>Draft</strong>. Anda dapat mengedit teks & memilih gambar sebelum memublikasikan.
+                AI output will be inserted as a <strong>Draft</strong>. You can edit text & select images before publishing.
               </span>
             ) : (
               <span>
-                Admin menentukan → AI menyarankan → Admin memilih → Generate draft artikel.
+                Admin sets parameters → AI suggests → Admin selects → Generate article draft.
               </span>
             )}
           </div>
@@ -1637,7 +1637,7 @@ export default function GeminiBlogModal({
               disabled={isGenerating}
               className="px-4 py-2.5 rounded-xl bg-white hover:bg-secondary-100 text-secondary-700 border border-secondary-200 font-bold text-xs transition cursor-pointer"
             >
-              Batal
+              Cancel
             </button>
 
             {!generatedResult ? (
@@ -1650,7 +1650,7 @@ export default function GeminiBlogModal({
                 {isGenerating ? (
                   <>
                     <RefreshCw className="w-4 h-4 animate-spin" />
-                    <span>Menghasilkan Draft...</span>
+                    <span>Generating Draft...</span>
                   </>
                 ) : (
                   <>
@@ -1666,7 +1666,7 @@ export default function GeminiBlogModal({
                 className="px-6 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-400 text-secondary-950 font-black text-xs shadow-md transition flex items-center gap-2 cursor-pointer"
               >
                 <Check className="w-4 h-4" />
-                <span>Gunakan Hasil & Masukkan ke Editor</span>
+                <span>Apply Result & Insert to Editor</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             )}

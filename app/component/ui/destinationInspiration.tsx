@@ -62,25 +62,25 @@ export default function DestinationInspiration() {
               Get inspired for your next trip
             </h2>
             <p className="mt-1 text-xs sm:text-sm text-secondary-600">
-              Jelajahi keindahan alam dan tempat magis terbaik di Banyuwangi & sekitarnya.
+              Explore breathtaking natural landscapes and magical spots across Banyuwangi and surrounding areas.
             </p>
           </div>
           <Link
             href="/destinations"
             className="hidden sm:inline-flex items-center text-xs sm:text-sm font-bold text-primary-600 hover:text-primary-700 transition-colors shrink-0"
           >
-            Lihat semua destinasi →
+            View all destinations →
           </Link>
         </div>
 
         {/* Carousel Slider */}
         <div className="relative group">
-          {/* Tombol Navigasi Kiri */}
+          {/* Previous Scroll Button */}
           <button
             type="button"
             onClick={() => handleScroll('left')}
             disabled={!canScrollLeft}
-            aria-label="Scroll ke kiri"
+            aria-label="Scroll left"
             className={`absolute -left-3 sm:-left-5 top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full bg-white text-secondary-950 shadow-xl transition-all duration-200 cursor-pointer ${
               canScrollLeft
                 ? 'opacity-100 hover:bg-primary-500 hover:scale-105 active:scale-95'
@@ -90,12 +90,12 @@ export default function DestinationInspiration() {
             <ChevronLeft className="h-5 w-5 stroke-[2.5]" />
           </button>
 
-          {/* Tombol Navigasi Kanan */}
+          {/* Next Scroll Button */}
           <button
             type="button"
             onClick={() => handleScroll('right')}
             disabled={!canScrollRight}
-            aria-label="Scroll ke kanan"
+            aria-label="Scroll right"
             className={`absolute -right-3 sm:-right-5 top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full bg-white text-secondary-950 shadow-xl transition-all duration-200 cursor-pointer ${
               canScrollRight
                 ? 'opacity-100 hover:bg-primary-500 hover:scale-105 active:scale-95'
@@ -105,7 +105,7 @@ export default function DestinationInspiration() {
             <ChevronRight className="h-5 w-5 stroke-[2.5]" />
           </button>
 
-          {/* Daftar Kartu Destinasi Horisontal */}
+          {/* Destination Cards Horizontal List */}
           <div
             ref={scrollRef}
             className="flex gap-4 overflow-x-auto pb-4 pt-1 hide-scrollbar scroll-smooth snap-x snap-mandatory"
@@ -119,7 +119,7 @@ export default function DestinationInspiration() {
                   href={`/destinations/${slug}`}
                   className="group/card relative h-48 sm:h-56 w-[260px] sm:w-[310px] shrink-0 snap-start overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 select-none block"
                 >
-                  {/* Foto Destinasi */}
+                  {/* Destination Photo */}
                   <img
                     src={dest.image || '/images/pkg-bluefire.png'}
                     alt={dest.name}
@@ -129,17 +129,17 @@ export default function DestinationInspiration() {
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-110"
                   />
 
-                  {/* Overlay Gradasi Hitam Bawah */}
+                  {/* Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
 
-                  {/* Badge Label Kategori di Kiri Atas */}
+                  {/* Category Tag Badge */}
                   <div className="absolute left-3.5 top-3.5 z-10">
                     <span className="inline-block rounded-md bg-white/90 backdrop-blur-md px-2.5 py-1 text-[11px] font-bold text-secondary-950 shadow-xs">
-                      {dest.tag || 'Destinasi'}
+                      {dest.tag || 'Destination'}
                     </span>
                   </div>
 
-                  {/* Nama Destinasi di Kiri Bawah */}
+                  {/* Destination Name */}
                   <div className="absolute bottom-3.5 left-3.5 right-3.5 z-10">
                     <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight leading-tight drop-shadow-md group-hover/card:text-primary-300 transition-colors">
                       {dest.name}
@@ -151,13 +151,13 @@ export default function DestinationInspiration() {
           </div>
         </div>
 
-        {/* Link Lihat Semua untuk Tampilan Mobile */}
+        {/* View All Link for Mobile */}
         <div className="mt-4 text-center sm:hidden">
           <Link
             href="/destinations"
             className="inline-flex items-center text-xs font-bold text-primary-600 hover:text-primary-700"
           >
-            Lihat semua destinasi →
+            View all destinations →
           </Link>
         </div>
 

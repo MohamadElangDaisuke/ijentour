@@ -14,11 +14,11 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "TravelAgency",
     name: "Ijen Tour",
-    description: "Paket wisata Kawah Ijen Banyuwangi, fenomena langka blue fire, dan destinasi alam terbaik di Jawa Timur bersama pemandu lokal berlisensi.",
+    description: "Mount Ijen Crater tour packages in Banyuwangi, rare blue fire phenomenon, and top natural destinations in East Java with licensed local guides.",
     areaServed: {
       "@type": "City",
       name: "Banyuwangi",
-      containedInPlace: { "@type": "AdministrativeArea", name: "Jawa Timur" },
+      containedInPlace: { "@type": "AdministrativeArea", name: "East Java" },
     },
     touristDestinations: [
       "Kawah Ijen",

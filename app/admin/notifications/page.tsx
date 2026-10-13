@@ -42,13 +42,13 @@ export default function AdminNotificationsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-primary-600">
-            Pusat Pesan & Log
+            Message & Log Center
           </span>
           <h1 className="text-2xl sm:text-3xl font-black text-secondary-950 tracking-tight">
-            Notifikasi Sistem Real-time
+            Real-time System Notifications
           </h1>
           <p className="text-xs sm:text-sm text-secondary-600 mt-1">
-            Pemberitahuan otomatis saat terjadi reservasi baru, pertanyaan kontak, atau registrasi pengguna.
+            Automated notifications for new reservations, contact inquiries, and user activities.
           </p>
         </div>
 
@@ -57,7 +57,7 @@ export default function AdminNotificationsPage() {
           className="px-4 py-2 rounded-2xl bg-secondary-100 hover:bg-secondary-200 text-secondary-800 font-bold text-xs transition flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
         >
           <CheckCheck className="w-4 h-4 text-emerald-600" />
-          <span>Tandai Semua Sudah Dibaca</span>
+          <span>Mark All as Read</span>
         </button>
       </div>
 
@@ -68,7 +68,7 @@ export default function AdminNotificationsPage() {
           </div>
         ) : notifications.length === 0 ? (
           <div className="py-20 text-center text-xs text-secondary-400">
-            Belum ada notifikasi tercatat.
+            No notifications recorded yet.
           </div>
         ) : (
           <div className="space-y-3">
@@ -113,7 +113,7 @@ export default function AdminNotificationsPage() {
                     href={n.link}
                     className="px-3.5 py-1.5 rounded-xl bg-white border border-secondary-300 hover:border-primary-500 text-secondary-800 text-xs font-bold transition flex items-center gap-1 self-start sm:self-center shrink-0 shadow-2xs"
                   >
-                    <span>Buka Rincian</span>
+                    <span>View Details</span>
                     <ExternalLink className="w-3 h-3" />
                   </Link>
                 )}

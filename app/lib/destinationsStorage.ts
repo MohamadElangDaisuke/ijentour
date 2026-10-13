@@ -12,16 +12,16 @@ export interface HeroStat {
 }
 
 export const defaultHeroStats: HeroStat[] = [
-  { value: '2.769m', label: 'ketinggian Kawah Ijen' },
-  { value: '02:00', label: 'waktu mulai terbaik' },
-  { value: '01 hari', label: 'perjalanan berkesan' }
+  { value: '2,769m', label: 'Mount Ijen summit altitude' },
+  { value: '02:00 AM', label: 'ideal trek start time' },
+  { value: '01 day', label: 'unforgettable expedition' }
 ];
 
 export const defaultDestinations: Destination[] = [
-  { id: 'dest-ijen', name: 'Kawah Ijen', description: 'Blue fire dan sunrise', image: '/images/the-best-view-of-kawah.webp', tag: 'Gunung Berapi' },
-  { id: 'dest-djawatan', name: 'Djawatan', description: 'Hutan trembesi ikonik', image: '/images/djawatan.png', tag: 'Hutan Magis' },
-  { id: 'dest-baluran', name: 'TN Baluran', description: 'Savana Africa van Java', image: '/images/pkg-crater.png', tag: 'Safari Liar' },
-  { id: 'dest-red-island', name: 'Pulau Merah', description: 'Pantai dan bukit merah', image: '/images/pkg-bali.png', tag: 'Sunset Spot' },
-  { id: 'dest-green-island', name: 'Teluk Ijo', description: 'Pesisir hijau Banyuwangi', image: '/images/pkg-waterfall.png', tag: 'Pantai Tropis' },
-  { id: 'dest-kawah-wurung', name: 'Kawah Wurung', description: 'Padang bukit yang tenang', image: '/images/pkg-bluefire.png', tag: 'Perbukitan Hijau' }
+  { id: 'dest-ijen', name: 'Mount Ijen Crater', description: 'Electric blue fire and golden sunrise', image: '/images/the-best-view-of-kawah.webp', tag: 'Volcano' },
+  { id: 'dest-djawatan', name: 'De Djawatan Forest', description: 'Iconic ancient trembesi forest', image: '/images/djawatan.png', tag: 'Enchanted Woods' },
+  { id: 'dest-baluran', name: 'Baluran National Park', description: 'Wild savanna dubbed Africa van Java', image: '/images/pkg-crater.png', tag: 'Wildlife Safari' },
+  { id: 'dest-red-island', name: 'Red Island (Pulau Merah)', description: 'Scenic beach and reddish coastal hill', image: '/images/pkg-bali.png', tag: 'Sunset Spot' },
+  { id: 'dest-green-island', name: 'Green Bay (Teluk Ijo)', description: 'Pristine turquoise tropical coastline', image: '/images/pkg-waterfall.png', tag: 'Tropical Beach' },
+  { id: 'dest-kawah-wurung', name: 'Kawah Wurung', description: 'Serene rolling highland savanna hills', image: '/images/pkg-bluefire.png', tag: 'Green Highlands' }
 ];

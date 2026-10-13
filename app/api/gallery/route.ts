@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     const { title, image, caption, category = "crater", isFeatured = true } = await request.json();
 
     if (!title || !image) {
-      return NextResponse.json({ error: "Judul dan link gambar wajib diisi." }, { status: 400 });
+      return NextResponse.json({ error: "Title and image link are required." }, { status: 400 });
     }
 
     const item = await prisma.galleryItem.create({
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error("POST /api/gallery error:", error);
     return NextResponse.json(
-      { error: error.message || "Gagal menambahkan foto galeri." },
+      { error: error.message || "Failed to add gallery photo." },
       { status: 500 }
     );
   }

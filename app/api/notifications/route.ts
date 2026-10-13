@@ -67,7 +67,7 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: "Parameter tidak valid." }, { status: 400 });
   } catch (error: any) {
     console.error("PUT /api/notifications error:", error);
-    return NextResponse.json({ error: "Gagal memperbarui notifikasi." }, { status: 500 });
+    return NextResponse.json({ error: "Failed to update notification." }, { status: 500 });
   }
 }
 
@@ -75,7 +75,7 @@ export async function POST(request: Request) {
   try {
     const { title, description, link = "/admin/notifications", type = "booking" } = await request.json();
     if (!title || !description) {
-      return NextResponse.json({ error: "Judul dan deskripsi notifikasi wajib diisi." }, { status: 400 });
+      return NextResponse.json({ error: "Notification title and description are required." }, { status: 400 });
     }
 
     const notif = await prisma.notification.create({
@@ -91,6 +91,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, notification: notif });
   } catch (error: any) {
     console.error("POST /api/notifications error:", error);
-    return NextResponse.json({ error: "Gagal membuat notifikasi." }, { status: 500 });
+    return NextResponse.json({ error: "Failed to create notification." }, { status: 500 });
   }
 }

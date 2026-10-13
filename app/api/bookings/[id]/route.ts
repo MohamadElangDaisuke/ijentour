@@ -16,13 +16,13 @@ export async function GET(
     });
 
     if (!booking) {
-      return NextResponse.json({ error: "Booking tidak ditemukan." }, { status: 404 });
+      return NextResponse.json({ error: "Booking not found." }, { status: 404 });
     }
 
     return NextResponse.json({ success: true, booking });
   } catch (error) {
     console.error("GET /api/bookings/[id] error:", error);
-    return NextResponse.json({ error: "Gagal memuat detail reservasi." }, { status: 500 });
+    return NextResponse.json({ error: "Failed to load reservation details." }, { status: 500 });
   }
 }
 
@@ -37,7 +37,7 @@ export async function PUT(
     });
 
     if (!existing) {
-      return NextResponse.json({ error: "Booking tidak ditemukan." }, { status: 404 });
+      return NextResponse.json({ error: "Booking not found." }, { status: 404 });
     }
 
     const body = await request.json();
@@ -59,13 +59,13 @@ export async function PUT(
 
     return NextResponse.json({
       success: true,
-      message: "Status reservasi berhasil diperbarui.",
+      message: "Reservation status updated successfully.",
       booking: updated,
     });
   } catch (error: any) {
     console.error("PUT /api/bookings/[id] error:", error);
     return NextResponse.json(
-      { error: error.message || "Gagal memperbarui reservasi." },
+      { error: error.message || "Failed to update reservation." },
       { status: 500 }
     );
   }
@@ -82,15 +82,15 @@ export async function DELETE(
     });
 
     if (!existing) {
-      return NextResponse.json({ error: "Booking tidak ditemukan atau sudah dihapus." }, { status: 404 });
+      return NextResponse.json({ error: "Booking not found or already deleted." }, { status: 404 });
     }
 
     await prisma.booking.delete({ where: { id: existing.id } });
-    return NextResponse.json({ success: true, message: "Reservasi berhasil dihapus." });
+    return NextResponse.json({ success: true, message: "Reservation successfully deleted." });
   } catch (error: any) {
     console.error("DELETE /api/bookings/[id] error:", error);
     return NextResponse.json(
-      { error: error.message || "Gagal menghapus reservasi." },
+      { error: error.message || "Failed to delete reservation." },
       { status: 500 }
     );
   }

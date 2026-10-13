@@ -13,7 +13,7 @@ export const defaultFeatures: FeatureItem[] = [
     iconName: 'Map',
     title: 'Local Experts',
     subtitle: 'Local Knowledge That Matters',
-    description: 'Dipandu langsung oleh warga lokal berpengalaman yang mengenal setiap lekuk jalur Kawah Ijen, waktu terbaik blue fire, dan spot foto tersembunyi.',
+    description: 'Guided directly by experienced local residents who know every bend of the Mount Ijen trails, the optimal blue fire timing, and secret viewpoints.',
     color: 'text-secondary-600'
   },
   {
@@ -21,7 +21,7 @@ export const defaultFeatures: FeatureItem[] = [
     iconName: 'HeartHandshake',
     title: 'Personalized Service',
     subtitle: 'Tailored To Your Needs',
-    description: 'Solusi tour yang fleksibel mulai dari open trip hemat hingga paket private eksklusif sesuai dengan kebutuhan dan preferensi perjalanan Anda.',
+    description: 'Flexible tour options ranging from budget-friendly open trips to exclusive private packages tailored to your schedule and preferences.',
     color: 'text-primary-500'
   },
   {
@@ -29,7 +29,7 @@ export const defaultFeatures: FeatureItem[] = [
     iconName: 'ShieldCheck',
     title: 'Proven Success',
     subtitle: 'Your Success Is Our Priority',
-    description: 'Perjalanan terjamin aman dengan panduan keselamatan standar BKSDA, respirator gas berstandar medis, dan tim berpengalaman tanggap medan.',
+    description: 'Guaranteed safe expeditions with official reserve safety guidelines, certified miner-grade gas respirators, and a responsive mountain team.',
     color: 'text-secondary-600'
   },
   {
@@ -37,7 +37,7 @@ export const defaultFeatures: FeatureItem[] = [
     iconName: 'Award',
     title: 'Industry Recognition',
     subtitle: 'Trusted By Many',
-    description: 'Layanan tour terpercaya dengan ribuan testimoni puas serta jaminan transparansi harga penuh tanpa ada biaya tak terduga.',
+    description: 'Trusted tour services backed by thousands of 5-star reviews and full price transparency with absolutely no hidden fees.',
     color: 'text-primary-500'
   }
 ];

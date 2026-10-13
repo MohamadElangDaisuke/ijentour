@@ -27,14 +27,14 @@ export default function AdminTripsPage() {
   }, []);
 
   const handleDelete = async (id: string, title: string) => {
-    if (!confirm(`Apakah Anda yakin ingin menghapus paket "${title}"?`)) return;
+    if (!confirm(`Are you sure you want to delete package "${title}"?`)) return;
 
     try {
       const res = await fetch(`/api/trips/${id}`, { method: "DELETE" });
       if (res.ok) {
         setPackages((prev) => prev.filter((p) => p.id !== id));
       } else {
-        alert("Gagal menghapus paket.");
+        alert("Failed to delete package.");
       }
     } catch (e) {
       console.error(e);
@@ -51,13 +51,13 @@ export default function AdminTripsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-primary-600">
-            Katalog Wisata
+            Tour Catalog
           </span>
           <h1 className="text-2xl sm:text-3xl font-black text-secondary-950 tracking-tight">
-            Kelola Paket Wisata (Trips)
+            Manage Tour Packages (Trips)
           </h1>
           <p className="text-xs sm:text-sm text-secondary-600 mt-1">
-            Tambah, sunting fasilitas & itinerary, atau nonaktifkan paket tur yang tampil di publik.
+            Add, edit facilities & itinerary, or manage public tour packages.
           </p>
         </div>
 
@@ -66,14 +66,14 @@ export default function AdminTripsPage() {
           className="px-5 py-2.5 rounded-2xl bg-primary-500 hover:bg-primary-400 text-secondary-950 font-black text-xs transition shadow-sm inline-flex items-center gap-2 self-start sm:self-auto cursor-pointer"
         >
           <Plus className="w-4 h-4" />
-          <span>Tambah Paket Baru</span>
+          <span>Add New Package</span>
         </Link>
       </div>
 
       {/* Filter Tabs */}
       <div className="flex gap-2 border-b border-secondary-200 pb-3 overflow-x-auto">
         {[
-          { label: "Semua Kategori", val: "all" },
+          { label: "All Categories", val: "all" },
           { label: "Midnight Expedition", val: "midnight" },
           { label: "Regular Tour", val: "regular" },
           { label: "Private Tour", val: "private" },
@@ -100,19 +100,19 @@ export default function AdminTripsPage() {
           </div>
         ) : filtered.length === 0 ? (
           <div className="py-20 text-center text-xs text-secondary-500">
-            Tidak ada paket wisata pada kategori ini.
+            No tour packages found in this category.
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
                 <tr className="bg-secondary-50 border-b border-secondary-100 text-[11px] font-bold text-secondary-500 uppercase tracking-wider">
-                  <th className="py-4 px-6">Foto & Nama Paket</th>
-                  <th className="py-4 px-6">Kategori</th>
-                  <th className="py-4 px-6">Durasi</th>
-                  <th className="py-4 px-6">Harga Dasar</th>
+                  <th className="py-4 px-6">Photo & Package Name</th>
+                  <th className="py-4 px-6">Category</th>
+                  <th className="py-4 px-6">Duration</th>
+                  <th className="py-4 px-6">Base Price</th>
                   <th className="py-4 px-6">Rating</th>
-                  <th className="py-4 px-6 text-right">Aksi</th>
+                  <th className="py-4 px-6 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-secondary-100">
@@ -128,7 +128,7 @@ export default function AdminTripsPage() {
                         <div>
                           <p className="font-bold text-sm text-secondary-950">{pkg.title}</p>
                           <span className="text-[10px] text-secondary-500 font-mono">
-                            ID: {pkg.id} • {pkg.badge || "Standar"}
+                            ID: {pkg.id} • {pkg.badge || "Standard"}
                           </span>
                         </div>
                       </div>
@@ -152,21 +152,21 @@ export default function AdminTripsPage() {
                         href={`/packages/${pkg.id}`}
                         target="_blank"
                         className="p-2 rounded-xl bg-secondary-100 hover:bg-secondary-200 text-secondary-800 inline-block transition"
-                        title="Lihat Tampilan Publik"
+                        title="View Public Page"
                       >
                         <Eye className="w-4 h-4" />
                       </Link>
                       <Link
                         href={`/admin/trips/${pkg.id}`}
                         className="p-2 rounded-xl bg-primary-100 hover:bg-primary-200 text-primary-800 inline-block transition"
-                        title="Sunting Paket"
+                        title="Edit Package"
                       >
                         <Edit3 className="w-4 h-4" />
                       </Link>
                       <button
                         onClick={() => handleDelete(pkg.id, pkg.title)}
                         className="p-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 transition cursor-pointer"
-                        title="Hapus Paket"
+                        title="Delete Package"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>

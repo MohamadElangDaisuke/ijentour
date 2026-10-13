@@ -98,7 +98,7 @@ export default function AdminDashboardPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[450px] space-y-3">
         <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-500"></div>
-        <p className="text-xs text-secondary-500 font-medium">Memuat data analitik sistem...</p>
+        <p className="text-xs text-secondary-500 font-medium">Loading system analytics...</p>
       </div>
     );
   }
@@ -109,13 +109,13 @@ export default function AdminDashboardPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-primary-600">
-            Overview Sistem
+            System Overview
           </span>
           <h1 className="text-2xl sm:text-3xl font-black text-secondary-950 tracking-tight">
-            Dashboard Manajemen Ijen Tour
+            Ijen Tour Management Dashboard
           </h1>
           <p className="text-xs sm:text-sm text-secondary-600 mt-1">
-            Data aktual dari database Supabase PostgreSQL: reservasi, wisatawan, omset, dan katalog tur.
+            Live data from database: reservations, travelers, revenue, and tour catalogs.
           </p>
         </div>
 
@@ -125,31 +125,31 @@ export default function AdminDashboardPage() {
             className="px-4 py-2.5 rounded-2xl bg-primary-500 hover:bg-primary-400 text-secondary-950 font-black text-xs transition shadow-sm flex items-center gap-1.5"
           >
             <Plus className="w-4 h-4" />
-            <span>Tambah Paket Tur</span>
+            <span>Add Tour Package</span>
           </Link>
           <Link
             href="/admin/bookings"
             className="px-4 py-2.5 rounded-2xl bg-secondary-950 hover:bg-secondary-900 text-white font-bold text-xs transition shadow-sm"
           >
-            Semua Reservasi ({bookings.length})
+            All Reservations ({bookings.length})
           </Link>
         </div>
       </div>
 
       {/* STAT CARDS - 6 METRIC PRODUCTION GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-        {/* Total Destinasi */}
+        {/* Total Destinations */}
         <div className="bg-white rounded-2xl p-5 border border-secondary-200/80 shadow-xs">
           <div className="flex items-center justify-between mb-2">
             <span className="text-[11px] font-bold text-secondary-500 uppercase tracking-wider">
-              Destinasi
+              Destinations
             </span>
             <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
               <Sparkles className="w-4 h-4" />
             </div>
           </div>
           <p className="text-2xl font-black text-secondary-950">{destinations.length}</p>
-          <p className="text-[10px] text-secondary-500 font-semibold mt-1">Spot wisata Ijen</p>
+          <p className="text-[10px] text-secondary-500 font-semibold mt-1">Ijen travel spots</p>
         </div>
 
         {/* Total Trips */}
@@ -163,7 +163,7 @@ export default function AdminDashboardPage() {
             </div>
           </div>
           <p className="text-2xl font-black text-secondary-950">{packages.length}</p>
-          <p className="text-[10px] text-sky-600 font-semibold mt-1">Paket aktif</p>
+          <p className="text-[10px] text-sky-600 font-semibold mt-1">Active packages</p>
         </div>
 
         {/* Total Bookings */}
@@ -177,7 +177,7 @@ export default function AdminDashboardPage() {
             </div>
           </div>
           <p className="text-2xl font-black text-secondary-950">{bookings.length}</p>
-          <p className="text-[10px] text-secondary-500 font-semibold mt-1">Semua status</p>
+          <p className="text-[10px] text-secondary-500 font-semibold mt-1">All statuses</p>
         </div>
 
         {/* Pending Bookings */}
@@ -191,7 +191,7 @@ export default function AdminDashboardPage() {
             </div>
           </div>
           <p className="text-2xl font-black text-amber-600">{pendingBookings.length}</p>
-          <p className="text-[10px] text-amber-700 font-semibold mt-1">Perlu konfirmasi</p>
+          <p className="text-[10px] text-amber-700 font-semibold mt-1">Requires confirmation</p>
         </div>
 
         {/* Confirmed Bookings */}
@@ -205,7 +205,7 @@ export default function AdminDashboardPage() {
             </div>
           </div>
           <p className="text-2xl font-black text-emerald-600">{confirmedBookings.length}</p>
-          <p className="text-[10px] text-emerald-700 font-semibold mt-1">Siap jalan</p>
+          <p className="text-[10px] text-emerald-700 font-semibold mt-1">Ready to depart</p>
         </div>
 
         {/* Real Revenue */}
@@ -221,7 +221,7 @@ export default function AdminDashboardPage() {
           <p className="text-lg font-black text-secondary-950 truncate">
             {formatCurrency(totalRevenue)}
           </p>
-          <p className="text-[10px] text-emerald-600 font-semibold mt-1">✓ Omset riil</p>
+          <p className="text-[10px] text-emerald-600 font-semibold mt-1">✓ Verified revenue</p>
         </div>
       </div>
 
@@ -232,7 +232,7 @@ export default function AdminDashboardPage() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <span className="text-xs font-bold text-primary-600 uppercase tracking-wider block">
-                Katalog Unggulan
+                Featured Catalog
               </span>
               <h2 className="text-lg font-black text-secondary-950">Popular Trips</h2>
             </div>
@@ -240,7 +240,7 @@ export default function AdminDashboardPage() {
               href="/admin/trips"
               className="text-xs font-bold text-primary-600 hover:text-primary-700 inline-flex items-center gap-1"
             >
-              <span>Kelola Semua Paket</span>
+              <span>Manage All Packages</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -284,17 +284,17 @@ export default function AdminDashboardPage() {
         <div className="bg-white rounded-3xl p-6 sm:p-7 border border-secondary-200/80 shadow-xs flex flex-col justify-between">
           <div>
             <span className="text-xs font-bold text-primary-600 uppercase tracking-wider block mb-1">
-              Statistik Wisatawan
+              Traveler Statistics
             </span>
-            <h2 className="text-lg font-black text-secondary-950 mb-4">Total Peserta Tur</h2>
+            <h2 className="text-lg font-black text-secondary-950 mb-4">Total Tour Travelers</h2>
 
             <div className="p-4 rounded-2xl bg-secondary-50 border border-secondary-100 space-y-3">
               <div className="flex items-center justify-between text-xs">
-                <span className="text-secondary-600 font-medium">Peserta Terkonfirmasi:</span>
+                <span className="text-secondary-600 font-medium">Confirmed Travelers:</span>
                 <span className="font-black text-secondary-950 text-base">{totalTravelers} Pax</span>
               </div>
               <div className="flex items-center justify-between text-xs">
-                <span className="text-secondary-600 font-medium">Rata-rata Biaya / Pemesanan:</span>
+                <span className="text-secondary-600 font-medium">Average Booking Value:</span>
                 <span className="font-bold text-primary-600">
                   {confirmedBookings.length > 0
                     ? formatCurrency(Math.round(totalRevenue / confirmedBookings.length))
@@ -302,7 +302,7 @@ export default function AdminDashboardPage() {
                 </span>
               </div>
               <div className="flex items-center justify-between text-xs">
-                <span className="text-secondary-600 font-medium">Tingkat Konfirmasi:</span>
+                <span className="text-secondary-600 font-medium">Confirmation Rate:</span>
                 <span className="font-bold text-emerald-600">
                   {bookings.length > 0
                     ? `${Math.round((confirmedBookings.length / bookings.length) * 100)}%`
@@ -313,8 +313,8 @@ export default function AdminDashboardPage() {
           </div>
 
           <div className="mt-4 pt-4 border-t border-secondary-100 flex items-center justify-between text-xs">
-            <span className="text-secondary-500">Kapasitas Maksimal Ijen</span>
-            <span className="font-bold text-secondary-950">Kuota Resmi BBKSDA</span>
+            <span className="text-secondary-500">Ijen Maximum Quota</span>
+            <span className="font-bold text-secondary-950">Official BBKSDA Quota</span>
           </div>
         </div>
       </div>
@@ -324,7 +324,7 @@ export default function AdminDashboardPage() {
         <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-secondary-100 gap-4 mb-6">
           <div>
             <span className="text-xs font-bold text-primary-600 uppercase tracking-wider block">
-              Transaksi Terkini
+              Recent Transactions
             </span>
             <h2 className="text-xl font-black text-secondary-950">Recent Bookings</h2>
           </div>
@@ -335,7 +335,7 @@ export default function AdminDashboardPage() {
               <Search className="w-3.5 h-3.5 text-secondary-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="Cari kode / nama pemesan..."
+                placeholder="Search booking code / name..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-8 pr-3 py-1.5 rounded-xl bg-secondary-50 border border-secondary-200 text-xs text-secondary-950 outline-none focus:ring-2 focus:ring-primary-500 w-48 sm:w-56"
@@ -347,7 +347,7 @@ export default function AdminDashboardPage() {
               onChange={(e) => setStatusFilter(e.target.value)}
               className="px-3 py-1.5 rounded-xl bg-secondary-50 border border-secondary-200 text-xs font-bold text-secondary-800 outline-none focus:ring-2 focus:ring-primary-500"
             >
-              <option value="ALL">Semua Status</option>
+              <option value="ALL">All Statuses</option>
               <option value="PENDING">Pending ({pendingBookings.length})</option>
               <option value="CONFIRMED">Confirmed ({confirmedBookings.length})</option>
               <option value="CANCELLED">Cancelled ({cancelledBookings.length})</option>
@@ -357,20 +357,20 @@ export default function AdminDashboardPage() {
 
         {filteredBookings.length === 0 ? (
           <div className="py-12 text-center text-secondary-400 text-xs">
-            Tidak ada transaksi reservasi yang cocok dengan pencarian
+            No reservation transactions match your search
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
                 <tr className="border-b border-secondary-100 text-[11px] font-bold text-secondary-500 uppercase tracking-wider">
-                  <th className="pb-3">Kode / Pemesan</th>
-                  <th className="pb-3">Paket Tur</th>
-                  <th className="pb-3">Tanggal</th>
+                  <th className="pb-3">Code / Customer</th>
+                  <th className="pb-3">Tour Package</th>
+                  <th className="pb-3">Date</th>
                   <th className="pb-3 text-center">Pax</th>
-                  <th className="pb-3">Total Biaya</th>
+                  <th className="pb-3">Total Price</th>
                   <th className="pb-3">Status</th>
-                  <th className="pb-3 text-right">Aksi Cepat</th>
+                  <th className="pb-3 text-right">Quick Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-secondary-100">
@@ -405,7 +405,7 @@ export default function AdminDashboardPage() {
                           onClick={() => handleUpdateStatus(b.id, "CONFIRMED")}
                           className="px-2.5 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[10px] cursor-pointer transition shadow-2xs"
                         >
-                          Konfirmasi
+                          Confirm
                         </button>
                       )}
                       {b.status === "CONFIRMED" && (
@@ -413,13 +413,13 @@ export default function AdminDashboardPage() {
                           onClick={() => handleUpdateStatus(b.id, "COMPLETED")}
                           className="px-2.5 py-1 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-bold text-[10px] cursor-pointer transition shadow-2xs"
                         >
-                          Selesai
+                          Complete
                         </button>
                       )}
                       <Link
                         href={`/admin/bookings?search=${b.bookingCode}`}
                         className="px-2 py-1 rounded-lg bg-secondary-100 hover:bg-secondary-200 text-secondary-700 font-bold text-[10px] inline-flex items-center"
-                        title="Lihat Rincian Lengkap"
+                        title="View Full Details"
                       >
                         <ExternalLink className="w-3 h-3" />
                       </Link>

@@ -15,7 +15,7 @@ export default function PackagesSections() {
   const [packagesData, setPackagesData] = useState<TourPackage[]>(defaultPackages);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  // Sinkronisasi data paket dari Database API / LocalStorage
+  // Sync package data from Database API / LocalStorage
   useEffect(() => {
     let isMounted = true;
     const loadPackages = async () => {
@@ -127,27 +127,27 @@ export default function PackagesSections() {
         viewport={{ once: true, amount: 0.2 }}
         className="relative z-10 mx-auto max-w-7xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
       >
-        {/* LEFT COLUMN: Headline, Deskripsi, & Tombol See More */}
+        {/* LEFT COLUMN: Headline, Description, & View All Button */}
         <div className="col-span-1 lg:col-span-5 flex flex-col justify-center items-center lg:items-start space-y-5 sm:space-y-6 text-center lg:text-left">
           <div className="space-y-4">
             <h2
               id="packages-heading"
               className="text-2xl sm:text-4xl lg:text-5xl font-black text-secondary-950 leading-tight tracking-tight"
             >
-              Paket wisata Kawah Ijen dan Banyuwangi
+              Mount Ijen & Banyuwangi Tour Packages
             </h2>
 
             <p className="text-sm sm:text-base font-normal leading-relaxed text-secondary-700 max-w-lg mx-auto lg:mx-0">
-              Pilih paket perjalanan yang dirancang untuk menikmati Ijen, blue fire, dan lanskap Jawa Timur dengan lebih dekat.
+              Choose thoughtfully crafted tour packages to experience Mount Ijen, the electric Blue Fire, and the stunning landscapes of East Java up close.
             </p>
           </div>
 
-          {/* Tombol See More (Lihat Selengkapnya) */}
+          {/* View All Button */}
           <Link
             href="/packages"
             className="inline-flex items-center justify-center gap-2 rounded-full bg-primary-500 px-6 py-3.5 text-secondary-950 text-sm font-bold transition-all hover:bg-primary-400 hover:shadow-lg cursor-pointer transform hover:-translate-y-0.5 mx-auto lg:mx-0"
           >
-            <span>Lihat Selengkapnya</span>
+            <span>View All Packages</span>
             <ArrowRightIcon className="hidden sm:inline-block w-4 h-4 stroke-[2.5]" />
           </Link>
         </div>
@@ -164,8 +164,8 @@ export default function PackagesSections() {
             <motion.button
               type="button"
               onClick={handlePrev}
-              aria-label="Paket sebelumnya"
-              title="Paket sebelumnya"
+              aria-label="Previous package"
+              title="Previous package"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               transition={{ ease: easeIn, duration: 0.2 }}
@@ -178,8 +178,8 @@ export default function PackagesSections() {
             <motion.button
               type="button"
               onClick={handleNext}
-              aria-label="Paket berikutnya"
-              title="Paket berikutnya"
+              aria-label="Next package"
+              title="Next package"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               transition={{ ease: easeIn, duration: 0.2 }}
@@ -216,7 +216,7 @@ export default function PackagesSections() {
                   <div className="relative aspect-4/3 w-full bg-secondary-100">
                     <img
                       src={pkg.image || '/images/pkg-bluefire.png'}
-                      alt={`${pkg.title} - wisata Banyuwangi dan Kawah Ijen`}
+                      alt={`${pkg.title} - Mount Ijen and Banyuwangi tour`}
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold text-secondary-950 backdrop-blur-sm">
@@ -250,7 +250,7 @@ export default function PackagesSections() {
                       </h3>
                       <div className="flex items-end justify-between gap-3 border-t border-secondary-100 pt-3">
                         <div>
-                          <p className="text-[10px] text-secondary-500">Mulai dari</p>
+                          <p className="text-[10px] text-secondary-500">Starts from</p>
                           <p className="mt-0.5 text-sm font-black text-primary-600">{pkg.price}</p>
                         </div>
                         <Link
@@ -258,7 +258,7 @@ export default function PackagesSections() {
                           onClick={(e) => e.stopPropagation()}
                           className="text-xs font-bold text-primary-600 hover:text-primary-700 hover:underline px-2 py-1 rounded-md bg-primary-50 hover:bg-primary-100 transition"
                         >
-                          Lihat detail →
+                          View details →
                         </Link>
                       </div>
                   </motion.div>

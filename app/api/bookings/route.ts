@@ -32,7 +32,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ success: true, bookings });
   } catch (error) {
     console.error("GET /api/bookings error:", error);
-    return NextResponse.json({ error: "Gagal memuat data reservasi." }, { status: 500 });
+    return NextResponse.json({ error: "Failed to load reservation data." }, { status: 500 });
   }
 }
 
@@ -56,7 +56,7 @@ export async function POST(request: Request) {
 
     if (!customerName || !whatsappNumber || !packageName) {
       return NextResponse.json(
-        { error: "Nama, nomor WhatsApp, dan paket wajib diisi." },
+        { error: "Customer name, WhatsApp number, and package name are required." },
         { status: 400 }
       );
     }
@@ -108,8 +108,8 @@ export async function POST(request: Request) {
     await prisma.notification.create({
       data: {
         type: "booking",
-        title: "Reservasi Baru Masuk",
-        description: `${customerName} memesan '${packageName}' (${numParticipants} pax). Kode: ${bookingCode}`,
+        title: "New Reservation Received",
+        description: `${customerName} booked '${packageName}' (${numParticipants} pax). Code: ${bookingCode}`,
         link: "/admin/bookings",
         unread: true,
       },
@@ -117,14 +117,14 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: "Reservasi berhasil dibuat!",
+      message: "Reservation successfully created!",
       bookingCode,
       booking,
     });
   } catch (error: any) {
     console.error("POST /api/bookings error:", error);
     return NextResponse.json(
-      { error: error.message || "Gagal memproses pemesanan." },
+      { error: error.message || "Failed to process booking." },
       { status: 500 }
     );
   }

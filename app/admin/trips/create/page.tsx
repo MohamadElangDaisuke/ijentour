@@ -12,34 +12,34 @@ export default function CreateTripPage() {
 
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("regular");
-  const [duration, setDuration] = useState("1 Hari");
+  const [duration, setDuration] = useState("1 Day");
   const [price, setPrice] = useState("Rp 750.000");
   const [basePrice, setBasePrice] = useState(750000);
   const [rating, setRating] = useState(5.0);
-  const [badge, setBadge] = useState("Paket Rekomendasi");
+  const [badge, setBadge] = useState("Recommended Tour");
   const [image, setImage] = useState("");
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
-  const [meetingPoint, setMeetingPoint] = useState("Banyuwangi (Stasiun/Bandara/Hotel)");
+  const [meetingPoint, setMeetingPoint] = useState("Banyuwangi (Station / Airport / Hotel)");
   const [shortDescription, setShortDescription] = useState("");
   const [description, setDescription] = useState("");
 
   const [highlights, setHighlights] = useState<string[]>([
-    "Pemandu Lokal Berlisensi",
-    "Tiket Masuk Resmi & Asuransi",
-    "Peralatan Masker Respirator Lengkap"
+    "Licensed Local Guide",
+    "Official Entrance Permits & Insurance",
+    "Complete Respirator Mask Equipment"
   ]);
   const [newHighlight, setNewHighlight] = useState("");
 
   const [included, setIncluded] = useState<string[]>([
-    "Transportasi AC PP",
-    "Guide Lokal",
-    "Air Mineral"
+    "Roundtrip AC Transportation",
+    "Licensed Local Guide",
+    "Bottled Mineral Water"
   ]);
   const [newIncluded, setNewIncluded] = useState("");
 
   const [excluded, setExcluded] = useState<string[]>([
-    "Pengeluaran Pribadi",
-    "Tip Sukarela"
+    "Personal Expenses",
+    "Voluntary Gratuity / Tips"
   ]);
   const [newExcluded, setNewExcluded] = useState("");
 
@@ -82,7 +82,7 @@ export default function CreateTripPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) {
-      setError("Judul paket wisata wajib diisi.");
+      setError("Tour package title is required.");
       return;
     }
 
@@ -110,21 +110,21 @@ export default function CreateTripPage() {
           included,
           excluded,
           itinerary: [
-            { day: "Hari 1", title: "Keberangkatan & Persiapan", desc: "Briefing keselamatan dan perjalanan ke basecamp." },
-            { day: "Hari 2", title: "Pendakian Puncak & Kawah", desc: "Menyaksikan keindahan kawah dan fajar menyingsing." }
+            { day: "Day 1", title: "Departure & Preparation", desc: "Safety briefing and transfer to basecamp." },
+            { day: "Day 2", title: "Crater Summit & Sunrise", desc: "Witness the crater wonders and morning dawn." }
           ],
         }),
       });
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || "Gagal membuat paket tur.");
+        throw new Error(data.error || "Failed to create tour package.");
       }
 
       router.push("/admin/trips");
       router.refresh();
     } catch (err: any) {
-      setError(err.message || "Terjadi kesalahan.");
+      setError(err.message || "An error occurred.");
     } finally {
       setSubmitting(false);
     }
@@ -139,9 +139,9 @@ export default function CreateTripPage() {
             className="inline-flex items-center gap-1.5 text-xs font-bold text-secondary-600 hover:text-primary-600 mb-1 transition"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Kembali ke Daftar Paket</span>
+            <span>Back to Packages List</span>
           </Link>
-          <h1 className="text-2xl font-black text-secondary-950">Tambah Paket Wisata Baru</h1>
+          <h1 className="text-2xl font-black text-secondary-950">Add New Tour Package</h1>
         </div>
       </div>
 
@@ -155,24 +155,24 @@ export default function CreateTripPage() {
       <form onSubmit={handleSubmit} className="space-y-8">
         <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-xs space-y-6">
           <h2 className="text-base font-black text-secondary-950 uppercase tracking-wider pb-3 border-b border-secondary-100">
-            1. Informasi Dasar Paket
+            1. Basic Package Information
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-xs font-bold text-secondary-800 mb-2">Judul Paket *</label>
+              <label className="block text-xs font-bold text-secondary-800 mb-2">Package Title *</label>
               <input
                 type="text"
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Contoh: Midnight Expedition Blue Fire Ijen"
+                placeholder="e.g. Midnight Expedition Blue Fire Ijen"
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-sm font-bold text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-secondary-800 mb-2">Kategori Tur</label>
+              <label className="block text-xs font-bold text-secondary-800 mb-2">Tour Category</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
@@ -187,18 +187,18 @@ export default function CreateTripPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <div>
-              <label className="block text-xs font-bold text-secondary-800 mb-2">Durasi Paket</label>
+              <label className="block text-xs font-bold text-secondary-800 mb-2">Package Duration</label>
               <input
                 type="text"
                 value={duration}
                 onChange={(e) => setDuration(e.target.value)}
-                placeholder="Contoh: 1 Hari (Midnight)"
+                placeholder="e.g. 1 Day (Midnight)"
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-secondary-800 mb-2">Harga Tampilan (Label)</label>
+              <label className="block text-xs font-bold text-secondary-800 mb-2">Display Price (Label)</label>
               <input
                 type="text"
                 value={price}
@@ -209,7 +209,7 @@ export default function CreateTripPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-secondary-800 mb-2">Harga Dasar (Angka Integer)</label>
+              <label className="block text-xs font-bold text-secondary-800 mb-2">Base Price (Integer Number)</label>
               <input
                 type="number"
                 value={basePrice}
@@ -222,23 +222,23 @@ export default function CreateTripPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <label className="block text-xs font-bold text-secondary-800 mb-2">Badge Promosi</label>
+              <label className="block text-xs font-bold text-secondary-800 mb-2">Promotional Badge</label>
               <input
                 type="text"
                 value={badge}
                 onChange={(e) => setBadge(e.target.value)}
-                placeholder="Contoh: Best Seller / Paling Laris"
+                placeholder="e.g. Best Seller / Popular"
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-secondary-800 mb-2">Titik Kumpul (Meeting Point)</label>
+              <label className="block text-xs font-bold text-secondary-800 mb-2">Meeting Point</label>
               <input
                 type="text"
                 value={meetingPoint}
                 onChange={(e) => setMeetingPoint(e.target.value)}
-                placeholder="Contoh: Banyuwangi (Stasiun/Bandara/Hotel)"
+                placeholder="e.g. Banyuwangi (Station / Airport / Hotel)"
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
@@ -249,39 +249,39 @@ export default function CreateTripPage() {
               value={image}
               onChange={(url) => setImage(url)}
               folder="trips"
-              label="Foto Sampul Tur (Cover Image - Supabase)"
+              label="Tour Cover Image (Cover Image - Supabase)"
               required
               aspectRatio="video"
-              helperText="Upload foto utama untuk kartu dan banner tur (Maks. 5 MB)."
+              helperText="Upload primary cover image for tour cards and hero banner (Max. 5 MB)."
             />
 
             <MultiImageUpload
               value={galleryImages}
               onChange={(urls) => setGalleryImages(urls)}
               folder="trips"
-              label="Galeri Foto Tur (Multiple Upload - Supabase)"
+              label="Tour Photo Gallery (Multiple Upload - Supabase)"
               maxFiles={8}
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-secondary-800 mb-2">Ringkasan Singkat (Short Description)</label>
+            <label className="block text-xs font-bold text-secondary-800 mb-2">Short Description</label>
             <input
               type="text"
               value={shortDescription}
               onChange={(e) => setShortDescription(e.target.value)}
-              placeholder="Ringkasan 1-2 kalimat untuk preview card..."
+              placeholder="Brief 1-2 sentence overview for preview card..."
               className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-secondary-800 mb-2">Deskripsi Lengkap Tur</label>
+            <label className="block text-xs font-bold text-secondary-800 mb-2">Full Tour Description</label>
             <textarea
               rows={4}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Jelaskan daya tarik, suasana, dan fasilitas petualangan..."
+              placeholder="Describe attractions, atmosphere, and adventure highlights..."
               className="w-full px-4 py-3 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
             ></textarea>
           </div>
@@ -290,18 +290,18 @@ export default function CreateTripPage() {
         {/* Dynamic Highlights & Facilities */}
         <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-xs space-y-6">
           <h2 className="text-base font-black text-secondary-950 uppercase tracking-wider pb-3 border-b border-secondary-100">
-            2. Keunggulan & Fasilitas
+            2. Highlights & Facilities
           </h2>
 
           {/* Highlights */}
           <div>
-            <label className="block text-xs font-bold text-secondary-800 mb-2">Keunggulan Utama (Highlights)</label>
+            <label className="block text-xs font-bold text-secondary-800 mb-2">Key Highlights</label>
             <div className="flex gap-2 mb-3">
               <input
                 type="text"
                 value={newHighlight}
                 onChange={(e) => setNewHighlight(e.target.value)}
-                placeholder="Tambah keunggulan..."
+                placeholder="Add highlight..."
                 className="grow px-4 py-2 bg-secondary-50 border border-secondary-200 rounded-xl text-xs"
               />
               <button
@@ -309,7 +309,7 @@ export default function CreateTripPage() {
                 onClick={addHighlightItem}
                 className="px-4 py-2 bg-secondary-950 text-white rounded-xl text-xs font-bold hover:bg-primary-500 hover:text-secondary-950 transition cursor-pointer"
               >
-                + Tambah
+                + Add
               </button>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -324,13 +324,13 @@ export default function CreateTripPage() {
 
           {/* Included Items */}
           <div>
-            <label className="block text-xs font-bold text-secondary-800 mb-2">Fasilitas Termasuk (Included)</label>
+            <label className="block text-xs font-bold text-secondary-800 mb-2">Included Facilities (Inclusions)</label>
             <div className="flex gap-2 mb-3">
               <input
                 type="text"
                 value={newIncluded}
                 onChange={(e) => setNewIncluded(e.target.value)}
-                placeholder="Contoh: Tiket Masuk BKSDA, Masker Gas..."
+                placeholder="e.g. Entrance Ticket, Gas Mask..."
                 className="grow px-4 py-2 bg-secondary-50 border border-secondary-200 rounded-xl text-xs"
               />
               <button
@@ -338,7 +338,7 @@ export default function CreateTripPage() {
                 onClick={addIncludedItem}
                 className="px-4 py-2 bg-secondary-950 text-white rounded-xl text-xs font-bold hover:bg-primary-500 hover:text-secondary-950 transition cursor-pointer"
               >
-                + Tambah
+                + Add
               </button>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -353,13 +353,13 @@ export default function CreateTripPage() {
 
           {/* Excluded Items */}
           <div>
-            <label className="block text-xs font-bold text-secondary-800 mb-2">Tidak Termasuk (Excluded)</label>
+            <label className="block text-xs font-bold text-secondary-800 mb-2">Excluded Facilities (Exclusions)</label>
             <div className="flex gap-2 mb-3">
               <input
                 type="text"
                 value={newExcluded}
                 onChange={(e) => setNewExcluded(e.target.value)}
-                placeholder="Contoh: Pengeluaran pribadi..."
+                placeholder="e.g. Personal expenses..."
                 className="grow px-4 py-2 bg-secondary-50 border border-secondary-200 rounded-xl text-xs"
               />
               <button
@@ -367,7 +367,7 @@ export default function CreateTripPage() {
                 onClick={addExcludedItem}
                 className="px-4 py-2 bg-secondary-950 text-white rounded-xl text-xs font-bold hover:bg-primary-500 hover:text-secondary-950 transition cursor-pointer"
               >
-                + Tambah
+                + Add
               </button>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -386,7 +386,7 @@ export default function CreateTripPage() {
             href="/admin/trips"
             className="px-6 py-3 rounded-2xl bg-secondary-100 hover:bg-secondary-200 text-secondary-800 font-bold text-xs transition"
           >
-            Batal
+            Cancel
           </Link>
           <button
             type="submit"
@@ -394,7 +394,7 @@ export default function CreateTripPage() {
             className="px-8 py-3.5 rounded-2xl bg-primary-500 hover:bg-primary-400 text-secondary-950 font-black text-sm transition shadow-md flex items-center gap-2 cursor-pointer disabled:opacity-60"
           >
             <Save className="w-4 h-4" />
-            <span>{submitting ? "Menyimpan ke Database..." : "Simpan & Publikasikan Paket"}</span>
+            <span>{submitting ? "Saving to Database..." : "Save & Publish Package"}</span>
           </button>
         </div>
       </form>

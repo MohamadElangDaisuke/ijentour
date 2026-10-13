@@ -41,29 +41,29 @@ export default function HeroSection() {
           className="relative z-10 max-w-xl text-center sm:text-left mx-auto sm:mx-0"
         >
           <h1 className="text-3xl font-black leading-tight tracking-tight text-secondary-950 sm:text-5xl lg:text-5xl">
-            Jelajahi Kawah Ijen dan <span translate="no" className="notranslate">Banyuwangi</span>.
+            Explore Mount Ijen and <span translate="no" className="notranslate">Banyuwangi</span>.
           </h1>
           <p className="mt-4 max-w-md mx-auto sm:mx-0 text-sm leading-relaxed text-secondary-700 sm:text-base">
-            Temukan sisi paling liar dari Jawa Timur bersama pemandu lokal yang tahu kapan harus berhenti, berjalan, dan menikmati keajaiban alam Blue Fire.
+            Discover the wild wonders of East Java alongside licensed local guides who know when to pause, trek, and immerse you in the magical Blue Fire phenomenon.
           </p>
 
           <div className="mt-5 flex flex-wrap items-center justify-center sm:justify-start gap-3">
             <Link href="/packages" className="inline-flex items-center gap-2 rounded-full bg-primary-500 px-6 py-3.5 text-sm font-bold text-secondary-950 transition hover:-translate-y-0.5 hover:bg-primary-400 hover:shadow-lg hover:shadow-primary-500/20">
-              Jelajahi Paket Tur <ArrowRight className="h-4 w-4" />
+              Explore Tour Packages <ArrowRight className="h-4 w-4" />
             </Link>
             <button
               type="button"
               onClick={() => openBookingModal()}
               className="inline-flex items-center gap-2 rounded-full border border-secondary-300 bg-white/70 px-5 py-3.5 text-sm font-bold text-secondary-800 transition hover:border-[#25D366] hover:bg-white hover:text-[#25D366] cursor-pointer"
             >
-              <FaWhatsapp className="h-4 w-4 text-[#25D366]" /> Chat WhatsApp
+              <FaWhatsapp className="h-4 w-4 text-[#25D366]" /> Chat on WhatsApp
             </button>
           </div>
 
           {/* Trust Badges */}
           <div className="mt-4 flex flex-wrap items-center justify-center sm:justify-start gap-2.5 text-[11px] font-semibold text-secondary-600">
-            <span className="px-3 py-1 rounded-full bg-white border border-secondary-200 shadow-2xs">✓ Local Guide Berlisensi</span>
-            <span className="px-3 py-1 rounded-full bg-white border border-secondary-200 shadow-2xs">✓ Free Masker Gas & Senter</span>
+            <span className="px-3 py-1 rounded-full bg-white border border-secondary-200 shadow-2xs">✓ Licensed Local Guides</span>
+            <span className="px-3 py-1 rounded-full bg-white border border-secondary-200 shadow-2xs">✓ Free Gas Masks & Headlamps</span>
             <span className="px-3 py-1 rounded-full bg-white border border-secondary-200 shadow-2xs">✓ 24/7 WhatsApp Support</span>
           </div>
 
@@ -110,7 +110,7 @@ export default function HeroSection() {
               >
                 <Image
                   src={destination.image}
-                  alt={`${destination.name}, destinasi wisata Banyuwangi`}
+                  alt={`${destination.name}, Banyuwangi travel destination`}
                   fill
                   priority
                   sizes="(max-width: 1024px) 100vw, 60vw"
@@ -120,10 +120,10 @@ export default function HeroSection() {
             </AnimatePresence>
           </div>
           <div className="absolute bottom-8 right-8 z-20 flex gap-2 sm:bottom-12 sm:right-12">
-            <button type="button" onClick={() => changeDestination(-1)} aria-label="Destinasi sebelumnya" className="flex h-9 w-9 items-center justify-center rounded-full border border-white/50 bg-secondary-950/70 text-white backdrop-blur transition hover:bg-primary-500 hover:text-secondary-950">
+            <button type="button" onClick={() => changeDestination(-1)} aria-label="Previous destination" className="flex h-9 w-9 items-center justify-center rounded-full border border-white/50 bg-secondary-950/70 text-white backdrop-blur transition hover:bg-primary-500 hover:text-secondary-950">
               <ArrowLeft className="h-4 w-4" />
             </button>
-            <button type="button" onClick={() => changeDestination(1)} aria-label="Destinasi berikutnya" className="flex h-9 w-9 items-center justify-center rounded-full border border-white/50 bg-secondary-950/70 text-white backdrop-blur transition hover:bg-primary-500 hover:text-secondary-950">
+            <button type="button" onClick={() => changeDestination(1)} aria-label="Next destination" className="flex h-9 w-9 items-center justify-center rounded-full border border-white/50 bg-secondary-950/70 text-white backdrop-blur transition hover:bg-primary-500 hover:text-secondary-950">
               <ArrowRight className="h-4 w-4" />
             </button>
           </div>

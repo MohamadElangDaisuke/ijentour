@@ -13,28 +13,28 @@ interface FaqItem {
 
 const defaultFaqs: FaqItem[] = [
   {
-    q: "Berapa lama durasi pendakian menuju puncak Kawah Ijen?",
-    a: "Pendakian dari Pos Paltuding ke puncak Kawah Ijen berjarak sekitar 3 km dengan waktu tempuh rata-rata 1,5 hingga 2 jam berjalan santai. Jalur berupa jalan setapak tanah yang cukup lebar. Jika ingin turun ke dasar kawah untuk melihat Blue Fire dari dekat, dibutuhkan waktu tambahan sekitar 30-45 menit menuruni jalan bebatuan.",
+    q: "How long does it take to hike to the summit of Mount Ijen?",
+    a: "The trek from the Paltuding basecamp to the summit rim is approximately 3 km (1.8 miles), taking 1.5 to 2 hours at an easy, moderate pace along a wide dirt trail. If you wish to descend to the crater floor to see the Blue Fire up close, it requires an additional 30–45 minutes down a rocky path.",
   },
   {
-    q: "Apakah disediakan masker gas respirator dan perlengkapan keselamatan?",
-    a: "Ya! Semua paket wisata Kawah Ijen kami sudah termasuk peminjaman masker gas respirator standar penambang belerang dan senter kepala (headlamp). Pemandu lokal kami juga membawa cadangan masker dan pertolongan pertama.",
+    q: "Are respirator gas masks and safety gear provided?",
+    a: "Yes! All our Mount Ijen tour packages include standard certified respirator gas masks and headlamps. Our local guides also carry backup masks, eye protection, and first-aid supplies.",
   },
   {
-    q: "Kapan waktu terbaik untuk menyaksikan fenomena Blue Fire?",
-    a: "Fenomena Blue Fire (Api Biru) hanya dapat disaksikan dalam kondisi gelap gulita antara pukul 02:00 hingga 04:30 WIB dini hari sebelum fajar menyingsing. Oleh karena itu, tur midnight berangkat dari Banyuwangi sekitar pukul 00:00 - 00:30 WIB.",
+    q: "When is the best time to see the Blue Fire phenomenon?",
+    a: "The Blue Fire can only be witnessed in pitch darkness between 2:00 AM and 4:30 AM before sunrise. Midnight tours typically depart from Banyuwangi between 12:00 AM and 12:30 AM.",
   },
   {
-    q: "Bagaimana jika saya tidak kuat mendaki jalan kaki?",
-    a: "Tersedia layanan 'Troli / Gerobak Dorong' tradisional yang dioperasikan oleh warga lokal dan penambang Ijen. Anda dapat menyewa troli baik untuk naik, turun, maupun pulang-pergi dengan tarif lokal standar (bisa kami bantu pesankan saat reservasi).",
+    q: "What if I cannot complete the hike on foot?",
+    a: "Traditional 'trolley / cart' services pulled and pushed by experienced local miners are available at Paltuding. You can rent a trolley for the ascent, descent, or round trip at standard local rates (we can assist in pre-arranging this for you).",
   },
   {
-    q: "Apakah ada layanan penjemputan dari hotel, stasiun, atau bandara?",
-    a: "Tentu! Kami menyediakan layanan antar-jemput gratis di area Kota Banyuwangi, Stasiun Banyuwangi Kota, Stasiun Ketapang, Bandara Blimbingsari, hingga pelabuhan Ketapang bagi peserta yang baru menyeberang dari Bali.",
+    q: "Is pickup available from hotels, train stations, or the airport?",
+    a: "Absolutely! We provide complimentary round-trip transfers across Banyuwangi City, Banyuwangi Kota Station, Ketapang Station, Blimbingsari Airport, and Ketapang Ferry Port for travelers arriving from Bali.",
   },
   {
-    q: "Bagaimana prosedur pemesanan dan kebijakan pembatalan / reschedule?",
-    a: "Pemesanan dapat dilakukan online lewat website atau langsung chat WhatsApp kami. Anda dapat melakukan reschedule jadwal tanpa biaya tambahan dengan konfirmasi minimal 24 jam sebelum jadwal keberangkatan, menyesuaikan status aktivitas vulkanik kawah.",
+    q: "What is your booking procedure and cancellation/reschedule policy?",
+    a: "Bookings can be made online via our website or directly through WhatsApp. You can reschedule free of charge with at least 24 hours prior notice, subject to crater volcanic safety conditions.",
   },
 ];
 
@@ -51,10 +51,10 @@ export default function FaqSection() {
       <div className="max-w-4xl mx-auto">
         <div className="mb-14 max-w-2xl text-center sm:text-left mx-auto sm:mx-0">
           <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-secondary-950 tracking-tight leading-tight">
-            Hal yang Sering Ditanyakan
+            Frequently Asked Questions
           </h2>
           <p className="mt-4 text-sm sm:text-base text-secondary-700 leading-relaxed">
-            Semua informasi penting yang perlu Anda ketahui sebelum menaklukkan Kawah Ijen.
+            Everything you need to know before your adventure to Mount Ijen.
           </p>
         </div>
 
@@ -101,8 +101,8 @@ export default function FaqSection() {
               <FaWhatsapp className="w-6 h-6 text-[#25D366]" />
             </div>
             <div>
-              <h4 className="font-bold text-sm sm:text-base text-white">Punya pertanyaan lain seputar perjalanan?</h4>
-              <p className="text-xs text-secondary-300">Tim pemandu lokal kami siap menjawab via WhatsApp 24/7.</p>
+              <h4 className="font-bold text-sm sm:text-base text-white">Have more questions about your trip?</h4>
+              <p className="text-xs text-secondary-300">Our local guide team is ready to assist you on WhatsApp 24/7.</p>
             </div>
           </div>
           <button
@@ -111,7 +111,7 @@ export default function FaqSection() {
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs transition shadow-md shrink-0 hover:scale-105 active:scale-95 mx-auto sm:mx-0 cursor-pointer"
           >
             <FaWhatsapp className="w-4 h-4" />
-            <span>Chat CS WhatsApp</span>
+            <span>Chat on WhatsApp</span>
           </button>
         </div>
       </div>

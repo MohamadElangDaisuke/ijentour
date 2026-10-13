@@ -56,8 +56,8 @@ export default function ThemeToggle() {
       type="button"
       onClick={toggleTheme}
       suppressHydrationWarning
-      aria-label={isDark ? 'Aktifkan light theme' : 'Aktifkan dark theme'}
-      title={isDark ? 'Light theme' : 'Dark theme'}
+      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       aria-pressed={isDark}
       className={`relative h-9 w-16 shrink-0 rounded-full border p-0.5 transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 cursor-pointer ${
         isDark

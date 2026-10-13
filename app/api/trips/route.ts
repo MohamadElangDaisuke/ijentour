@@ -96,7 +96,7 @@ export async function POST(request: Request) {
     } = body;
 
     if (!title) {
-      return NextResponse.json({ error: "Judul paket wisata wajib diisi." }, { status: 400 });
+      return NextResponse.json({ error: "Trip package title is required." }, { status: 400 });
     }
 
     const slug = createSlug(title) + "-" + Date.now().toString(36);
@@ -136,7 +136,7 @@ export async function POST(request: Request) {
       data: {
         type: "system",
         title: "Paket Wisata Baru Dibuat",
-        description: `Paket '${newPackage.title}' berhasil ditambahkan ke database.`,
+        description: `Package '${newPackage.title}' successfully added to database.`,
         link: `/packages/${newPackage.id}`,
         unread: true,
       },
@@ -144,13 +144,13 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: "Paket berhasil ditambahkan.",
+      message: "Package successfully created.",
       package: newPackage,
     });
   } catch (error: any) {
     console.error("POST /api/trips error:", error);
     return NextResponse.json(
-      { error: error.message || "Gagal membuat paket wisata baru." },
+      { error: error.message || "Failed to create new trip package." },
       { status: 500 }
     );
   }

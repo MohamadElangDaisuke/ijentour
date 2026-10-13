@@ -25,33 +25,33 @@ export default function Footer() {
               <span>Ijen</span><span className="font-extrabold text-primary-500">Tour</span>
             </Link>
             <p className="text-sm leading-relaxed text-secondary-600">
-              Penyedia jasa tur profesional terpercaya khusus di wilayah Kawah Ijen, Taman Nasional Baluran, Gunung Bromo, dan sekitarnya.
+              Trusted professional tour service specializing in Mount Ijen Crater, Baluran National Park, Mount Bromo, and surrounding destinations.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-secondary-950">Tautan Cepat</h4>
+            <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-secondary-950">Quick Links</h4>
             <ul className="space-y-2.5 text-sm">
-              <li><Link href="/" className="hover:text-primary-500 transition-colors">Beranda</Link></li>
-              <li><Link href="/packages" className="hover:text-primary-500 transition-colors">Paket Wisata</Link></li>
-              <li><Link href="/destinations" className="hover:text-primary-500 transition-colors">Destinasi</Link></li>
-              <li><Link href="/gallery" className="hover:text-primary-500 transition-colors">Galeri Wisata</Link></li>
-              <li><Link href="/booking" className="hover:text-primary-500 transition-colors">Cek Status Booking</Link></li>
-              <li><Link href="/about" className="hover:text-primary-500 transition-colors">Tentang Kami</Link></li>
+              <li><Link href="/" className="hover:text-primary-500 transition-colors">Home</Link></li>
+              <li><Link href="/packages" className="hover:text-primary-500 transition-colors">Tour Packages</Link></li>
+              <li><Link href="/destinations" className="hover:text-primary-500 transition-colors">Destinations</Link></li>
+              <li><Link href="/gallery" className="hover:text-primary-500 transition-colors">Travel Gallery</Link></li>
+              <li><Link href="/booking" className="hover:text-primary-500 transition-colors">Check Booking Status</Link></li>
+              <li><Link href="/about" className="hover:text-primary-500 transition-colors">About Us</Link></li>
               <li><Link href="/about#faq" className="hover:text-primary-500 transition-colors">FAQ</Link></li>
               <li><Link href="/blog" className="hover:text-primary-500 transition-colors">Blog</Link></li>
-              <li><Link href="/contact" className="hover:text-primary-500 transition-colors">Kontak</Link></li>
+              <li><Link href="/contact" className="hover:text-primary-500 transition-colors">Contact</Link></li>
             </ul>
           </div>
 
           {/* Contact Info */}
           <div>
-            <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-secondary-950">Kontak Kami</h4>
+            <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-secondary-950">Contact Us</h4>
             <ul className="space-y-4 text-sm text-secondary-600">
               <li className="flex items-start">
                 <MapPin size={18} className="mr-3 mt-0.5 shrink-0 text-primary-500" />
-                <span>Jl. Raya Ijen No. 45, <span translate="no" className="notranslate">Banyuwangi</span>,<br />Jawa Timur</span>
+                <span>Jl. Raya Ijen No. 45, <span translate="no" className="notranslate">Banyuwangi</span>,<br />East Java, Indonesia</span>
               </li>
               <li className="flex items-center">
                 <Phone size={18} className="mr-3 shrink-0 text-primary-500" />
@@ -75,7 +75,7 @@ export default function Footer() {
 
           {/* Social Links */}
           <div>
-            <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-secondary-950">Ikuti Kami</h4>
+            <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-secondary-950">Follow Us</h4>
             <div className="flex space-x-3">
               <a href="#" aria-label="Instagram" className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary-100 text-secondary-700 hover:bg-primary-500 hover:text-secondary-950 transition-all shadow-2xs">
                 <FaInstagram size={16} />

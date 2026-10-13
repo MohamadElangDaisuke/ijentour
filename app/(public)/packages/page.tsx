@@ -29,10 +29,10 @@ function PackagesContent() {
   const [viewDate, setViewDate] = useState<Date>(() => new Date());
 
   const MONTH_NAMES = [
-    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
   ];
-  const DAY_NAMES = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+  const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   const currentYear = viewDate.getFullYear();
   const currentMonth = viewDate.getMonth();
@@ -55,7 +55,7 @@ function PackagesContent() {
     (currentYear === today.getFullYear() && currentMonth <= today.getMonth());
 
   const formattedSelectedDate = selectedDate
-    ? selectedDate.toLocaleDateString('id-ID', {
+    ? selectedDate.toLocaleDateString('en-US', {
         weekday: 'long',
         day: 'numeric',
         month: 'long',
@@ -86,7 +86,7 @@ function PackagesContent() {
           });
         }
       } catch (e) {
-        console.error("Gagal memuat paket dari localStorage:", e);
+        console.error("Failed to load packages from localStorage:", e);
       }
     }
   }, []);
@@ -115,7 +115,7 @@ function PackagesContent() {
   ];
 
   const whatsappMessage = encodeURIComponent(
-    `Halo Ijen Tour, saya ingin memesan paket "${activePackage.title}" (${activePackage.price})${formattedSelectedDate ? ` untuk tanggal keberangkatan ${formattedSelectedDate}` : ''}. Mohon informasi ketersediaan tanggal dan slot pemandu.`
+    `Hello Ijen Tour, I would like to book the "${activePackage.title}" package (${activePackage.price})${formattedSelectedDate ? ` for departure date ${formattedSelectedDate}` : ''}. Please provide information regarding availability and guide slots.`
   );
 
   return (
@@ -133,7 +133,7 @@ function PackagesContent() {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="flex flex-wrap items-center gap-2 mb-4">
             <span className="bg-primary-500 text-secondary-950 text-xs font-black px-3 py-1 rounded-md uppercase tracking-wider">
-              {activePackage.badge || 'Paket Populer'}
+              {activePackage.badge || 'Popular Tour'}
             </span>
             <span className="bg-white/20 backdrop-blur-md text-white text-xs font-semibold px-3 py-1 rounded-md capitalize">
               {activePackage.category === 'midnight' ? 'Midnight Trip' : activePackage.category === 'private' ? 'Private Tour' : 'Regular Tour'}
@@ -149,13 +149,13 @@ function PackagesContent() {
               <Star size={18} className="fill-current mr-1.5" />
               <span className="font-bold text-white">
                 {(activePackage.rating || 4.9).toFixed(1)}{' '}
-                <span className="text-white/70 font-normal">({activePackage.savedCount || '2.5K+'} tersimpan)</span>
+                <span className="text-white/70 font-normal">({activePackage.savedCount || '2.5K+'} saved)</span>
               </span>
             </div>
             <span>•</span>
             <div className="flex items-center text-white/90">
               <Clock size={16} className="mr-1.5 text-primary-400" />
-              <span>Durasi: {activePackage.duration}</span>
+              <span>Duration: {activePackage.duration}</span>
             </div>
             <span>•</span>
             <div className="flex items-center text-primary-400 font-extrabold text-base">
@@ -167,7 +167,7 @@ function PackagesContent() {
             href={`/packages/${activePackage.id}`}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-400 text-secondary-950 text-xs font-black transition-all shadow-md transform hover:-translate-y-0.5"
           >
-            <span>Buka Halaman Detail Lengkap</span>
+            <span>View Full Package Details</span>
             <ArrowRight size={15} />
           </Link>
         </div>
@@ -180,14 +180,14 @@ function PackagesContent() {
         <section className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-secondary-100">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-6 border-b border-secondary-100">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary-600 mb-1">Pilihan Paket Wisata</p>
-              <h2 className="text-2xl font-black text-secondary-950">Pilih Paket yang Anda Inginkan</h2>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary-600 mb-1">Tour Package Options</p>
+              <h2 className="text-2xl font-black text-secondary-950">Choose Your Preferred Tour Package</h2>
             </div>
 
             {/* Filter Tabs */}
             <div className="flex flex-wrap gap-2">
               {[
-                { id: 'all', label: 'Semua Paket' },
+                { id: 'all', label: 'All Packages' },
                 { id: 'midnight', label: 'Midnight Trip' },
                 { id: 'private', label: 'Private Tour' },
                 { id: 'regular', label: 'Regular Tour' }
@@ -239,24 +239,24 @@ function PackagesContent() {
 
                   <div className="mt-4 pt-3 border-t border-secondary-100 flex items-center justify-between gap-2">
                     <div>
-                      <p className="text-[10px] text-secondary-500">Mulai dari</p>
+                      <p className="text-[10px] text-secondary-500">Starting from</p>
                       <p className="text-sm font-black text-primary-600">{pkg.price}</p>
                     </div>
                     <div className="flex items-center gap-1.5">
                       <Link
                         href={`/packages/${pkg.id}`}
                         onClick={(e) => e.stopPropagation()}
-                        title="Buka halaman detail paket"
+                        title="View package details"
                         className="text-xs font-bold px-2.5 py-1.5 rounded-lg border border-secondary-200 text-secondary-700 hover:bg-secondary-100 hover:text-secondary-950 transition flex items-center gap-1"
                       >
-                        <span>Detail</span>
+                        <span>Details</span>
                         <ExternalLink size={12} />
                       </Link>
                       <span className={`text-xs font-bold px-3 py-1.5 rounded-lg transition ${isSelected
                           ? 'bg-primary-500 text-secondary-950'
                           : 'bg-secondary-100 text-secondary-800 group-hover:bg-secondary-950 group-hover:text-white'
                         }`}>
-                        {isSelected ? 'Terpilih ✓' : 'Pilih'}
+                        {isSelected ? 'Selected ✓' : 'Select'}
                       </span>
                     </div>
                   </div>
@@ -272,16 +272,16 @@ function PackagesContent() {
           {/* LEFT COLUMN - DETAILS */}
           <div className="lg:col-span-2 space-y-12">
 
-            {/* Galeri Foto */}
+            {/* Photo Gallery */}
             <section>
-              <h3 className="font-bold text-secondary-950 mb-4 uppercase tracking-wide text-xs">Galeri Foto Momen</h3>
+              <h3 className="font-bold text-secondary-950 mb-4 uppercase tracking-wide text-xs">Photo Gallery</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {galleryImages.map((imgUrl, i) => (
                   <div key={i} className="aspect-video rounded-2xl overflow-hidden bg-secondary-100 border border-secondary-200/50">
                     <img
                       src={imgUrl}
                       onError={(e) => { (e.target as HTMLImageElement).src = '/images/pkg-bluefire.png'; }}
-                      alt={`Galeri ${activePackage.title} ${i + 1}`}
+                      alt={`Gallery ${activePackage.title} ${i + 1}`}
                       className="w-full h-full object-cover hover:scale-105 transition duration-300"
                     />
                   </div>
@@ -289,13 +289,13 @@ function PackagesContent() {
               </div>
             </section>
 
-            {/* Highlights Paket */}
+            {/* Package Highlights */}
             {activePackage.highlights && activePackage.highlights.length > 0 && (
               <section className="bg-white rounded-3xl p-6 md:p-8 border border-secondary-100 shadow-sm">
                 <div className="flex items-center gap-2 text-primary-600 font-bold text-xs uppercase tracking-wider mb-2">
-                  <Sparkles size={16} /> Keunggulan Utama
+                  <Sparkles size={16} /> Key Highlights
                 </div>
-                <h3 className="text-2xl font-black text-secondary-950 mb-6">Highlight Perjalanan</h3>
+                <h3 className="text-2xl font-black text-secondary-950 mb-6">Trip Highlights</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {activePackage.highlights.map((item, idx) => (
                     <div key={idx} className="flex items-start gap-3 p-3.5 rounded-2xl bg-secondary-50 border border-secondary-100">
@@ -310,7 +310,7 @@ function PackagesContent() {
             {/* Itinerary */}
             {activePackage.itinerary && activePackage.itinerary.length > 0 && (
               <section className="bg-white rounded-3xl p-6 md:p-8 border border-secondary-100 shadow-sm">
-                <h2 className="text-2xl font-black text-secondary-950 mb-6">Rencana Perjalanan (Itinerary)</h2>
+                <h2 className="text-2xl font-black text-secondary-950 mb-6">Trip Itinerary</h2>
                 <div className="space-y-6 relative before:absolute before:left-4 before:top-3 before:bottom-3 before:w-0.5 before:bg-secondary-200">
                   {activePackage.itinerary.map((item, idx) => (
                     <div key={idx} className="relative pl-10">
@@ -326,12 +326,12 @@ function PackagesContent() {
               </section>
             )}
 
-            {/* Termasuk & Tidak Termasuk */}
+            {/* Included & Excluded */}
             <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white p-6 rounded-3xl shadow-sm border border-secondary-100">
-                <h3 className="font-black text-secondary-950 mb-4 text-lg">Termasuk (Included)</h3>
+                <h3 className="font-black text-secondary-950 mb-4 text-lg">Included</h3>
                 <ul className="space-y-3">
-                  {["Transportasi AC PP", "Tiket Masuk & Konservasi", "Pemandu Lokal Berlisensi", "Masker Gas Medis Respirator", "Air Minum & P3K"].map((item, i) => (
+                  {["Roundtrip AC Transportation", "Entrance & Conservation Tickets", "Licensed Local Guide", "Medical Respirator Gas Mask", "Bottled Water & First Aid"].map((item, i) => (
                     <li key={i} className="flex items-start text-sm text-secondary-700">
                       <Check size={18} className="text-secondary-600 mr-2 shrink-0" />
                       {item}
@@ -340,9 +340,9 @@ function PackagesContent() {
                 </ul>
               </div>
               <div className="bg-white p-6 rounded-3xl shadow-sm border border-secondary-100">
-                <h3 className="font-black text-secondary-950 mb-4 text-lg">Tidak Termasuk (Excluded)</h3>
+                <h3 className="font-black text-secondary-950 mb-4 text-lg">Excluded</h3>
                 <ul className="space-y-3">
-                  {["Pengeluaran Pribadi", "Tip Pemandu (Sukarela)", "Makan & Camilan Pribadi", "Taksi Troly Kawah (Jika Dibutuhkan)"].map((item, i) => (
+                  {["Personal Expenses", "Guide Gratuity / Tip (Optional)", "Personal Meals & Snacks", "Crater Trolley Taxi (If Needed)"].map((item, i) => (
                     <li key={i} className="flex items-start text-sm text-secondary-700">
                       <XCircle size={18} className="text-primary-600 mr-2 shrink-0" />
                       {item}
@@ -357,16 +357,16 @@ function PackagesContent() {
           <div className="lg:col-span-1">
             <div className="bg-white rounded-3xl shadow-xl border border-secondary-100 p-6 sticky top-24">
               <div className="mb-6 pb-5 border-b border-secondary-100">
-                <span className="text-secondary-500 text-xs font-bold uppercase tracking-wider block mb-1">Total Biaya Paket</span>
+                <span className="text-secondary-500 text-xs font-bold uppercase tracking-wider block mb-1">Total Package Price</span>
                 <div className="flex items-end gap-2">
                   <span className="text-3xl font-black text-primary-600">{activePackage.price}</span>
-                  <span className="text-secondary-600 text-sm pb-1 font-medium">/ Org</span>
+                  <span className="text-secondary-600 text-sm pb-1 font-medium">/ Person</span>
                 </div>
               </div>
 
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-extrabold text-secondary-950 text-sm">Pilih Tanggal Keberangkatan</h4>
+                  <h4 className="font-extrabold text-secondary-950 text-sm">Select Departure Date</h4>
                   {selectedDate && (
                     <span className="text-xs text-primary-700 font-bold bg-primary-100 px-2 py-0.5 rounded-md">
                       {selectedDate.getDate()} {MONTH_NAMES[selectedDate.getMonth()]}
@@ -374,7 +374,7 @@ function PackagesContent() {
                   )}
                 </div>
 
-                {/* Kalender Interaktif */}
+                {/* Interactive Calendar */}
                 <div className="bg-secondary-50 p-4 rounded-2xl border border-secondary-200">
                   <div className="flex justify-between items-center mb-4 text-sm font-bold text-secondary-800">
                     <span className="capitalize">{MONTH_NAMES[currentMonth]} {currentYear}</span>
@@ -383,8 +383,8 @@ function PackagesContent() {
                         type="button"
                         onClick={handlePrevMonth}
                         disabled={isPrevDisabled}
-                        title="Bulan Sebelumnya"
-                        aria-label="Bulan Sebelumnya"
+                        title="Previous Month"
+                        aria-label="Previous Month"
                         className={`p-1.5 rounded-lg transition ${
                           isPrevDisabled
                             ? 'text-secondary-300 cursor-not-allowed opacity-40'
@@ -396,8 +396,8 @@ function PackagesContent() {
                       <button
                         type="button"
                         onClick={handleNextMonth}
-                        title="Bulan Berikutnya"
-                        aria-label="Bulan Berikutnya"
+                        title="Next Month"
+                        aria-label="Next Month"
                         className="p-1.5 rounded-lg hover:bg-secondary-200 hover:text-secondary-900 transition cursor-pointer active:scale-95"
                       >
                         <ChevronRight size={16} />
@@ -405,21 +405,21 @@ function PackagesContent() {
                     </div>
                   </div>
 
-                  {/* Header Hari */}
+                  {/* Day Header */}
                   <div className="grid grid-cols-7 text-center text-[11px] text-secondary-500 gap-y-2 mb-2 font-bold uppercase tracking-wider">
                     {DAY_NAMES.map((day) => (
                       <div key={day} className="py-0.5">{day}</div>
                     ))}
                   </div>
 
-                  {/* Grid Tanggal */}
+                  {/* Date Grid */}
                   <div className="grid grid-cols-7 gap-1 text-center text-xs">
-                    {/* Placeholder hari kosong sebelum tanggal 1 */}
+                    {/* Empty placeholder days before the 1st */}
                     {Array.from({ length: firstDayOfMonth }).map((_, index) => (
                       <div key={`empty-${index}`} className="h-8 w-8 mx-auto" />
                     ))}
 
-                    {/* Hari-hari dalam bulan */}
+                    {/* Month days */}
                     {Array.from({ length: daysInMonth }).map((_, index) => {
                       const dayNumber = index + 1;
                       const cellDate = new Date(currentYear, currentMonth, dayNumber);
@@ -460,15 +460,15 @@ function PackagesContent() {
                   <span>
                     {selectedDate ? (
                       <>
-                        Keberangkatan: <strong className="font-bold text-emerald-950">{formattedSelectedDate}</strong>
+                        Departure: <strong className="font-bold text-emerald-950">{formattedSelectedDate}</strong>
                       </>
                     ) : (
-                      'Silakan tentukan tanggal pilihan Anda'
+                      'Please select your preferred date'
                     )}
                   </span>
                 </div>
                 <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-md shrink-0">
-                  Tersedia
+                  Available
                 </span>
               </div>
 
@@ -485,7 +485,7 @@ function PackagesContent() {
                 className="w-full bg-primary-500 hover:bg-primary-600 text-secondary-950 font-black py-4 rounded-2xl shadow-xs hover:shadow transition duration-200 flex items-center justify-center space-x-2 text-center cursor-pointer"
               >
                 <FaWhatsapp size={20} className="text-secondary-950" />
-                <span>PESAN SEKARANG VIA WHATSAPP</span>
+                <span>BOOK NOW VIA WHATSAPP</span>
                 <ArrowRight size={18} />
               </button>
 
@@ -493,7 +493,7 @@ function PackagesContent() {
                 href={`/packages/${activePackage.id}`}
                 className="w-full mt-3 border border-secondary-300 hover:border-primary-500 hover:bg-primary-50 text-secondary-900 font-bold py-3 rounded-2xl transition duration-200 flex items-center justify-center space-x-1.5 text-xs text-center"
               >
-                <span>Lihat Detail Lengkap & Itinerary</span>
+                <span>View Full Details & Itinerary</span>
                 <ExternalLink size={14} className="text-primary-600" />
               </Link>
             </div>

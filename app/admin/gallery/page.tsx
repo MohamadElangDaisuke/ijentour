@@ -36,7 +36,7 @@ export default function AdminGalleryPage() {
   const handleAddPhoto = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !image) {
-      setError("Judul dan file foto gambar wajib diunggah.");
+      setError("Photo title and image file are required.");
       return;
     }
 
@@ -56,21 +56,21 @@ export default function AdminGalleryPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Gagal menambahkan foto.");
+      if (!res.ok) throw new Error(data.error || "Failed to add photo.");
 
       setItems([data.item, ...items]);
       setTitle("");
       setImage("");
       setCaption("");
     } catch (err: any) {
-      setError(err.message || "Terjadi kesalahan.");
+      setError(err.message || "An error occurred.");
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Hapus foto momen ini?")) return;
+    if (!confirm("Delete this photo moment?")) return;
 
     try {
       const res = await fetch(`/api/gallery/${id}`, { method: "DELETE" });
@@ -86,20 +86,20 @@ export default function AdminGalleryPage() {
     <div className="space-y-8 pb-12">
       <div>
         <span className="text-xs font-bold uppercase tracking-wider text-primary-600">
-          Media & Dokumentasi
+          Media & Documentation
         </span>
         <h1 className="text-2xl sm:text-3xl font-black text-secondary-950 tracking-tight">
-          Kelola Galeri Momen
+          Manage Moments Gallery
         </h1>
         <p className="text-xs sm:text-sm text-secondary-600 mt-1">
-          Unggah atau perbarui foto-foto dokumentasi keindahan Ijen yang disimpan langsung di Supabase Storage.
+          Upload or update documentation photos of Mount Ijen stored directly in Supabase Storage.
         </p>
       </div>
 
       {/* Add New Photo Card */}
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-xs">
         <h2 className="text-base font-black text-secondary-950 uppercase tracking-wider pb-3 border-b border-secondary-100 mb-6">
-          Tambah Foto Galeri Baru
+          Add New Gallery Photo
         </h2>
 
         {error && (
@@ -113,39 +113,39 @@ export default function AdminGalleryPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-secondary-800 mb-1.5">Judul Foto *</label>
+                <label className="block text-xs font-bold text-secondary-800 mb-1.5">Photo Title *</label>
                 <input
                   type="text"
                   required
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Contoh: Danau Toska Kawah Ijen"
+                  placeholder="e.g. Turquoise Crater Lake of Mount Ijen"
                   className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-secondary-800 mb-1.5">Kategori</label>
+                <label className="block text-xs font-bold text-secondary-800 mb-1.5">Category</label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                   className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-800 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 >
                   <option value="blue-fire">Blue Fire</option>
-                  <option value="crater">Danau Kawah</option>
+                  <option value="crater">Crater Lake</option>
                   <option value="sunrise">Sunrise</option>
-                  <option value="miners">Penambang Belerang</option>
-                  <option value="destination">Destinasi Banyuwangi</option>
+                  <option value="miners">Sulfur Miners</option>
+                  <option value="destination">Banyuwangi Destinations</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-secondary-800 mb-1.5">Keterangan / Caption</label>
+                <label className="block text-xs font-bold text-secondary-800 mb-1.5">Caption / Description</label>
                 <textarea
                   rows={3}
                   value={caption}
                   onChange={(e) => setCaption(e.target.value)}
-                  placeholder="Deskripsi singkat momen petualangan ini..."
+                  placeholder="Brief description of this adventure moment..."
                   className="w-full px-4 py-2 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
               </div>
@@ -156,10 +156,10 @@ export default function AdminGalleryPage() {
                 value={image}
                 onChange={(url) => setImage(url)}
                 folder="gallery"
-                label="Unggah File Foto (Supabase Storage)"
+                label="Upload Photo File (Supabase Storage)"
                 required
                 aspectRatio="video"
-                helperText="Pilih file JPG, PNG, atau WebP dari perangkat Anda (Maks. 5 MB)."
+                helperText="Choose a JPG, PNG, or WebP file from your device (Max 5 MB)."
               />
             </div>
           </div>
@@ -171,7 +171,7 @@ export default function AdminGalleryPage() {
               className="px-6 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-400 text-secondary-950 font-bold text-xs shadow-sm transition flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
             >
               <Plus className="w-4 h-4" />
-              <span>{submitting ? "Menyimpan..." : "Tambahkan ke Galeri"}</span>
+              <span>{submitting ? "Saving..." : "Add to Gallery"}</span>
             </button>
           </div>
         </form>
@@ -180,7 +180,7 @@ export default function AdminGalleryPage() {
       {/* Gallery Grid */}
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-xs">
         <h2 className="text-base font-black text-secondary-950 uppercase tracking-wider pb-3 border-b border-secondary-100 mb-6">
-          Foto Galeri Aktif ({items.length})
+          Active Gallery Photos ({items.length})
         </h2>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -204,7 +204,7 @@ export default function AdminGalleryPage() {
                 type="button"
                 onClick={() => handleDelete(item.id)}
                 className="absolute top-2 right-2 p-1.5 rounded-full bg-red-600/80 hover:bg-red-600 text-white transition cursor-pointer"
-                title="Hapus Foto"
+                title="Delete Photo"
               >
                 <Trash2 className="w-3.5 h-3.5" />
               </button>

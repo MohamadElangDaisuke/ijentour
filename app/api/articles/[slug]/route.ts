@@ -17,7 +17,7 @@ export async function GET(
       if (fallback) {
         return NextResponse.json({ success: true, article: fallback });
       }
-      return NextResponse.json({ error: "Artikel tidak ditemukan." }, { status: 404 });
+      return NextResponse.json({ error: "Article not found." }, { status: 404 });
     }
 
     // Search in Prisma database first
@@ -43,7 +43,7 @@ export async function GET(
       return NextResponse.json({ success: true, article: fallback });
     }
 
-    return NextResponse.json({ error: "Artikel tidak ditemukan." }, { status: 404 });
+    return NextResponse.json({ error: "Article not found." }, { status: 404 });
   } catch {
     try {
       const { slug } = await params;
@@ -54,7 +54,7 @@ export async function GET(
         return NextResponse.json({ success: true, article: fallback });
       }
     } catch {}
-    return NextResponse.json({ error: "Artikel tidak ditemukan." }, { status: 404 });
+    return NextResponse.json({ error: "Article not found." }, { status: 404 });
   }
 }
 
@@ -83,7 +83,7 @@ export async function PUT(
     });
 
     if (!existing) {
-      return NextResponse.json({ error: "Artikel tidak ditemukan." }, { status: 404 });
+      return NextResponse.json({ error: "Article not found." }, { status: 404 });
     }
 
     const updated = await prisma.blogPost.update({
@@ -104,7 +104,7 @@ export async function PUT(
   } catch (error: any) {
     console.error("PUT /api/articles/[slug] error:", error);
     return NextResponse.json(
-      { error: error.message || "Gagal memperbarui artikel." },
+      { error: error.message || "Failed to update article." },
       { status: 500 }
     );
   }
@@ -121,10 +121,10 @@ export async function DELETE(
         OR: [{ id: slug }, { slug }],
       },
     });
-    return NextResponse.json({ success: true, message: "Artikel berhasil dihapus." });
+    return NextResponse.json({ success: true, message: "Article successfully deleted." });
   } catch (error: any) {
     console.error("DELETE /api/articles/[slug] error:", error);
-    return NextResponse.json({ error: "Gagal menghapus artikel." }, { status: 500 });
+    return NextResponse.json({ error: "Failed to delete article." }, { status: 500 });
   }
 }
 

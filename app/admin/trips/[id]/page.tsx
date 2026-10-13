@@ -57,10 +57,10 @@ export default function EditTripPage({ params }: PageProps) {
           setIncluded(Array.isArray(p.included) ? p.included : []);
           setExcluded(Array.isArray(p.excluded) ? p.excluded : []);
         } else {
-          setError("Paket tidak ditemukan.");
+          setError("Package not found.");
         }
       })
-      .catch((e) => setError("Gagal memuat paket."))
+      .catch((e) => setError("Failed to load package."))
       .finally(() => setLoading(false));
   }, [tripId]);
 
@@ -91,12 +91,12 @@ export default function EditTripPage({ params }: PageProps) {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Gagal memperbarui paket.");
+      if (!res.ok) throw new Error(data.error || "Failed to update package.");
 
       router.push("/admin/trips");
       router.refresh();
     } catch (err: any) {
-      setError(err.message || "Gagal menyimpan perubahan.");
+      setError(err.message || "Failed to save changes.");
     } finally {
       setSubmitting(false);
     }
@@ -119,9 +119,9 @@ export default function EditTripPage({ params }: PageProps) {
             className="inline-flex items-center gap-1.5 text-xs font-bold text-secondary-600 hover:text-primary-600 mb-1 transition"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Kembali ke Daftar Paket</span>
+            <span>Back to Packages List</span>
           </Link>
-          <h1 className="text-2xl font-black text-secondary-950">Sunting Paket: {title}</h1>
+          <h1 className="text-2xl font-black text-secondary-950">Edit Package: {title}</h1>
         </div>
       </div>
 
@@ -136,7 +136,7 @@ export default function EditTripPage({ params }: PageProps) {
         <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-xs space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-xs font-bold text-secondary-800 mb-2">Judul Paket *</label>
+              <label className="block text-xs font-bold text-secondary-800 mb-2">Package Title *</label>
               <input
                 type="text"
                 required
@@ -147,7 +147,7 @@ export default function EditTripPage({ params }: PageProps) {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-secondary-800 mb-2">Kategori Tur</label>
+              <label className="block text-xs font-bold text-secondary-800 mb-2">Tour Category</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
@@ -162,7 +162,7 @@ export default function EditTripPage({ params }: PageProps) {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <div>
-              <label className="block text-xs font-bold text-secondary-800 mb-2">Durasi Paket</label>
+              <label className="block text-xs font-bold text-secondary-800 mb-2">Package Duration</label>
               <input
                 type="text"
                 value={duration}
@@ -172,7 +172,7 @@ export default function EditTripPage({ params }: PageProps) {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-secondary-800 mb-2">Harga Tampilan (Label)</label>
+              <label className="block text-xs font-bold text-secondary-800 mb-2">Display Price (Label)</label>
               <input
                 type="text"
                 value={price}
@@ -182,7 +182,7 @@ export default function EditTripPage({ params }: PageProps) {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-secondary-800 mb-2">Harga Dasar (Integer)</label>
+              <label className="block text-xs font-bold text-secondary-800 mb-2">Base Price (Integer)</label>
               <input
                 type="number"
                 value={basePrice}
@@ -194,7 +194,7 @@ export default function EditTripPage({ params }: PageProps) {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <label className="block text-xs font-bold text-secondary-800 mb-2">Badge Promosi</label>
+              <label className="block text-xs font-bold text-secondary-800 mb-2">Promotional Badge</label>
               <input
                 type="text"
                 value={badge}
@@ -209,23 +209,23 @@ export default function EditTripPage({ params }: PageProps) {
               value={image}
               onChange={(url) => setImage(url)}
               folder="trips"
-              label="Foto Sampul Tur (Cover Image - Supabase)"
+              label="Tour Cover Image (Cover Image - Supabase)"
               required
               aspectRatio="video"
-              helperText="Upload foto utama untuk kartu dan banner tur (Maks. 5 MB)."
+              helperText="Upload primary cover image for tour cards and hero banner (Max. 5 MB)."
             />
 
             <MultiImageUpload
               value={galleryImages}
               onChange={(urls) => setGalleryImages(urls)}
               folder="trips"
-              label="Galeri Foto Tur (Multiple Upload - Supabase)"
+              label="Tour Photo Gallery (Multiple Upload - Supabase)"
               maxFiles={8}
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-secondary-800 mb-2">Deskripsi Lengkap Tur</label>
+            <label className="block text-xs font-bold text-secondary-800 mb-2">Full Tour Description</label>
             <textarea
               rows={4}
               value={description}
@@ -240,7 +240,7 @@ export default function EditTripPage({ params }: PageProps) {
             href="/admin/trips"
             className="px-6 py-3 rounded-2xl bg-secondary-100 hover:bg-secondary-200 text-secondary-800 font-bold text-xs transition"
           >
-            Batal
+            Cancel
           </Link>
           <button
             type="submit"
@@ -248,7 +248,7 @@ export default function EditTripPage({ params }: PageProps) {
             className="px-8 py-3.5 rounded-2xl bg-primary-500 hover:bg-primary-400 text-secondary-950 font-black text-sm transition shadow-md flex items-center gap-2 cursor-pointer disabled:opacity-60"
           >
             <Save className="w-4 h-4" />
-            <span>{submitting ? "Menyimpan Perubahan..." : "Simpan Perubahan Paket"}</span>
+            <span>{submitting ? "Saving Changes..." : "Save Package Changes"}</span>
           </button>
         </div>
       </form>

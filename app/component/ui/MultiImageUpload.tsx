@@ -18,7 +18,7 @@ export default function MultiImageUpload({
   value = [],
   onChange,
   folder = "trips",
-  label = "Galeri Foto Tambahan",
+  label = "Additional Photo Gallery",
   maxFiles = 8,
 }: MultiImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
@@ -30,18 +30,18 @@ export default function MultiImageUpload({
     if (fileArray.length === 0) return;
 
     if (value.length + fileArray.length > maxFiles) {
-      setErrorMessage(`Batas maksimum adalah ${maxFiles} foto galeri.`);
+      setErrorMessage(`Maximum limit is ${maxFiles} gallery photos.`);
       return;
     }
 
     // Validate all files
     for (const f of fileArray) {
       if (!ALLOWED_TYPES.includes(f.type.toLowerCase())) {
-        setErrorMessage("Format gambar tidak didukung. Harap gunakan format JPG, JPEG, PNG, atau WebP.");
+        setErrorMessage("Unsupported image format. Please use JPG, JPEG, PNG, or WebP.");
         return;
       }
       if (f.size > MAX_SIZE_MB * 1024 * 1024) {
-        setErrorMessage(`File ${f.name} terlalu besar (maksimal ${MAX_SIZE_MB} MB).`);
+        setErrorMessage(`File ${f.name} is too large (maximum ${MAX_SIZE_MB} MB).`);
         return;
       }
     }
@@ -66,14 +66,14 @@ export default function MultiImageUpload({
         if (res.ok && data.success) {
           uploadedUrls.push(data.url);
         } else {
-          throw new Error(data.error || "Gagal mengunggah beberapa gambar.");
+          throw new Error(data.error || "Failed to upload some images.");
         }
       }
 
       onChange([...value, ...uploadedUrls]);
     } catch (err: any) {
       console.error("Multi upload error:", err);
-      setErrorMessage(err.message || "Gagal mengunggah foto. Silakan periksa koneksi dan coba lagi.");
+      setErrorMessage(err.message || "Failed to upload photos. Please check your connection and try again.");
     } finally {
       setIsUploading(false);
       if (fileInputRef.current) {
@@ -95,7 +95,7 @@ export default function MultiImageUpload({
         </label>
         {value.length > 0 && (
           <span className="text-[11px] text-secondary-500 font-medium">
-            {value.length} foto terpilih
+            {value.length} photos selected
           </span>
         )}
       </div>
@@ -109,14 +109,14 @@ export default function MultiImageUpload({
           >
             <img
               src={url}
-              alt={`Galeri ${idx + 1}`}
+              alt={`Gallery ${idx + 1}`}
               className="w-full h-full object-cover transition group-hover:scale-105"
             />
             <button
               type="button"
               onClick={() => handleRemove(idx)}
               className="absolute top-2 right-2 p-1.5 rounded-full bg-secondary-950/70 hover:bg-red-600 text-white transition shadow-sm"
-              title="Hapus foto ini"
+              title="Remove this photo"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -137,7 +137,7 @@ export default function MultiImageUpload({
               </div>
             )}
             <span className="text-[11px] font-bold text-secondary-800">
-              {isUploading ? "Mengunggah..." : "Tambah Foto"}
+              {isUploading ? "Uploading..." : "Add Photo"}
             </span>
           </div>
         )}

@@ -23,7 +23,7 @@ export function formatCurrency(amount: number): string {
 /**
  * Format date to readable string
  */
-export function formatDate(date: Date | string, locale: string = "id-ID"): string {
+export function formatDate(date: Date | string, locale: string = "en-US"): string {
   return new Date(date).toLocaleDateString(locale, {
     weekday: "long",
     year: "numeric",
@@ -35,7 +35,7 @@ export function formatDate(date: Date | string, locale: string = "id-ID"): strin
 /**
  * Format short date
  */
-export function formatShortDate(date: Date | string, locale: string = "id-ID"): string {
+export function formatShortDate(date: Date | string, locale: string = "en-US"): string {
   return new Date(date).toLocaleDateString(locale, {
     month: "short",
     day: "numeric",

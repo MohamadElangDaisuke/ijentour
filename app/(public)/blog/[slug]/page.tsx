@@ -2,24 +2,18 @@
 
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Calendar,
   Clock,
-  User,
   Share2,
   Check,
-  Tag,
   BookOpen,
   ArrowRight,
-  Sparkles,
-  MapPin,
-  Compass
 } from "lucide-react";
-import { defaultArticles, Article } from "@/app/lib/articlesStorage";
-import { defaultPackages } from "@/app/lib/packagesStorage";
 import MarkdownRenderer from "@/app/component/ui/MarkdownRenderer";
+import { defaultArticles, Article } from "@/app/lib/articlesStorage";
+import { ArticleDetailSkeleton } from "@/app/component/ui/skeleton";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -28,7 +22,6 @@ interface PageProps {
 export default function BlogDetailPage({ params }: PageProps) {
   const resolved = use(params);
   const slug = resolved.slug;
-  const router = useRouter();
 
   const [article, setArticle] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -45,14 +38,14 @@ export default function BlogDetailPage({ params }: PageProps) {
         } else {
           // Fallback to local defaultArticles
           const found = defaultArticles.find(
-            (a) => a.id === slug || a.title.toLowerCase().includes(slug.replace(/-/g, " ").toLowerCase())
+            (a: Article) => a.id === slug || a.title.toLowerCase().includes(slug.replace(/-/g, " ").toLowerCase())
           );
           if (found) setArticle(found);
         }
       })
       .catch(() => {
         const found = defaultArticles.find(
-          (a) => a.id === slug || a.title.toLowerCase().includes(slug.replace(/-/g, " ").toLowerCase())
+          (a: Article) => a.id === slug || a.title.toLowerCase().includes(slug.replace(/-/g, " ").toLowerCase())
         );
         if (found) setArticle(found);
       })
@@ -65,11 +58,11 @@ export default function BlogDetailPage({ params }: PageProps) {
         if (data.success && data.articles) {
           setRecentArticles(data.articles.filter((a: any) => (a.slug || a.id) !== slug).slice(0, 3));
         } else {
-          setRecentArticles(defaultArticles.filter((a) => a.id !== slug).slice(0, 3));
+          setRecentArticles(defaultArticles.filter((a: Article) => a.id !== slug).slice(0, 3));
         }
       })
       .catch(() => {
-        setRecentArticles(defaultArticles.filter((a) => a.id !== slug).slice(0, 3));
+        setRecentArticles(defaultArticles.filter((a: Article) => a.id !== slug).slice(0, 3));
       });
   }, [slug]);
 
@@ -92,11 +85,7 @@ export default function BlogDetailPage({ params }: PageProps) {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-secondary-50 flex items-center justify-center p-8">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
-      </div>
-    );
+    return <ArticleDetailSkeleton />;
   }
 
   if (!article) {

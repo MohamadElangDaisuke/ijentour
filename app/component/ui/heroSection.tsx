@@ -2,29 +2,43 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, Compass, Play } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Compass } from 'lucide-react';
+import { FaWhatsapp } from 'react-icons/fa';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { FaWhatsapp } from 'react-icons/fa';
 import { defaultHeroStats, defaultDestinations } from '../../lib/destinationsStorage';
-import { getWhatsAppLink, WhatsAppTemplates } from '@/lib/whatsapp';
 import { useBookingModal } from '@/lib/bookingModalStore';
 
 export default function HeroSection() {
   const { openBookingModal } = useBookingModal();
+  const [destinations, setDestinations] = useState<any[]>(defaultDestinations);
   const [activeDestination, setActiveDestination] = useState(0);
-  const destination = defaultDestinations[activeDestination] || defaultDestinations[0];
+
+  useEffect(() => {
+    fetch('/api/destinations')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.destinations && data.destinations.length > 0) {
+          setDestinations(data.destinations);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const destList = destinations.length > 0 ? destinations : defaultDestinations;
+  const destination = destList[activeDestination % destList.length] || defaultDestinations[0];
 
   const changeDestination = (direction: number) => {
-    setActiveDestination((current) => (current + direction + defaultDestinations.length) % defaultDestinations.length);
+    setActiveDestination((current) => (current + direction + destList.length) % destList.length);
   };
 
   useEffect(() => {
+    if (destList.length <= 1) return;
     const autoplay = window.setInterval(() => {
-      setActiveDestination((current) => (current + 1) % defaultDestinations.length);
+      setActiveDestination((current) => (current + 1) % destList.length);
     }, 5000);
     return () => window.clearInterval(autoplay);
-  }, []);
+  }, [destList.length]);
 
   return (
     <section
@@ -62,6 +76,14 @@ export default function HeroSection() {
 
           {/* Trust Badges */}
           <div className="mt-4 flex flex-wrap items-center justify-center sm:justify-start gap-2.5 text-[11px] font-semibold text-secondary-600">
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent('open-ai-assistant'))}
+              className="px-3 py-1 rounded-full bg-primary-100/80 border border-primary-300 text-secondary-900 shadow-2xs hover:bg-primary-200 transition cursor-pointer flex items-center gap-1.5"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="font-bold text-secondary-950">AI Travel Assistant (Live)</span>
+            </button>
             <span className="px-3 py-1 rounded-full bg-white border border-secondary-200 shadow-2xs">✓ Licensed Local Guides</span>
             <span className="px-3 py-1 rounded-full bg-white border border-secondary-200 shadow-2xs">✓ Free Gas Masks & Headlamps</span>
             <span className="px-3 py-1 rounded-full bg-white border border-secondary-200 shadow-2xs">✓ 24/7 WhatsApp Support</span>

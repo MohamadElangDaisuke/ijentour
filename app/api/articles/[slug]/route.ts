@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { defaultArticles } from "@/app/lib/articlesStorage";
+import { requireAdmin } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 export async function GET(
   request: Request,
@@ -8,17 +10,6 @@ export async function GET(
 ) {
   try {
     const { slug } = await params;
-
-    if (!process.env.DATABASE_URL || process.env.DATABASE_URL.includes("localhost:5432") || process.env.DATABASE_URL.startsWith("file:")) {
-      const fallback = defaultArticles.find(
-        (a) => a.id === slug || a.title.toLowerCase().includes(slug.replace(/-/g, " ").toLowerCase())
-      );
-
-      if (fallback) {
-        return NextResponse.json({ success: true, article: fallback });
-      }
-      return NextResponse.json({ error: "Article not found." }, { status: 404 });
-    }
 
     // Search in Prisma database first
     const post = await prisma.blogPost.findFirst({
@@ -63,6 +54,11 @@ export async function PUT(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json({ error: "Unauthorized. Please login as an administrator." }, { status: 401 });
+    }
+
     const { slug } = await params;
     const body = await request.json();
     const {
@@ -100,6 +96,12 @@ export async function PUT(
       },
     });
 
+    try {
+      revalidatePath("/");
+      revalidatePath("/blog");
+      revalidatePath(`/blog/${existing.slug}`);
+    } catch {}
+
     return NextResponse.json({ success: true, article: updated });
   } catch (error: any) {
     console.error("PUT /api/articles/[slug] error:", error);
@@ -115,12 +117,23 @@ export async function DELETE(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json({ error: "Unauthorized. Please login as an administrator." }, { status: 401 });
+    }
+
     const { slug } = await params;
     await prisma.blogPost.deleteMany({
       where: {
         OR: [{ id: slug }, { slug }],
       },
     });
+
+    try {
+      revalidatePath("/");
+      revalidatePath("/blog");
+    } catch {}
+
     return NextResponse.json({ success: true, message: "Article successfully deleted." });
   } catch (error: any) {
     console.error("DELETE /api/articles/[slug] error:", error);

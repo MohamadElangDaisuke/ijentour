@@ -204,7 +204,7 @@ Suggest 6 to 8 secondary keywords and LSI phrases.`;
           rawText = response.text;
           break;
         }
-      } catch (err) {
+      } catch {
         console.warn(`[Blog Suggestions] Model ${modelName} failed, trying next fallback...`);
       }
     }

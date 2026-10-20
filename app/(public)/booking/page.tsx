@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Search, Calendar, MapPin, CheckCircle2, Clock, XCircle, AlertCircle, ArrowRight } from "lucide-react";
+import { Search, CheckCircle2, Clock, XCircle, AlertCircle, ArrowRight } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { formatCurrency } from "@/lib/utils";
 import { getWhatsAppLink } from "@/lib/whatsapp";
+import { BookingResultSkeleton } from "@/app/component/ui/skeleton";
 
 export default function BookingLookupPage() {
   const [bookingCode, setBookingCode] = useState("");
@@ -111,8 +112,11 @@ export default function BookingLookupPage() {
         </div>
       </div>
 
+      {/* LOADING SKELETON */}
+      {loading && <BookingResultSkeleton />}
+
       {/* NEW RESERVATION CTA WHEN NO SEARCH PERFORMED */}
-      {!booking && (
+      {!loading && !booking && (
         <div className="max-w-2xl mx-auto px-4 mt-8">
           <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 border border-secondary-200 text-center space-y-3">
             <span className="text-[11px] font-bold uppercase tracking-wider text-primary-600">
@@ -143,9 +147,16 @@ export default function BookingLookupPage() {
           <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200 shadow-md">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-secondary-100 gap-4 mb-6">
               <div>
-                <span className="text-[11px] font-bold text-secondary-500 uppercase tracking-wider block">
-                  Confirmed Reservation Details
-                </span>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-[11px] font-bold text-secondary-500 uppercase tracking-wider block">
+                    Reservation Details
+                  </span>
+                  {booking.bookingType === "CUSTOM" && (
+                    <span className="px-2 py-0.5 rounded-md bg-purple-100 text-purple-800 font-extrabold text-[10px] uppercase">
+                      Custom Expedition
+                    </span>
+                  )}
+                </div>
                 <h3 className="text-2xl font-black text-secondary-950">{booking.packageName}</h3>
                 <span className="text-xs font-mono font-bold text-primary-600 bg-primary-50 px-2.5 py-1 rounded-md inline-block mt-2">
                   {booking.bookingCode}
@@ -153,14 +164,15 @@ export default function BookingLookupPage() {
               </div>
               <div>
                 <span
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider ${booking.status === "CONFIRMED"
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider ${
+                    booking.status === "CONFIRMED"
                       ? "bg-emerald-100 text-emerald-800"
                       : booking.status === "COMPLETED"
-                        ? "bg-blue-100 text-blue-800"
-                        : booking.status === "CANCELLED"
-                          ? "bg-red-100 text-red-800"
-                          : "bg-amber-100 text-amber-800"
-                    }`}
+                      ? "bg-blue-100 text-blue-800"
+                      : booking.status === "CANCELLED"
+                      ? "bg-red-100 text-red-800"
+                      : "bg-amber-100 text-amber-800"
+                  }`}
                 >
                   {booking.status === "CONFIRMED" && <CheckCircle2 className="w-3.5 h-3.5" />}
                   {booking.status === "PENDING" && <Clock className="w-3.5 h-3.5" />}
@@ -169,6 +181,64 @@ export default function BookingLookupPage() {
                 </span>
               </div>
             </div>
+
+            {/* Custom Trip Details Card */}
+            {booking.customDetails && (() => {
+              let parsed: any = null;
+              try {
+                parsed = typeof booking.customDetails === "string" ? JSON.parse(booking.customDetails) : booking.customDetails;
+              } catch {}
+              if (!parsed) return null;
+
+              return (
+                <div className="mb-6 p-4 rounded-2xl bg-purple-50/60 border border-purple-200/80 text-xs space-y-3">
+                  <span className="text-[11px] font-black uppercase tracking-wider text-purple-900 block">
+                    Customized Itinerary & Logistics
+                  </span>
+
+                  {parsed.destinations && Array.isArray(parsed.destinations) && (
+                    <div>
+                      <span className="text-secondary-500 text-[10px] font-bold block mb-1">
+                        Destinations Included:
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {parsed.destinations.map((d: any, idx: number) => (
+                          <span
+                            key={idx}
+                            className="bg-white border border-purple-200 text-purple-950 font-bold px-2.5 py-1 rounded-lg text-xs"
+                          >
+                            📍 {d.name}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-purple-200/60">
+                    <div>
+                      <span className="text-secondary-500 text-[10px] block">Duration:</span>
+                      <span className="font-bold text-secondary-900">{parsed.durationName || "1 Day"}</span>
+                    </div>
+                    <div>
+                      <span className="text-secondary-500 text-[10px] block">Transportation:</span>
+                      <span className="font-bold text-secondary-900">{parsed.transportName || "Standard Vehicle"}</span>
+                    </div>
+                    <div>
+                      <span className="text-secondary-500 text-[10px] block">Tour Guide:</span>
+                      <span className="font-bold text-secondary-900">{parsed.guideName || "Certified Guide"}</span>
+                    </div>
+                    {parsed.addonsList && parsed.addonsList.length > 0 && (
+                      <div>
+                        <span className="text-secondary-500 text-[10px] block">Add-ons:</span>
+                        <span className="font-bold text-secondary-900">
+                          {parsed.addonsList.map((a: any) => a.name).join(", ")}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })()}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs mb-6">
               <div className="p-4 rounded-2xl bg-secondary-50 space-y-1">
@@ -189,11 +259,33 @@ export default function BookingLookupPage() {
               </div>
 
               <div className="p-4 rounded-2xl bg-secondary-50 space-y-1">
-                <span className="text-secondary-500 block">Total Tour Cost:</span>
-                <p className="font-black text-primary-600 text-base">{formatCurrency(booking.totalPrice)}</p>
-                <p className="text-secondary-500">Payment Status: {booking.paymentStatus}</p>
+                <span className="text-secondary-500 block">
+                  {booking.bookingType === "CUSTOM" && booking.status === "PENDING"
+                    ? "Estimated Tour Cost:"
+                    : "Total Tour Price:"}
+                </span>
+                <p className="font-black text-primary-600 text-base">
+                  {formatCurrency(booking.finalPrice || booking.totalPrice)}
+                </p>
+                {booking.bookingType === "CUSTOM" && booking.status === "PENDING" && (
+                  <p className="text-[10px] text-amber-700 font-bold">
+                    (Pending coordinator final approval)
+                  </p>
+                )}
+                {booking.bookingType === "CUSTOM" && booking.status === "CONFIRMED" && (
+                  <p className="text-[10px] text-emerald-700 font-bold">
+                    ✓ Final price verified by coordinator
+                  </p>
+                )}
               </div>
             </div>
+
+            {booking.adminNotes && (
+              <div className="mb-6 p-4 rounded-2xl bg-blue-50 border border-blue-200 text-blue-900 text-xs">
+                <span className="font-bold block mb-1">Coordinator Notes:</span>
+                <p>{booking.adminNotes}</p>
+              </div>
+            )}
 
             <div className="pt-4 border-t border-secondary-100 flex flex-col sm:flex-row gap-3 justify-end">
               <a

@@ -363,9 +363,13 @@ export const defaultPackages: TourPackage[] = [
 
 export const packagesStorageKey = 'ijen-tour-packages';
 
-/**
- * Helper to fetch a package by ID with fallback to default packages
- */
 export function getPackageByIdFromList(packages: TourPackage[], id: string): TourPackage | undefined {
-  return packages.find((p) => p.id === id) || defaultPackages.find((p) => p.id === id);
+  const norm = id.toLowerCase().trim();
+  const match = (p: TourPackage) =>
+    p.id.toLowerCase() === norm ||
+    ((p as any).slug && (p as any).slug.toLowerCase() === norm) ||
+    p.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').includes(norm);
+
+  return packages.find(match) || defaultPackages.find(match);
 }
+

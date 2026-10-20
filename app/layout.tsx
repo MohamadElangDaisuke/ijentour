@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     siteName: "Ijen Tour Banyuwangi",
     images: [
       {
-        url: "/images/HeroSection.webp",
+        url: "https://ijentour.vercel.app/images/HeroSection.webp",
         width: 1200,
         height: 630,
         alt: "Mount Ijen Crater Exploration Banyuwangi",
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Ijen Tour | Mount Ijen Crater & Blue Fire Banyuwangi",
     description: "Official Mount Ijen tour packages with gas respirators, certified local guides, and hotel pickup.",
-    images: ["/images/HeroSection.webp"],
+    images: ["https://ijentour.vercel.app/images/HeroSection.webp"],
   },
 };
 
@@ -71,7 +71,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={plusJakartaSans.variable} suppressHydrationWarning>
+    <html lang="en" className={plusJakartaSans.variable} data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className={`${plusJakartaSans.className} font-sans text-secondary-950 bg-secondary-50 min-h-screen flex flex-col antialiased`}>
         {children}
       </body>

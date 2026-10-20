@@ -1,13 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { defaultStories } from "@/app/lib/stories";
+import { requireAdmin } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 export async function GET(request: Request) {
   try {
-    if (!process.env.DATABASE_URL || process.env.DATABASE_URL.includes("localhost:5432") || process.env.DATABASE_URL.startsWith("file:")) {
-      return NextResponse.json({ success: true, items: defaultStories, gallery: defaultStories });
-    }
-
     const { searchParams } = new URL(request.url);
     const category = searchParams.get("category");
 
@@ -26,13 +24,19 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json({ success: true, items, gallery: items });
-  } catch {
+  } catch (error) {
+    console.error("GET /api/gallery error:", error);
     return NextResponse.json({ success: true, items: defaultStories, gallery: defaultStories });
   }
 }
 
 export async function POST(request: Request) {
   try {
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json({ error: "Unauthorized. Please login as an administrator." }, { status: 401 });
+    }
+
     const { title, image, caption, category = "crater", isFeatured = true } = await request.json();
 
     if (!title || !image) {
@@ -48,6 +52,11 @@ export async function POST(request: Request) {
         isFeatured: Boolean(isFeatured),
       },
     });
+
+    try {
+      revalidatePath("/");
+      revalidatePath("/gallery");
+    } catch {}
 
     return NextResponse.json({ success: true, item });
   } catch (error: any) {

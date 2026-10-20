@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma, safeJsonParse } from "@/lib/prisma";
 import { defaultPackages, getPackageByIdFromList } from "@/app/lib/packagesStorage";
+import { requireAdmin } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 export async function GET(
   request: Request,
@@ -52,6 +54,11 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json({ error: "Unauthorized. Please login as an administrator." }, { status: 401 });
+    }
+
     const { id } = await params;
     const existing = await prisma.tripPackage.findFirst({
       where: { OR: [{ id }, { slug: id }] },
@@ -89,6 +96,13 @@ export async function PUT(
       data: dataToUpdate,
     });
 
+    try {
+      revalidatePath("/");
+      revalidatePath("/packages");
+      revalidatePath(`/packages/${existing.id}`);
+      revalidatePath(`/packages/${existing.slug}`);
+    } catch {}
+
     return NextResponse.json({
       success: true,
       message: "Package successfully updated.",
@@ -108,6 +122,11 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json({ error: "Unauthorized. Please login as an administrator." }, { status: 401 });
+    }
+
     const { id } = await params;
     const existing = await prisma.tripPackage.findFirst({
       where: { OR: [{ id }, { slug: id }] },
@@ -118,6 +137,12 @@ export async function DELETE(
     }
 
     await prisma.tripPackage.delete({ where: { id: existing.id } });
+
+    try {
+      revalidatePath("/");
+      revalidatePath("/packages");
+    } catch {}
+
     return NextResponse.json({ success: true, message: "Package successfully deleted." });
   } catch (error: any) {
     console.error("DELETE /api/trips/[id] error:", error);

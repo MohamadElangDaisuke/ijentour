@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/auth";
 
 export async function GET(
   request: Request,
@@ -31,6 +32,11 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json({ error: "Unauthorized. Please login as an administrator." }, { status: 401 });
+    }
+
     const { id } = await params;
     const existing = await prisma.booking.findFirst({
       where: { OR: [{ id }, { bookingCode: id }] },
@@ -48,6 +54,11 @@ export async function PUT(
       if (body.status === "CONFIRMED") dataToUpdate.confirmedAt = new Date();
       if (body.status === "CANCELLED") dataToUpdate.cancelledAt = new Date();
     }
+    if (body.finalPrice !== undefined && body.finalPrice !== null) {
+      dataToUpdate.finalPrice = Number(body.finalPrice);
+      dataToUpdate.totalPrice = Number(body.finalPrice);
+    }
+    if (body.adminNotes !== undefined) dataToUpdate.adminNotes = body.adminNotes;
     if (body.paymentStatus !== undefined) dataToUpdate.paymentStatus = body.paymentStatus;
     if (body.specialRequests !== undefined) dataToUpdate.specialRequests = body.specialRequests;
     if (body.pickupLocation !== undefined) dataToUpdate.pickupLocation = body.pickupLocation;
@@ -56,6 +67,11 @@ export async function PUT(
       where: { id: existing.id },
       data: dataToUpdate,
     });
+
+    try {
+      const { revalidatePath } = await import("next/cache");
+      revalidatePath("/admin/bookings");
+    } catch {}
 
     return NextResponse.json({
       success: true,
@@ -76,6 +92,11 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json({ error: "Unauthorized. Please login as an administrator." }, { status: 401 });
+    }
+
     const { id } = await params;
     const existing = await prisma.booking.findFirst({
       where: { OR: [{ id }, { bookingCode: id }] },

@@ -2,17 +2,11 @@ import { NextResponse } from "next/server";
 import { prisma, safeJsonParse } from "@/lib/prisma";
 import { createSlug } from "@/lib/utils";
 import { defaultPackages } from "@/app/lib/packagesStorage";
+import { requireAdmin } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 export async function GET(request: Request) {
   try {
-    if (!process.env.DATABASE_URL || process.env.DATABASE_URL.includes("localhost:5432") || process.env.DATABASE_URL.startsWith("file:")) {
-      return NextResponse.json({
-        success: true,
-        source: "fallback",
-        packages: defaultPackages,
-      });
-    }
-
     const { searchParams } = new URL(request.url);
     const category = searchParams.get("category");
     const featured = searchParams.get("featured");
@@ -73,6 +67,11 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json({ error: "Unauthorized. Please login as an administrator." }, { status: 401 });
+    }
+
     const body = await request.json();
     const {
       title,
@@ -127,11 +126,11 @@ export async function POST(request: Request) {
         isFeatured: Boolean(isFeatured),
         isTrending: Boolean(isTrending),
         isRecent: Boolean(isRecent),
-        isActive: true,
+        isActive: body.isActive !== undefined ? Boolean(body.isActive) : true,
       },
     });
 
-    // Notify admin
+    // Notify admin in database
     await prisma.notification.create({
       data: {
         type: "system",
@@ -141,6 +140,12 @@ export async function POST(request: Request) {
         unread: true,
       },
     });
+
+    try {
+      revalidatePath("/");
+      revalidatePath("/packages");
+      revalidatePath(`/packages/${newPackage.id}`);
+    } catch {}
 
     return NextResponse.json({
       success: true,

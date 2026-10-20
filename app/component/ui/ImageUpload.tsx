@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import Image from "next/image";
-import { UploadCloud, X, Loader2, Image as ImageIcon, RefreshCw, AlertCircle, CheckCircle2 } from "lucide-react";
+import { UploadCloud, X, Loader2, RefreshCw, AlertCircle, CheckCircle2 } from "lucide-react";
 
 interface ImageUploadProps {
   value?: string;

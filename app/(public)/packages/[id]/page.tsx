@@ -2,8 +2,6 @@
 
 import React, { useState, useEffect, use } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import {
   Star,
   Clock,
@@ -20,9 +18,7 @@ import {
   Sparkles,
   AlertCircle,
   HelpCircle,
-  Camera,
   ArrowRight,
-  PhoneCall,
   Flame,
   Maximize2
 } from 'lucide-react';
@@ -43,7 +39,6 @@ interface PageProps {
 export default function PackageDetailPage({ params }: PageProps) {
   const resolvedParams = use(params);
   const packageId = resolvedParams.id;
-  const router = useRouter();
   const { openBookingModal } = useBookingModal();
 
   const [packagesData, setPackagesData] = useState<TourPackage[]>(defaultPackages);

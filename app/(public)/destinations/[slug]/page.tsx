@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, MapPin, Sparkles, Compass } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { prisma } from "@/lib/prisma";
-import { defaultDestinations } from "@/app/lib/destinationsStorage";
+import { defaultDestinations, getDestinationBySlugFromList } from "@/app/lib/destinationsStorage";
 import { defaultPackages } from "@/app/lib/packagesStorage";
 import { formatCurrency } from "@/lib/utils";
 
@@ -14,9 +14,19 @@ export default async function DestinationDetailPage({ params }: PageProps) {
 
   let dest: any = null;
   try {
+    const aliases = [
+      slug,
+      slug === "ijen" ? "kawah-ijen" : slug === "kawah-ijen" ? "ijen" : null,
+      slug === "baluran" ? "tn-baluran" : slug === "tn-baluran" ? "baluran" : null,
+      slug === "djawatan" ? "de-djawatan" : slug === "de-djawatan" ? "djawatan" : null,
+    ].filter(Boolean) as string[];
+
     dest = await prisma.destination.findFirst({
       where: {
-        OR: [{ slug }, { id: slug }],
+        OR: [
+          ...aliases.map((s) => ({ slug: s })),
+          ...aliases.map((s) => ({ id: s })),
+        ],
       },
     });
   } catch (e) {
@@ -24,13 +34,7 @@ export default async function DestinationDetailPage({ params }: PageProps) {
   }
 
   if (!dest) {
-    dest =
-      defaultDestinations.find(
-        (d) =>
-          d.id === `dest-${slug}` ||
-          d.id === slug ||
-          d.name.toLowerCase().includes(slug.replace(/-/g, " "))
-      ) || defaultDestinations[0];
+    dest = getDestinationBySlugFromList(defaultDestinations, slug) || defaultDestinations[0];
   }
 
   let dbPackages: any[] = [];

@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import {
-  MapPin, Phone, Mail, Clock, Send, CheckCircle2, AlertCircle, Loader2, HelpCircle, ChevronDown
+  MapPin, Phone, Mail, Clock, Send, CheckCircle2, AlertCircle, Loader2, ChevronDown, Sparkles
 } from "lucide-react";
 import { FaInstagram, FaFacebook, FaYoutube } from "react-icons/fa";
 import { getAdminWhatsAppNumber, getWhatsAppLink, WhatsAppTemplates } from "@/lib/whatsapp";
+import { OFFICIAL_SOCIAL_LINKS } from "@/lib/constants";
 
 export default function ContactPage() {
   const [name, setName] = useState("");
@@ -154,18 +155,53 @@ export default function ContactPage() {
                   <p className="text-secondary-200 text-sm leading-relaxed">Monday - Sunday: 08:00 - 22:00 WIB<br />Emergency Support: 24/7</p>
                 </div>
               </div>
+
+              <div className="flex items-start">
+                <div className="w-12 h-12 rounded-full bg-primary-500/20 flex items-center justify-center shrink-0 mr-4 border border-primary-500/40 text-primary-400">
+                  <Sparkles size={24} className="text-primary-400" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-white mb-1">Ijen Tour Assistant</h4>
+                  <p className="text-secondary-300 text-xs mb-2">Instant answers to tour prices, departure hours, and equipment questions.</p>
+                  <button
+                    type="button"
+                    onClick={() => window.dispatchEvent(new CustomEvent('open-ai-assistant'))}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-primary-500 hover:bg-primary-400 text-secondary-950 text-xs font-black transition cursor-pointer"
+                  >
+                    <span>Open Chat Assistant</span>
+                  </button>
+                </div>
+              </div>
             </div>
 
             <div className="pt-8 border-t border-secondary-800">
-              <h4 className="font-bold text-white mb-4">Social Media</h4>
+              <h4 className="font-bold text-white mb-4">Official Social Media</h4>
               <div className="flex space-x-4">
-                <a href="#" className="w-10 h-10 rounded-full bg-secondary-900 flex items-center justify-center hover:bg-primary-500 hover:text-secondary-950 transition">
+                <a
+                  href={OFFICIAL_SOCIAL_LINKS.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                  className="w-10 h-10 rounded-full bg-secondary-900 flex items-center justify-center hover:bg-primary-500 hover:text-secondary-950 transition"
+                >
                   <FaInstagram size={18} />
                 </a>
-                <a href="#" className="w-10 h-10 rounded-full bg-secondary-900 flex items-center justify-center hover:bg-primary-500 hover:text-secondary-950 transition">
+                <a
+                  href={OFFICIAL_SOCIAL_LINKS.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Facebook"
+                  className="w-10 h-10 rounded-full bg-secondary-900 flex items-center justify-center hover:bg-primary-500 hover:text-secondary-950 transition"
+                >
                   <FaFacebook size={18} />
                 </a>
-                <a href="#" className="w-10 h-10 rounded-full bg-secondary-900 flex items-center justify-center hover:bg-primary-500 hover:text-secondary-950 transition">
+                <a
+                  href={OFFICIAL_SOCIAL_LINKS.youtube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="YouTube"
+                  className="w-10 h-10 rounded-full bg-secondary-900 flex items-center justify-center hover:bg-primary-500 hover:text-secondary-950 transition"
+                >
                   <FaYoutube size={18} />
                 </a>
               </div>

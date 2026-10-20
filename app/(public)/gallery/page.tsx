@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, X, Sparkles, Filter, Camera, ZoomIn } from "lucide-react";
+import { X, Sparkles, Camera, ZoomIn } from "lucide-react";
 import { defaultStories, Story } from "@/app/lib/stories";
+import { GalleryGridSkeleton } from "@/app/component/ui/skeleton";
 
 const CATEGORIES = [
   { label: "All Moments", value: "all" },
@@ -94,14 +94,7 @@ export default function GalleryPage() {
 
         {/* LOADING SKELETON */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-              <div
-                key={i}
-                className="rounded-3xl aspect-4/3 bg-secondary-200 animate-pulse border border-secondary-200"
-              />
-            ))}
-          </div>
+          <GalleryGridSkeleton count={8} />
         ) : filteredItems.length === 0 ? (
           /* EMPTY STATE */
           <div className="text-center py-20 bg-white rounded-3xl border border-secondary-200 my-8 p-8">

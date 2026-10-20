@@ -2,21 +2,31 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { defaultTestimonials, testimonialsStorageKey, type Testimonial } from "../../lib/testimonialsStorage";
+import { defaultTestimonials, type Testimonial } from "../../lib/testimonialsStorage";
 
 export default function TestimonialSection() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>(defaultTestimonials);
-  const featuredTestimonial = testimonials[0];
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    const saved = window.localStorage.getItem(testimonialsStorageKey);
-    if (!saved) return;
-    try {
-      setTestimonials(JSON.parse(saved));
-    } catch (error) {
-      console.error("Failed to load testimonials from localStorage:", error);
-    }
+    fetch("/api/reviews")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.reviews) && data.reviews.length > 0) {
+          const mapped: Testimonial[] = data.reviews.map((r: any) => ({
+            id: r.id,
+            name: r.authorName || r.customerName || "Traveler",
+            quote: r.comment,
+            origin: r.tripPackage?.title || "IjenTour Traveler",
+            image: r.avatar || "/images/pkg-bluefire.png",
+          }));
+          setTestimonials(mapped);
+        }
+      })
+      .catch(() => {});
   }, []);
+
+  const featuredTestimonial = testimonials[activeIndex % testimonials.length] || defaultTestimonials[0];
 
   return (
     <motion.section
@@ -52,8 +62,32 @@ export default function TestimonialSection() {
             <div>
               <p className="text-4xl font-black leading-none text-primary-500">“</p>
               <p className="mt-2 text-base font-medium leading-relaxed text-secondary-800">{featuredTestimonial.quote}</p>
-              <p className="mt-6 text-base font-bold text-secondary-950">{featuredTestimonial.name}</p>
-              <p className="mt-1 text-xs text-secondary-500">{featuredTestimonial.origin || 'IjenTour Traveler'}</p>
+              <div className="flex items-center justify-between mt-6">
+                <div>
+                  <p className="text-base font-bold text-secondary-950">{featuredTestimonial.name}</p>
+                  <p className="mt-0.5 text-xs text-secondary-500">{featuredTestimonial.origin || 'IjenTour Traveler'}</p>
+                </div>
+                {testimonials.length > 1 && (
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)}
+                      aria-label="Previous Testimonial"
+                      className="w-8 h-8 rounded-full border border-secondary-300 flex items-center justify-center hover:bg-secondary-100 transition cursor-pointer text-xs font-bold text-secondary-800"
+                    >
+                      ←
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveIndex((prev) => (prev + 1) % testimonials.length)}
+                      aria-label="Next Testimonial"
+                      className="w-8 h-8 rounded-full border border-secondary-300 flex items-center justify-center hover:bg-secondary-100 transition cursor-pointer text-xs font-bold text-secondary-800"
+                    >
+                      →
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </article>
         ) : (

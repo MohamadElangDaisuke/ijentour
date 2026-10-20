@@ -1,12 +1,10 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 export async function GET(request: Request) {
   try {
-    if (!process.env.DATABASE_URL || process.env.DATABASE_URL.includes("localhost:5432") || process.env.DATABASE_URL.startsWith("file:")) {
-      return NextResponse.json({ success: true, faqs: [] });
-    }
-
     const { searchParams } = new URL(request.url);
     const category = searchParams.get("category");
 
@@ -21,13 +19,19 @@ export async function GET(request: Request) {
     });
 
     return NextResponse.json({ success: true, faqs });
-  } catch {
+  } catch (error) {
+    console.error("GET /api/faqs error:", error);
     return NextResponse.json({ success: true, faqs: [] });
   }
 }
 
 export async function POST(request: Request) {
   try {
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json({ error: "Unauthorized. Please login as an administrator." }, { status: 401 });
+    }
+
     const body = await request.json();
     const { question, answer, category = "general", sortOrder = 0 } = body;
 
@@ -47,6 +51,12 @@ export async function POST(request: Request) {
         isActive: true,
       },
     });
+
+    try {
+      revalidatePath("/");
+      revalidatePath("/about");
+      revalidatePath("/contact");
+    } catch {}
 
     return NextResponse.json({ success: true, faq });
   } catch (error: any) {

@@ -1,26 +1,35 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import {
   Search, Calendar, Clock, ArrowRight, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import {
   defaultArticles,
   articleCategories,
-  articlesStorageKey,
   type Article
 } from '../../lib/articlesStorage';
 
-export default function ArticlesPage() {
+function ArticlesContent() {
+  const searchParams = useSearchParams();
+  const categoryFromUrl = searchParams.get('category');
+
   const [articlesList, setArticlesList] = useState<Article[]>(defaultArticles);
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [selectedCategory, setSelectedCategory] = useState<string>(categoryFromUrl || 'All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 3;
 
   useEffect(() => {
-    // 1. Fetch real blog posts from database
+    if (categoryFromUrl) {
+      setSelectedCategory(categoryFromUrl);
+    }
+  }, [categoryFromUrl]);
+
+  useEffect(() => {
+    // Fetch real blog posts from database
     fetch('/api/articles')
       .then((res) => res.json())
       .then((data) => {
@@ -29,23 +38,6 @@ export default function ArticlesPage() {
         }
       })
       .catch(() => {});
-
-    // 2. Also check localStorage for local drafts
-    const saved = window.localStorage.getItem(articlesStorageKey);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setArticlesList((prev) => {
-            const existingSlugs = new Set(prev.map((a: any) => a.slug || a.id));
-            const newFromSaved = parsed.filter((p: any) => !existingSlugs.has(p.slug || p.id));
-            return [...prev, ...newFromSaved];
-          });
-        }
-      } catch (e) {
-        console.error('Error loading articles from localStorage:', e);
-      }
-    }
   }, []);
 
   const featuredArticle = articlesList.find((a) => a.isFeatured) || articlesList[0];
@@ -295,5 +287,19 @@ export default function ArticlesPage() {
 
       </main>
     </div>
+  );
+}
+
+export default function ArticlesPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-secondary-50 flex items-center justify-center p-8">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
+        </div>
+      }
+    >
+      <ArticlesContent />
+    </Suspense>
   );
 }

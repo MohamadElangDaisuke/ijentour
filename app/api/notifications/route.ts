@@ -1,14 +1,12 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/auth";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    if (!process.env.DATABASE_URL || process.env.DATABASE_URL.includes("localhost:5432") || process.env.DATABASE_URL.startsWith("file:")) {
-      return NextResponse.json({
-        success: true,
-        unreadCount: 0,
-        notifications: [],
-      });
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json({ error: "Unauthorized. Please login as an administrator." }, { status: 401 });
     }
 
     const notifications = await prisma.notification.findMany({
@@ -28,14 +26,15 @@ export async function GET() {
         description: n.description,
         link: n.link,
         unread: n.unread,
-        time: new Date(n.createdAt).toLocaleTimeString("id-ID", {
+        time: new Date(n.createdAt).toLocaleTimeString("en-US", {
           hour: "2-digit",
           minute: "2-digit",
         }),
         createdAt: n.createdAt,
       })),
     });
-  } catch {
+  } catch (error) {
+    console.error("GET /api/notifications error:", error);
     return NextResponse.json({
       success: true,
       unreadCount: 0,
@@ -46,6 +45,11 @@ export async function GET() {
 
 export async function PUT(request: Request) {
   try {
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json({ error: "Unauthorized. Please login as an administrator." }, { status: 401 });
+    }
+
     const { id, markAllAsRead } = await request.json();
 
     if (markAllAsRead) {

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, MapPin, Sparkles } from "lucide-react";
+import { ArrowRight, MapPin } from "lucide-react";
 import { defaultDestinations, Destination } from "@/app/lib/destinationsStorage";
 
 export default function DestinationsPage() {

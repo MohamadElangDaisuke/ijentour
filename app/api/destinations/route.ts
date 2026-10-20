@@ -1,13 +1,12 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { createSlug } from "@/lib/utils";
 import { defaultDestinations } from "@/app/lib/destinationsStorage";
+import { requireAdmin } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 export async function GET() {
   try {
-    if (!process.env.DATABASE_URL || process.env.DATABASE_URL.includes("localhost:5432") || process.env.DATABASE_URL.startsWith("file:")) {
-      return NextResponse.json({ success: true, destinations: defaultDestinations });
-    }
-
     const destinations = await prisma.destination.findMany({
       orderBy: { sortOrder: "asc" },
     });
@@ -17,7 +16,64 @@ export async function GET() {
     }
 
     return NextResponse.json({ success: true, destinations });
-  } catch {
+  } catch (error) {
+    console.error("GET /api/destinations error:", error);
     return NextResponse.json({ success: true, destinations: defaultDestinations });
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    // Enforce Admin Authentication
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json({ success: false, error: "Unauthorized. Please login as an administrator." }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const { name, description, image, tag = "Destination", isFeatured = true, sortOrder = 0 } = body;
+
+    if (!name || !description || !image) {
+      return NextResponse.json(
+        { success: false, error: "Destination name, description, and image are required." },
+        { status: 400 }
+      );
+    }
+
+    const baseSlug = createSlug(name);
+    // Ensure slug uniqueness
+    const existing = await prisma.destination.findFirst({ where: { slug: baseSlug } });
+    const slug = existing ? `${baseSlug}-${Date.now().toString(36)}` : baseSlug;
+
+    const destination = await prisma.destination.create({
+      data: {
+        name: name.trim(),
+        slug,
+        description: description.trim(),
+        image: image.trim(),
+        tag: tag?.trim() || "Destination",
+        isFeatured: Boolean(isFeatured),
+        sortOrder: Number(sortOrder) || 0,
+      },
+    });
+
+    // Invalidate public page cache
+    try {
+      revalidatePath("/");
+      revalidatePath("/destinations");
+      revalidatePath(`/destinations/${slug}`);
+    } catch {}
+
+    return NextResponse.json({
+      success: true,
+      message: "Destination added successfully.",
+      destination,
+    });
+  } catch (error: any) {
+    console.error("POST /api/destinations error:", error);
+    return NextResponse.json(
+      { success: false, error: error.message || "Failed to add destination." },
+      { status: 500 }
+    );
   }
 }

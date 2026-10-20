@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -106,6 +107,11 @@ model Booking {
   totalPrice      Float
   specialRequests String?
   pickupLocation  String?
+  bookingType     String    @default("REGULAR") // REGULAR, CUSTOM
+  customDetails   String?   // JSON string snapshot of custom options
+  estimatedPrice  Float?
+  finalPrice      Float?
+  adminNotes      String?
   status          String    @default("PENDING") // PENDING, CONFIRMED, COMPLETED, CANCELLED
   paymentStatus   String    @default("PENDING") // PENDING, PAID, REFUNDED
   confirmedAt     DateTime?

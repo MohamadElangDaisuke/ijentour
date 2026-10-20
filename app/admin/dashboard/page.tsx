@@ -5,22 +5,18 @@ import Link from "next/link";
 import {
   Calendar,
   Compass,
-  TrendingUp,
   DollarSign,
-  Users,
-  Flame,
   Clock,
   CheckCircle2,
-  XCircle,
   Plus,
   ArrowRight,
   Sparkles,
   Search,
-  Filter,
   Star,
   ExternalLink,
 } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
+import { AdminDashboardSkeleton } from "@/app/component/ui/skeleton";
 
 export default function AdminDashboardPage() {
   const [bookings, setBookings] = useState<any[]>([]);
@@ -96,9 +92,8 @@ export default function AdminDashboardPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[450px] space-y-3">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-500"></div>
-        <p className="text-xs text-secondary-500 font-medium">Loading system analytics...</p>
+      <div className="space-y-8 pb-12 pt-4">
+        <AdminDashboardSkeleton />
       </div>
     );
   }

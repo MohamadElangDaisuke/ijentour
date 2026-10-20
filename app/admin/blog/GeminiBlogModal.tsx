@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import {
   Sparkles,
   X,
@@ -17,9 +17,7 @@ import {
   Key,
   Compass,
   Target,
-  Plus,
   Layers,
-  ChevronDown,
 } from "lucide-react";
 import { GeneratedBlogResponse } from "@/app/api/ai/generate-blog/route";
 import MarkdownRenderer from "@/app/component/ui/MarkdownRenderer";
@@ -209,7 +207,7 @@ export default function GeminiBlogModal({
         ...prev,
         [type]: list,
       }));
-    } catch (err: any) {
+    } catch {
       setSuggestionError((prev) => ({
         ...prev,
         [type]: "Unable to generate suggestions. Please try again.",

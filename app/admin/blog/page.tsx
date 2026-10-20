@@ -19,6 +19,7 @@ import { defaultArticles, Article } from "@/app/lib/articlesStorage";
 import ImageUpload from "@/app/component/ui/ImageUpload";
 import GeminiBlogModal from "./GeminiBlogModal";
 import MarkdownRenderer from "@/app/component/ui/MarkdownRenderer";
+import { AdminTableSkeleton } from "@/app/component/ui/skeleton";
 
 export default function AdminBlogPage() {
   const [articles, setArticles] = useState<Article[]>(defaultArticles);
@@ -588,18 +589,21 @@ export default function AdminBlogPage() {
       </div>
 
       {/* Articles Table */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-xs">
-        <div className="flex items-center justify-between pb-3 border-b border-secondary-100 mb-6">
-          <h2 className="text-base font-black text-secondary-950 uppercase tracking-wider">
-            Article List ({articles.length})
-          </h2>
-          <span className="text-xs text-secondary-400">
-            Total {articles.length} registered articles
-          </span>
-        </div>
+      {loading ? (
+        <AdminTableSkeleton columns={5} rows={4} />
+      ) : (
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-xs">
+          <div className="flex items-center justify-between pb-3 border-b border-secondary-100 mb-6">
+            <h2 className="text-base font-black text-secondary-950 uppercase tracking-wider">
+              Article List ({articles.length})
+            </h2>
+            <span className="text-xs text-secondary-400">
+              Total {articles.length} registered articles
+            </span>
+          </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
             <thead>
               <tr className="border-b border-secondary-100 text-[11px] font-bold text-secondary-500 uppercase tracking-wider">
                 <th className="pb-3">Article Title</th>
@@ -662,6 +666,7 @@ export default function AdminBlogPage() {
           </table>
         </div>
       </div>
+    )}
 
       {/* Gemini AI Blog Generator Modal */}
       <GeminiBlogModal

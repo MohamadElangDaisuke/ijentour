@@ -2,18 +2,16 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { defaultArticles } from "@/app/lib/articlesStorage";
 import { createSlug } from "@/lib/utils";
+import { requireAdmin } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 export async function GET(request: Request) {
   try {
-    if (!process.env.DATABASE_URL || process.env.DATABASE_URL.includes("localhost:5432") || process.env.DATABASE_URL.startsWith("file:")) {
-      return NextResponse.json({ success: true, articles: defaultArticles });
-    }
-
     const { searchParams } = new URL(request.url);
     const category = searchParams.get("category");
 
     const where: any = {};
-    if (category && category !== "Semua") {
+    if (category && category !== "Semua" && category !== "All") {
       where.category = category;
     }
 
@@ -27,21 +25,27 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json({ success: true, articles: posts });
-  } catch {
+  } catch (error) {
+    console.error("GET /api/articles error:", error);
     return NextResponse.json({ success: true, articles: defaultArticles });
   }
 }
 
 export async function POST(request: Request) {
   try {
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json({ error: "Unauthorized. Please login as an administrator." }, { status: 401 });
+    }
+
     const body = await request.json();
     const {
       title,
-      category = "Panduan",
+      category = "Guides",
       excerpt = "",
       content = "",
       image = "/images/pkg-bluefire.png",
-      author = "Tim Ekspedisi Ijen",
+      author = "Ijen Expedition Team",
       readTime = "5 min read",
       isFeatured = false,
     } = body;
@@ -50,8 +54,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Article title is required." }, { status: 400 });
     }
 
-    const slug = createSlug(title);
-    const date = new Date().toLocaleDateString("id-ID", {
+    const slug = createSlug(title) + "-" + Date.now().toString(36);
+    const date = new Date().toLocaleDateString("en-US", {
       day: "numeric",
       month: "long",
       year: "numeric",
@@ -71,6 +75,12 @@ export async function POST(request: Request) {
         isFeatured: Boolean(isFeatured),
       },
     });
+
+    try {
+      revalidatePath("/");
+      revalidatePath("/blog");
+      revalidatePath(`/blog/${post.slug}`);
+    } catch {}
 
     return NextResponse.json({ success: true, article: post });
   } catch (error: any) {

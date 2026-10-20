@@ -47,7 +47,7 @@ export default function HowItWorks() {
     setOpenIndex(openIndex === index ? null : index);
   };
   return (
-    <section className="relative overflow-hidden bg-secondary-50 px-4 py-20 sm:px-8 sm:py-24 lg:py-28">
+    <section id="how-it-works" className="relative overflow-hidden bg-secondary-50 px-4 py-20 sm:px-8 sm:py-24 lg:py-28">
       {/* Subtle background glow */}
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-100/40 blur-3xl" />
 

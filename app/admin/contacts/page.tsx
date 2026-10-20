@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Mail, Phone, Clock, MessageSquare, Check, Trash2 } from "lucide-react";
+import { Mail, Trash2 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
+import { AdminCardListSkeleton } from "@/app/component/ui/skeleton";
 
 export default function AdminContactsPage() {
   const [contacts, setContacts] = useState<any[]>([]);
@@ -23,6 +24,21 @@ export default function AdminContactsPage() {
   useEffect(() => {
     loadContacts();
   }, []);
+
+  const handleDelete = async (id: string, name: string) => {
+    if (!confirm(`Delete contact message from "${name}"?`)) return;
+
+    try {
+      const res = await fetch(`/api/contacts/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        setContacts((prev) => prev.filter((c) => c.id !== id));
+      } else {
+        alert("Failed to delete contact message.");
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <div className="space-y-6 pb-12">
@@ -46,9 +62,7 @@ export default function AdminContactsPage() {
 
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-xs">
         {loading ? (
-          <div className="py-20 text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto"></div>
-          </div>
+          <AdminCardListSkeleton count={4} />
         ) : contacts.length === 0 ? (
           <div className="py-20 text-center text-xs text-secondary-400">
             No contact messages received yet.
@@ -82,7 +96,14 @@ export default function AdminContactsPage() {
                   </p>
                 </div>
 
-                <div className="flex justify-end gap-2 pt-1">
+                <div className="flex justify-end items-center gap-2 pt-1">
+                  <button
+                    onClick={() => handleDelete(c.id, c.name)}
+                    className="p-2 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-xl transition cursor-pointer"
+                    title="Delete Message"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                   <a
                     href={`mailto:${c.email}?subject=Reply:%20${encodeURIComponent(c.subject)}`}
                     className="px-4 py-2 rounded-xl bg-secondary-950 hover:bg-secondary-900 text-white font-bold text-xs flex items-center gap-1.5 transition"

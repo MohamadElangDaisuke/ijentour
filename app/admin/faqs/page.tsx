@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { HelpCircle, Plus, Trash2, AlertCircle } from "lucide-react";
+import { Plus, Trash2, AlertCircle } from "lucide-react";
+import { AdminCardListSkeleton } from "@/app/component/ui/skeleton";
 
 export default function AdminFaqsPage() {
   const [faqs, setFaqs] = useState<any[]>([]);
@@ -156,9 +157,7 @@ export default function AdminFaqsPage() {
         </h2>
 
         {loading ? (
-          <div className="py-12 text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto"></div>
-          </div>
+          <AdminCardListSkeleton count={4} />
         ) : faqs.length === 0 ? (
           <div className="py-12 text-center text-xs text-secondary-400">
             No FAQs saved yet. Add a new question above.

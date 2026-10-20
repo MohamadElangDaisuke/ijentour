@@ -1,11 +1,18 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json({ error: "Unauthorized. Please login as an administrator." }, { status: 401 });
+    }
+
     const { id } = await params;
     const existing = await prisma.faq.findUnique({ where: { id } });
     if (!existing) {
@@ -14,6 +21,13 @@ export async function DELETE(
     await prisma.faq.delete({
       where: { id },
     });
+
+    try {
+      revalidatePath("/");
+      revalidatePath("/about");
+      revalidatePath("/contact");
+    } catch {}
+
     return NextResponse.json({ success: true, message: "FAQ successfully deleted." });
   } catch (error: any) {
     console.error("DELETE /api/faqs/[id] error:", error);
@@ -26,6 +40,11 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json({ error: "Unauthorized. Please login as an administrator." }, { status: 401 });
+    }
+
     const { id } = await params;
     const existing = await prisma.faq.findUnique({ where: { id } });
     if (!existing) {
@@ -45,6 +64,12 @@ export async function PUT(
       where: { id },
       data: dataToUpdate,
     });
+
+    try {
+      revalidatePath("/");
+      revalidatePath("/about");
+      revalidatePath("/contact");
+    } catch {}
 
     return NextResponse.json({ success: true, faq: updated });
   } catch (error: any) {

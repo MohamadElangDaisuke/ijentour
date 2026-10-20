@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
-import { ChevronDown, HelpCircle } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { ChevronDown, Sparkles } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { getWhatsAppLink, WhatsAppTemplates } from "@/lib/whatsapp";
-import { useBookingModal } from "@/lib/bookingModalStore";
 
 interface FaqItem {
   q: string;
@@ -39,12 +38,29 @@ const defaultFaqs: FaqItem[] = [
 ];
 
 export default function FaqSection() {
-  const { openBookingModal } = useBookingModal();
+  const [faqs, setFaqs] = useState<FaqItem[]>(defaultFaqs);
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  useEffect(() => {
+    fetch('/api/faqs')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.faqs) && data.faqs.length > 0) {
+          const mapped: FaqItem[] = data.faqs.map((f: any) => ({
+            q: f.question,
+            a: f.answer,
+          }));
+          setFaqs(mapped);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const toggle = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
+
+  const listToRender = faqs.length > 0 ? faqs : defaultFaqs;
 
   return (
     <section id="faq" className="relative overflow-hidden bg-white px-4 py-20 sm:px-8 sm:py-24 lg:py-28">
@@ -59,7 +75,7 @@ export default function FaqSection() {
         </div>
 
         <div className="space-y-3.5">
-          {defaultFaqs.map((faq, idx) => {
+          {listToRender.map((faq, idx) => {
             const isOpen = openIndex === idx;
             return (
               <div
@@ -105,14 +121,25 @@ export default function FaqSection() {
               <p className="text-xs text-secondary-300">Our local guide team is ready to assist you on WhatsApp 24/7.</p>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={() => openBookingModal()}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs transition shadow-md shrink-0 hover:scale-105 active:scale-95 mx-auto sm:mx-0 cursor-pointer"
-          >
-            <FaWhatsapp className="w-4 h-4" />
-            <span>Chat on WhatsApp</span>
-          </button>
+          <div className="flex flex-wrap items-center justify-center gap-2.5 shrink-0 mx-auto sm:mx-0">
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent('open-ai-assistant'))}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary-500 hover:bg-primary-400 text-secondary-950 font-black text-xs transition shadow-md hover:scale-105 active:scale-95 cursor-pointer"
+            >
+              <Sparkles className="w-4 h-4" />
+              <span>Ask Tour Assistant</span>
+            </button>
+            <a
+              href={getWhatsAppLink(WhatsAppTemplates.generalInquiry())}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-xs transition shadow-md hover:scale-105 active:scale-95"
+            >
+              <FaWhatsapp className="w-4 h-4" />
+              <span>Chat on WhatsApp</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>

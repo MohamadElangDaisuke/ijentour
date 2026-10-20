@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { UploadCloud, X, Loader2, Plus, Image as ImageIcon, AlertCircle } from "lucide-react";
+import { X, Loader2, Plus, AlertCircle } from "lucide-react";
 
 interface MultiImageUploadProps {
   value: string[];

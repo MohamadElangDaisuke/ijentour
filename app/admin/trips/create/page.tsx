@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Save, Plus, Trash2, Sparkles, AlertCircle } from "lucide-react";
+import { ArrowLeft, Save, AlertCircle } from "lucide-react";
 import ImageUpload from "@/app/component/ui/ImageUpload";
 import MultiImageUpload from "@/app/component/ui/MultiImageUpload";
 
@@ -15,7 +15,7 @@ export default function CreateTripPage() {
   const [duration, setDuration] = useState("1 Day");
   const [price, setPrice] = useState("Rp 750.000");
   const [basePrice, setBasePrice] = useState(750000);
-  const [rating, setRating] = useState(5.0);
+  const rating = 5.0;
   const [badge, setBadge] = useState("Recommended Tour");
   const [image, setImage] = useState("");
   const [galleryImages, setGalleryImages] = useState<string[]>([]);

@@ -7,13 +7,11 @@ import {
   User,
   Globe,
   Mail,
-  Phone,
   Compass,
   Calendar,
   Users,
   MapPin,
   MessageSquare,
-  Sparkles,
   ArrowRight,
   ShieldCheck,
   CheckCircle2,
@@ -124,11 +122,7 @@ export default function BookingModal() {
   // Sync initialData when modal opens
   useEffect(() => {
     if (isOpen) {
-      if (initialData.packageName) {
-        setSelectedPackage(initialData.packageName);
-      } else if (!selectedPackage) {
-        setSelectedPackage('');
-      }
+      setSelectedPackage(prev => initialData.packageName || prev || '');
 
       if (initialData.tourDate) {
         setTourDate(initialData.tourDate);

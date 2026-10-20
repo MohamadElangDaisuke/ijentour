@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Bell, CheckCheck, Calendar, Mail, User, Sparkles, ExternalLink } from "lucide-react";
+import { CheckCheck, Calendar, Mail, User, ExternalLink } from "lucide-react";
+import { AdminCardListSkeleton } from "@/app/component/ui/skeleton";
 
 export default function AdminNotificationsPage() {
   const [notifications, setNotifications] = useState<any[]>([]);
@@ -63,9 +64,7 @@ export default function AdminNotificationsPage() {
 
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-xs">
         {loading ? (
-          <div className="py-20 text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto"></div>
-          </div>
+          <AdminCardListSkeleton count={5} />
         ) : notifications.length === 0 ? (
           <div className="py-20 text-center text-xs text-secondary-400">
             No notifications recorded yet.

@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { MapPin, Phone, Mail } from 'lucide-react';
 import { FaInstagram, FaFacebook, FaYoutube } from 'react-icons/fa';
 import { getAdminWhatsAppNumber, getWhatsAppLink, WhatsAppTemplates } from '@/lib/whatsapp';
+import { OFFICIAL_SOCIAL_LINKS } from '@/lib/constants';
 
 export default function Footer() {
   const pathname = usePathname();
@@ -77,13 +78,31 @@ export default function Footer() {
           <div>
             <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-secondary-950">Follow Us</h4>
             <div className="flex space-x-3">
-              <a href="#" aria-label="Instagram" className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary-100 text-secondary-700 hover:bg-primary-500 hover:text-secondary-950 transition-all shadow-2xs">
+              <a
+                href={OFFICIAL_SOCIAL_LINKS.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary-100 text-secondary-700 hover:bg-primary-500 hover:text-secondary-950 transition-all shadow-2xs"
+              >
                 <FaInstagram size={16} />
               </a>
-              <a href="#" aria-label="Facebook" className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary-100 text-secondary-700 hover:bg-primary-500 hover:text-secondary-950 transition-all shadow-2xs">
+              <a
+                href={OFFICIAL_SOCIAL_LINKS.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary-100 text-secondary-700 hover:bg-primary-500 hover:text-secondary-950 transition-all shadow-2xs"
+              >
                 <FaFacebook size={16} />
               </a>
-              <a href="#" aria-label="Youtube" className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary-100 text-secondary-700 hover:bg-primary-500 hover:text-secondary-950 transition-all shadow-2xs">
+              <a
+                href={OFFICIAL_SOCIAL_LINKS.youtube}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Youtube"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary-100 text-secondary-700 hover:bg-primary-500 hover:text-secondary-950 transition-all shadow-2xs"
+              >
                 <FaYoutube size={16} />
               </a>
             </div>

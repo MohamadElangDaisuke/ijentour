@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Trash2, Image as ImageIcon, Sparkles, AlertCircle } from "lucide-react";
+import { Plus, Trash2, AlertCircle } from "lucide-react";
 import { defaultStories, Story } from "@/app/lib/stories";
 import ImageUpload from "@/app/component/ui/ImageUpload";
+import { AdminGallerySkeleton } from "@/app/component/ui/skeleton";
 
 export default function AdminGalleryPage() {
   const [items, setItems] = useState<Story[]>(defaultStories);
@@ -183,7 +184,14 @@ export default function AdminGalleryPage() {
           Active Gallery Photos ({items.length})
         </h2>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        {loading ? (
+          <AdminGallerySkeleton count={8} />
+        ) : items.length === 0 ? (
+          <div className="py-12 text-center text-xs text-secondary-400">
+            No gallery photos added yet. Use the form above to add your first photo.
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {items.map((item) => (
             <div
               key={item.id}
@@ -211,6 +219,7 @@ export default function AdminGalleryPage() {
             </div>
           ))}
         </div>
+      )}
       </div>
     </div>
   );

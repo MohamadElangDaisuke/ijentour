@@ -45,6 +45,9 @@ export default function Home() {
       {/* 3. Featured Tours */}
       <Packages />
 
+      {/* 3.1 How It Works & Travel Information */}
+      <HowItWorks />
+
       {/* 4. Get Inspired - Destination Carousel */}
       <DestinationInspiration />
 
@@ -60,7 +63,8 @@ export default function Home() {
       {/* 8. FAQ Accordion */}
       <FaqSection />
 
-
+      {/* 9. Final Call to Action */}
+      <FinalCta />
     </>
   );
 }

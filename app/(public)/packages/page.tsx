@@ -7,18 +7,24 @@ import {
   Star, Check, XCircle, ChevronLeft, ChevronRight, Clock, Sparkles, ArrowRight, ExternalLink
 } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
-import { TourPackage, defaultPackages, packagesStorageKey } from '../../lib/packagesStorage';
-import { getWhatsAppLink } from '@/lib/whatsapp';
+import { TourPackage, defaultPackages } from '../../lib/packagesStorage';
 import { useBookingModal } from '@/lib/bookingModalStore';
 
 function PackagesContent() {
   const searchParams = useSearchParams();
   const packageIdFromUrl = searchParams.get('id');
+  const categoryFromUrl = searchParams.get('category');
   const { openBookingModal } = useBookingModal();
 
   const [packagesData, setPackagesData] = useState<TourPackage[]>(defaultPackages);
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedCategory, setSelectedCategory] = useState<string>(categoryFromUrl || 'all');
   const [selectedPackageId, setSelectedPackageId] = useState<string>('');
+
+  useEffect(() => {
+    if (categoryFromUrl) {
+      setSelectedCategory(categoryFromUrl);
+    }
+  }, [categoryFromUrl]);
 
   // Calendar state
   const [selectedDate, setSelectedDate] = useState<Date>(() => {
@@ -73,22 +79,6 @@ function PackagesContent() {
         }
       })
       .catch(() => { });
-
-    const saved = window.localStorage.getItem(packagesStorageKey);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setPackagesData((prev) => {
-            const existingIds = new Set(prev.map((p) => p.id));
-            const newFromSaved = parsed.filter((p: any) => !existingIds.has(p.id));
-            return [...prev, ...newFromSaved];
-          });
-        }
-      } catch (e) {
-        console.error("Failed to load packages from localStorage:", e);
-      }
-    }
   }, []);
 
   // Determine active package
@@ -113,10 +103,6 @@ function PackagesContent() {
     '/images/pkg-waterfall.png',
     '/images/the-best-view-of-kawah.webp'
   ];
-
-  const whatsappMessage = encodeURIComponent(
-    `Hello Ijen Tour, I would like to book the "${activePackage.title}" package (${activePackage.price})${formattedSelectedDate ? ` for departure date ${formattedSelectedDate}` : ''}. Please provide information regarding availability and guide slots.`
-  );
 
   return (
     <div className="text-secondary-950 bg-secondary-50 min-h-screen">
@@ -203,6 +189,39 @@ function PackagesContent() {
                   {tab.label}
                 </button>
               ))}
+            </div>
+          </div>
+
+          {/* Custom Trip Promo Banner */}
+          <div className="mb-6 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-secondary-950 via-secondary-900 to-primary-950 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border border-secondary-800 shadow-md">
+            <div className="space-y-1">
+              <span className="text-[10px] font-black uppercase tracking-wider text-primary-400 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Custom Tour Available</span>
+              </span>
+              <h3 className="text-base sm:text-lg font-black text-white">
+                Want to Design Your Own Expedition?
+              </h3>
+              <p className="text-xs text-secondary-300 max-w-xl">
+                Combine Mount Ijen with Baluran Safari, De Djawatan Forest, or Red Island with your own private vehicle and schedule.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new CustomEvent('open-ai-assistant'))}
+                className="px-4 py-2.5 rounded-xl border border-primary-500/40 bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-primary-400" />
+                <span>Ask Tour Assistant</span>
+              </button>
+              <Link
+                href="/custom-package"
+                className="px-5 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-400 text-secondary-950 text-xs font-black transition flex items-center gap-1.5 shadow-sm"
+              >
+                <span>Build Custom Package</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
           </div>
 

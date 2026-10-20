@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase, supabaseAdmin } from "@/lib/supabase";
+import { requireAdmin } from "@/lib/auth";
 import path from "path";
 import fs from "fs/promises";
 
@@ -14,6 +15,14 @@ const ALLOWED_MIME_TYPES = [
 
 export async function POST(request: NextRequest) {
   try {
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized. Please login as an administrator." },
+        { status: 401 }
+      );
+    }
+
     // 1. Parse FormData
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
@@ -134,6 +143,14 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized. Please login as an administrator." },
+        { status: 401 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const storagePath = searchParams.get("path");
 

@@ -3,7 +3,6 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { defaultDestinations, getDestinationBySlugFromList } from "@/app/lib/destinationsStorage";
 import { defaultPackages } from "@/app/lib/packagesStorage";
-import { formatCurrency } from "@/lib/utils";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -151,10 +150,7 @@ export default async function DestinationDetailPage({ params }: PageProps) {
                   <h4 className="font-bold text-base text-secondary-950 mb-1">{pkg.title}</h4>
                   <p className="text-xs text-secondary-600 line-clamp-2 mb-4">{pkg.description}</p>
                 </div>
-                <div className="flex items-center justify-between pt-3 border-t border-secondary-100">
-                  <span className="text-sm font-black text-primary-600">
-                    {pkg.price || formatCurrency(pkg.basePrice)}
-                  </span>
+                <div className="flex justify-end pt-3 border-t border-secondary-100">
                   <Link
                     href={`/packages/${pkg.id}`}
                     className="px-4 py-2 rounded-xl bg-primary-500 hover:bg-primary-400 text-secondary-950 font-bold text-xs"

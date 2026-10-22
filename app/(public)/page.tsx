@@ -6,7 +6,13 @@ import ExperienceSections from "../component/ui/experienceSections";
 import GallerySection from "../component/ui/gallerySection";
 import TestimonialSection from "../component/ui/testimonialSection";
 import FaqSection from "../component/ui/faqSection";
-import FinalCta from "../component/ui/finalCta";
+import ArticleSection from "../component/ui/articleSection";
+import {
+  CustomTourCtaSection,
+  ExploreByInterestSection,
+  LocalGuidesSection,
+  TravelResourcesSection,
+} from "../component/ui/homeSections";
 
 export default function Home() {
   const structuredData = {
@@ -47,20 +53,35 @@ export default function Home() {
       {/* 4. Get Inspired - Destination Carousel */}
       <DestinationInspiration />
 
-      {/* 5. Experience / Destination */}
+      {/* 5. Featured Travel Guides */}
+      <ArticleSection variant="guides" />
+
+      {/* 6. Explore by Interest */}
+      <ExploreByInterestSection />
+
+      {/* 7. Latest Articles & Travel Stories */}
+      <ArticleSection variant="latest" />
+
+      {/* 8. Experience / Destination */}
       <ExperienceSections />
 
-      {/* 6. Gallery */}
+      {/* 9. Meet Our Local Guides */}
+      <LocalGuidesSection />
+
+      {/* 10. Gallery */}
       <GallerySection />
 
-      {/* 7. Testimonials */}
+      {/* 11. Testimonials */}
       <TestimonialSection />
 
-      {/* 8. FAQ Accordion */}
-      <FaqSection />
+      {/* 12. Travel Planning Resources */}
+      <TravelResourcesSection />
 
-      {/* 9. Final Call to Action */}
-      <FinalCta />
+      {/* 13. Custom Tour CTA */}
+      <CustomTourCtaSection />
+
+      {/* 14. FAQ Accordion */}
+      <FaqSection />
     </>
   );
 }

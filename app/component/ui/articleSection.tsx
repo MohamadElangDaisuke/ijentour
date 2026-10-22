@@ -6,7 +6,11 @@ import { ArrowRight, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { defaultArticles, articlesStorageKey, type Article } from '../../lib/articlesStorage';
 
-export default function ArticleSection() {
+interface ArticleSectionProps {
+  variant?: 'guides' | 'latest';
+}
+
+export default function ArticleSection({ variant = 'latest' }: ArticleSectionProps) {
   const [articles, setArticles] = useState<Article[]>(defaultArticles);
 
   useEffect(() => {
@@ -36,17 +40,26 @@ export default function ArticleSection() {
     }
   }, []);
 
-  const displayArticles = articles.slice(0, 3);
+  const isGuidesSection = variant === 'guides';
+  const displayArticles = isGuidesSection
+    ? articles.filter((article) => ['Guides', 'Tips & Tricks', 'Ijen Insights'].includes(article.category)).slice(0, 3)
+    : articles.slice(0, 3);
+  const sectionId = isGuidesSection ? 'featured-guides' : 'latest-articles';
+  const heading = isGuidesSection ? 'Featured Travel Guides' : 'Latest Articles & Travel Stories';
+  const subheading = isGuidesSection
+    ? 'Everything You Need to Know Before You Go'
+    : 'Fresh Insights for Your Next Journey';
 
   return (
-    <section id="articles" aria-labelledby="articles-heading" className="relative w-full overflow-hidden bg-white px-4 py-20 sm:px-8 sm:py-24 lg:py-28">
+    <section id={sectionId} aria-labelledby={`${sectionId}-heading`} className="relative w-full overflow-hidden bg-white px-4 py-20 sm:px-8 sm:py-24 lg:py-28">
       <div className="relative z-10 mx-auto max-w-7xl">
         <div className="mb-10 flex flex-col items-center justify-between gap-5 text-center sm:flex-row sm:items-end sm:text-left">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary-600">Travel journal</p>
-            <h2 id="articles-heading" className="mt-3 text-2xl sm:text-4xl lg:text-5xl font-black leading-tight tracking-tight text-secondary-950">
-              Travel stories and guides.
+            <h2 id={`${sectionId}-heading`} className="mt-3 text-2xl sm:text-4xl lg:text-5xl font-black leading-tight tracking-tight text-secondary-950">
+              {heading}
             </h2>
+            <p className="mt-3 text-sm sm:text-base text-secondary-700">{subheading}</p>
           </div>
           <Link
             href="/blog"
@@ -58,7 +71,7 @@ export default function ArticleSection() {
 
         <div className="grid gap-6 md:grid-cols-3">
           {displayArticles.map((article, index) => {
-            const targetSlug = (article as any).slug || article.id;
+            const targetSlug = article.slug || article.id;
             return (
               <motion.article
                 key={article.id || article.title}
@@ -88,7 +101,7 @@ export default function ArticleSection() {
                     </p>
                     <div className="mt-5 flex items-center justify-between text-xs text-secondary-500 border-t border-secondary-200/60 pt-3">
                       <span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" /> {article.readTime}</span>
-                      <span className="font-bold text-primary-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform">Read →</span>
+                      <span className="font-bold text-primary-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform">Read <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" /></span>
                     </div>
                   </div>
                 </Link>
@@ -100,4 +113,3 @@ export default function ArticleSection() {
     </section>
   );
 }
-

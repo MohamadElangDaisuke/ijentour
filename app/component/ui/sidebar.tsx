@@ -4,11 +4,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence, PanInfo } from 'framer-motion'
-import {
-  XMarkIcon,
-  MagnifyingGlassIcon,
-  ChevronDownIcon,
-} from '@heroicons/react/24/outline'
+import { ChevronDown, Search, X } from 'lucide-react'
 import ThemeToggle from './themeToggle'
 import { MAIN_NAV_ITEMS, NavDropdownItem } from './navConfig'
 import { useBookingModal } from '@/lib/bookingModalStore'
@@ -94,12 +90,12 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                   <img
                     src="/images/logo-light.png"
                     alt="Mount Ijen Tour and Trip Organizer"
-                    className="h-10 sm:h-11 w-auto object-contain dark:hidden"
+                    className="h-10 w-auto object-contain dark:hidden sm:h-11"
                   />
                   <img
                     src="/images/logo-dark.png"
                     alt="Mount Ijen Tour and Trip Organizer"
-                    className="h-10 sm:h-11 w-auto object-contain hidden dark:block"
+                    className="hidden h-10 w-auto object-contain dark:block sm:h-11"
                   />
                 </Link>
                 <div className="flex items-center gap-2">
@@ -110,7 +106,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     className="rounded-xl p-2 text-secondary-500 hover:bg-secondary-100 dark:hover:bg-secondary-800 hover:text-secondary-950 dark:hover:text-white transition-colors cursor-pointer"
                     aria-label="Close navigation"
                   >
-                    <XMarkIcon className="w-5 h-5" />
+                    <X className="w-5 h-5" />
                   </button>
                 </div>
               </div>
@@ -121,7 +117,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 onSubmit={onClose}
                 className="mt-4 flex items-center overflow-hidden rounded-2xl border border-secondary-200 dark:border-secondary-800 bg-secondary-50 dark:bg-secondary-900 px-3.5 py-2.5 transition focus-within:border-primary-500 focus-within:bg-white dark:focus-within:bg-secondary-900 focus-within:ring-2 focus-within:ring-primary-500/20"
               >
-                <MagnifyingGlassIcon className="h-4 w-4 shrink-0 text-secondary-400 dark:text-secondary-500" />
+                <Search className="h-4 w-4 shrink-0 text-secondary-400 dark:text-secondary-500" />
                 <input
                   type="search"
                   name="q"
@@ -172,7 +168,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                         aria-expanded={isOpenAccordion}
                       >
                         <span>{item.label}</span>
-                        <ChevronDownIcon
+                        <ChevronDown
                           className={`w-4 h-4 text-secondary-500 transition-transform duration-200 ${
                             isOpenAccordion ? 'rotate-180 text-primary-600' : ''
                           }`}

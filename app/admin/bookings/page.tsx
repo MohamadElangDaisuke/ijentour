@@ -40,11 +40,13 @@ export default function AdminBookingsPage() {
   // Sync modal edit fields when a booking is selected
   useEffect(() => {
     if (selectedBooking) {
-      setEditFinalPrice(
-        selectedBooking.finalPrice !== null && selectedBooking.finalPrice !== undefined
-          ? String(selectedBooking.finalPrice)
-          : String(selectedBooking.totalPrice || selectedBooking.estimatedPrice || "")
-      );
+      if (selectedBooking.bookingType !== "CUSTOM") {
+        setEditFinalPrice(
+          selectedBooking.finalPrice !== null && selectedBooking.finalPrice !== undefined
+            ? String(selectedBooking.finalPrice)
+            : String(selectedBooking.totalPrice || selectedBooking.estimatedPrice || "")
+        );
+      }
       setEditAdminNotes(selectedBooking.adminNotes || "");
     }
   }, [selectedBooking]);
@@ -76,10 +78,10 @@ export default function AdminBookingsPage() {
     setIsUpdating(true);
 
     try {
-      const payload: any = {
-        finalPrice: Number(editFinalPrice) || selectedBooking.totalPrice,
-        adminNotes: editAdminNotes.trim(),
-      };
+      const payload: any = { adminNotes: editAdminNotes.trim() };
+      if (selectedBooking.bookingType !== "CUSTOM") {
+        payload.finalPrice = Number(editFinalPrice) || selectedBooking.totalPrice;
+      }
       if (newStatus) {
         payload.status = newStatus;
       }
@@ -97,7 +99,13 @@ export default function AdminBookingsPage() {
           prev.map((b) => (b.id === updated.id ? { ...b, ...updated } : b))
         );
         setSelectedBooking((prev: any) => ({ ...prev, ...updated }));
-        alert(newStatus ? `Booking status set to ${newStatus} with confirmed price.` : "Price and coordinator notes updated.");
+        alert(
+          newStatus
+            ? `Booking status set to ${newStatus}.`
+            : selectedBooking.bookingType === "CUSTOM"
+              ? "Coordinator notes updated."
+              : "Price and coordinator notes updated."
+        );
       } else {
         alert("Failed to update booking price.");
       }
@@ -147,7 +155,7 @@ export default function AdminBookingsPage() {
             Manage Reservations & Bookings
           </h1>
           <p className="text-xs sm:text-sm text-secondary-600 mt-1">
-            Confirm regular packages, review custom trip itineraries, adjust final quotes, and coordinate with travelers.
+            Confirm regular packages, review custom trip itineraries, and coordinate with travelers.
           </p>
         </div>
 
@@ -237,7 +245,7 @@ export default function AdminBookingsPage() {
                   <th className="py-4 px-6">Tour Package / Type</th>
                   <th className="py-4 px-6">Schedule</th>
                   <th className="py-4 px-6 text-center">Pax</th>
-                  <th className="py-4 px-6">Pricing</th>
+                  <th className="py-4 px-6">Price / Quote</th>
                   <th className="py-4 px-6">Status</th>
                   <th className="py-4 px-6 text-right">Update Status / Actions</th>
                 </tr>
@@ -286,22 +294,16 @@ export default function AdminBookingsPage() {
                         {b.numParticipants}
                       </td>
                       <td className="py-4 px-6 whitespace-nowrap">
-                        {isCustom && !b.finalPrice ? (
+                        {isCustom ? (
                           <div>
-                            <span className="font-black text-amber-700 text-sm block">
-                              {formatCurrency(b.estimatedPrice || b.totalPrice)}
+                            <span className="font-bold text-secondary-600 text-xs">
+                              Handled offline
                             </span>
-                            <span className="text-[10px] text-amber-600 font-bold">Estimated</span>
                           </div>
                         ) : (
-                          <div>
-                            <span className="font-black text-primary-600 text-sm block">
-                              {formatCurrency(b.finalPrice || b.totalPrice)}
-                            </span>
-                            {isCustom && (
-                              <span className="text-[10px] text-emerald-600 font-bold">Confirmed</span>
-                            )}
-                          </div>
+                          <span className="font-black text-primary-600 text-sm">
+                            {formatCurrency(b.finalPrice || b.totalPrice)}
+                          </span>
                         )}
                       </td>
                       <td className="py-4 px-6">
@@ -347,7 +349,7 @@ export default function AdminBookingsPage() {
                         <button
                           onClick={() => setSelectedBooking(b)}
                           className="p-1.5 rounded-lg bg-secondary-100 hover:bg-secondary-200 text-secondary-800 transition cursor-pointer inline-block"
-                          title="View Full Details & Manage Pricing"
+                          title="View Reservation Details"
                         >
                           <Eye className="w-3.5 h-3.5" />
                         </button>
@@ -368,7 +370,7 @@ export default function AdminBookingsPage() {
         </div>
       )}
 
-      {/* DETAIL & PRICING MODAL */}
+      {/* RESERVATION DETAILS MODAL */}
       {selectedBooking && (() => {
         const isCustom = selectedBooking.bookingType === "CUSTOM";
         let parsedCustom: any = null;
@@ -455,19 +457,19 @@ export default function AdminBookingsPage() {
                       <div>
                         <span className="text-secondary-500 block text-[10px]">Duration:</span>
                         <span className="font-bold text-secondary-900">
-                          {parsedCustom.durationName || "1 Day"}
+                          {parsedCustom.durationName || "Not specified"}
                         </span>
                       </div>
                       <div>
                         <span className="text-secondary-500 block text-[10px]">Vehicle:</span>
                         <span className="font-bold text-secondary-900">
-                          {parsedCustom.transportName || "Standard Vehicle"}
+                          {parsedCustom.transportName || "Not specified"}
                         </span>
                       </div>
                       <div>
                         <span className="text-secondary-500 block text-[10px]">Guide:</span>
                         <span className="font-bold text-secondary-900">
-                          {parsedCustom.guideName || "Certified Guide"}
+                          {parsedCustom.guideName || "Not specified"}
                         </span>
                       </div>
                       <div>
@@ -509,11 +511,37 @@ export default function AdminBookingsPage() {
                   </div>
                 )}
 
-                {/* PRICING & ADMIN APPROVAL SECTION */}
-                <div className="p-4 bg-primary-50/80 rounded-2xl border border-primary-200 space-y-3">
+                {isCustom ? (
+                  <div className="p-4 bg-purple-50/80 rounded-2xl border border-purple-200 space-y-3">
+                    <p className="font-bold text-secondary-900">
+                      Custom trip quotes are calculated manually outside this application.
+                    </p>
+                    <div className="space-y-1">
+                      <label className="text-[11px] font-bold text-secondary-800">
+                        Coordinator Internal Notes:
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={editAdminNotes}
+                        onChange={(e) => setEditAdminNotes(e.target.value)}
+                        placeholder="Internal coordination notes"
+                        className="w-full p-2.5 rounded-xl text-xs bg-white border border-secondary-200 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      disabled={isUpdating}
+                      onClick={() => handleSavePriceAndNotes()}
+                      className="w-full py-2 px-3 rounded-xl bg-secondary-950 hover:bg-secondary-800 text-white font-bold text-xs transition cursor-pointer disabled:opacity-60"
+                    >
+                      Save Notes
+                    </button>
+                  </div>
+                ) : (
+                  <div className="p-4 bg-primary-50/80 rounded-2xl border border-primary-200 space-y-3">
                   <div className="flex justify-between items-baseline">
                     <span className="font-bold text-secondary-900">
-                      {isCustom ? "Estimated Price:" : "Total Price:"}
+                      Total Price:
                     </span>
                     <span className="text-base font-black text-primary-700">
                       {formatCurrency(selectedBooking.estimatedPrice || selectedBooking.totalPrice)}
@@ -588,7 +616,8 @@ export default function AdminBookingsPage() {
                       </button>
                     )}
                   </div>
-                </div>
+                  </div>
+                )}
               </div>
 
               {/* Modal Footer / WhatsApp Contact */}
@@ -618,4 +647,3 @@ export default function AdminBookingsPage() {
     </div>
   );
 }
-

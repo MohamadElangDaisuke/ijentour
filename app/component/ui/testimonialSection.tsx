@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { defaultTestimonials, type Testimonial } from "../../lib/testimonialsStorage";
 
@@ -75,7 +76,7 @@ export default function TestimonialSection() {
                       aria-label="Previous Testimonial"
                       className="w-8 h-8 rounded-full border border-secondary-300 flex items-center justify-center hover:bg-secondary-100 transition cursor-pointer text-xs font-bold text-secondary-800"
                     >
-                      ←
+                      <ChevronLeft className="h-4 w-4" aria-hidden="true" />
                     </button>
                     <button
                       type="button"
@@ -83,7 +84,7 @@ export default function TestimonialSection() {
                       aria-label="Next Testimonial"
                       className="w-8 h-8 rounded-full border border-secondary-300 flex items-center justify-center hover:bg-secondary-100 transition cursor-pointer text-xs font-bold text-secondary-800"
                     >
-                      →
+                      <ChevronRight className="h-4 w-4" aria-hidden="true" />
                     </button>
                   </div>
                 )}

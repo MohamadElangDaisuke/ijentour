@@ -9,6 +9,8 @@ import {
   Mail,
   Compass,
   Calendar,
+  CalendarDays,
+  Check,
   Users,
   MapPin,
   MessageSquare,
@@ -395,11 +397,16 @@ export default function BookingModal() {
                       <Compass className="w-4 h-4 text-primary-500" />
                       <span>{selectedPackage}</span>
                     </p>
-                    <p className="text-secondary-600 dark:text-secondary-300">
-                      📅 Date: {getFormattedDateDisplay(tourDate)} • 👥 {participants} Participants
+                    <p className="flex items-center gap-1.5 text-secondary-600 dark:text-secondary-300">
+                      <CalendarDays className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                      <span>Date: {getFormattedDateDisplay(tourDate)}</span>
+                      <span aria-hidden="true">•</span>
+                      <Users className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                      <span>{participants} Participants</span>
                     </p>
-                    <p className="text-secondary-600 dark:text-secondary-300">
-                      📍 Pickup: {pickupLocation}
+                    <p className="flex items-center gap-1.5 text-secondary-600 dark:text-secondary-300">
+                      <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                      <span>Pickup: {pickupLocation}</span>
                     </p>
                   </div>
 
@@ -682,8 +689,9 @@ export default function BookingModal() {
                         />
                       </div>
                       {tourDate && (
-                        <p className="mt-1 text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
-                          ✓ Format: {getFormattedDateDisplay(tourDate)}
+                        <p className="mt-1 inline-flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
+                          <Check className="h-3 w-3" aria-hidden="true" />
+                          Format: {getFormattedDateDisplay(tourDate)}
                         </p>
                       )}
                       {errors.tourDate && (

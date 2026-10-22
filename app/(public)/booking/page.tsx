@@ -217,15 +217,21 @@ export default function BookingLookupPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 border-t border-purple-200/60">
                     <div>
                       <span className="text-secondary-500 text-[10px] block">Duration:</span>
-                      <span className="font-bold text-secondary-900">{parsed.durationName || "1 Day"}</span>
+                      <span className="font-bold text-secondary-900">
+                        {parsed.durationName || "Not specified"}
+                      </span>
                     </div>
                     <div>
                       <span className="text-secondary-500 text-[10px] block">Transportation:</span>
-                      <span className="font-bold text-secondary-900">{parsed.transportName || "Standard Vehicle"}</span>
+                      <span className="font-bold text-secondary-900">
+                        {parsed.transportName || "Not specified"}
+                      </span>
                     </div>
                     <div>
                       <span className="text-secondary-500 text-[10px] block">Tour Guide:</span>
-                      <span className="font-bold text-secondary-900">{parsed.guideName || "Certified Guide"}</span>
+                      <span className="font-bold text-secondary-900">
+                        {parsed.guideName || "Not specified"}
+                      </span>
                     </div>
                     {parsed.addonsList && parsed.addonsList.length > 0 && (
                       <div>
@@ -258,26 +264,21 @@ export default function BookingLookupPage() {
                 <p className="font-bold text-secondary-950 text-sm">{booking.pickupLocation || "Banyuwangi Area"}</p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-secondary-50 space-y-1">
-                <span className="text-secondary-500 block">
-                  {booking.bookingType === "CUSTOM" && booking.status === "PENDING"
-                    ? "Estimated Tour Cost:"
-                    : "Total Tour Price:"}
-                </span>
-                <p className="font-black text-primary-600 text-base">
-                  {formatCurrency(booking.finalPrice || booking.totalPrice)}
-                </p>
-                {booking.bookingType === "CUSTOM" && booking.status === "PENDING" && (
-                  <p className="text-[10px] text-amber-700 font-bold">
-                    (Pending coordinator final approval)
+              {booking.bookingType === "CUSTOM" ? (
+                <div className="p-4 rounded-2xl bg-secondary-50 space-y-1">
+                  <span className="text-secondary-500 block">Custom Quote:</span>
+                  <p className="font-bold text-secondary-950 text-sm">
+                    Our travel team will contact you with a personalized proposal.
                   </p>
-                )}
-                {booking.bookingType === "CUSTOM" && booking.status === "CONFIRMED" && (
-                  <p className="text-[10px] text-emerald-700 font-bold">
-                    ✓ Final price verified by coordinator
+                </div>
+              ) : (
+                <div className="p-4 rounded-2xl bg-secondary-50 space-y-1">
+                  <span className="text-secondary-500 block">Total Tour Price:</span>
+                  <p className="font-black text-primary-600 text-base">
+                    {formatCurrency(booking.finalPrice || booking.totalPrice)}
                   </p>
-                )}
-              </div>
+                </div>
+              )}
             </div>
 
             {booking.adminNotes && (

@@ -7,6 +7,15 @@ import { FaInstagram, FaFacebook, FaYoutube } from 'react-icons/fa';
 import { getAdminWhatsAppNumber, getWhatsAppLink, WhatsAppTemplates } from '@/lib/whatsapp';
 import { OFFICIAL_SOCIAL_LINKS } from '@/lib/constants';
 
+const articleCategories = [
+  'Guides',
+  'Tips & Tricks',
+  'Local Culture',
+  'Destinations',
+  'Culinary',
+  'Ijen Insights',
+];
+
 export default function Footer() {
   const pathname = usePathname();
 
@@ -19,14 +28,19 @@ export default function Footer() {
     <>
       {/* Global Footer */}
       <footer className="mt-auto border-t border-secondary-200/80 bg-white pt-16 pb-8 text-secondary-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
           {/* Brand Col */}
           <div className="col-span-1 md:col-span-1">
             <Link href="/" className="mb-4 inline-flex items-center transition-transform hover:scale-105" aria-label="Mount Ijen Tour Home">
               <img
                 src="/images/logo-light.png"
                 alt="Mount Ijen Tour and Trip Organizer"
-                className="h-12 sm:h-14 w-auto object-contain"
+                className="h-12 w-auto object-contain dark:hidden sm:h-14"
+              />
+              <img
+                src="/images/logo-dark.png"
+                alt="Mount Ijen Tour and Trip Organizer"
+                className="hidden h-12 w-auto object-contain dark:block sm:h-14"
               />
             </Link>
             <p className="text-sm leading-relaxed text-secondary-600">
@@ -47,6 +61,23 @@ export default function Footer() {
               <li><Link href="/about#faq" className="hover:text-primary-500 transition-colors">FAQ</Link></li>
               <li><Link href="/blog" className="hover:text-primary-500 transition-colors">Blog</Link></li>
               <li><Link href="/contact" className="hover:text-primary-500 transition-colors">Contact</Link></li>
+            </ul>
+          </div>
+
+          {/* Article Categories */}
+          <div>
+            <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-secondary-950">Explore by Interest</h4>
+            <ul className="space-y-2.5 text-sm">
+              {articleCategories.map((category) => (
+                <li key={category}>
+                  <Link
+                    href={`/blog?category=${encodeURIComponent(category)}`}
+                    className="hover:text-primary-500 transition-colors"
+                  >
+                    {category}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -115,6 +146,10 @@ export default function Footer() {
 
         <div className="mx-auto max-w-7xl border-t border-secondary-200/80 px-4 pt-6 text-center text-xs text-secondary-500 sm:px-6 lg:px-8">
           <p>© {new Date().getFullYear()} IjenTour. All rights reserved.</p>
+          <nav aria-label="Legal" className="mt-3 flex justify-center gap-5">
+            <Link href="/privacy" className="transition-colors hover:text-primary-500">Privacy Policy</Link>
+            <Link href="/terms" className="transition-colors hover:text-primary-500">Terms of Service</Link>
+          </nav>
         </div>
       </footer>
     </>

@@ -14,6 +14,7 @@ import {
   Loader2,
   Compass,
 } from "lucide-react";
+import ThemeToggle from "@/app/component/ui/themeToggle";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -77,6 +78,9 @@ export default function AdminLoginPage() {
       {/* Decorative Orbs */}
       <div className="absolute top-1/4 -left-20 w-96 h-96 bg-primary-500/10 rounded-full filter blur-3xl pointer-events-none" />
       <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-sky-500/10 rounded-full filter blur-3xl pointer-events-none" />
+      <div className="absolute right-4 top-4 z-20 sm:right-6 sm:top-6">
+        <ThemeToggle />
+      </div>
 
       <div className="relative z-10 sm:mx-auto sm:w-full sm:max-w-md">
         {/* Brand Header */}

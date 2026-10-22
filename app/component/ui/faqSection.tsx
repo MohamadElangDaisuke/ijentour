@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { ChevronDown, Sparkles } from "lucide-react";
+import { ChevronDown, MessageCircleQuestion } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { getWhatsAppLink, WhatsAppTemplates } from "@/lib/whatsapp";
 
@@ -127,7 +127,7 @@ export default function FaqSection() {
               onClick={() => window.dispatchEvent(new CustomEvent('open-ai-assistant'))}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary-500 hover:bg-primary-400 text-secondary-950 font-black text-xs transition shadow-md hover:scale-105 active:scale-95 cursor-pointer"
             >
-              <Sparkles className="w-4 h-4" />
+              <MessageCircleQuestion className="w-4 h-4" />
               <span>Ask Tour Assistant</span>
             </button>
             <a

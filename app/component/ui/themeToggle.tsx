@@ -69,7 +69,7 @@ export default function ThemeToggle() {
       <Moon className={`absolute right-2 h-3.5 w-3.5 transition-colors ${isDark ? 'text-secondary-100' : 'text-secondary-500'}`} aria-hidden="true" />
       <span
         aria-hidden="true"
-        className={`relative z-10 flex h-7 w-7 items-center justify-center rounded-full bg-white shadow-sm transition-transform duration-300 ${
+        className={`theme-toggle-thumb relative z-10 flex h-7 w-7 items-center justify-center rounded-full bg-white shadow-sm transition-transform duration-300 ${
           isDark ? 'translate-x-7' : 'translate-x-0'
         }`}
       >

@@ -47,6 +47,12 @@ export async function PUT(
     }
 
     const body = await request.json();
+    if (existing.bookingType === "CUSTOM" && body.finalPrice !== undefined) {
+      return NextResponse.json(
+        { error: "Custom trip quotes are handled manually outside the application." },
+        { status: 400 }
+      );
+    }
 
     const dataToUpdate: any = {};
     if (body.status !== undefined) {

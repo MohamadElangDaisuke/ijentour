@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import ThemeToggle from "@/app/component/ui/themeToggle";
 import {
   LayoutDashboard,
   Compass,
@@ -138,6 +139,8 @@ export default function AdminClientLayout({ children }: { children: React.ReactN
         </div>
 
         <div className="flex items-center gap-3">
+          <ThemeToggle />
+
           {/* Notifications Popover */}
           <div className="relative">
             <button

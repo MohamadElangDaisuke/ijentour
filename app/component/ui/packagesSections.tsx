@@ -3,12 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence, easeIn } from 'framer-motion';
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  StarIcon,
-  ArrowRightIcon
-} from '@heroicons/react/24/outline';
+import { ArrowRight, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { TourPackage, defaultPackages, packagesStorageKey } from '../../lib/packagesStorage';
 
 export default function PackagesSections() {
@@ -160,7 +155,7 @@ export default function PackagesSections() {
               className="inline-flex items-center justify-center gap-2 rounded-full bg-primary-500 px-5 sm:px-6 py-3 sm:py-3.5 text-secondary-950 text-xs sm:text-sm font-bold transition-all hover:bg-primary-400 hover:shadow-lg cursor-pointer transform hover:-translate-y-0.5"
             >
               <span>View All Packages</span>
-              <ArrowRightIcon className="hidden sm:inline-block w-4 h-4 stroke-[2.5]" />
+              <ArrowRight className="hidden sm:inline-block w-4 h-4 stroke-[2.5]" />
             </Link>
 
             {/* Mobile Next-Prev Navigation in Header */}
@@ -172,7 +167,7 @@ export default function PackagesSections() {
                 title="Previous package"
                 className="flex items-center justify-center w-8 h-8 rounded-full bg-white text-secondary-950 shadow-xs border border-secondary-200 hover:bg-primary-500 hover:border-primary-500 transition active:scale-90 cursor-pointer"
               >
-                <ChevronLeftIcon className="w-4 h-4 stroke-[2.5]" />
+                <ChevronLeft className="w-4 h-4 stroke-[2.5]" />
               </button>
 
               <span className="text-xs font-bold text-secondary-700 px-1 select-none tabular-nums">
@@ -186,7 +181,7 @@ export default function PackagesSections() {
                 title="Next package"
                 className="flex items-center justify-center w-8 h-8 rounded-full bg-white text-secondary-950 shadow-xs border border-secondary-200 hover:bg-primary-500 hover:border-primary-500 transition active:scale-90 cursor-pointer"
               >
-                <ChevronRightIcon className="w-4 h-4 stroke-[2.5]" />
+                <ChevronRight className="w-4 h-4 stroke-[2.5]" />
               </button>
             </div>
           </div>
@@ -211,7 +206,7 @@ export default function PackagesSections() {
               transition={{ ease: easeIn, duration: 0.2 }}
               className="hidden lg:flex absolute -left-16 top-1/2 -translate-y-1/2 z-40 items-center justify-center w-10 h-10 rounded-full bg-white text-secondary-950 shadow-md hover:shadow-xl transition-all hover:bg-primary-500 cursor-pointer"
             >
-              <ChevronLeftIcon className="w-5 h-5 stroke-[2.5]" />
+              <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
             </motion.button>
 
             {/* Desktop Only Next Nav Button */}
@@ -225,7 +220,7 @@ export default function PackagesSections() {
               transition={{ ease: easeIn, duration: 0.2 }}
               className="hidden lg:flex absolute -right-16 top-1/2 -translate-y-1/2 z-40 items-center justify-center w-10 h-10 rounded-full bg-white text-secondary-950 shadow-md hover:shadow-xl transition-all hover:bg-primary-500 cursor-pointer"
             >
-              <ChevronRightIcon className="w-5 h-5 stroke-[2.5]" />
+              <ChevronRight className="w-5 h-5 stroke-[2.5]" />
             </motion.button>
 
             {/* Cards Loop */}
@@ -269,7 +264,7 @@ export default function PackagesSections() {
                     <div className="mb-3 flex items-center justify-between gap-2 text-xs">
                       <div className="flex items-center gap-1.5 text-primary-500">
                       {[0, 1, 2, 3, 4].map((star) => (
-                        <StarIcon
+                        <Star
                           key={star}
                           className={`h-3 w-3 ${star < Math.round(pkg.rating || 4.9) ? 'fill-primary-500' : 'fill-transparent'}`}
                         />
@@ -294,7 +289,7 @@ export default function PackagesSections() {
                         onClick={(e) => e.stopPropagation()}
                         className="text-xs font-bold text-primary-600 hover:text-primary-700 hover:underline px-2 py-1 rounded-md bg-primary-50 hover:bg-primary-100 transition"
                       >
-                        View details →
+                        View details <ArrowRight className="ml-1 inline h-3.5 w-3.5" aria-hidden="true" />
                       </Link>
                     </div>
                   </div>

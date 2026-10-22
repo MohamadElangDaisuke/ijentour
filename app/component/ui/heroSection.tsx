@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, Compass } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Compass } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
@@ -84,9 +84,9 @@ export default function HeroSection() {
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <span className="font-bold text-secondary-950">AI Travel Assistant (Live)</span>
             </button>
-            <span className="px-3 py-1 rounded-full bg-white border border-secondary-200 shadow-2xs">✓ Licensed Local Guides</span>
-            <span className="px-3 py-1 rounded-full bg-white border border-secondary-200 shadow-2xs">✓ Free Gas Masks & Headlamps</span>
-            <span className="px-3 py-1 rounded-full bg-white border border-secondary-200 shadow-2xs">✓ 24/7 WhatsApp Support</span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-secondary-200 shadow-2xs"><Check className="h-3.5 w-3.5 text-emerald-600" aria-hidden="true" /> Licensed Local Guides</span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-secondary-200 shadow-2xs"><Check className="h-3.5 w-3.5 text-emerald-600" aria-hidden="true" /> Free Gas Masks & Headlamps</span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-secondary-200 shadow-2xs"><Check className="h-3.5 w-3.5 text-emerald-600" aria-hidden="true" /> 24/7 WhatsApp Support</span>
           </div>
 
           <div className="mx-auto mt-7 grid max-w-lg grid-cols-3 gap-4 border-t border-secondary-200 pt-4 text-center sm:text-left sm:mx-0">

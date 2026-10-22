@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { generateBookingCode } from "@/lib/utils";
 import { requireAdmin } from "@/lib/auth";
-import { calculateCustomTourEstimate } from "@/lib/customTour";
+import { ADDON_OPTIONS, DURATION_OPTIONS, GUIDE_OPTIONS, TRANSPORT_OPTIONS } from "@/lib/customTour";
 import { revalidatePath } from "next/cache";
 
 export async function GET(request: Request) {
@@ -67,9 +67,9 @@ export async function POST(request: Request) {
       pickupLocation = "Banyuwangi",
       // Custom Tour Specific Fields
       destinations = [],
-      durationId = "1d",
-      transportId = "mpv",
-      guideId = "certified-guide",
+      durationId = "",
+      transportId = "",
+      guideId = "",
       addonIds = [],
     } = body;
 
@@ -120,15 +120,10 @@ export async function POST(request: Request) {
         };
       });
 
-      // Pure Server-Side Calculation (Do NOT trust client price)
-      const breakdown = calculateCustomTourEstimate({
-        destinations: verifiedDestinations,
-        durationId,
-        transportId,
-        guideId,
-        addonIds: Array.isArray(addonIds) ? addonIds : [],
-        numParticipants: pax,
-      });
+      const selectedAddonIds = Array.isArray(addonIds) ? addonIds : [];
+      const addonsList = ADDON_OPTIONS.filter((addon) => selectedAddonIds.includes(addon.id)).map(
+        (addon) => ({ id: addon.id, name: addon.name })
+      );
 
       const customTripTitle = `Custom Trip: ${verifiedDestinations.map((d) => d.name).join(" + ")}`;
 
@@ -136,16 +131,14 @@ export async function POST(request: Request) {
         isCustom: true,
         destinations: verifiedDestinations,
         durationId,
-        durationName: breakdown.durationName,
-        durationDays: breakdown.durationDays,
+        durationName: DURATION_OPTIONS.find((duration) => duration.id === durationId)?.name ?? null,
         transportId,
-        transportName: breakdown.transportName,
+        transportName:
+          TRANSPORT_OPTIONS.find((transport) => transport.id === transportId)?.name ?? null,
         guideId,
-        guideName: breakdown.guideName,
-        addonIds,
-        addonsList: breakdown.addonsList,
-        breakdown,
-        calculatedAt: new Date().toISOString(),
+        guideName: GUIDE_OPTIONS.find((guide) => guide.id === guideId)?.name ?? null,
+        addonIds: selectedAddonIds,
+        addonsList,
         requiresAdminReview: true,
       };
 
@@ -161,12 +154,12 @@ export async function POST(request: Request) {
           whatsappNumber: sanitizedWhatsApp,
           departureDate: validDepartureDate,
           numParticipants: pax,
-          basePrice: breakdown.subtotal,
-          addons: JSON.stringify(breakdown.addonsList),
-          addonTotal: breakdown.addonsTotal,
+          basePrice: 0,
+          addons: JSON.stringify(addonsList),
+          addonTotal: 0,
           discountAmount: 0,
-          totalPrice: breakdown.estimatedTotal,
-          estimatedPrice: breakdown.estimatedTotal,
+          totalPrice: 0,
+          estimatedPrice: 0,
           finalPrice: null, // Admin must review and approve
           customDetails: JSON.stringify(customSnapshot),
           specialRequests: specialRequests ? specialRequests.trim() : null,
@@ -181,7 +174,7 @@ export async function POST(request: Request) {
         data: {
           type: "booking",
           title: "New Custom Trip Request",
-          description: `${customerName.trim()} requested a custom trip: ${verifiedDestinations.map((d) => d.name).join(", ")} (${pax} pax). Estimated: Rp ${breakdown.estimatedTotal.toLocaleString("id-ID")}`,
+          description: `${customerName.trim()} requested a custom trip: ${verifiedDestinations.map((d) => d.name).join(", ")} (${pax} pax). A travel agent will prepare the proposal manually.`,
           link: "/admin/bookings",
           unread: true,
         },
@@ -196,8 +189,6 @@ export async function POST(request: Request) {
         message: "Custom trip request successfully submitted! Our expedition coordinator will review and confirm your schedule.",
         bookingCode,
         booking,
-        estimatedTotal: breakdown.estimatedTotal,
-        breakdown,
       });
     }
 
@@ -273,4 +264,3 @@ export async function POST(request: Request) {
     );
   }
 }
-

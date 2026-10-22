@@ -4,17 +4,14 @@ import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
-  Compass,
   MapPin,
   Calendar,
   Users,
-  Car,
   ShieldCheck,
   Check,
   ArrowRight,
   ArrowLeft,
   Sparkles,
-  Info,
   CheckCircle2,
   AlertCircle,
   Copy,
@@ -23,7 +20,6 @@ import {
   Mail,
   User,
   Globe,
-  DollarSign,
 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import {
@@ -32,12 +28,7 @@ import {
   TRANSPORT_OPTIONS,
   GUIDE_OPTIONS,
   ADDON_OPTIONS,
-  calculateCustomTourEstimate,
-  CustomTourPriceBreakdown,
-  DESTINATION_PRICING_MAP,
-  DEFAULT_DESTINATION_TICKET_PRICE,
 } from "@/lib/customTour";
-import { formatCurrency } from "@/lib/utils";
 import { defaultDestinations } from "@/app/lib/destinationsStorage";
 import { getWhatsAppLink } from "@/lib/whatsapp";
 import { CustomTripDestinationsSkeleton } from "@/app/component/ui/skeleton";
@@ -65,7 +56,7 @@ function CustomPackageBuilderContent() {
   const searchParams = useSearchParams();
   const [loadedFromAssistant, setLoadedFromAssistant] = useState<boolean>(false);
 
-  // Wizard Step (1: Destinations, 2: Journey Parameters, 3: Pricing Breakdown, 4: Contact & Review, 5: Success)
+  // Wizard Step (1: Destinations, 2: Trip Details, 3: Request Summary, 4: Contact, 5: Success)
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   // Database destinations list
@@ -76,27 +67,20 @@ function CustomPackageBuilderContent() {
   const [selectedDestIds, setSelectedDestIds] = useState<string[]>([]);
 
   // Step 2: Journey Options
-  const [departureDate, setDepartureDate] = useState<string>(() => {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    return tomorrow.toISOString().split("T")[0];
-  });
-  const [numParticipants, setNumParticipants] = useState<number>(2);
-  const [selectedDurationId, setSelectedDurationId] = useState<string>("1d");
-  const [selectedTransportId, setSelectedTransportId] = useState<string>("mpv");
-  const [selectedGuideId, setSelectedGuideId] = useState<string>("certified-guide");
-  const [selectedAddonIds, setSelectedAddonIds] = useState<string[]>([
-    "gasmask-headlamp",
-    "thermal-jacket",
-  ]);
+  const [departureDate, setDepartureDate] = useState<string>("");
+  const [numParticipants, setNumParticipants] = useState<number>(1);
+  const [selectedDurationId, setSelectedDurationId] = useState<string>("");
+  const [selectedTransportId, setSelectedTransportId] = useState<string>("");
+  const [selectedGuideId, setSelectedGuideId] = useState<string>("");
+  const [selectedAddonIds, setSelectedAddonIds] = useState<string[]>([]);
   const [specialRequests, setSpecialRequests] = useState<string>("");
 
   // Step 4: Contact Information
   const [fullName, setFullName] = useState<string>("");
   const [whatsappNumber, setWhatsappNumber] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [nationality, setNationality] = useState<string>("Indonesia");
-  const [pickupLocation, setPickupLocation] = useState<string>("Hotel in Banyuwangi Area");
+  const [nationality, setNationality] = useState<string>("");
+  const [pickupLocation, setPickupLocation] = useState<string>("");
 
   // Submission State
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -120,21 +104,8 @@ function CustomPackageBuilderContent() {
             description: d.description,
             image: d.image,
             tag: d.tag || "Must Visit",
-            ticketPrice:
-              DESTINATION_PRICING_MAP[d.slug] ??
-              DESTINATION_PRICING_MAP[d.id] ??
-              DEFAULT_DESTINATION_TICKET_PRICE,
           }));
           setDestinations(mapped);
-          // Default select Mount Ijen if available
-          const ijen = mapped.find(
-            (d) => d.slug?.includes("ijen") || d.name.toLowerCase().includes("ijen")
-          );
-          if (ijen) {
-            setSelectedDestIds([ijen.id]);
-          } else if (mapped[0]) {
-            setSelectedDestIds([mapped[0].id]);
-          }
         } else {
           // Fallback to default destinations
           const fallbackMapped: CustomDestinationItem[] = defaultDestinations.map((d) => ({
@@ -144,10 +115,8 @@ function CustomPackageBuilderContent() {
             description: d.description,
             image: d.image,
             tag: d.tag || "Highlight",
-            ticketPrice: DESTINATION_PRICING_MAP[d.id] ?? DEFAULT_DESTINATION_TICKET_PRICE,
           }));
           setDestinations(fallbackMapped);
-          setSelectedDestIds([fallbackMapped[0].id]);
         }
       })
       .catch(() => {
@@ -158,10 +127,8 @@ function CustomPackageBuilderContent() {
           description: d.description,
           image: d.image,
           tag: d.tag || "Highlight",
-          ticketPrice: DESTINATION_PRICING_MAP[d.id] ?? DEFAULT_DESTINATION_TICKET_PRICE,
         }));
         setDestinations(fallbackMapped);
-        setSelectedDestIds([fallbackMapped[0].id]);
       })
       .finally(() => setDestinationsLoading(false));
   }, []);
@@ -243,16 +210,6 @@ function CustomPackageBuilderContent() {
   // Compute Selected Destination Objects
   const selectedDestinations = destinations.filter((d) => selectedDestIds.includes(d.id));
 
-  // Compute Live Estimate
-  const breakdown: CustomTourPriceBreakdown = calculateCustomTourEstimate({
-    destinations: selectedDestinations,
-    durationId: selectedDurationId,
-    transportId: selectedTransportId,
-    guideId: selectedGuideId,
-    addonIds: selectedAddonIds,
-    numParticipants,
-  });
-
   // Toggle Destination Selection
   const toggleDestination = (id: string) => {
     setSelectedDestIds((prev) => {
@@ -300,6 +257,11 @@ function CustomPackageBuilderContent() {
   // Submit Handler
   const handleSubmitBooking = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (selectedDestinations.length === 0) {
+      setErrorMsg("Please select at least 1 destination for your tour.");
+      setCurrentStep(1);
+      return;
+    }
     if (!validateContactForm()) {
       setCurrentStep(4);
       return;
@@ -327,7 +289,12 @@ function CustomPackageBuilderContent() {
         guideId: selectedGuideId,
         addonIds: selectedAddonIds,
         pickupLocation: pickupLocation.trim(),
-        specialRequests: `Nationality: ${nationality}\n${specialRequests.trim()}`,
+        specialRequests: [
+          nationality.trim() ? `Nationality: ${nationality.trim()}` : "",
+          specialRequests.trim(),
+        ]
+          .filter(Boolean)
+          .join("\n"),
       };
 
       const res = await fetch("/api/bookings", {
@@ -379,8 +346,8 @@ function CustomPackageBuilderContent() {
           </h1>
           <p className="text-xs sm:text-sm text-secondary-200 max-w-2xl mx-auto leading-relaxed">
             Personalize your dream expedition across Mount Ijen and East Java. Select your
-            destinations, travel duration, private transport, and local guides with transparent
-            cost estimations.
+            destinations, travel duration, private transport, and local guide preferences. Our
+            travel team will prepare a personalized proposal after reviewing your request.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
             <button
@@ -426,7 +393,7 @@ function CustomPackageBuilderContent() {
             {[
               { num: 1, label: "Destinations", icon: MapPin },
               { num: 2, label: "Trip Setup", icon: Calendar },
-              { num: 3, label: "Price Estimate", icon: DollarSign },
+              { num: 3, label: "Request Summary", icon: CheckCircle2 },
               { num: 4, label: "Review & Send", icon: ShieldCheck },
             ].map((step) => {
               const isDone = currentStep > step.num || currentStep === 5;
@@ -435,12 +402,8 @@ function CustomPackageBuilderContent() {
                 <button
                   key={step.num}
                   type="button"
-                  disabled={currentStep === 5}
-                  onClick={() => {
-                    if (step.num < currentStep || currentStep !== 5) {
-                      setCurrentStep(step.num);
-                    }
-                  }}
+                  disabled={currentStep === 5 || step.num > currentStep}
+                  onClick={() => setCurrentStep(step.num)}
                   className={`flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-2.5 py-2 px-1 rounded-2xl transition cursor-pointer ${
                     isCurrent
                       ? "bg-secondary-950 text-white font-black shadow-sm"
@@ -551,18 +514,7 @@ function CustomPackageBuilderContent() {
                         </p>
                       </div>
 
-                      <div className="mt-4 pt-3 border-t border-secondary-100 flex items-center justify-between text-xs">
-                        <div>
-                          <span className="text-[10px] text-secondary-500 block">
-                            Entrance / Permit
-                          </span>
-                          <span className="font-extrabold text-secondary-950">
-                            {formatCurrency(dest.ticketPrice)}{" "}
-                            <span className="text-[10px] font-normal text-secondary-500">
-                              / pax
-                            </span>
-                          </span>
-                        </div>
+                      <div className="mt-4 pt-3 border-t border-secondary-100 flex justify-end text-xs">
                         <span
                           className={`px-3 py-1.5 rounded-xl font-bold text-[11px] transition ${
                             isSelected
@@ -737,11 +689,6 @@ function CustomPackageBuilderContent() {
                           <span className="font-extrabold text-xs text-secondary-950">
                             {trans.name}
                           </span>
-                          <span className="font-mono text-xs font-bold text-primary-700">
-                            {trans.pricePerDay === 0
-                              ? "Free"
-                              : `${formatCurrency(trans.pricePerDay)}/day`}
-                          </span>
                         </div>
                         <span className="text-[10px] bg-secondary-200/80 text-secondary-700 px-2 py-0.5 rounded font-bold inline-block mb-1">
                           {trans.capacity}
@@ -781,11 +728,6 @@ function CustomPackageBuilderContent() {
                           </span>
                           {isSelected && <Check className="w-4 h-4 text-primary-600" />}
                         </div>
-                        <span className="text-xs font-bold text-primary-700 block mb-1">
-                          {guide.pricePerDay === 0
-                            ? "Free"
-                            : `${formatCurrency(guide.pricePerDay)}/day`}
-                        </span>
                         <p className="text-[11px] text-secondary-600 leading-relaxed">
                           {guide.description}
                         </p>
@@ -826,12 +768,6 @@ function CustomPackageBuilderContent() {
                       <div className="grow text-xs">
                         <div className="flex items-center justify-between gap-2">
                           <span className="font-bold text-secondary-950">{addon.name}</span>
-                          <span className="font-mono text-primary-700 font-bold shrink-0">
-                            {formatCurrency(addon.price)}
-                            <span className="text-[10px] text-secondary-500 font-normal">
-                              {addon.perPerson ? "/pax" : "/trip"}
-                            </span>
-                          </span>
                         </div>
                         <p className="text-[11px] text-secondary-600 mt-0.5 leading-relaxed">
                           {addon.description}
@@ -869,10 +805,17 @@ function CustomPackageBuilderContent() {
               </button>
               <button
                 type="button"
-                onClick={() => setCurrentStep(3)}
+                onClick={() => {
+                  if (selectedDestIds.length === 0) {
+                    setErrorMsg("Please select at least 1 destination to proceed.");
+                    return;
+                  }
+                  setErrorMsg("");
+                  setCurrentStep(3);
+                }}
                 className="px-6 py-3 rounded-2xl bg-secondary-950 hover:bg-primary-500 hover:text-secondary-950 text-white font-extrabold text-xs transition shadow-md flex items-center gap-2 cursor-pointer"
               >
-                <span>View Price Breakdown</span>
+                <span>Review Trip Request</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -880,7 +823,7 @@ function CustomPackageBuilderContent() {
         )}
 
         {/* ========================================================= */}
-        {/* STEP 3: PRICE BREAKDOWN & ESTIMATION */}
+        {/* STEP 3: REQUEST SUMMARY */}
         {/* ========================================================= */}
         {currentStep === 3 && (
           <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200 shadow-sm space-y-6">
@@ -888,149 +831,48 @@ function CustomPackageBuilderContent() {
               <span className="text-[11px] font-black uppercase tracking-wider text-primary-600">
                 Step 3 of 4
               </span>
-              <h2 className="text-2xl font-black text-secondary-950">
-                Transparent Cost Estimation
-              </h2>
+              <h2 className="text-2xl font-black text-secondary-950">Review Your Trip Request</h2>
               <p className="text-xs text-secondary-600 mt-1">
-                Here is a transparent breakdown of your personalized itinerary based on official
-                park levies and private logistics.
+                Our travel team will review your preferences and prepare a personalized proposal.
+                No price is calculated or displayed here.
               </p>
             </div>
 
-            {/* Breakdown Table */}
-            <div className="bg-secondary-50 rounded-2xl border border-secondary-200 overflow-hidden text-xs">
-              <div className="p-4 bg-secondary-100/70 border-b border-secondary-200 font-black text-secondary-900 uppercase tracking-wider text-[11px] flex justify-between">
-                <span>Itinerary Component</span>
-                <span>Subtotal (IDR)</span>
+            <div className="p-4 bg-secondary-50 rounded-2xl border border-secondary-200 text-xs space-y-3">
+              <div>
+                <span className="text-secondary-500 block text-[10px]">Destinations</span>
+                <p className="font-bold text-secondary-950">
+                  {selectedDestinations.map((destination) => destination.name).join(" • ")}
+                </p>
               </div>
-
-              <div className="divide-y divide-secondary-200/60 p-2 sm:p-4 space-y-2">
-                {/* 1. Destinations */}
-                <div className="pt-2">
-                  <div className="flex justify-between font-bold text-secondary-950 mb-1">
-                    <span className="flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-primary-600" />
-                      <span>Destinations Admission & Conservation ({numParticipants} Guests)</span>
-                    </span>
-                    <span className="font-black text-secondary-950">
-                      {formatCurrency(breakdown.destinationsTotal)}
-                    </span>
-                  </div>
-                  <ul className="pl-5 space-y-1 text-[11px] text-secondary-600">
-                    {breakdown.destinationsList.map((d, i) => (
-                      <li key={i} className="flex justify-between">
-                        <span>
-                          {d.name} ({formatCurrency(d.unitPrice)} × {numParticipants} pax)
-                        </span>
-                        <span>{formatCurrency(d.total)}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* 2. Transportation */}
-                <div className="pt-3">
-                  <div className="flex justify-between font-bold text-secondary-950 mb-1">
-                    <span className="flex items-center gap-1.5">
-                      <Car className="w-3.5 h-3.5 text-primary-600" />
-                      <span>Private Transport Charter ({breakdown.durationDays} Days)</span>
-                    </span>
-                    <span className="font-black text-secondary-950">
-                      {formatCurrency(breakdown.transportTotal)}
-                    </span>
-                  </div>
-                  <p className="pl-5 text-[11px] text-secondary-600 flex justify-between">
-                    <span>
-                      {breakdown.transportName} ({formatCurrency(breakdown.transportDailyPrice)} ×{" "}
-                      {breakdown.durationDays} day)
-                    </span>
-                    <span>{formatCurrency(breakdown.transportTotal)}</span>
-                  </p>
-                </div>
-
-                {/* 3. Guide */}
-                <div className="pt-3">
-                  <div className="flex justify-between font-bold text-secondary-950 mb-1">
-                    <span className="flex items-center gap-1.5">
-                      <Compass className="w-3.5 h-3.5 text-primary-600" />
-                      <span>Tour Guide & Assistant ({breakdown.durationDays} Days)</span>
-                    </span>
-                    <span className="font-black text-secondary-950">
-                      {formatCurrency(breakdown.guideTotal)}
-                    </span>
-                  </div>
-                  <p className="pl-5 text-[11px] text-secondary-600 flex justify-between">
-                    <span>
-                      {breakdown.guideName} ({formatCurrency(breakdown.guideDailyPrice)} ×{" "}
-                      {breakdown.durationDays} day)
-                    </span>
-                    <span>{formatCurrency(breakdown.guideTotal)}</span>
-                  </p>
-                </div>
-
-                {/* 4. Addons */}
-                {breakdown.addonsList.length > 0 && (
-                  <div className="pt-3">
-                    <div className="flex justify-between font-bold text-secondary-950 mb-1">
-                      <span className="flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5 text-primary-600" />
-                        <span>Optional Gear & Facilities</span>
-                      </span>
-                      <span className="font-black text-secondary-950">
-                        {formatCurrency(breakdown.addonsTotal)}
-                      </span>
-                    </div>
-                    <ul className="pl-5 space-y-1 text-[11px] text-secondary-600">
-                      {breakdown.addonsList.map((a, i) => (
-                        <li key={i} className="flex justify-between">
-                          <span>
-                            {a.name} ({formatCurrency(a.unitPrice)} × {a.qty})
-                          </span>
-                          <span>{formatCurrency(a.total)}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+              <div>
+                <span className="text-secondary-500 block text-[10px]">Schedule & Party</span>
+                <p className="font-bold text-secondary-950">
+                  {departureDate} • {numParticipants} Guests •{" "}
+                  {DURATION_OPTIONS.find((duration) => duration.id === selectedDurationId)?.name ??
+                    "Duration not specified"}
+                </p>
               </div>
-
-              {/* Total Card */}
-              <div className="p-4 bg-primary-100/60 border-t border-primary-200 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
-                <div>
-                  <span className="text-[10px] uppercase font-black tracking-wider text-primary-800 block">
-                    Total Estimated Expedition Cost
-                  </span>
-                  <span className="text-xs text-secondary-600">
-                    For {numParticipants} participant(s) • {breakdown.durationName}
-                  </span>
-                </div>
-                <div className="text-right">
-                  <span className="text-2xl font-black text-secondary-950">
-                    {formatCurrency(breakdown.estimatedTotal)}
-                  </span>
-                  <span className="text-[10px] text-secondary-600 block">
-                    (Approx. {formatCurrency(Math.round(breakdown.estimatedTotal / numParticipants))} / person)
-                  </span>
-                </div>
+              <div>
+                <span className="text-secondary-500 block text-[10px]">Logistics</span>
+                <p className="font-bold text-secondary-950">
+                  {TRANSPORT_OPTIONS.find((transport) => transport.id === selectedTransportId)?.name ??
+                    "Transport not specified"}{" "}
+                  •{" "}
+                  {GUIDE_OPTIONS.find((guide) => guide.id === selectedGuideId)?.name ??
+                    "Guide not specified"}
+                </p>
               </div>
-            </div>
-
-            {/* IMPORTANT DISCLAIMER NOTICE */}
-            <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 text-xs flex items-start gap-3">
-              <Info className="w-5 h-5 shrink-0 text-amber-600 mt-0.5" />
-              <div className="space-y-1 leading-relaxed">
-                <p className="font-extrabold">Estimated Cost vs Final Approved Price:</p>
-                <p className="text-amber-900">
-                  The amount displayed above is a <strong>transparent operational estimate</strong>.
-                  Before payment, our tour coordinator will examine road conditions, permit
-                  availability, and seasonal crater policies, then contact you via WhatsApp with the
-                  guaranteed final price. No advance payment is charged until you agree to the final
-                  quote!
+              <div>
+                <span className="text-secondary-500 block text-[10px]">Additional preferences</span>
+                <p className="font-bold text-secondary-950">
+                  {ADDON_OPTIONS.filter((addon) => selectedAddonIds.includes(addon.id))
+                    .map((addon) => addon.name)
+                    .join(" • ") || "None specified"}
                 </p>
               </div>
             </div>
 
-            {/* Step 3 Actions */}
             <div className="pt-6 border-t border-secondary-100 flex justify-between items-center">
               <button
                 type="button"
@@ -1038,7 +880,7 @@ function CustomPackageBuilderContent() {
                 className="px-5 py-2.5 rounded-xl border border-secondary-300 text-secondary-700 font-bold text-xs hover:bg-secondary-100 transition flex items-center gap-1.5 cursor-pointer"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
-                <span>Adjust Journey Options</span>
+                <span>Adjust Trip Details</span>
               </button>
               <button
                 type="button"
@@ -1253,19 +1095,19 @@ function CustomPackageBuilderContent() {
                 <div>
                   <span className="text-secondary-500 block text-[10px]">Schedule & Party:</span>
                   <p className="font-bold text-secondary-950">
-                    {departureDate} • {numParticipants} Guests ({breakdown.durationName})
+                    {departureDate} • {numParticipants} Guests •{" "}
+                    {DURATION_OPTIONS.find((duration) => duration.id === selectedDurationId)?.name ??
+                      "Duration not specified"}
                   </p>
                 </div>
                 <div>
                   <span className="text-secondary-500 block text-[10px]">Logistics:</span>
                   <p className="font-bold text-secondary-950">
-                    {breakdown.transportName} • {breakdown.guideName}
-                  </p>
-                </div>
-                <div>
-                  <span className="text-secondary-500 block text-[10px]">Estimated Price:</span>
-                  <p className="font-black text-primary-700 text-sm">
-                    {formatCurrency(breakdown.estimatedTotal)}
+                    {TRANSPORT_OPTIONS.find((transport) => transport.id === selectedTransportId)?.name ??
+                      "Transport not specified"}{" "}
+                    •{" "}
+                    {GUIDE_OPTIONS.find((guide) => guide.id === selectedGuideId)?.name ??
+                      "Guide not specified"}
                   </p>
                 </div>
               </div>
@@ -1279,7 +1121,7 @@ function CustomPackageBuilderContent() {
                 className="px-5 py-2.5 rounded-xl border border-secondary-300 text-secondary-700 font-bold text-xs hover:bg-secondary-100 transition flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
-                <span>Back to Price Breakdown</span>
+                <span>Back to Request Summary</span>
               </button>
 
               <button
@@ -1367,8 +1209,9 @@ function CustomPackageBuilderContent() {
               <p className="text-secondary-600">
                 📍 Pickup: {submittedBooking.pickupLocation}
               </p>
-              <p className="font-black text-primary-700 pt-1 border-t border-secondary-200/80">
-                Estimated Price: {formatCurrency(submittedBooking.totalPrice)}
+              <p className="text-secondary-600 pt-1 border-t border-secondary-200/80">
+                Our travel team will contact you with a personalized proposal after reviewing your
+                request.
               </p>
             </div>
 

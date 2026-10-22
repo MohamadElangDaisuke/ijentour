@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { defaultDestinations, Destination } from '../../lib/destinationsStorage';
 
 export default function DestinationInspiration() {
@@ -69,7 +69,7 @@ export default function DestinationInspiration() {
             href="/destinations"
             className="hidden sm:inline-flex items-center text-xs sm:text-sm font-bold text-primary-600 hover:text-primary-700 transition-colors shrink-0"
           >
-            View all destinations →
+            View all destinations <ArrowRight className="ml-1 h-3.5 w-3.5" aria-hidden="true" />
           </Link>
         </div>
 
@@ -157,7 +157,7 @@ export default function DestinationInspiration() {
             href="/destinations"
             className="inline-flex items-center text-xs font-bold text-primary-600 hover:text-primary-700"
           >
-            View all destinations →
+            View all destinations <ArrowRight className="ml-1 h-3.5 w-3.5" aria-hidden="true" />
           </Link>
         </div>
 

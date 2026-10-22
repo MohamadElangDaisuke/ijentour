@@ -3,12 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import {
-  Bars3Icon,
-  MagnifyingGlassIcon,
-  XMarkIcon,
-  ChevronDownIcon,
-} from '@heroicons/react/24/outline'
+import { ChevronDown, Menu, Search, X } from 'lucide-react'
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion'
 import Sidebar from './sidebar'
 import ThemeToggle from './themeToggle'
@@ -130,7 +125,7 @@ export default function Navbar() {
                   className="rounded-xl p-2 text-secondary-700 dark:text-secondary-200 hover:bg-secondary-100 dark:hover:bg-secondary-800 hover:text-secondary-950 dark:hover:text-white focus:outline-hidden transition-colors cursor-pointer"
                   aria-label="Open mobile navigation menu"
                 >
-                  <Bars3Icon className="w-6 h-6" />
+                  <Menu className="w-6 h-6" />
                 </button>
               </div>
 
@@ -149,7 +144,7 @@ export default function Navbar() {
                   <img
                     src="/images/logo-dark.png"
                     alt="Mount Ijen Tour and Trip Organizer"
-                    className="h-10 sm:h-12 md:h-13 w-auto object-contain hidden dark:block"
+                    className="hidden h-10 w-auto object-contain dark:block sm:h-12 md:h-13"
                   />
                 </Link>
               </div>
@@ -211,7 +206,7 @@ export default function Navbar() {
                           }`}
                         >
                           <span>{item.label}</span>
-                          <ChevronDownIcon
+                          <ChevronDown
                             className={`w-3.5 h-3.5 transition-transform duration-200 ${
                               isOpen ? 'rotate-180 text-primary-500' : 'text-secondary-400'
                             }`}
@@ -337,7 +332,7 @@ export default function Navbar() {
                       action="/blog"
                       className="flex items-center overflow-hidden rounded-full border border-primary-500 bg-white/90 dark:bg-secondary-900/90 shadow-sm"
                     >
-                      <MagnifyingGlassIcon className="ml-3 h-4 w-4 shrink-0 text-primary-600 dark:text-primary-400" />
+                      <Search className="ml-3 h-4 w-4 shrink-0 text-primary-600 dark:text-primary-400" />
                       <input
                         type="search"
                         name="q"
@@ -352,7 +347,7 @@ export default function Navbar() {
                         aria-label="Close search"
                         className="mr-1 rounded-full p-1 text-secondary-500 hover:bg-secondary-100 dark:hover:bg-secondary-800 cursor-pointer"
                       >
-                        <XMarkIcon className="h-4 w-4" />
+                        <X className="h-4 w-4" />
                       </button>
                     </form>
                   ) : (
@@ -363,7 +358,7 @@ export default function Navbar() {
                       title="Search articles and destinations"
                       className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary-100/80 dark:bg-secondary-900 text-secondary-700 dark:text-secondary-300 shadow-2xs transition hover:bg-primary-50 dark:hover:bg-secondary-800 hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer"
                     >
-                      <MagnifyingGlassIcon className="w-5 h-5" />
+                      <Search className="w-5 h-5" />
                     </button>
                   )}
                 </div>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
@@ -73,6 +74,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={plusJakartaSans.variable} data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className={`${plusJakartaSans.className} font-sans text-secondary-950 bg-secondary-50 min-h-screen flex flex-col antialiased`}>
+        <Script id="theme-init" strategy="beforeInteractive">
+          {`(() => {
+            const savedTheme = localStorage.getItem("ijentour-theme");
+            const theme = savedTheme === "dark" ? "dark" : "light";
+            document.documentElement.classList.toggle("dark", theme === "dark");
+            document.documentElement.style.colorScheme = theme;
+          })();`}
+        </Script>
         {children}
       </body>
     </html>

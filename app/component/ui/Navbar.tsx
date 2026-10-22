@@ -134,14 +134,23 @@ export default function Navbar() {
                 </button>
               </div>
 
-              {/* Logo: IjenTour */}
+              {/* Logo: Mount Ijen Tour */}
               <div className="flex items-center">
                 <Link
                   href="/"
-                  className="text-2xl font-black tracking-tight text-secondary-950 dark:text-white transition-transform duration-200 hover:scale-105 flex items-center gap-1"
+                  className="relative flex items-center transition-transform duration-200 hover:scale-105 py-0.5"
+                  aria-label="Mount Ijen Tour Home"
                 >
-                  <span>Ijen</span>
-                  <span className="text-primary-500 font-extrabold">Tour</span>
+                  <img
+                    src="/images/logo-light.png"
+                    alt="Mount Ijen Tour and Trip Organizer"
+                    className="h-10 sm:h-12 md:h-13 w-auto object-contain dark:hidden"
+                  />
+                  <img
+                    src="/images/logo-dark.png"
+                    alt="Mount Ijen Tour and Trip Organizer"
+                    className="h-10 sm:h-12 md:h-13 w-auto object-contain hidden dark:block"
+                  />
                 </Link>
               </div>
 

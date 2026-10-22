@@ -3,7 +3,6 @@ import ChooseUs from "../component/ui/chooseUs";
 import Packages from "../component/ui/packagesSections";
 import DestinationInspiration from "../component/ui/destinationInspiration";
 import ExperienceSections from "../component/ui/experienceSections";
-import HowItWorks from "../component/ui/howItWorks";
 import GallerySection from "../component/ui/gallerySection";
 import TestimonialSection from "../component/ui/testimonialSection";
 import FaqSection from "../component/ui/faqSection";
@@ -44,9 +43,6 @@ export default function Home() {
 
       {/* 3. Featured Tours */}
       <Packages />
-
-      {/* 3.1 How It Works & Travel Information */}
-      <HowItWorks />
 
       {/* 4. Get Inspired - Destination Carousel */}
       <DestinationInspiration />

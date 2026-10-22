@@ -88,9 +88,19 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 <Link
                   href="/"
                   onClick={onClose}
-                  className="text-xl font-black tracking-tight text-secondary-950 dark:text-white"
+                  className="relative flex items-center transition-transform hover:scale-105"
+                  aria-label="Mount Ijen Tour Home"
                 >
-                  Ijen<span className="text-primary-500 font-extrabold">Tour</span>
+                  <img
+                    src="/images/logo-light.png"
+                    alt="Mount Ijen Tour and Trip Organizer"
+                    className="h-10 sm:h-11 w-auto object-contain dark:hidden"
+                  />
+                  <img
+                    src="/images/logo-dark.png"
+                    alt="Mount Ijen Tour and Trip Organizer"
+                    className="h-10 sm:h-11 w-auto object-contain hidden dark:block"
+                  />
                 </Link>
                 <div className="flex items-center gap-2">
                   <ThemeToggle />

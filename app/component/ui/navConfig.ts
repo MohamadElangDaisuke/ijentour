@@ -109,11 +109,6 @@ export const MAIN_NAV_ITEMS: NavDropdownItem[] = [
             href: "/booking",
             description: "Check your booking code, departure time, and status",
           },
-          {
-            title: "How It Works & Preparation",
-            href: "/#how-it-works",
-            description: "4 simple steps from reservation to the volcanic summit",
-          },
         ],
       },
     ],

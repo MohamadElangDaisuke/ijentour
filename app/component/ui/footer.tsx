@@ -22,8 +22,12 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Brand Col */}
           <div className="col-span-1 md:col-span-1">
-            <Link href="/" className="mb-4 flex items-center space-x-1 text-2xl font-black text-secondary-950">
-              <span>Ijen</span><span className="font-extrabold text-primary-500">Tour</span>
+            <Link href="/" className="mb-4 inline-flex items-center transition-transform hover:scale-105" aria-label="Mount Ijen Tour Home">
+              <img
+                src="/images/logo-light.png"
+                alt="Mount Ijen Tour and Trip Organizer"
+                className="h-12 sm:h-14 w-auto object-contain"
+              />
             </Link>
             <p className="text-sm leading-relaxed text-secondary-600">
               Trusted professional tour service specializing in Mount Ijen Crater, Baluran National Park, Mount Bromo, and surrounding destinations.

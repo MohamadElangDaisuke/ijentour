@@ -53,9 +53,6 @@ export default function Home() {
       {/* 4. Get Inspired - Destination Carousel */}
       <DestinationInspiration />
 
-      {/* 5. Featured Travel Guides */}
-      <ArticleSection variant="guides" />
-
       {/* 6. Explore by Interest */}
       <ExploreByInterestSection />
 

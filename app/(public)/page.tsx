@@ -44,11 +44,11 @@ export default function Home() {
       {/* 1. Hero Section */}
       <HeroSection />
 
-      {/* 2. Why Choose Ijen Tour */}
-      <ChooseUs />
-
-      {/* 3. Featured Tours */}
+      {/* 2. Featured Tours */}
       <Packages />
+
+      {/* 3. Why Choose Ijen Tour */}
+      <ChooseUs />
 
       {/* 4. Get Inspired - Destination Carousel */}
       <DestinationInspiration />

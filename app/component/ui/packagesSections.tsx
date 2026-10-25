@@ -133,7 +133,7 @@ export default function PackagesSections() {
         viewport={{ once: true, amount: 0.2 }}
         className="relative z-10 mx-auto max-w-7xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
       >
-        {/* LEFT COLUMN: Headline, Description, View All Button & Mobile Next-Prev Controls */}
+        {/* LEFT COLUMN: Headline and View All Button */}
         <div className="col-span-1 lg:col-span-5 flex flex-col justify-center items-center lg:items-start space-y-5 sm:space-y-6 text-center lg:text-left">
           <div className="space-y-3 sm:space-y-4">
             <h2
@@ -148,7 +148,7 @@ export default function PackagesSections() {
             </p>
           </div>
 
-          {/* Action Row: View All Button & Header Next-Prev Buttons on Mobile */}
+          {/* Action Row: View All Button */}
           <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 w-full">
             <Link
               href="/packages"
@@ -157,33 +157,6 @@ export default function PackagesSections() {
               <span>View All Packages</span>
               <ArrowRight className="hidden sm:inline-block w-4 h-4 stroke-[2.5]" />
             </Link>
-
-            {/* Mobile Next-Prev Navigation in Header */}
-            <div className="flex lg:hidden items-center gap-2 bg-white/80 border border-secondary-200/80 rounded-full px-2 py-1 shadow-xs">
-              <button
-                type="button"
-                onClick={handlePrev}
-                aria-label="Previous package"
-                title="Previous package"
-                className="flex items-center justify-center w-8 h-8 rounded-full bg-white text-secondary-950 shadow-xs border border-secondary-200 hover:bg-primary-500 hover:border-primary-500 transition active:scale-90 cursor-pointer"
-              >
-                <ChevronLeft className="w-4 h-4 stroke-[2.5]" />
-              </button>
-
-              <span className="text-xs font-bold text-secondary-700 px-1 select-none tabular-nums">
-                {(((activeIndex % totalPackages) + totalPackages) % totalPackages) + 1} / {totalPackages}
-              </span>
-
-              <button
-                type="button"
-                onClick={handleNext}
-                aria-label="Next package"
-                title="Next package"
-                className="flex items-center justify-center w-8 h-8 rounded-full bg-white text-secondary-950 shadow-xs border border-secondary-200 hover:bg-primary-500 hover:border-primary-500 transition active:scale-90 cursor-pointer"
-              >
-                <ChevronRight className="w-4 h-4 stroke-[2.5]" />
-              </button>
-            </div>
           </div>
         </div>
 
@@ -193,8 +166,27 @@ export default function PackagesSections() {
           className="col-span-1 lg:col-span-7 flex flex-col items-center justify-center relative min-h-80 sm:min-h-95 lg:items-center lg:pr-14"
         >
           {/* Cards Stage Container */}
-          <div className="relative h-96 w-56 sm:h-112 sm:w-72 flex items-center justify-center">
-            
+          <div className="relative h-112 w-72 flex items-center justify-center">
+            <button
+              type="button"
+              onClick={handlePrev}
+              aria-label="Previous package"
+              title="Previous package"
+              className="absolute left-2 top-1/2 z-30 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-secondary-200 bg-white text-secondary-950 shadow-md transition hover:bg-primary-500 active:scale-90 lg:hidden"
+            >
+              <ChevronLeft className="h-5 w-5 stroke-[2.5]" />
+            </button>
+
+            <button
+              type="button"
+              onClick={handleNext}
+              aria-label="Next package"
+              title="Next package"
+              className="absolute right-2 top-1/2 z-30 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-secondary-200 bg-white text-secondary-950 shadow-md transition hover:bg-primary-500 active:scale-90 lg:hidden"
+            >
+              <ChevronRight className="h-5 w-5 stroke-[2.5]" />
+            </button>
+
             {/* Desktop Only Prev Nav Button */}
             <motion.button
               type="button"
@@ -233,7 +225,7 @@ export default function PackagesSections() {
                   key={`${pkg.id}-${activeIndex + offset}`}
                   initial={false}
                   animate={{
-                    x: offset * (isMobile ? 85 : 110),
+                    x: offset * (isMobile ? 65 : 110),
                     scale: isCenter ? 1 : (isMobile ? 0.85 : 0.75),
                     rotateY: isMobile ? 0 : offset * 15,
                     opacity: isCenter ? 1 : 0.45,
@@ -247,7 +239,7 @@ export default function PackagesSections() {
                       setActiveIndex((prev) => prev + offset);
                     }
                   }}
-                  className="absolute w-56 sm:w-72 overflow-hidden rounded-4xl border border-secondary-100 bg-white shadow-xl shadow-secondary-900/10 cursor-pointer transform-gpu will-change-transform"
+                  className="absolute w-72 overflow-hidden rounded-4xl border border-secondary-100 bg-white shadow-xl shadow-secondary-900/10 cursor-pointer transform-gpu will-change-transform"
                 >
                   <div className="relative aspect-4/3 w-full bg-secondary-100">
                     <img
@@ -303,6 +295,9 @@ export default function PackagesSections() {
             variants={itemVariants}
             className="flex items-center gap-1.5 mt-4 sm:mt-6"
           >
+            <span className="mr-1 text-xs font-bold tabular-nums text-secondary-700 lg:hidden">
+              {(((activeIndex % totalPackages) + totalPackages) % totalPackages) + 1} / {totalPackages}
+            </span>
             {packagesData.map((_, i) => {
               const currentActive = ((activeIndex % totalPackages) + totalPackages) % totalPackages;
               return (

@@ -9,7 +9,7 @@ import {
   MapPinned,
   Mountain,
   ShieldCheck,
-  Users,
+  UserRound,
 } from "lucide-react";
 
 const interests = [
@@ -22,6 +22,11 @@ const interests = [
     label: "Nature",
     category: "Destinations",
     image: "https://images.pexels.com/photos/460621/pexels-photo-460621.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  },
+  {
+    label: "Birding",
+    category: "Destinations",
+    image: "https://images.pexels.com/photos/97533/pexels-photo-97533.jpeg?auto=compress&cs=tinysrgb&w=1200",
   },
   {
     label: "Culture",
@@ -85,14 +90,42 @@ const resources = [
   },
 ];
 
+const localGuides = [
+  {
+    name: "Guide Name 01",
+    specialty: "Local Birding Guide",
+    description: "Add the guide's birdwatching experience and knowledge of local habitats.",
+  },
+  {
+    name: "Guide Name 02",
+    specialty: "Field Guide",
+    description: "Add how this guide helps visitors explore birding locations around Ijen.",
+  },
+  {
+    name: "Guide Name 03",
+    specialty: "Birding Guide",
+    description: "Add this guide's experience supporting birdwatching trips and habitat discovery.",
+  },
+  {
+    name: "Guide Name 04",
+    specialty: "Birding Guide",
+    description: "Add how this guide helps guests spot forest birds around Mount Ijen.",
+  },
+  {
+    name: "Guide Name 05",
+    specialty: "Field Assistant",
+    description: "Add this team member's role in trip logistics and practical support.",
+  },
+];
+
 export function ExploreByInterestSection() {
   return (
     <section
       id="explore-by-interest"
       aria-labelledby="explore-by-interest-heading"
-      className="bg-secondary-50 px-4 py-16 sm:px-8 sm:py-20 lg:py-24 dark:bg-secondary-950"
+      className="bg-secondary-50 px-4 py-10 sm:px-8 sm:py-12 lg:py-16 dark:bg-secondary-950"
     >
-      <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.8fr_2fr] lg:items-center lg:gap-10">
+      <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-2 lg:items-center lg:gap-10">
         <header className="max-w-md text-center lg:text-left">
           <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary-600">Explore by interest</p>
           <h2 id="explore-by-interest-heading" className="mt-3 text-3xl font-black tracking-tight text-secondary-950 sm:text-4xl dark:text-white">
@@ -139,27 +172,31 @@ export function LocalGuidesSection() {
     <section
       id="local-guides"
       aria-labelledby="local-guides-heading"
-      className="bg-secondary-50 px-4 py-16 sm:px-8 sm:py-20 lg:py-24"
+      className="bg-secondary-50 px-4 py-10 sm:px-8 sm:py-12 lg:py-16"
     >
-      <div className="mx-auto grid max-w-7xl gap-10 rounded-3xl border border-secondary-200 bg-white p-6 sm:p-10 lg:grid-cols-[1fr_auto] lg:items-center lg:p-14">
-        <div className="max-w-3xl">
-          <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary-600">Meet our local guides</p>
-          <h2 id="local-guides-heading" className="mt-3 text-2xl font-black tracking-tight text-secondary-950 sm:text-4xl">
-            Discover Indonesia with Local Experts
+      <div className="mx-auto max-w-7xl">
+        <header className="mx-auto mb-8 max-w-4xl text-center sm:mb-10">
+          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary-600 sm:text-xs">Local knowledge, shared</p>
+          <h2 id="local-guides-heading" className="mt-3 text-2xl font-black tracking-tight text-secondary-950 sm:text-3xl lg:text-4xl">
+            Meet Your Birding Team
           </h2>
-          <p className="mt-4 text-sm leading-relaxed text-secondary-700 sm:text-base">
-            Get to know Banyuwangi through the local team who helps bring each journey together, from sharing regional insight to helping you plan your experience.
+          <p className="mt-3 text-sm leading-relaxed text-secondary-600 sm:text-base">
+            Meet the local team supporting birdwatching trips around Mount Ijen and East Java.
           </p>
-        </div>
-        <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-          <div className="flex items-center gap-3 rounded-2xl bg-secondary-50 px-4 py-3 text-sm font-semibold text-secondary-800">
-            <Compass className="h-5 w-5 shrink-0 text-primary-600" aria-hidden="true" />
-            Local knowledge
-          </div>
-          <div className="flex items-center gap-3 rounded-2xl bg-secondary-50 px-4 py-3 text-sm font-semibold text-secondary-800">
-            <Users className="h-5 w-5 shrink-0 text-primary-600" aria-hidden="true" />
-            Personal trip planning
-          </div>
+        </header>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+          {localGuides.map(({ name, specialty, description }) => (
+            <article key={name} className="flex min-h-full flex-col items-center rounded-2xl border border-secondary-200 bg-white px-4 py-5 text-center shadow-sm">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-secondary-300 p-1">
+                <div className="flex h-full w-full items-center justify-center rounded-full bg-secondary-100 text-secondary-600">
+                  <UserRound className="h-6 w-6" aria-hidden="true" />
+                </div>
+              </div>
+              <h3 className="mt-4 text-base font-bold text-secondary-950">{name}</h3>
+              <p className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-primary-700">{specialty}</p>
+              <p className="mt-3 text-xs leading-relaxed text-secondary-600">{description}</p>
+            </article>
+          ))}
         </div>
       </div>
     </section>

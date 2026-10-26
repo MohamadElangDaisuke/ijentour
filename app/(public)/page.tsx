@@ -53,34 +53,31 @@ export default function Home() {
       {/* 4. Get Inspired - Destination Carousel */}
       <DestinationInspiration />
 
-      {/* 5. Featured Travel Guides */}
-      <ArticleSection variant="guides" />
-
-      {/* 6. Explore by Interest */}
+      {/* 5. Explore by Interest */}
       <ExploreByInterestSection />
 
-      {/* 7. Latest Articles & Travel Stories */}
+      {/* 6. Latest Articles & Travel Stories */}
       <ArticleSection variant="latest" />
 
-      {/* 8. Experience / Destination */}
+      {/* 7. Experience / Destination */}
       <ExperienceSections />
 
-      {/* 9. Meet Our Local Guides */}
+      {/* 8. Meet Our Local Guides */}
       <LocalGuidesSection />
 
-      {/* 10. Gallery */}
+      {/* 9. Gallery */}
       <GallerySection />
 
-      {/* 11. Testimonials */}
+      {/* 10. Testimonials */}
       <TestimonialSection />
 
-      {/* 12. Travel Planning Resources */}
+      {/* 11. Travel Planning Resources */}
       <TravelResourcesSection />
 
-      {/* 13. Custom Tour CTA */}
+      {/* 12. Custom Tour CTA */}
       <CustomTourCtaSection />
 
-      {/* 14. FAQ Accordion */}
+      {/* 13. FAQ Accordion */}
       <FaqSection />
     </>
   );

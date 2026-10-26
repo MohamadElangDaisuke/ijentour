@@ -344,7 +344,7 @@ export default function AdminUsersPage() {
                   disabled={modalMode === "edit"}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin2@ijentour.com"
+                  placeholder="admin2@mountijentour.com"
                   className={`w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500 ${
                     modalMode === "edit" ? "opacity-60 cursor-not-allowed" : ""
                   }`}

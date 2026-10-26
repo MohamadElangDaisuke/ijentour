@@ -15,7 +15,7 @@ export default function GlobalError({
       <body className="antialiased font-sans bg-secondary-50 text-secondary-950 dark:bg-secondary-950 dark:text-white">
         <Script id="theme-init" strategy="beforeInteractive">
           {`(() => {
-            const savedTheme = localStorage.getItem("ijentour-theme");
+            const savedTheme = localStorage.getItem("mountijentour-theme") || localStorage.getItem("ijentour-theme");
             const theme = savedTheme === "dark" ? "dark" : "light";
             document.documentElement.classList.toggle("dark", theme === "dark");
             document.documentElement.style.colorScheme = theme;

@@ -22,7 +22,7 @@ const sections = [
   {
     title: "Questions",
     content:
-      "For questions about a request or these draft terms, contact Ijen Tour at info@ijentour.com or through the contact page. Any final terms should clearly identify the operating business and the policies applicable to confirmed bookings.",
+      "For questions about a request or these draft terms, contact Mount Ijen Tour at info@mountijentour.com or through the contact page. Any final terms should clearly identify the operating business and the policies applicable to confirmed bookings.",
   },
 ];
 
@@ -44,7 +44,7 @@ export default function TermsPage() {
           ))}
         </div>
         <p className="mt-10 border-t border-secondary-200 pt-6 text-sm text-secondary-600">
-          Contact: <a className="font-semibold text-primary-600 hover:underline" href="mailto:info@ijentour.com">info@ijentour.com</a>
+          Contact: <a className="font-semibold text-primary-600 hover:underline" href="mailto:info@mountijentour.com">info@mountijentour.com</a>
         </p>
       </article>
     </div>

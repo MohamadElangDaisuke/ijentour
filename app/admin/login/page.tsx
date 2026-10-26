@@ -134,7 +134,7 @@ export default function AdminLoginPage() {
                   autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@ijentour.com"
+                  placeholder="admin@mountijentour.com"
                   className="w-full pl-10 pr-4 py-3 bg-secondary-50 border border-secondary-200 rounded-2xl text-xs sm:text-sm font-medium text-secondary-950 placeholder:text-secondary-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
                 />
               </div>

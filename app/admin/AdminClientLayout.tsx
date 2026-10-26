@@ -274,7 +274,7 @@ export default function AdminClientLayout({ children }: { children: React.ReactN
                 {currentAdmin?.name || "Administrator"}
               </p>
               <p className="text-[11px] text-secondary-500 truncate mt-0.5">
-                {currentAdmin?.email || "admin@ijentour.com"}
+                {currentAdmin?.email || "admin@mountijentour.com"}
               </p>
               <div className="mt-2 pt-2 border-t border-secondary-200/80 flex items-center justify-between">
                 <span className="inline-block px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-100 text-emerald-800">

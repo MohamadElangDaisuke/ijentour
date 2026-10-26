@@ -95,14 +95,14 @@ export function buildChatbotResponse(
     const waLink = getWhatsAppLink(WhatsAppTemplates.generalInquiry("General Tour Assistance"));
     const message =
       language === "id"
-        ? `Anda dapat langsung menghubungi tim koordinator resmi Ijen Tour melalui saluran berikut:\n\n` +
+        ? `Anda dapat langsung menghubungi tim koordinator resmi Mount Ijen Tour melalui saluran berikut:\n\n` +
           `• 📱 **WhatsApp Resmi**: [Chat WhatsApp (+${adminPhone})](${waLink})\n` +
-          `• ✉️ **Email Dukungan**: info@ijentour.com\n` +
+          `• ✉️ **Email Dukungan**: info@mountijentour.com\n` +
           `• 📍 **Kantor Operasional**: Banyuwangi, Jawa Timur\n\n` +
           `Tim kami siap melayani konsultasi private tour, konfirmasi kuota pendakian, dan pertanyaan teknis lainnya.`
-        : `You can directly reach the official Ijen Tour coordination team through our official channels:\n\n` +
+        : `You can directly reach the official Mount Ijen Tour coordination team through our official channels:\n\n` +
           `• 📱 **Official WhatsApp**: [Chat on WhatsApp (+${adminPhone})](${waLink})\n` +
-          `• ✉️ **Email Support**: info@ijentour.com\n` +
+          `• ✉️ **Email Support**: info@mountijentour.com\n` +
           `• 📍 **Basecamp Location**: Banyuwangi, East Java, Indonesia\n\n` +
           `Our coordinators are ready to help with custom itineraries, hiking permits, and group bookings.`;
 

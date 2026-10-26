@@ -1,4 +1,4 @@
-# 🌋 Ijen Tour — Fullstack Travel Platform
+# 🌋 Mount Ijen Tour — Fullstack Travel Platform
 
 Platform web resmi pemesanan tur ekspedisi Kawah Ijen Banyuwangi lengkap dengan portal multi-role (Admin, Customer, Customer Pro VIP, Mitra Tour Guide), manajemen paket wisata, artikel panduan, galeri momen, dan pelacakan reservasi booking.
 

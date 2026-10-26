@@ -16,8 +16,8 @@ export async function GET() {
     }
 
     return NextResponse.json({ success: true, destinations });
-  } catch (error) {
-    console.error("GET /api/destinations error:", error);
+  } catch (error: any) {
+    console.warn("GET /api/destinations fallback used:", error?.message || error);
     return NextResponse.json({ success: true, destinations: defaultDestinations });
   }
 }

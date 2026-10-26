@@ -18,7 +18,7 @@ export default function TestimonialSection() {
             id: r.id,
             name: r.authorName || r.customerName || "Traveler",
             quote: r.comment,
-            origin: r.tripPackage?.title || "IjenTour Traveler",
+            origin: r.tripPackage?.title || "Mount Ijen Tour Traveler",
             image: r.avatar || "/images/pkg-bluefire.png",
           }));
           setTestimonials(mapped);
@@ -66,7 +66,7 @@ export default function TestimonialSection() {
               <div className="flex items-center justify-between mt-6">
                 <div>
                   <p className="text-base font-bold text-secondary-950">{featuredTestimonial.name}</p>
-                  <p className="mt-0.5 text-xs text-secondary-500">{featuredTestimonial.origin || 'IjenTour Traveler'}</p>
+                  <p className="mt-0.5 text-xs text-secondary-500">{featuredTestimonial.origin || 'Mount Ijen Tour Traveler'}</p>
                 </div>
                 {testimonials.length > 1 && (
                   <div className="flex gap-2">

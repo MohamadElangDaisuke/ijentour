@@ -24,8 +24,8 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json({ success: true, items, gallery: items });
-  } catch (error) {
-    console.error("GET /api/gallery error:", error);
+  } catch (error: any) {
+    console.warn("GET /api/gallery fallback used:", error?.message || error);
     return NextResponse.json({ success: true, items: defaultStories, gallery: defaultStories });
   }
 }

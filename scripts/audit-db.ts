@@ -20,7 +20,7 @@ async function auditDb() {
 
   for (const table of tables) {
     try {
-      const countRes: any = await prisma.$queryRawUnsafe(`SELECT COUNT(*)::int as count FROM "${table}"`);
+      const countRes: any = await prisma.$queryRawUnsafe(`SELECT COUNT(*) as count FROM "${table}"`);
       const count = countRes[0]?.count ?? 0;
       console.log(`✅ Table "${table}": ${count} records`);
     } catch (err: any) {

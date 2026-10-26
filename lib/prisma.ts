@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 
 // Cegah Prisma crash jika DATABASE_URL belum diisi di .env
 if (!process.env.DATABASE_URL) {
-  process.env.DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/ijentour_dev?schema=public";
+  process.env.DATABASE_URL = "file:./dev.db";
 }
 
 const globalForPrisma = globalThis as unknown as {
@@ -13,7 +13,7 @@ const globalForPrisma = globalThis as unknown as {
 export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
-    log: ["error"],
+    log: process.env.NODE_ENV === "development" ? ["warn"] : ["error"],
   });
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;

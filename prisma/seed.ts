@@ -13,9 +13,9 @@ async function main() {
   const mitraPass = await bcrypt.hash("mitra123", 10);
 
   const admin = await prisma.user.upsert({
-    where: { email: "admin@ijentour.com" },
+    where: { email: "admin@mountijentour.com" },
     update: {
-      name: "Ijen Tour Administrator",
+      name: "Mount Ijen Tour Administrator",
       passwordHash: adminPass,
       phone: "6282268177188",
       role: "ADMIN",
@@ -23,8 +23,8 @@ async function main() {
       isActive: true,
     },
     create: {
-      name: "Ijen Tour Administrator",
-      email: "admin@ijentour.com",
+      name: "Mount Ijen Tour Administrator",
+      email: "admin@mountijentour.com",
       passwordHash: adminPass,
       phone: "6282268177188",
       role: "ADMIN",
@@ -34,7 +34,7 @@ async function main() {
   });
 
   const customerPro = await prisma.user.upsert({
-    where: { email: "pro@ijentour.com" },
+    where: { email: "pro@mountijentour.com" },
     update: {
       name: "Budi Santoso (Pro Member)",
       passwordHash: custPass,
@@ -45,7 +45,7 @@ async function main() {
     },
     create: {
       name: "Budi Santoso (Pro Member)",
-      email: "pro@ijentour.com",
+      email: "pro@mountijentour.com",
       passwordHash: custPass,
       phone: "6281234567801",
       role: "CUSTOMER_PRO",
@@ -76,7 +76,7 @@ async function main() {
   });
 
   const mitra = await prisma.user.upsert({
-    where: { email: "mitra@ijentour.com" },
+    where: { email: "mitra@mountijentour.com" },
     update: {
       name: "Pak Slamet (Local Guide Mitra)",
       passwordHash: mitraPass,
@@ -87,7 +87,7 @@ async function main() {
     },
     create: {
       name: "Pak Slamet (Local Guide Mitra)",
-      email: "mitra@ijentour.com",
+      email: "mitra@mountijentour.com",
       passwordHash: mitraPass,
       phone: "6281234567803",
       role: "MITRA",

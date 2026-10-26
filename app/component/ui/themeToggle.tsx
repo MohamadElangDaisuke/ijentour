@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { Moon, Sun } from 'lucide-react';
 
-const themeStorageKey = 'ijentour-theme';
+const themeStorageKey = 'mountijentour-theme';
+const legacyThemeStorageKey = 'ijentour-theme';
 
 type Theme = 'light' | 'dark';
 
@@ -17,7 +18,7 @@ export default function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const savedTheme = window.localStorage.getItem(themeStorageKey) as Theme | null;
+    const savedTheme = (window.localStorage.getItem(themeStorageKey) || window.localStorage.getItem(legacyThemeStorageKey)) as Theme | null;
     const nextTheme: Theme = savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : 'light';
 
     setTheme(nextTheme);
@@ -28,8 +29,8 @@ export default function ThemeToggle() {
       setTheme(e.detail);
     };
 
-    window.addEventListener('ijentour-theme-change' as any, handleThemeEvent);
-    return () => window.removeEventListener('ijentour-theme-change' as any, handleThemeEvent);
+    window.addEventListener('mountijentour-theme-change' as any, handleThemeEvent);
+    return () => window.removeEventListener('mountijentour-theme-change' as any, handleThemeEvent);
   }, []);
 
   const toggleTheme = () => {
@@ -37,7 +38,7 @@ export default function ThemeToggle() {
     setTheme(nextTheme);
     window.localStorage.setItem(themeStorageKey, nextTheme);
     applyTheme(nextTheme);
-    window.dispatchEvent(new CustomEvent('ijentour-theme-change', { detail: nextTheme }));
+    window.dispatchEvent(new CustomEvent('mountijentour-theme-change', { detail: nextTheme }));
   };
 
   if (!mounted) {

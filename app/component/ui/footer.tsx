@@ -102,8 +102,8 @@ export default function Footer() {
               </li>
               <li className="flex items-center">
                 <Mail size={18} className="mr-3 shrink-0 text-primary-500" />
-                <a href="mailto:info@ijentour.com" className="hover:text-primary-500 transition-colors">
-                  info@ijentour.com
+                <a href="mailto:info@mountijentour.com" className="hover:text-primary-500 transition-colors">
+                  info@mountijentour.com
                 </a>
               </li>
             </ul>
@@ -145,7 +145,7 @@ export default function Footer() {
         </div>
 
         <div className="mx-auto max-w-7xl border-t border-secondary-200/80 px-4 pt-6 text-center text-xs text-secondary-500 sm:px-6 lg:px-8">
-          <p>© {new Date().getFullYear()} IjenTour. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Mount Ijen Tour. All rights reserved.</p>
           <nav aria-label="Legal" className="mt-3 flex justify-center gap-5">
             <Link href="/privacy" className="transition-colors hover:text-primary-500">Privacy Policy</Link>
             <Link href="/terms" className="transition-colors hover:text-primary-500">Terms of Service</Link>

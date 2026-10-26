@@ -19,8 +19,8 @@ export async function GET(request: Request) {
     });
 
     return NextResponse.json({ success: true, faqs });
-  } catch (error) {
-    console.error("GET /api/faqs error:", error);
+  } catch (error: any) {
+    console.warn("GET /api/faqs fallback used:", error?.message || error);
     return NextResponse.json({ success: true, faqs: [] });
   }
 }

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { ArrowLeft, Save, AlertCircle } from "lucide-react";
 import ImageUpload from "@/app/component/ui/ImageUpload";
 import MultiImageUpload from "@/app/component/ui/MultiImageUpload";
-import { Skeleton } from "@/app/component/ui/skeleton";
+import { AdminFormSkeleton } from "@/app/component/ui/skeleton";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -104,43 +104,7 @@ export default function EditTripPage({ params }: PageProps) {
   };
 
   if (loading) {
-    return (
-      <div
-        role="status"
-        aria-busy="true"
-        aria-label="Loading tour package details..."
-        className="space-y-6 pb-16 max-w-4xl"
-      >
-        <div className="space-y-2 border-b border-secondary-200/80 pb-4">
-          <Skeleton className="w-32 h-4" rounded="md" />
-          <Skeleton className="w-72 h-8" rounded="lg" />
-        </div>
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-xs space-y-6">
-          <div className="space-y-2">
-            <Skeleton className="w-28 h-3" rounded="sm" />
-            <Skeleton className="w-full h-10" rounded="xl" />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Skeleton className="w-24 h-3" rounded="sm" />
-              <Skeleton className="w-full h-10" rounded="xl" />
-            </div>
-            <div className="space-y-2">
-              <Skeleton className="w-24 h-3" rounded="sm" />
-              <Skeleton className="w-full h-10" rounded="xl" />
-            </div>
-          </div>
-          <div className="space-y-2">
-            <Skeleton className="w-28 h-3" rounded="sm" />
-            <Skeleton className="w-full h-24" rounded="2xl" />
-          </div>
-          <div className="space-y-2">
-            <Skeleton className="w-32 h-3" rounded="sm" />
-            <Skeleton className="w-full h-44" rounded="2xl" />
-          </div>
-        </div>
-      </div>
-    );
+    return <AdminFormSkeleton />;
   }
 
   return (

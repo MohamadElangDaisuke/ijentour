@@ -22,7 +22,7 @@ const sections = [
   {
     title: "Retention and your requests",
     content:
-      "A specific retention schedule and request-handling process have not been confirmed in the available service information. For questions about information you submitted, or to request a correction or deletion, contact info@ijentour.com. Ijen Tour should confirm its retention periods and applicable privacy procedures before treating this draft as final.",
+      "A specific retention schedule and request-handling process have not been confirmed in the available service information. For questions about information you submitted, or to request a correction or deletion, contact info@mountijentour.com. Mount Ijen Tour should confirm its retention periods and applicable privacy procedures before treating this draft as final.",
   },
 ];
 
@@ -44,7 +44,7 @@ export default function PrivacyPage() {
           ))}
         </div>
         <p className="mt-10 border-t border-secondary-200 pt-6 text-sm text-secondary-600">
-          Contact: <a className="font-semibold text-primary-600 hover:underline" href="mailto:info@ijentour.com">info@ijentour.com</a>
+          Contact: <a className="font-semibold text-primary-600 hover:underline" href="mailto:info@mountijentour.com">info@mountijentour.com</a>
         </p>
       </article>
     </div>

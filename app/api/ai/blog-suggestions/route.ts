@@ -88,7 +88,7 @@ export async function POST(request: Request) {
 
     switch (type) {
       case "topics":
-        instruction = `You are an expert travel editor and SEO strategist for Ijen Tour (ijentour.com) in East Java, Indonesia.
+        instruction = `You are an expert travel editor and SEO strategist for Mount Ijen Tour (mountijentour.com) in East Java, Indonesia.
 Mount Ijen is famous for its midnight hike, world-renowned electric Blue Fire, turquoise acid crater lake, traditional sulfur miners, and sunrise.
 Your goal is to suggest 5 to 6 compelling, high-CTR, SEO-optimized article topics / titles in English.
 - If the user provides a topic or keyword, suggest creative, engaging variations and angles around that theme.

@@ -71,7 +71,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ success: true, reviews });
   } catch (error: any) {
-    console.error("GET /api/reviews error:", error);
+    console.warn("GET /api/reviews fallback used:", error?.message || error);
     return NextResponse.json({
       success: true,
       source: "fallback",

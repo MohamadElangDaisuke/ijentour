@@ -253,7 +253,7 @@ export async function POST(request: Request) {
     else if (articleLength === "Comprehensive" || articleLength === "1500 words") targetWordCount = "1500 words";
 
     // 4. Construct System Instruction & Prompt
-    const systemInstruction = `You are a senior travel content writer and SEO specialist for "Ijen Tour" (ijentour.com), the premier expedition and tour operator for Mount Ijen (Kawah Ijen Volcano) in Banyuwangi, East Java, Indonesia.
+    const systemInstruction = `You are a senior travel content writer and SEO specialist for "Mount Ijen Tour" (mountijentour.com), the premier expedition and tour operator for Mount Ijen (Kawah Ijen Volcano) in Banyuwangi, East Java, Indonesia.
 
 Your writing standards:
 1. Tone & Persona: Natural, engaging, inspiring, and informative. The content must feel human-crafted by seasoned local expedition guides and travel writers, NEVER robotic or generic AI text.

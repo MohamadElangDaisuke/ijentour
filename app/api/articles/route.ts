@@ -25,8 +25,8 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json({ success: true, articles: posts });
-  } catch (error) {
-    console.error("GET /api/articles error:", error);
+  } catch (error: any) {
+    console.warn("GET /api/articles fallback used:", error?.message || error);
     return NextResponse.json({ success: true, articles: defaultArticles });
   }
 }

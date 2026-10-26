@@ -142,7 +142,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h4 className="font-bold text-white mb-1">Email</h4>
-                  <p className="text-secondary-200 text-sm leading-relaxed">info@ijentour.com<br />booking@ijentour.com</p>
+                  <p className="text-secondary-200 text-sm leading-relaxed">info@mountijentour.com<br />booking@mountijentour.com</p>
                 </div>
               </div>
 

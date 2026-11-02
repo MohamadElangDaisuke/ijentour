@@ -34,6 +34,7 @@ const SIDEBAR_ITEMS = [
   { label: "Inbox Messages", href: "/admin/contacts", icon: <Mail className="h-4.5 w-4.5" /> },
   { label: "Manage Blog Articles", href: "/admin/blog", icon: <BookOpen className="h-4.5 w-4.5" /> },
   { label: "Manage FAQs", href: "/admin/faqs", icon: <HelpCircle className="h-4.5 w-4.5" /> },
+  { label: "Manage Staff & Guides", href: "/admin/staff", icon: <UserCheck className="h-4.5 w-4.5" /> },
   { label: "Manage Admin Accounts", href: "/admin/users", icon: <Users className="h-4.5 w-4.5" /> },
 ];
 

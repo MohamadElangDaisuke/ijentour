@@ -5,13 +5,20 @@ import Link from 'next/link';
 import { motion, AnimatePresence, easeIn } from 'framer-motion';
 import { ArrowRight, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { TourPackage, defaultPackages, packagesStorageKey } from '../../lib/packagesStorage';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
 
 export default function PackagesSections() {
   const [packagesData, setPackagesData] = useState<TourPackage[]>(defaultPackages);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Detect mobile device to disable heavy 3D transforms and background animations
+  // Detect mobile device
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1024);
@@ -79,9 +86,9 @@ export default function PackagesSections() {
       opacity: 1,
       transition: {
         staggerChildren: 0.12,
-        delayChildren: 0.1
-      }
-    }
+        delayChildren: 0.1,
+      },
+    },
   };
 
   const itemVariants = {
@@ -89,8 +96,8 @@ export default function PackagesSections() {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: easeIn }
-    }
+      transition: { duration: 0.6, ease: easeIn },
+    },
   };
 
   return (
@@ -105,9 +112,7 @@ export default function PackagesSections() {
     >
       {/* 1. DYNAMIC FULL BACKGROUND (Desktop Only - Hidden on Mobile) */}
       <div className="hidden lg:flex absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        {/* Sisi Kiri (Desktop Only): Solid bg-secondary-50, Sisi Kanan: Full foto */}
         <div className="w-1/2 h-full bg-secondary-50" />
-
         <div className="relative w-1/2 h-full overflow-hidden">
           <AnimatePresence mode="popLayout">
             <motion.img
@@ -148,11 +153,11 @@ export default function PackagesSections() {
             </p>
           </div>
 
-          {/* Action Row: View All Button */}
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 w-full">
+          {/* Action Row: View All Button (Desktop: tetap di kolom kiri) */}
+          <div className="hidden lg:flex flex-wrap items-center justify-start gap-3 w-full">
             <Link
               href="/packages"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-primary-500 px-5 sm:px-6 py-3 sm:py-3.5 text-secondary-950 text-xs sm:text-sm font-bold transition-all hover:bg-primary-400 hover:shadow-lg cursor-pointer transform hover:-translate-y-0.5"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-500 px-5 sm:px-6 py-3 sm:py-3.5 text-secondary-950 text-xs sm:text-sm font-bold transition-all hover:bg-primary-400 hover:shadow-lg cursor-pointer transform hover:-translate-y-0.5"
             >
               <span>View All Packages</span>
               <ArrowRight className="hidden sm:inline-block w-4 h-4 stroke-[2.5]" />
@@ -160,34 +165,100 @@ export default function PackagesSections() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Interactive Package Carousel */}
-        <motion.div 
+        {/* RIGHT COLUMN: Packages Carousel (Mobile: Shadcn UI Carousel, Desktop: 3D Cards Stage) */}
+        <motion.div
           variants={itemVariants}
           className="col-span-1 lg:col-span-7 flex flex-col items-center justify-center relative min-h-80 sm:min-h-95 lg:items-center lg:pr-14"
         >
-          {/* Cards Stage Container */}
-          <div className="relative h-112 w-72 flex items-center justify-center">
-            <button
-              type="button"
-              onClick={handlePrev}
-              aria-label="Previous package"
-              title="Previous package"
-              className="absolute left-2 top-1/2 z-30 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-secondary-200 bg-white text-secondary-950 shadow-md transition hover:bg-primary-500 active:scale-90 lg:hidden"
+          {/* --- MOBILE VIEW: SHADCN UI CAROUSEL --- */}
+          <div className="w-full flex lg:hidden flex-col items-center justify-center px-4">
+            <Carousel
+              opts={{
+                align: 'center',
+                loop: true,
+              }}
+              className="w-full max-w-[18.5rem] sm:max-w-xs"
             >
-              <ChevronLeft className="h-5 w-5 stroke-[2.5]" />
-            </button>
+              <CarouselContent>
+                {packagesData.map((pkg) => (
+                  <CarouselItem key={pkg.id}>
+                    <div className="p-1">
+                      <div className="overflow-hidden rounded-2xl border border-secondary-200/90 bg-white shadow-md text-secondary-950">
+                        <div className="relative aspect-4/3 w-full bg-secondary-100">
+                          <img
+                            src={pkg.image || '/images/pkg-bluefire.png'}
+                            alt={`${pkg.title} - Mount Ijen and Banyuwangi tour`}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute left-3 top-3 rounded-lg bg-white/95 px-3 py-1 text-[10px] font-bold text-secondary-950 shadow-xs">
+                            {pkg.badge || 'Ijen escape'}
+                          </div>
+                        </div>
 
-            <button
-              type="button"
-              onClick={handleNext}
-              aria-label="Next package"
-              title="Next package"
-              className="absolute right-2 top-1/2 z-30 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-secondary-200 bg-white text-secondary-950 shadow-md transition hover:bg-primary-500 active:scale-90 lg:hidden"
-            >
-              <ChevronRight className="h-5 w-5 stroke-[2.5]" />
-            </button>
+                        <div className="p-4 sm:p-5">
+                          <div className="mb-3 flex items-center justify-between gap-2 text-xs">
+                            <div className="flex items-center gap-1.5 text-primary-500">
+                              {[0, 1, 2, 3, 4].map((star) => (
+                                <Star
+                                  key={star}
+                                  className={`h-3 w-3 ${
+                                    star < Math.round(pkg.rating || 4.9)
+                                      ? 'fill-primary-500'
+                                      : 'fill-transparent'
+                                  }`}
+                                />
+                              ))}
+                              <span className="ml-1 font-bold text-secondary-700">
+                                {(pkg.rating || 4.9).toFixed(1)}
+                              </span>
+                            </div>
+                            <span className="text-secondary-500">{pkg.duration}</span>
+                          </div>
 
-            {/* Desktop Only Prev Nav Button */}
+                          <h3 className="mb-3 line-clamp-2 text-sm font-extrabold leading-snug">
+                            {pkg.title}
+                          </h3>
+
+                          <div className="flex items-end justify-between gap-3 border-t border-secondary-100 pt-3">
+                            <div>
+                              <p className="text-[10px] text-secondary-500">Starts from</p>
+                              <p className="mt-0.5 text-sm font-black text-primary-600">
+                                {pkg.price}
+                              </p>
+                            </div>
+                            <Link
+                              href={`/packages/${pkg.id}`}
+                              className="text-xs font-bold text-primary-600 hover:text-primary-700 hover:underline px-2.5 py-1 rounded-md bg-primary-50 hover:bg-primary-100 transition inline-flex items-center"
+                            >
+                              View details{' '}
+                              <ArrowRight className="ml-1 inline h-3.5 w-3.5" aria-hidden="true" />
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="-left-4 sm:-left-6" />
+              <CarouselNext className="-right-4 sm:-right-6" />
+            </Carousel>
+
+            {/* Mobile View All Button (Ditempatkan di bawah carousel agar alur visual natural) */}
+            <div className="mt-7 sm:mt-8 flex items-center justify-center w-full">
+              <Link
+                href="/packages"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-500 px-6 py-3.5 text-secondary-950 text-sm font-bold transition-all hover:bg-primary-400 hover:shadow-lg cursor-pointer transform hover:-translate-y-0.5"
+              >
+                <span>View All Packages</span>
+                <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+              </Link>
+            </div>
+          </div>
+
+          {/* --- DESKTOP VIEW: INTERACTIVE 3D CARDS STAGE --- */}
+          <div className="hidden lg:flex relative h-112 w-72 items-center justify-center">
+            {/* Desktop Prev Nav Button */}
             <motion.button
               type="button"
               onClick={handlePrev}
@@ -196,12 +267,12 @@ export default function PackagesSections() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               transition={{ ease: easeIn, duration: 0.2 }}
-              className="hidden lg:flex absolute -left-16 top-1/2 -translate-y-1/2 z-40 items-center justify-center w-10 h-10 rounded-full bg-white text-secondary-950 shadow-md hover:shadow-xl transition-all hover:bg-primary-500 cursor-pointer"
+              className="absolute -left-16 top-1/2 -translate-y-1/2 z-40 items-center justify-center w-10 h-10 rounded-full bg-white text-secondary-950 shadow-md hover:shadow-xl transition-all hover:bg-primary-500 cursor-pointer flex"
             >
               <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
             </motion.button>
 
-            {/* Desktop Only Next Nav Button */}
+            {/* Desktop Next Nav Button */}
             <motion.button
               type="button"
               onClick={handleNext}
@@ -210,12 +281,12 @@ export default function PackagesSections() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               transition={{ ease: easeIn, duration: 0.2 }}
-              className="hidden lg:flex absolute -right-16 top-1/2 -translate-y-1/2 z-40 items-center justify-center w-10 h-10 rounded-full bg-white text-secondary-950 shadow-md hover:shadow-xl transition-all hover:bg-primary-500 cursor-pointer"
+              className="absolute -right-16 top-1/2 -translate-y-1/2 z-40 items-center justify-center w-10 h-10 rounded-full bg-white text-secondary-950 shadow-md hover:shadow-xl transition-all hover:bg-primary-500 cursor-pointer flex"
             >
               <ChevronRight className="w-5 h-5 stroke-[2.5]" />
             </motion.button>
 
-            {/* Cards Loop */}
+            {/* Desktop Cards Loop */}
             {[-1, 0, 1].map((offset) => {
               const pkg = getPackageByOffset(offset);
               const isCenter = offset === 0;
@@ -225,21 +296,20 @@ export default function PackagesSections() {
                   key={`${pkg.id}-${activeIndex + offset}`}
                   initial={false}
                   animate={{
-                    x: offset * (isMobile ? 65 : 110),
-                    scale: isCenter ? 1 : (isMobile ? 0.85 : 0.75),
-                    rotateY: isMobile ? 0 : offset * 15,
+                    x: offset * 110,
+                    scale: isCenter ? 1 : 0.75,
+                    rotateY: offset * 15,
                     opacity: isCenter ? 1 : 0.45,
-                    zIndex: isCenter ? 20 : 10
+                    zIndex: isCenter ? 20 : 10,
                   }}
                   transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                  whileHover={!isMobile ? { scale: isCenter ? 1.03 : 0.78 } : undefined}
+                  whileHover={{ scale: isCenter ? 1.03 : 0.78 }}
                   onClick={() => {
-                    // On desktop only: clicking side cards changes selection
-                    if (!isMobile && !isCenter) {
+                    if (!isCenter) {
                       setActiveIndex((prev) => prev + offset);
                     }
                   }}
-                  className="absolute w-72 overflow-hidden rounded-4xl border border-secondary-100 bg-white shadow-xl shadow-secondary-900/10 cursor-pointer transform-gpu will-change-transform"
+                  className="absolute w-72 overflow-hidden rounded-2xl border border-secondary-100 bg-white shadow-xl shadow-secondary-900/10 cursor-pointer transform-gpu will-change-transform"
                 >
                   <div className="relative aspect-4/3 w-full bg-secondary-100">
                     <img
@@ -247,7 +317,7 @@ export default function PackagesSections() {
                       alt={`${pkg.title} - Mount Ijen and Banyuwangi tour`}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold text-secondary-950 shadow-xs">
+                    <div className="absolute left-3 top-3 rounded-lg bg-white/95 px-3 py-1 text-[10px] font-bold text-secondary-950 shadow-xs">
                       {pkg.badge || 'Ijen escape'}
                     </div>
                   </div>
@@ -255,15 +325,19 @@ export default function PackagesSections() {
                   <div className="p-4 text-secondary-950 sm:p-5">
                     <div className="mb-3 flex items-center justify-between gap-2 text-xs">
                       <div className="flex items-center gap-1.5 text-primary-500">
-                      {[0, 1, 2, 3, 4].map((star) => (
-                        <Star
-                          key={star}
-                          className={`h-3 w-3 ${star < Math.round(pkg.rating || 4.9) ? 'fill-primary-500' : 'fill-transparent'}`}
-                        />
-                      ))}
-                      <span className="ml-1 font-bold text-secondary-700">
-                        {(pkg.rating || 4.9).toFixed(1)}
-                      </span>
+                        {[0, 1, 2, 3, 4].map((star) => (
+                          <Star
+                            key={star}
+                            className={`h-3 w-3 ${
+                              star < Math.round(pkg.rating || 4.9)
+                                ? 'fill-primary-500'
+                                : 'fill-transparent'
+                            }`}
+                          />
+                        ))}
+                        <span className="ml-1 font-bold text-secondary-700">
+                          {(pkg.rating || 4.9).toFixed(1)}
+                        </span>
                       </div>
                       <span className="text-secondary-500">{pkg.duration}</span>
                     </div>
@@ -281,7 +355,8 @@ export default function PackagesSections() {
                         onClick={(e) => e.stopPropagation()}
                         className="text-xs font-bold text-primary-600 hover:text-primary-700 hover:underline px-2 py-1 rounded-md bg-primary-50 hover:bg-primary-100 transition"
                       >
-                        View details <ArrowRight className="ml-1 inline h-3.5 w-3.5" aria-hidden="true" />
+                        View details{' '}
+                        <ArrowRight className="ml-1 inline h-3.5 w-3.5" aria-hidden="true" />
                       </Link>
                     </div>
                   </div>
@@ -290,16 +365,14 @@ export default function PackagesSections() {
             })}
           </div>
 
-          {/* Dots Indicator */}
-          <motion.div 
+          {/* Desktop Dots Indicator */}
+          <motion.div
             variants={itemVariants}
-            className="flex items-center gap-1.5 mt-4 sm:mt-6"
+            className="hidden lg:flex items-center gap-1.5 mt-4 sm:mt-6"
           >
-            <span className="mr-1 text-xs font-bold tabular-nums text-secondary-700 lg:hidden">
-              {(((activeIndex % totalPackages) + totalPackages) % totalPackages) + 1} / {totalPackages}
-            </span>
             {packagesData.map((_, i) => {
-              const currentActive = ((activeIndex % totalPackages) + totalPackages) % totalPackages;
+              const currentActive =
+                ((activeIndex % totalPackages) + totalPackages) % totalPackages;
               return (
                 <motion.button
                   key={i}
@@ -308,15 +381,15 @@ export default function PackagesSections() {
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.8 }}
                   className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                    currentActive === i ? 'w-6 bg-amber-400' : 'w-2 bg-secondary-400 hover:bg-secondary-300'
+                    currentActive === i
+                      ? 'w-6 bg-amber-400'
+                      : 'w-2 bg-secondary-400 hover:bg-secondary-300'
                   }`}
                 />
               );
             })}
           </motion.div>
-
         </motion.div>
-
       </motion.div>
     </motion.section>
   );

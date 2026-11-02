@@ -801,6 +801,106 @@ async function main() {
   }
   console.log("✅ Seeded FAQs");
 
+  // 10. Seed Staff / Tour Guides
+  const staffList = [
+    {
+      name: "Pak Slamet Raharjo",
+      role: "Senior Mountain Guide",
+      specialty: "Blue Fire & Crater Specialist",
+      description: "Mantan penambang belerang asli Kawah Ijen dengan pemahaman mendalam tentang jalur kawah, arah angin belerang, dan keselamatan trekking malam.",
+      avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
+      experience: "12+ Tahun",
+      languages: "Bahasa Indonesia, Jawa, English (Basic)",
+      rating: 5.0,
+      reviewCount: 340,
+      badge: "HPI Certified & Former Miner",
+      phone: "+62 822-6817-7188",
+      userId: mitra?.id || null,
+      isFeatured: true,
+      isActive: true,
+      sortOrder: 1,
+    },
+    {
+      name: "Ahmad Fauzi",
+      role: "Local Birding & Wildlife Guide",
+      specialty: "Birding & Forest Ecology",
+      description: "Pakar pengamat burung endemik Jawa Timur dan ekosistem lereng Gunung Ijen & Baluran. Membantu mengidentifikasi satwa hutan langka.",
+      avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
+      experience: "8+ Tahun",
+      languages: "Bahasa Indonesia, English",
+      rating: 4.9,
+      reviewCount: 195,
+      badge: "Licensed Birding Guide",
+      phone: "+62 822-6817-7188",
+      isFeatured: true,
+      isActive: true,
+      sortOrder: 2,
+    },
+    {
+      name: "Hendra Wijaya",
+      role: "Safety & First Aid Lead",
+      specialty: "Trek Safety & Mountain Rescue",
+      description: "Instruktur keselamatan pendakian bersertifikasi SAR & P3K gunung. Memastikan setiap pendaki mendapatkan panduan ritme dan respirasi yang tepat.",
+      avatarUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80",
+      experience: "7+ Tahun",
+      languages: "Bahasa Indonesia, English",
+      rating: 5.0,
+      reviewCount: 220,
+      badge: "BNSP & First Aid Certified",
+      phone: "+62 822-6817-7188",
+      isFeatured: true,
+      isActive: true,
+      sortOrder: 3,
+    },
+    {
+      name: "Bayu Pratama",
+      role: "Field Guide & Photographer",
+      specialty: "Volcano Photography & Astrophotography",
+      description: "Fotografer lanskap berpengalaman yang siap mengabadikan momen Blue Fire elektrik, milky way, dan golden sunrise Anda dari sudut terbaik.",
+      avatarUrl: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80",
+      experience: "6+ Tahun",
+      languages: "Bahasa Indonesia, English",
+      rating: 4.9,
+      reviewCount: 180,
+      badge: "Adventure Photo Specialist",
+      phone: "+62 822-6817-7188",
+      isFeatured: true,
+      isActive: true,
+      sortOrder: 4,
+    },
+    {
+      name: "Dewi Lestari",
+      role: "Tour Coordinator & Cultural Interpreter",
+      specialty: "Logistics & Local Culture",
+      description: "Menghubungkan tamu mancanegara dengan kehangatan tradisi masyarakat suku Osing Banyuwangi dan memastikan seluruh logistik perjalanan berjalan lancar.",
+      avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80",
+      experience: "5+ Tahun",
+      languages: "Bahasa Indonesia, English, Mandarin (Conversational)",
+      rating: 5.0,
+      reviewCount: 210,
+      badge: "Certified Tour Leader",
+      phone: "+62 822-6817-7188",
+      isFeatured: true,
+      isActive: true,
+      sortOrder: 5,
+    },
+  ];
+
+  for (const staff of staffList) {
+    const existing = await prisma.staff.findFirst({
+      where: { name: staff.name },
+    });
+    if (!existing) {
+      await prisma.staff.create({ data: staff });
+    } else {
+      await prisma.staff.update({
+        where: { id: existing.id },
+        data: staff,
+      });
+    }
+  }
+  console.log("✅ Seeded Staff / Tour Guides");
+
   console.log("🎉 Database seeding completed successfully!");
 }
 

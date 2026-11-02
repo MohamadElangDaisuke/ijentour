@@ -24,6 +24,7 @@ model User {
   bookings Booking[]
   reviews  Review[]
   posts    BlogPost[]
+  staff    Staff[]
 
   @@map("users")
 }
@@ -227,3 +228,31 @@ model Review {
 
   @@map("reviews")
 }
+
+model Staff {
+  id          String   @id @default(cuid())
+  userId      String?
+  name        String
+  role        String   @default("Tour Guide") // "Tour Guide", "Senior Guide", "Lead Porter", etc.
+  specialty   String?  // e.g. "Local Birding Guide", "Blue Fire Specialist", "Volcano Trekking"
+  description String?  // Bio atau ringkasan pengalaman pemandu
+  avatarUrl   String?  // URL foto profil
+  experience  String?  @default("5+ Tahun")
+  languages   String?  @default("Bahasa Indonesia, English")
+  rating      Float    @default(5.0)
+  reviewCount Int      @default(0)
+  badge       String?  // e.g. "Lisensi HPI", "Certified Guide"
+  phone       String?  // Kontak telepon / WhatsApp
+  email       String?
+  instagram   String?
+  isFeatured  Boolean  @default(true)
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("staff")
+}
+

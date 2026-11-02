@@ -1,16 +1,11 @@
+import { TravelResourcesInteractive } from "./TravelResourcesInteractive";
 import Link from "next/link";
 import Image from "next/image";
 import {
   ArrowRight,
-  Backpack,
-  CalendarDays,
-  Compass,
-  Leaf,
-  MapPinned,
-  Mountain,
-  ShieldCheck,
   UserRound,
 } from "lucide-react";
+import { prisma } from "@/lib/prisma";
 
 const interests = [
   {
@@ -42,51 +37,6 @@ const interests = [
     label: "Travel Tips",
     category: "Tips & Tricks",
     image: "https://images.pexels.com/photos/1051075/pexels-photo-1051075.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  },
-];
-
-const resources = [
-  {
-    title: "Best time to visit",
-    description: "Read about when the night trek and Blue Fire are best experienced.",
-    href: "/blog/mengenal-fenomena-blue-fire",
-    icon: CalendarDays,
-  },
-  {
-    title: "Ijen trek and crater safety",
-    description: "Learn about the night trek, the Blue Fire, and important safety preparation.",
-    href: "/blog/mengenal-fenomena-blue-fire",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Prepare for your trek",
-    description: "Review practical fitness and packing advice before your Ijen adventure.",
-    href: "/blog/persiapan-trekking-kawah-ijen",
-    icon: Backpack,
-  },
-  {
-    title: "What to wear in Ijen",
-    description: "Find clothing tips for the cool conditions on the mountain.",
-    href: "/blog/panduan-memilih-pakaian",
-    icon: Mountain,
-  },
-  {
-    title: "Weather and clothing",
-    description: "Prepare for cool mountain conditions with practical clothing advice.",
-    href: "/blog/panduan-memilih-pakaian",
-    icon: Leaf,
-  },
-  {
-    title: "Transport and pickup",
-    description: "Ask our team about available routes, pickup locations, and trip logistics.",
-    href: "/contact",
-    icon: MapPinned,
-  },
-  {
-    title: "Current visitor information",
-    description: "Contact the team to confirm current access rules and visitor requirements.",
-    href: "/contact",
-    icon: Compass,
   },
 ];
 
@@ -167,34 +117,70 @@ export function ExploreByInterestSection() {
   );
 }
 
-export function LocalGuidesSection() {
+export async function LocalGuidesSection() {
+  let guides: any[] = [];
+  try {
+    guides = await prisma.staff.findMany({
+      where: { isActive: true },
+      orderBy: { sortOrder: "asc" },
+    });
+  } catch (error) {
+    console.warn("Could not load staff from database, using fallback:", error);
+  }
+
+  const displayGuides = guides && guides.length > 0 ? guides : localGuides;
+
   return (
     <section
       id="local-guides"
       aria-labelledby="local-guides-heading"
-      className="bg-secondary-50 px-4 py-10 sm:px-8 sm:py-12 lg:py-16"
+      className="bg-secondary-50 px-4 py-10 sm:px-8 sm:py-12 lg:py-16 dark:bg-secondary-900/40"
     >
       <div className="mx-auto max-w-7xl">
         <header className="mx-auto mb-8 max-w-4xl text-center sm:mb-10">
           <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary-600 sm:text-xs">Local knowledge, shared</p>
-          <h2 id="local-guides-heading" className="mt-3 text-2xl font-black tracking-tight text-secondary-950 sm:text-3xl lg:text-4xl">
-            Meet Your Birding Team
+          <h2 id="local-guides-heading" className="mt-3 text-2xl font-black tracking-tight text-secondary-950 sm:text-3xl lg:text-4xl dark:text-white">
+            Meet Our Tour Guides & Field Team
           </h2>
-          <p className="mt-3 text-sm leading-relaxed text-secondary-600 sm:text-base">
-            Meet the local team supporting birdwatching trips around Mount Ijen and East Java.
+          <p className="mt-3 text-sm leading-relaxed text-secondary-600 sm:text-base dark:text-secondary-300">
+            Meet our certified local guides and former sulfur miners supporting your adventures around Mount Ijen and East Java.
           </p>
         </header>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
-          {localGuides.map(({ name, specialty, description }) => (
-            <article key={name} className="flex min-h-full flex-col items-center rounded-2xl border border-secondary-200 bg-white px-4 py-5 text-center shadow-sm">
-              <div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-secondary-300 p-1">
-                <div className="flex h-full w-full items-center justify-center rounded-full bg-secondary-100 text-secondary-600">
-                  <UserRound className="h-6 w-6" aria-hidden="true" />
-                </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+          {displayGuides.map((guide: any) => (
+            <article
+              key={guide.id || guide.name}
+              className="group flex min-h-full flex-col items-center rounded-2xl border border-secondary-200 bg-white p-5 text-center shadow-xs transition hover:border-primary-400 hover:shadow-md dark:border-secondary-800 dark:bg-secondary-900"
+            >
+              <div className="relative flex h-24 w-24 shrink-0 overflow-hidden rounded-full border-2 border-primary-500/30 p-1">
+                {guide.avatarUrl ? (
+                  <div className="relative h-full w-full overflow-hidden rounded-full">
+                    <Image
+                      src={guide.avatarUrl}
+                      alt={guide.name}
+                      fill
+                      sizes="96px"
+                      className="object-cover transition duration-300 group-hover:scale-105"
+                    />
+                  </div>
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center rounded-full bg-secondary-100 text-secondary-600 dark:bg-secondary-800 dark:text-secondary-400">
+                    <UserRound className="h-8 w-8" aria-hidden="true" />
+                  </div>
+                )}
               </div>
-              <h3 className="mt-4 text-base font-bold text-secondary-950">{name}</h3>
-              <p className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-primary-700">{specialty}</p>
-              <p className="mt-3 text-xs leading-relaxed text-secondary-600">{description}</p>
+              <h3 className="mt-4 text-base font-bold text-secondary-950 dark:text-white">{guide.name}</h3>
+              <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-primary-700 dark:text-primary-400">
+                {guide.specialty || guide.role || "Tour Guide"}
+              </p>
+              {guide.experience && (
+                <span className="mt-1 inline-block rounded-full bg-secondary-100 px-2 py-0.5 text-[10px] font-medium text-secondary-600 dark:bg-secondary-800 dark:text-secondary-400">
+                  {guide.experience}
+                </span>
+              )}
+              <p className="mt-3 text-xs leading-relaxed text-secondary-600 dark:text-secondary-300">
+                {guide.description}
+              </p>
             </article>
           ))}
         </div>
@@ -202,6 +188,8 @@ export function LocalGuidesSection() {
     </section>
   );
 }
+
+
 
 export function TravelResourcesSection() {
   return (
@@ -211,31 +199,17 @@ export function TravelResourcesSection() {
       className="bg-white px-4 py-16 sm:px-8 sm:py-20 lg:py-24"
     >
       <div className="mx-auto max-w-7xl">
-        <div className="mb-10 max-w-2xl">
+        <div className="mb-10 max-w-3xl">
           <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary-600">Travel planning resources</p>
           <h2 id="travel-resources-heading" className="mt-3 text-2xl font-black tracking-tight text-secondary-950 sm:text-4xl">
-            Plan Your Trip with Confidence
+            Mount Ijen Trekking Guide &amp; Preparation Checklist
           </h2>
-          <p className="mt-3 text-sm text-secondary-700 sm:text-base">
-            Find practical information to help you prepare for a visit to Ijen and Banyuwangi.
+          <p className="mt-3 text-sm leading-relaxed text-secondary-700 sm:text-base">
+            Select a guide category to explore mandatory documents, cold-weather clothing (&lt;10°C), sulfur respirator gear, and vital tips before your trek.
           </p>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {resources.map(({ title, description, href, icon: Icon }) => (
-            <Link
-              key={title}
-              href={href}
-              className="group rounded-2xl border border-secondary-200 bg-secondary-50 p-5 transition hover:-translate-y-1 hover:border-primary-500 hover:bg-white"
-            >
-              <Icon className="h-6 w-6 text-primary-600" aria-hidden="true" />
-              <h3 className="mt-4 font-bold text-secondary-950">{title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-secondary-700">{description}</p>
-              <span className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-primary-600">
-                Read more <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" aria-hidden="true" />
-              </span>
-            </Link>
-          ))}
-        </div>
+
+        <TravelResourcesInteractive />
       </div>
     </section>
   );

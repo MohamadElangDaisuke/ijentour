@@ -2,6 +2,7 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { defaultDestinations, Destination } from '../../lib/destinationsStorage';
 
@@ -120,13 +121,12 @@ export default function DestinationInspiration() {
                   className="group/card relative h-48 sm:h-56 w-[260px] sm:w-[310px] shrink-0 snap-start overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 select-none block"
                 >
                   {/* Destination Photo */}
-                  <img
+                  <Image
                     src={dest.image || '/images/pkg-bluefire.png'}
                     alt={dest.name}
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/images/pkg-bluefire.png';
-                    }}
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-110"
+                    fill
+                    sizes="(max-width: 640px) 260px, 310px"
+                    className="object-cover transition-transform duration-700 ease-out group-hover/card:scale-110"
                   />
 
                   {/* Gradient Overlay */}

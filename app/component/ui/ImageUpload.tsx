@@ -6,7 +6,7 @@ import { UploadCloud, X, Loader2, RefreshCw, AlertCircle, CheckCircle2 } from "l
 interface ImageUploadProps {
   value?: string;
   onChange: (url: string) => void;
-  folder?: "trips" | "gallery" | "blog" | "destinations" | "avatars" | "general";
+  folder?: "packages" | "trips" | "gallery" | "blog" | "destinations" | "avatars" | "reviews" | "general";
   label?: string;
   required?: boolean;
   aspectRatio?: "video" | "square" | "wide";

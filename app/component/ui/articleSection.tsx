@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { defaultArticles, articlesStorageKey, type Article } from '../../lib/articlesStorage';
@@ -164,13 +165,12 @@ export default function ArticleSection({ variant = 'latest' }: ArticleSectionPro
                   <Link href={`/blog/${targetSlug}`} className="absolute inset-0 z-20" aria-label={article.title} />
 
                   {/* Full Background Photo */}
-                  <img
-                    src={article.image}
+                  <Image
+                    src={article.image || '/images/pkg-bluefire.png'}
                     alt={`${article.title} - Banyuwangi travel guide`}
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/images/pkg-bluefire.png';
-                    }}
-                    className="absolute inset-0 -z-10 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-110"
+                    fill
+                    sizes="(max-width: 640px) 285px, (max-width: 768px) 330px, 33vw"
+                    className="-z-10 object-cover transition duration-700 ease-out group-hover:scale-110"
                   />
 
                   {/* Gradient Overlay for high readability */}

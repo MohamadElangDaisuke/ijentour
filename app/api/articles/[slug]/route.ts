@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { defaultArticles } from "@/app/lib/articlesStorage";
 import { requireAdmin } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { safeDeleteMediaFile } from "@/lib/storage/mediaCleanup";
 
 export async function GET(
   request: Request,
@@ -44,7 +45,7 @@ export async function GET(
       if (fallback) {
         return NextResponse.json({ success: true, article: fallback });
       }
-    } catch {}
+    } catch { }
     return NextResponse.json({ error: "Article not found." }, { status: 404 });
   }
 }
@@ -96,11 +97,16 @@ export async function PUT(
       },
     });
 
+    // Safely cleanup old image if replaced and no longer referenced
+    if (image && image !== existing.image) {
+      safeDeleteMediaFile(existing.image, { model: "blogPost", id: existing.id }).catch(() => { });
+    }
+
     try {
       revalidatePath("/");
       revalidatePath("/blog");
       revalidatePath(`/blog/${existing.slug}`);
-    } catch {}
+    } catch { }
 
     return NextResponse.json({ success: true, article: updated });
   } catch (error: any) {
@@ -123,16 +129,29 @@ export async function DELETE(
     }
 
     const { slug } = await params;
-    await prisma.blogPost.deleteMany({
+    const existing = await prisma.blogPost.findFirst({
       where: {
         OR: [{ id: slug }, { slug }],
       },
     });
 
+    if (!existing) {
+      return NextResponse.json({ error: "Article not found or already deleted." }, { status: 404 });
+    }
+
+    await prisma.blogPost.delete({
+      where: { id: existing.id },
+    });
+
+    // Safely cleanup media file if unreferenced elsewhere and not static
+    if (existing.image) {
+      safeDeleteMediaFile(existing.image, { model: "blogPost", id: existing.id }).catch(() => { });
+    }
+
     try {
       revalidatePath("/");
       revalidatePath("/blog");
-    } catch {}
+    } catch { }
 
     return NextResponse.json({ success: true, message: "Article successfully deleted." });
   } catch (error: any) {

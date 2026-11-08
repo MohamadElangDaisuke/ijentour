@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { safeDeleteMediaFile } from "@/lib/storage/mediaCleanup";
 
 export async function GET(
   request: NextRequest,
@@ -66,6 +67,11 @@ export async function PUT(
       data: dataToUpdate,
     });
 
+    // Safely cleanup old image if replaced and no longer referenced
+    if (dataToUpdate.image && dataToUpdate.image !== existing.image) {
+      safeDeleteMediaFile(existing.image, { model: "destination", id: existing.id }).catch(() => {});
+    }
+
     try {
       revalidatePath("/");
       revalidatePath("/destinations");
@@ -109,6 +115,11 @@ export async function DELETE(
     }
 
     await prisma.destination.delete({ where: { id: existing.id } });
+
+    // Safely cleanup media file if unreferenced elsewhere and not static
+    if (existing.image) {
+      safeDeleteMediaFile(existing.image, { model: "destination", id: existing.id }).catch(() => {});
+    }
 
     try {
       revalidatePath("/");

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, AnimatePresence, easeIn } from 'framer-motion';
 import { ArrowRight, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { TourPackage, defaultPackages, packagesStorageKey } from '../../lib/packagesStorage';
@@ -184,11 +185,13 @@ export default function PackagesSections() {
                   <CarouselItem key={pkg.id}>
                     <div className="p-1">
                       <div className="overflow-hidden rounded-2xl border border-secondary-200/90 bg-white shadow-md text-secondary-950">
-                        <div className="relative aspect-4/3 w-full bg-secondary-100">
-                          <img
+                        <div className="relative aspect-4/3 w-full bg-secondary-100 overflow-hidden">
+                          <Image
                             src={pkg.image || '/images/pkg-bluefire.png'}
                             alt={`${pkg.title} - Mount Ijen and Banyuwangi tour`}
-                            className="w-full h-full object-cover"
+                            fill
+                            sizes="(max-width: 640px) 100vw, 320px"
+                            className="object-cover"
                           />
                           <div className="absolute left-3 top-3 rounded-lg bg-white/95 px-3 py-1 text-[10px] font-bold text-secondary-950 shadow-xs">
                             {pkg.badge || 'Ijen escape'}
@@ -311,11 +314,13 @@ export default function PackagesSections() {
                   }}
                   className="absolute w-72 overflow-hidden rounded-2xl border border-secondary-100 bg-white shadow-xl shadow-secondary-900/10 cursor-pointer transform-gpu will-change-transform"
                 >
-                  <div className="relative aspect-4/3 w-full bg-secondary-100">
-                    <img
+                  <div className="relative aspect-4/3 w-full bg-secondary-100 overflow-hidden">
+                    <Image
                       src={pkg.image || '/images/pkg-bluefire.png'}
                       alt={`${pkg.title} - Mount Ijen and Banyuwangi tour`}
-                      className="w-full h-full object-cover"
+                      fill
+                      sizes="288px"
+                      className="object-cover"
                     />
                     <div className="absolute left-3 top-3 rounded-lg bg-white/95 px-3 py-1 text-[10px] font-bold text-secondary-950 shadow-xs">
                       {pkg.badge || 'Ijen escape'}

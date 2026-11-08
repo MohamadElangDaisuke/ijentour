@@ -28,17 +28,24 @@
     "lucide-react": "^0.454.0",
     "motion": "^13.1.1",
     "nanoid": "^5.0.9",
-    "next": "16.3.2",
+    "next": "^16.4.5",
     "prisma": "^5.22.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-icons": "^5.7.0",
     "react-markdown": "^10.1.0",
     "remark-gfm": "^4.0.1",
+    "sharp": "^0.35.5",
     "slugify": "^1.6.9",
     "tailwind-merge": "^3.6.0",
-    "zod": "^3.24.2",
+    "zod": "^4.6.7",
     "zustand": "^5.0.14"
+  },
+  "overrides": {
+    "source-map-js": "^1.2.2",
+    "@typescript-eslint/typescript-estree": {
+      "minimatch": "^11.0.5"
+    }
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -48,7 +55,7 @@
     "@types/react-dom": "^19",
     "daisyui": "^5.7.20",
     "eslint": "^9",
-    "eslint-config-next": "16.3.2",
+    "eslint-config-next": "^16.4.5",
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.3",

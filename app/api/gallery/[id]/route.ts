@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { safeDeleteMediaFile } from "@/lib/storage/mediaCleanup";
 
 export async function DELETE(
   request: Request,
@@ -19,6 +20,14 @@ export async function DELETE(
       return NextResponse.json({ error: "Gallery photo not found or already deleted." }, { status: 404 });
     }
     await prisma.galleryItem.delete({ where: { id } });
+
+    // Safely cleanup media file if unreferenced elsewhere and not static
+    if (existing.image) {
+      safeDeleteMediaFile(existing.image, { model: "galleryItem", id: existing.id }).catch(() => {});
+    }
+    if (existing.thumbnailUrl && existing.thumbnailUrl !== existing.image) {
+      safeDeleteMediaFile(existing.thumbnailUrl, { model: "galleryItem", id: existing.id }).catch(() => {});
+    }
 
     try {
       revalidatePath("/");

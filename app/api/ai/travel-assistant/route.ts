@@ -1,14 +1,14 @@
 import "dotenv/config";
 import { NextResponse } from "next/server";
-import { processChatbotMessage } from "@/lib/ruleEngine/engine";
-import { ConversationContext } from "@/lib/ruleEngine/types";
+import { processHybridChatMessage } from "@/lib/ai/chatbot/orchestrator";
+import { HybridConversationContext } from "@/lib/ai/chatbot/context";
 
 export const runtime = "nodejs";
 
-// Simple in-memory sliding window rate limiter (25 requests / minute / IP)
+// In-memory sliding window rate limiter (30 requests / minute / IP)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
-const MAX_REQUESTS_PER_WINDOW = 25;
+const MAX_REQUESTS_PER_WINDOW = 30;
 
 function isRateLimited(ip: string): boolean {
   const now = Date.now();
@@ -34,7 +34,7 @@ export interface ChatMessage {
 
 export interface TravelAssistantRequest {
   messages: ChatMessage[];
-  context?: ConversationContext;
+  context?: HybridConversationContext;
 }
 
 export async function POST(request: Request) {
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          error: "Rate limit reached. Please wait a moment before sending another message.",
+          error: "Rate limit reached. Please wait a moment before sending another inquiry.",
         },
         { status: 429 }
       );
@@ -61,7 +61,7 @@ export async function POST(request: Request) {
       body = await request.json();
     } catch {
       return NextResponse.json(
-        { success: false, error: "Invalid JSON request body." },
+        { success: false, error: "Invalid JSON request payload." },
         { status: 400 }
       );
     }
@@ -74,10 +74,10 @@ export async function POST(request: Request) {
       );
     }
 
-    // Sanitize conversation history to prevent ballooning payload
+    // Sanitize conversation history to prevent payload ballooning
     const sanitizedMessages = messages.slice(-10).map((m) => ({
       role: m.role === "assistant" ? ("assistant" as const) : ("user" as const),
-      content: String(m.content || "").slice(0, 1000).trim(),
+      content: String(m.content || "").slice(0, 1500).trim(),
     }));
 
     const lastUserMsg = sanitizedMessages
@@ -87,29 +87,30 @@ export async function POST(request: Request) {
 
     if (!lastUserMsg || !lastUserMsg.content) {
       return NextResponse.json(
-        { success: false, error: "No user question found." },
+        { success: false, error: "No user question found in request." },
         { status: 400 }
       );
     }
 
-    // 3. Process via Strictly Rule-Based Engine (NO generative AI, 100% DB-driven)
-    const result = await processChatbotMessage({
+    // 3. Process via Full Hybrid AI Orchestrator
+    const result = await processHybridChatMessage({
       messages: sanitizedMessages,
       context,
     });
 
     return NextResponse.json({
-      success: true,
+      success: result.success,
       message: result.message,
       recommendedPackages: result.recommendedPackages || [],
       comparisonPackages: result.comparisonPackages || [],
       customTrip: result.customTrip || null,
       suggestedPrompts: result.suggestedPrompts || [],
+      handoff: result.handoff || null,
       context: result.context,
-      source: "rule_based_database",
+      source: result.source,
     });
   } catch (error: any) {
-    console.error("[Rule-Based Chatbot] Error processing message:", error);
+    console.error("[Full Hybrid Chatbot API] Unexpected error:", error);
     return NextResponse.json(
       {
         success: false,

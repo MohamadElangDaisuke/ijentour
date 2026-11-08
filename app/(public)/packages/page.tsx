@@ -263,7 +263,7 @@ function PackagesContent() {
                     </div>
                     <div className="flex items-center gap-1.5">
                       <Link
-                        href={`/packages/${pkg.id}`}
+                        href={`/packages/${pkg.slug || pkg.id}`}
                         onClick={(e) => e.stopPropagation()}
                         title="View package details"
                         className="text-xs font-bold px-2.5 py-1.5 rounded-lg border border-secondary-200 text-secondary-700 hover:bg-secondary-100 hover:text-secondary-950 transition flex items-center gap-1"
@@ -350,10 +350,13 @@ function PackagesContent() {
               <div className="bg-white p-6 rounded-3xl shadow-sm border border-secondary-100">
                 <h3 className="font-black text-secondary-950 mb-4 text-lg">Included</h3>
                 <ul className="space-y-3">
-                  {["Roundtrip AC Transportation", "Entrance & Conservation Tickets", "Licensed Local Guide", "Medical Respirator Gas Mask", "Bottled Water & First Aid"].map((item, i) => (
+                  {(activePackage.included && activePackage.included.length > 0
+                    ? activePackage.included
+                    : ["Official Entrance & Conservation Tickets", "Licensed Local Guide", "Respirator Gas Mask", "Bottled Water & First Aid"]
+                  ).map((item, i) => (
                     <li key={i} className="flex items-start text-sm text-secondary-700">
-                      <Check size={18} className="text-secondary-600 mr-2 shrink-0" />
-                      {item}
+                      <Check size={18} className="text-emerald-600 mr-2 shrink-0" />
+                      {typeof item === "string" ? item : (item as any)?.item || ""}
                     </li>
                   ))}
                 </ul>
@@ -361,10 +364,13 @@ function PackagesContent() {
               <div className="bg-white p-6 rounded-3xl shadow-sm border border-secondary-100">
                 <h3 className="font-black text-secondary-950 mb-4 text-lg">Excluded</h3>
                 <ul className="space-y-3">
-                  {["Personal Expenses", "Guide Gratuity / Tip (Optional)", "Personal Meals & Snacks", "Crater Trolley Taxi (If Needed)"].map((item, i) => (
+                  {(activePackage.excluded && activePackage.excluded.length > 0
+                    ? activePackage.excluded
+                    : ["Personal Expenses", "Guide Gratuity / Tip (Optional)", "Crater Trolley Taxi (If Needed)"]
+                  ).map((item, i) => (
                     <li key={i} className="flex items-start text-sm text-secondary-700">
-                      <XCircle size={18} className="text-primary-600 mr-2 shrink-0" />
-                      {item}
+                      <XCircle size={18} className="text-rose-500 mr-2 shrink-0" />
+                      {typeof item === "string" ? item : (item as any)?.item || ""}
                     </li>
                   ))}
                 </ul>
@@ -509,7 +515,7 @@ function PackagesContent() {
               </button>
 
               <Link
-                href={`/packages/${activePackage.id}`}
+                href={`/packages/${activePackage.slug || activePackage.id}`}
                 className="w-full mt-3 border border-secondary-300 hover:border-primary-500 hover:bg-primary-50 text-secondary-900 font-bold py-3 rounded-2xl transition duration-200 flex items-center justify-center space-x-1.5 text-xs text-center"
               >
                 <span>View Full Details & Itinerary</span>

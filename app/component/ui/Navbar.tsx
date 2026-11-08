@@ -77,6 +77,7 @@ export default function Navbar() {
 
   // Check if item or any of its children is currently active
   const isItemActive = (item: NavDropdownItem): boolean => {
+    if (!pathname) return false
     if (item.href) {
       return item.href === '/'
         ? pathname === '/'

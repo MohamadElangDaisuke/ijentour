@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -48,6 +49,18 @@ model TripPackage {
   altitude             String?  @default("2.769 mdpl")
   meetingPoint         String?  @default("Banyuwangi")
   departureTime        String?  @default("00:00 WIB")
+  pickupArea           String?  @default("Banyuwangi City Area & Surrounds")
+  safetyInfo           String?
+  importantNotes       String?
+  recommendedAge       String?  @default("7 - 65 Tahun")
+  currency             String   @default("IDR")
+  pricingUnit          String   @default("per orang")
+  discountPrice        Float?
+  priceNotes           String?
+  packageType          String?  @default("Open Trip")
+  metaTitle            String?
+  metaDescription      String?
+  ogImage              String?
   badge                String?  @default("Best Seller")
   rating               Float    @default(5.0)
   savedCount           String?  @default("1.500K")
@@ -56,13 +69,14 @@ model TripPackage {
   isFeatured           Boolean  @default(true)
   isActive             Boolean  @default(true)
   coverImage           String
-  galleryImages        String   @default("[]") // JSON string array of URLs
+  galleryImages        String   @default("[]") // JSON string array of URLs or {url, alt}
   highlights           String   @default("[]") // JSON string array
   includedItems        String   @default("[]") // JSON string array
   excludedItems        String   @default("[]") // JSON string array
   packingList          String   @default("[]") // JSON string array of objects/items
   faqs                 String   @default("[]") // JSON string array of {q, a}
-  itineraries          String   @default("[]") // JSON string array of {day, title, desc}
+  itineraries          String   @default("[]") // JSON string array of {day, title, desc, ...}
+  addons               String   @default("[]") // JSON string array of addon objects
   sortOrder            Int      @default(0)
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt

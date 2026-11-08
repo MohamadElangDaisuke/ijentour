@@ -6,7 +6,7 @@ import { X, Loader2, Plus, AlertCircle } from "lucide-react";
 interface MultiImageUploadProps {
   value: string[];
   onChange: (urls: string[]) => void;
-  folder?: "trips" | "gallery" | "blog" | "destinations" | "general";
+  folder?: "packages" | "trips" | "gallery" | "blog" | "destinations" | "avatars" | "reviews" | "general";
   label?: string;
   maxFiles?: number;
 }

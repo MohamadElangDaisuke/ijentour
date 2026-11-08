@@ -20,17 +20,15 @@ import {
   HelpCircle,
   ArrowRight,
   Flame,
-  Maximize2
+  Maximize2,
+  Info,
+  Car
 } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { getWhatsAppLink } from '@/lib/whatsapp';
 import { useBookingModal } from '@/lib/bookingModalStore';
-import {
-  TourPackage,
-  defaultPackages,
-  packagesStorageKey,
-  getPackageByIdFromList
-} from '../../../lib/packagesStorage';
+import { TourPackage, defaultPackages } from '../../../lib/packagesStorage';
+import { Skeleton } from '@/app/component/ui/skeleton';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -41,7 +39,9 @@ export default function PackageDetailPage({ params }: PageProps) {
   const packageId = resolvedParams.id;
   const { openBookingModal } = useBookingModal();
 
-  const [packagesData, setPackagesData] = useState<TourPackage[]>(defaultPackages);
+  const [loading, setLoading] = useState(true);
+  const [currentPkg, setCurrentPkg] = useState<any>(null);
+  const [relatedPackages, setRelatedPackages] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<'overview' | 'itinerary' | 'facilities' | 'packing' | 'faq'>('overview');
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
@@ -51,11 +51,7 @@ export default function PackageDetailPage({ params }: PageProps) {
   // Booking Calculator State
   const [selectedPax, setSelectedPax] = useState<number>(2);
   const [selectedDate, setSelectedDate] = useState<string>('');
-  const [selectedAddons, setSelectedAddons] = useState<{ [key: string]: boolean }>({
-    trolley: false,
-    drone: false,
-    pickup: false
-  });
+  const [selectedAddons, setSelectedAddons] = useState<{ [key: string]: boolean }>({});
 
   // Online Booking Modal State
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
@@ -68,42 +64,48 @@ export default function PackageDetailPage({ params }: PageProps) {
   const [bookingError, setBookingError] = useState('');
   const [confirmedBooking, setConfirmedBooking] = useState<any>(null);
 
-  // Load from API and fallback to localStorage / defaultPackages
+  // Load package from API by id or slug
   useEffect(() => {
-    // 1. Fetch package detail from real DB
+    setLoading(true);
     fetch(`/api/trips/${packageId}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success && data.package) {
-          setPackagesData((prev) => {
-            const index = prev.findIndex((p) => p.id === data.package.id || p.id === packageId);
-            if (index >= 0) {
-              const copy = [...prev];
-              copy[index] = data.package;
-              return copy;
-            }
-            return [data.package, ...prev];
-          });
+          setCurrentPkg(data.package);
+          if (data.package.pickupArea) {
+            setPickupLocation(data.package.pickupArea);
+          }
+        } else {
+          // Check fallback memory packages if DB returns 404
+          const norm = packageId.toLowerCase().trim();
+          const fallback = defaultPackages.find(
+            (p) =>
+              p.id.toLowerCase() === norm ||
+              (p.slug && p.slug.toLowerCase() === norm) ||
+              p.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').includes(norm)
+          );
+          if (fallback) {
+            setCurrentPkg(fallback);
+          }
         }
       })
-      .catch(() => { });
+      .catch((err) => {
+        console.error('Failed to load package:', err);
+      })
+      .finally(() => setLoading(false));
 
-    // 2. Load from localStorage if present
-    const saved = window.localStorage.getItem(packagesStorageKey);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setPackagesData((prev) => {
-            const existingIds = new Set(prev.map((p) => p.id));
-            const newFromSaved = parsed.filter((p: any) => !existingIds.has(p.id));
-            return [...prev, ...newFromSaved];
-          });
+    // Load related packages
+    fetch('/api/trips')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.packages)) {
+          const others = data.packages.filter(
+            (p: any) => p.id !== packageId && p.slug !== packageId
+          ).slice(0, 3);
+          setRelatedPackages(others);
         }
-      } catch (e) {
-        console.error('Failed to load packages from localStorage:', e);
-      }
-    }
+      })
+      .catch(() => {});
   }, [packageId]);
 
   // Set default tomorrow date for booking
@@ -114,7 +116,21 @@ export default function PackageDetailPage({ params }: PageProps) {
     setSelectedDate(dateStr);
   }, []);
 
-  const currentPkg = getPackageByIdFromList(packagesData, packageId);
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-secondary-50 text-secondary-950 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
+        <Skeleton className="w-48 h-6" rounded="lg" />
+        <div className="space-y-4">
+          <Skeleton className="w-32 h-6" rounded="full" />
+          <Skeleton className="w-3/4 h-12" rounded="2xl" />
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <Skeleton className="lg:col-span-8 h-96" rounded="3xl" />
+          <Skeleton className="lg:col-span-4 h-96" rounded="3xl" />
+        </div>
+      </div>
+    );
+  }
 
   if (!currentPkg) {
     return (
@@ -123,91 +139,86 @@ export default function PackageDetailPage({ params }: PageProps) {
           <div className="w-16 h-16 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <AlertCircle className="w-8 h-8" />
           </div>
-          <h1 className="text-2xl font-black mb-2 text-secondary-950">Package Not Found</h1>
+          <h1 className="text-2xl font-black mb-2 text-secondary-950">Paket Tidak Ditemukan</h1>
           <p className="text-secondary-600 text-sm mb-6 leading-relaxed">
-            Sorry, the tour package you are looking for is unavailable or has been relocated.
+            Maaf, paket tur yang Anda cari tidak tersedia, belum dipublikasikan, atau telah dipindahkan.
           </p>
           <Link
             href="/packages"
             className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-2xl bg-primary-500 hover:bg-primary-400 text-secondary-950 font-bold transition-all shadow-md"
           >
-            View All Packages <ArrowRight className="w-4 h-4" />
+            Lihat Semua Paket <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </div>
     );
   }
 
-  // Parse base price into integer
-  const cleanPrice = parseInt(currentPkg.price.replace(/[^0-9]/g, ''), 10) || 750000;
+  // Parse price into number
+  const cleanPrice =
+    currentPkg.basePrice ||
+    parseInt((currentPkg.price || '750000').replace(/[^0-9]/g, ''), 10) ||
+    750000;
 
-  // Addon prices
-  const ADDONS = [
-    { id: 'trolley', name: 'Kawah Ijen Trolley Taxi (Roundtrip)', price: 800000, note: 'For guests wishing to save physical energy' },
-    { id: 'drone', name: '4K Drone & Camera Documentation', price: 650000, note: 'Cinematic video highlights + high-resolution photos' },
-    { id: 'pickup', name: 'Juanda / Surabaya / Malang Airport Transfer', price: 600000, note: 'Private car transfer via intercity highway' }
-  ];
+  // Dynamic Addons from DB
+  const rawAddons = Array.isArray(currentPkg.addons) && currentPkg.addons.length > 0
+    ? currentPkg.addons.filter((a: any) => a.isActive !== false)
+    : [
+        { id: 'trolley', name: 'Kawah Ijen Trolley Taxi (PP)', price: 800000, description: 'Layanan becak dorong tradisional oleh penambang lokal' },
+        { id: 'drone', name: 'Dokumentasi Drone & Kamera 4K', price: 650000, description: 'Video sinematik highlight + foto resolusi tinggi' },
+        { id: 'pickup', name: 'Antar-Jemput Bandara Juanda Surabaya / Malang', price: 600000, description: 'Private car transfer via tol langsung ke Banyuwangi' },
+      ];
 
   let calculatedAddonTotal = 0;
-  ADDONS.forEach((addon) => {
+  rawAddons.forEach((addon: any) => {
     if (selectedAddons[addon.id]) {
-      calculatedAddonTotal += addon.price;
+      calculatedAddonTotal += Number(addon.price) || 0;
     }
   });
 
   const totalPrice = cleanPrice * selectedPax + calculatedAddonTotal;
-
   const formattedTotal = new Intl.NumberFormat('id-ID', {
     style: 'currency',
-    currency: 'IDR',
-    maximumFractionDigits: 0
+    currency: currentPkg.currency || 'IDR',
+    maximumFractionDigits: 0,
   }).format(totalPrice);
 
-  const galleryList = currentPkg.gallery && currentPkg.gallery.length > 0
+  // Gallery List
+  const rawGalleryList = Array.isArray(currentPkg.gallery) && currentPkg.gallery.length > 0
     ? currentPkg.gallery
-    : [
-      currentPkg.image || '/images/pkg-bluefire.png',
-      '/images/the-best-view-of-kawah.webp',
-      '/images/pkg-crater.png',
-      '/images/pkg-waterfall.png'
-    ];
+    : Array.isArray(currentPkg.galleryImages)
+    ? currentPkg.galleryImages.map((g: any) => (typeof g === "string" ? g : g?.url || ""))
+    : [currentPkg.coverImage || currentPkg.image || '/images/pkg-bluefire.png'];
 
-  const activePhoto = galleryList[activeImageIndex] || galleryList[0];
+  const galleryList = rawGalleryList.filter(Boolean);
+  const activePhoto = galleryList[activeImageIndex] || galleryList[0] || '/images/pkg-bluefire.png';
 
   const handleShare = () => {
-    if (typeof window !== 'undefined') {
-      if (navigator.share) {
-        navigator.share({
-          title: currentPkg.title,
-          text: `Check out ${currentPkg.title} at Ijen Tour Banyuwangi!`,
-          url: window.location.href
-        }).catch(() => { });
-      } else {
-        navigator.clipboard.writeText(window.location.href);
-        setCopiedLink(true);
-        setTimeout(() => setCopiedLink(false), 2500);
-      }
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(window.location.href);
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2500);
     }
   };
 
   const handleWhatsAppBooking = () => {
-    const selectedAddonNames = ADDONS
-      .filter((a) => selectedAddons[a.id])
-      .map((a) => a.name)
+    const selectedAddonNames = rawAddons
+      .filter((a: any) => selectedAddons[a.id])
+      .map((a: any) => `${a.name} (Rp ${Number(a.price).toLocaleString('id-ID')})`)
       .join(', ');
 
     openBookingModal({
       packageName: currentPkg.title,
       tourDate: selectedDate || '',
       participants: selectedPax,
-      specialRequests: selectedAddonNames ? `Additional add-ons: ${selectedAddonNames}` : '',
+      specialRequests: selectedAddonNames ? `Tambahan Add-ons: ${selectedAddonNames}` : '',
     });
   };
 
   const handleOnlineBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!customerName || !whatsappNumber) {
-      setBookingError('Please provide your full name and WhatsApp phone number.');
+      setBookingError('Mohon isi nama lengkap dan nomor WhatsApp aktif Anda.');
       return;
     }
 
@@ -215,9 +226,13 @@ export default function PackageDetailPage({ params }: PageProps) {
     setBookingError('');
 
     try {
-      const activeAddonsList = ADDONS
-        .filter((a) => selectedAddons[a.id])
-        .map((a) => ({ id: a.id, name: a.name, price: a.price }));
+      const activeAddonsList = rawAddons
+        .filter((a: any) => selectedAddons[a.id])
+        .map((a: any) => ({
+          id: a.id,
+          name: a.name,
+          price: Number(a.price) || 0,
+        }));
 
       const res = await fetch('/api/bookings', {
         method: 'POST',
@@ -233,6 +248,8 @@ export default function PackageDetailPage({ params }: PageProps) {
           numParticipants: selectedPax,
           basePrice: cleanPrice,
           addons: activeAddonsList,
+          addonTotal: calculatedAddonTotal,
+          totalPrice,
           pickupLocation,
           specialRequests,
         }),
@@ -240,62 +257,61 @@ export default function PackageDetailPage({ params }: PageProps) {
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || 'Failed to process reservation.');
+        throw new Error(data.error || 'Gagal memproses reservasi.');
       }
 
       setConfirmedBooking(data.booking);
       setIsBookingModalOpen(false);
     } catch (err: any) {
-      setBookingError(err.message || 'A system error occurred, please try again.');
+      setBookingError(err.message || 'Terjadi kesalahan sistem, silakan coba lagi.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const relatedPackages = packagesData.filter((p) => p.id !== currentPkg.id).slice(0, 3);
-
   return (
     <div className="bg-secondary-50 text-secondary-950 min-h-screen pb-24 selection:bg-primary-500 selection:text-secondary-950">
-
-      {/* BREADCRUMBS & TOP ACTION BAR */}
+      {/* BREADCRUMBS & TOP BAR */}
       <div className="border-b border-secondary-200/80 bg-white/70 backdrop-blur-md sticky top-16 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
           <nav className="flex items-center space-x-2 text-xs sm:text-sm text-secondary-600 font-medium overflow-x-auto whitespace-nowrap py-1">
-            <Link href="/" className="hover:text-primary-600 transition-colors">Home</Link>
+            <Link href="/" className="hover:text-primary-600 transition-colors">Beranda</Link>
             <ChevronRight className="w-3.5 h-3.5 text-secondary-400 shrink-0" />
-            <Link href="/packages" className="hover:text-primary-600 transition-colors">Tour Packages</Link>
+            <Link href="/packages" className="hover:text-primary-600 transition-colors">Paket Wisata</Link>
             <ChevronRight className="w-3.5 h-3.5 text-secondary-400 shrink-0" />
-            <span className="text-secondary-950 font-bold truncate max-w-50 sm:max-w-xs">{currentPkg.title}</span>
+            <span className="text-secondary-950 font-bold truncate max-w-40 sm:max-w-xs">{currentPkg.title}</span>
           </nav>
 
           <div className="flex items-center gap-2">
             <button
               onClick={handleShare}
               className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold border border-secondary-300 hover:border-primary-500 hover:bg-primary-50 text-secondary-800 transition-all cursor-pointer shadow-2xs"
-              title="Share this package"
+              title="Bagikan paket wisata ini"
             >
               <Share2 className="w-3.5 h-3.5 text-primary-600" />
-              <span>{copiedLink ? 'Link Copied! ✓' : 'Share'}</span>
+              <span>{copiedLink ? 'Link Tersalin! ✓' : 'Bagikan'}</span>
             </button>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8">
-
         {/* PACKAGE HEADER TITLE & BADGES */}
         <div className="mb-6 sm:mb-8">
           <div className="flex flex-wrap items-center gap-2.5 mb-3">
             <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-primary-500 text-secondary-950 shadow-sm">
               <Flame className="w-3.5 h-3.5" />
-              {currentPkg.badge || 'Recommended Tour'}
+              {currentPkg.badge || 'Paket Pilihan'}
             </span>
             <span className="px-3 py-1 rounded-full text-xs font-bold bg-secondary-100 text-secondary-800 border border-secondary-200 capitalize">
               {currentPkg.category === 'midnight' ? '🌙 Midnight Trip' : currentPkg.category === 'private' ? '👑 Private Tour' : '🎒 Regular Tour'}
             </span>
+            <span className="px-3 py-1 rounded-full text-xs font-bold bg-secondary-100 text-secondary-800 border border-secondary-200">
+              {currentPkg.packageType || 'Open Trip'}
+            </span>
             {currentPkg.isTrending && (
               <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                🔥 Most Popular
+                🔥 Paling Diminati
               </span>
             )}
           </div>
@@ -313,17 +329,17 @@ export default function PackageDetailPage({ params }: PageProps) {
                 />
               ))}
               <span className="text-secondary-950 font-bold ml-1">{(currentPkg.rating || 5.0).toFixed(1)}</span>
-              <span className="text-secondary-500 font-normal">({currentPkg.savedCount || '4.1K+'} reviews & favorites)</span>
+              <span className="text-secondary-500 font-normal">({currentPkg.savedCount || '1.5K+'} ulasan & favorit)</span>
             </div>
             <span className="hidden sm:inline text-secondary-300">•</span>
             <div className="flex items-center gap-1.5 text-secondary-700">
               <Clock className="w-4 h-4 text-primary-600" />
-              <span>Duration: <strong>{currentPkg.duration}</strong></span>
+              <span>Durasi: <strong>{currentPkg.duration}</strong></span>
             </div>
             <span className="hidden sm:inline text-secondary-300">•</span>
             <div className="flex items-center gap-1.5 text-secondary-700">
               <MapPin className="w-4 h-4 text-primary-600" />
-              <span>Kawah Ijen, Banyuwangi</span>
+              <span>{currentPkg.meetingPoint || 'Kawah Ijen, Banyuwangi'}</span>
             </div>
           </div>
         </div>
@@ -334,44 +350,43 @@ export default function PackageDetailPage({ params }: PageProps) {
           <div className="lg:col-span-8 relative aspect-16/10 rounded-3xl overflow-hidden bg-secondary-900 border border-secondary-200 shadow-xl group">
             <img
               src={activePhoto}
-              alt={`${currentPkg.title} - Main photo`}
+              alt={`${currentPkg.title} - Foto utama`}
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-secondary-950/70 via-transparent to-black/20 pointer-events-none" />
 
-            {/* Expand Image Button */}
             <button
               onClick={() => setIsLightboxOpen(true)}
               className="absolute bottom-4 right-4 z-10 flex items-center gap-2 bg-secondary-950/80 hover:bg-secondary-950 text-white backdrop-blur-md px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-lg hover:scale-105"
             >
               <Maximize2 className="w-4 h-4 text-primary-400" />
-              <span>View Full Photo</span>
+              <span>Lihat Foto Penuh</span>
             </button>
 
-            {/* Quick Tag */}
-            <div className="absolute top-4 left-4 z-10 bg-white/90 backdrop-blur-md px-3.5 py-1.5 rounded-xl text-xs font-black text-secondary-950 shadow-md">
-              From {currentPkg.price} / person
+            <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-xl text-xs font-black text-secondary-950 shadow-md">
+              Mulai {currentPkg.price || `Rp ${cleanPrice.toLocaleString('id-ID')}`} {currentPkg.pricingUnit ? `/ ${currentPkg.pricingUnit}` : '/ orang'}
             </div>
           </div>
 
           {/* Side Thumbnail List */}
           <div className="lg:col-span-4 grid grid-cols-2 lg:grid-cols-1 gap-3.5">
-            {galleryList.slice(0, 4).map((imgUrl, idx) => (
+            {galleryList.slice(0, 4).map((imgUrl: string, idx: number) => (
               <div
                 key={idx}
                 onClick={() => setActiveImageIndex(idx)}
-                className={`relative aspect-16/9 lg:aspect-auto lg:h-27 rounded-2xl overflow-hidden border-2 cursor-pointer transition-all shadow-sm ${activeImageIndex === idx
+                className={`relative aspect-16/9 lg:aspect-auto lg:h-27 rounded-2xl overflow-hidden border-2 cursor-pointer transition-all shadow-sm ${
+                  activeImageIndex === idx
                     ? 'border-primary-500 ring-3 ring-primary-500/30 scale-[1.02]'
                     : 'border-white/80 hover:border-secondary-300 opacity-80 hover:opacity-100'
-                  }`}
+                }`}
               >
                 <img
                   src={imgUrl}
-                  alt={`Gallery ${idx + 1}`}
+                  alt={`Galeri ${idx + 1}`}
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute bottom-2 left-2 bg-secondary-950/70 text-white text-[10px] font-bold px-2 py-0.5 rounded-md backdrop-blur-xs">
-                  Photo {idx + 1}
+                  Foto {idx + 1}
                 </div>
               </div>
             ))}
@@ -381,12 +396,12 @@ export default function PackageDetailPage({ params }: PageProps) {
         {/* QUICK SPECIFICATIONS MATRIX */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 mb-12">
           {[
-            { label: 'Duration', value: currentPkg.duration, icon: Clock },
-            { label: 'Altitude', value: currentPkg.altitude || '2,769 masl', icon: Compass },
-            { label: 'Fitness Level', value: currentPkg.difficulty || 'Moderate (3 Km)', icon: Sparkles },
-            { label: 'Start Time', value: currentPkg.departureTime || '00:00 AM WIB', icon: Calendar },
-            { label: 'Group', value: currentPkg.groupSize || 'Private & Open', icon: Users },
-            { label: 'Languages', value: (currentPkg.languages || ['ID', 'EN']).join(' / '), icon: ShieldCheck }
+            { label: 'Durasi', value: currentPkg.duration, icon: Clock },
+            { label: 'Ketinggian', value: currentPkg.altitude || '2.769 mdpl', icon: Compass },
+            { label: 'Tingkat Fisik', value: currentPkg.difficulty || 'Sedang (3 Km)', icon: Sparkles },
+            { label: 'Waktu Berangkat', value: currentPkg.departureTime || '00:00 WIB', icon: Calendar },
+            { label: 'Peserta', value: `${currentPkg.minParticipants || 1} - ${currentPkg.maxParticipants || 15} Pax`, icon: Users },
+            { label: 'Meeting Point', value: currentPkg.meetingPoint || 'Banyuwangi', icon: MapPin },
           ].map((item, idx) => {
             const IconComp = item.icon;
             return (
@@ -398,34 +413,35 @@ export default function PackageDetailPage({ params }: PageProps) {
                   <IconComp className="w-4 h-4 shrink-0" />
                   <span className="text-[11px] font-bold uppercase tracking-wider text-secondary-500">{item.label}</span>
                 </div>
-                <p className="text-xs sm:text-sm font-extrabold text-secondary-950 leading-snug">{item.value}</p>
+                <p className="text-xs sm:text-sm font-extrabold text-secondary-950 leading-snug truncate" title={item.value}>
+                  {item.value}
+                </p>
               </div>
             );
           })}
         </div>
 
-        {/* MAIN BODY: LEFT CONTENT (TABS & SECTIONS) & RIGHT BOOKING STICKY SIDEBAR */}
+        {/* MAIN BODY: LEFT CONTENT & RIGHT BOOKING STICKY SIDEBAR */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-
-          {/* LEFT 8 COLUMNS: INTERACTIVE TABS & CONTENT */}
+          {/* LEFT 8 COLUMNS: TABS & CONTENT */}
           <div className="lg:col-span-8 space-y-8">
-
             {/* TABS SELECTOR */}
-            <div className="flex items-center gap-2 border-b border-secondary-200/80 overflow-x-auto pb-px">
+            <div className="flex items-center gap-2 border-b border-secondary-200/80 overflow-x-auto pb-px no-scrollbar">
               {[
-                { id: 'overview', label: '✨ Overview' },
-                { id: 'itinerary', label: '🗺️ Itinerary' },
-                { id: 'facilities', label: '✅ Inclusions' },
-                { id: 'packing', label: '🎒 Packing List' },
-                { id: 'faq', label: '❓ FAQ' }
+                { id: 'overview', label: '✨ Ringkasan' },
+                { id: 'itinerary', label: '🗺️ Jadwal Itinerary' },
+                { id: 'facilities', label: '✅ Fasilitas' },
+                { id: 'packing', label: '🎒 Perlengkapan' },
+                { id: 'faq', label: '❓ FAQ Paket' },
               ].map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`px-4 py-3 text-xs sm:text-sm font-extrabold transition-all border-b-2 whitespace-nowrap cursor-pointer ${activeTab === tab.id
+                  className={`px-4 py-3 text-xs sm:text-sm font-extrabold transition-all border-b-2 whitespace-nowrap cursor-pointer ${
+                    activeTab === tab.id
                       ? 'border-primary-500 text-primary-700 bg-primary-50/50 rounded-t-xl'
                       : 'border-transparent text-secondary-600 hover:text-secondary-950 hover:border-secondary-300'
-                    }`}
+                  }`}
                 >
                   {tab.label}
                 </button>
@@ -438,41 +454,39 @@ export default function PackageDetailPage({ params }: PageProps) {
                 {/* Description Narrative */}
                 <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-sm space-y-4">
                   <h3 className="text-xl sm:text-2xl font-black text-secondary-950">
-                    About This Tour
+                    Tentang Paket Ini
                   </h3>
-                  <p className="text-secondary-700 text-sm sm:text-base leading-relaxed">
-                    {currentPkg.description ||
-                      `Experience an unforgettable adventure at Kawah Ijen with ${currentPkg.title}. We prioritize comfort, top-level safety, and authentic local sulfur miner guides ready to escort you through the natural wonders of Banyuwangi.`}
-                  </p>
-                  <p className="text-secondary-700 text-sm sm:text-base leading-relaxed">
-                    From pickup to return, all logistics, entrance tickets, visitor insurance, and protective equipment are professionally arranged for a trip of a lifetime.
+                  <p className="text-secondary-700 text-sm sm:text-base leading-relaxed whitespace-pre-line">
+                    {currentPkg.description}
                   </p>
                 </div>
 
-                {/* Key Highlights Grid */}
-                <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-sm">
-                  <div className="flex items-center gap-2 text-primary-600 font-bold text-xs uppercase tracking-wider mb-2">
-                    <Sparkles className="w-4 h-4" /> Selected Highlights
-                  </div>
-                  <h3 className="text-xl sm:text-2xl font-black text-secondary-950 mb-6">
-                    Tour Highlights
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {currentPkg.highlights.map((highlight, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-start gap-3.5 p-4 rounded-2xl bg-secondary-50 border border-secondary-200/60 hover:border-primary-400 hover:bg-primary-50/20 transition-all"
-                      >
-                        <div className="w-6 h-6 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center shrink-0 mt-0.5 font-black text-xs">
-                          ✓
+                {/* Highlights Grid */}
+                {Array.isArray(currentPkg.highlights) && currentPkg.highlights.length > 0 && (
+                  <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-sm">
+                    <div className="flex items-center gap-2 text-primary-600 font-bold text-xs uppercase tracking-wider mb-2">
+                      <Sparkles className="w-4 h-4" /> Sorotan Wisata
+                    </div>
+                    <h3 className="text-xl sm:text-2xl font-black text-secondary-950 mb-6">
+                      Daya Tarik Utama
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {currentPkg.highlights.map((highlight: string, idx: number) => (
+                        <div
+                          key={idx}
+                          className="flex items-start gap-3.5 p-4 rounded-2xl bg-secondary-50 border border-secondary-200/60 hover:border-primary-400 hover:bg-primary-50/20 transition-all"
+                        >
+                          <div className="w-6 h-6 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center shrink-0 mt-0.5 font-black text-xs">
+                            ✓
+                          </div>
+                          <span className="text-xs sm:text-sm font-bold text-secondary-900 leading-snug">
+                            {highlight}
+                          </span>
                         </div>
-                        <span className="text-xs sm:text-sm font-bold text-secondary-900 leading-snug">
-                          {highlight}
-                        </span>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Safety & Meeting Point Card */}
                 <div className="bg-linear-to-br from-primary-500/10 via-white to-secondary-100 rounded-3xl p-6 sm:p-8 border border-primary-200/80 shadow-sm">
@@ -480,24 +494,43 @@ export default function PackageDetailPage({ params }: PageProps) {
                     <div className="w-12 h-12 rounded-2xl bg-primary-500 text-secondary-950 flex items-center justify-center shrink-0 shadow-md">
                       <ShieldCheck className="w-6 h-6" />
                     </div>
-                    <div>
-                      <h4 className="text-base sm:text-lg font-black text-secondary-950 mb-1">
-                        Top Safety & Comfort Standards
+                    <div className="space-y-3">
+                      <h4 className="text-base sm:text-lg font-black text-secondary-950">
+                        Standar Keselamatan & Kenyamanan Terbaik
                       </h4>
                       <p className="text-xs sm:text-sm text-secondary-700 leading-relaxed">
-                        Every participant is equipped with a specialized respirator gas mask compliant with BKSDA standards to filter crater volcanic fumes. Our certified guides carry emergency oxygen cylinders and first aid kits.
+                        {currentPkg.safetyInfo ||
+                          'Setiap peserta dibekali masker respirator gas khusus standar BKSDA untuk menyaring asap belerang kawah. Pemandu berlisensi kami membawa tabung oksigen darurat dan perlengkapan P3K.'}
                       </p>
-                      <div className="mt-4 flex flex-wrap items-center gap-4 text-xs font-bold text-secondary-800">
+
+                      <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-secondary-800 pt-1">
                         <span className="flex items-center gap-1.5">
-                          <Check className="w-4 h-4 text-emerald-600" /> Free Pickup Banyuwangi Area
+                          <Check className="w-4 h-4 text-emerald-600" /> Antar-Jemput: {currentPkg.pickupArea || 'Area Banyuwangi'}
                         </span>
                         <span className="flex items-center gap-1.5">
-                          <Check className="w-4 h-4 text-emerald-600" /> Travel Insurance Included
+                          <Check className="w-4 h-4 text-emerald-600" /> Asuransi Pengunjung Resmi
                         </span>
                       </div>
                     </div>
                   </div>
                 </div>
+
+                {/* Important Notes if provided */}
+                {currentPkg.importantNotes && (
+                  <div className="bg-amber-50/60 border border-amber-200 rounded-3xl p-6 sm:p-8 text-secondary-950">
+                    <div className="flex items-start gap-3">
+                      <Info className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                      <div>
+                        <h4 className="text-sm font-black text-amber-900 uppercase tracking-wider mb-1">
+                          Catatan Penting Perjalanan
+                        </h4>
+                        <p className="text-xs sm:text-sm text-amber-800 leading-relaxed whitespace-pre-line">
+                          {currentPkg.importantNotes}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
@@ -505,35 +538,52 @@ export default function PackageDetailPage({ params }: PageProps) {
             {activeTab === 'itinerary' && (
               <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-sm animate-fadeIn">
                 <div className="mb-6">
-                  <span className="text-xs font-bold uppercase tracking-wider text-primary-600">Tour Itinerary</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-primary-600">Rangkaian Perjalanan</span>
                   <h3 className="text-xl sm:text-2xl font-black text-secondary-950 mt-1">
-                    Full Schedule & Route (Itinerary)
+                    Jadwal & Rute Lengkap (Itinerary)
                   </h3>
                   <p className="text-xs sm:text-sm text-secondary-600 mt-1">
-                    Schedule is flexible and may adjust based on weather conditions and group trekking pace.
+                    Jadwal fleksibel menyesuaikan kondisi cuaca dan ritme trekking wisatawan.
                   </p>
                 </div>
 
-                <div className="relative border-l-2 border-primary-400/50 ml-4 sm:ml-6 space-y-8 pl-6 sm:pl-8 py-2">
-                  {currentPkg.itinerary.map((item, idx) => (
-                    <div key={idx} className="relative group">
-                      {/* Timeline Dot Icon */}
-                      <div className="absolute -left-[31px] sm:-left-[39px] top-1 w-5 h-5 rounded-full bg-primary-500 ring-4 ring-white shadow-md flex items-center justify-center text-[10px] font-bold text-secondary-950" />
-
-                      <div className="bg-secondary-50 p-4 sm:p-5 rounded-2xl border border-secondary-200/70 hover:border-primary-400 transition-all">
-                        <div className="inline-block px-3 py-1 rounded-lg bg-primary-100 text-primary-800 text-xs font-black mb-2">
-                          {item.day}
+                {Array.isArray(currentPkg.itinerary) && currentPkg.itinerary.length > 0 ? (
+                  <div className="relative border-l-2 border-primary-400/50 ml-4 sm:ml-6 space-y-8 pl-6 sm:pl-8 py-2">
+                    {currentPkg.itinerary.map((item: any, idx: number) => (
+                      <div key={idx} className="relative group">
+                        <div className="absolute -left-[31px] sm:-left-[39px] top-1 w-5 h-5 rounded-full bg-primary-500 ring-4 ring-white shadow-md flex items-center justify-center text-[10px] font-bold text-secondary-950" />
+                        <div className="bg-secondary-50 p-4 sm:p-5 rounded-2xl border border-secondary-200/70 hover:border-primary-400 transition-all space-y-1.5">
+                          <div className="flex flex-wrap items-center gap-2 mb-1">
+                            <span className="inline-block px-3 py-1 rounded-lg bg-primary-100 text-primary-800 text-xs font-black">
+                              {item.day || item.startTime || `Langkah ${idx + 1}`}
+                            </span>
+                            {item.location && (
+                              <span className="text-xs text-secondary-500 font-semibold flex items-center gap-1">
+                                <MapPin className="w-3 h-3 text-secondary-400" />
+                                {item.location}
+                              </span>
+                            )}
+                          </div>
+                          <h4 className="text-base sm:text-lg font-black text-secondary-950">
+                            {item.title}
+                          </h4>
+                          <p className="text-xs sm:text-sm text-secondary-700 leading-relaxed">
+                            {item.desc}
+                          </p>
+                          {item.note && (
+                            <p className="text-[11px] text-primary-800 bg-primary-50 px-2.5 py-1 rounded-lg font-medium inline-block mt-1">
+                              💡 Catatan: {item.note}
+                            </p>
+                          )}
                         </div>
-                        <h4 className="text-base sm:text-lg font-black text-secondary-950 mb-1.5">
-                          {item.title}
-                        </h4>
-                        <p className="text-xs sm:text-sm text-secondary-700 leading-relaxed">
-                          {item.desc}
-                        </p>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="py-12 text-center text-xs text-secondary-500">
+                    Jadwal itinerary belum dikonfigurasi untuk paket ini.
+                  </div>
+                )}
               </div>
             )}
 
@@ -547,26 +597,21 @@ export default function PackageDetailPage({ params }: PageProps) {
                       ✓
                     </div>
                     <div>
-                      <h4 className="text-base sm:text-lg font-black text-secondary-950">Included (Inclusions)</h4>
-                      <p className="text-[11px] text-emerald-700 font-bold">Services & equipment provided for you</p>
+                      <h4 className="text-base sm:text-lg font-black text-secondary-950">Termasuk (Inclusions)</h4>
+                      <p className="text-[11px] text-emerald-700 font-bold">Layanan & peralatan yang disediakan</p>
                     </div>
                   </div>
 
                   <ul className="space-y-3.5">
-                    {(currentPkg.included || [
-                      'Roundtrip AC transport from Banyuwangi hotel or train station',
-                      'Official BKSDA entrance tickets & visitor insurance',
-                      'Licensed local guide',
-                      'Medical-grade respirator gas mask',
-                      'Headlamp / flashlight',
-                      'Bottled mineral water & warm snacks',
-                      'Standard first aid kit'
-                    ]).map((inc, i) => (
-                      <li key={i} className="flex items-start gap-3 text-xs sm:text-sm font-semibold text-secondary-800">
-                        <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                        <span>{inc}</span>
-                      </li>
-                    ))}
+                    {(Array.isArray(currentPkg.included) ? currentPkg.included : []).map((inc: any, i: number) => {
+                      const text = typeof inc === 'string' ? inc : inc.item || '';
+                      return (
+                        <li key={i} className="flex items-start gap-3 text-xs sm:text-sm font-semibold text-secondary-800">
+                          <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                          <span>{text}</span>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
 
@@ -577,23 +622,21 @@ export default function PackageDetailPage({ params }: PageProps) {
                       ✕
                     </div>
                     <div>
-                      <h4 className="text-base sm:text-lg font-black text-secondary-950">Excluded (Exclusions)</h4>
-                      <p className="text-[11px] text-rose-600 font-bold">Optional fees & personal expenses</p>
+                      <h4 className="text-base sm:text-lg font-black text-secondary-950">Tidak Termasuk (Exclusions)</h4>
+                      <p className="text-[11px] text-rose-600 font-bold">Biaya opsional & keperluan pribadi</p>
                     </div>
                   </div>
 
                   <ul className="space-y-3.5">
-                    {(currentPkg.excluded || [
-                      'Personal expenses outside the program',
-                      'Crater trolley taxi (optional if tired)',
-                      'Additional heavy meals outside package',
-                      'Voluntary tip for guide / driver'
-                    ]).map((exc, i) => (
-                      <li key={i} className="flex items-start gap-3 text-xs sm:text-sm font-semibold text-secondary-700">
-                        <X className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-                        <span>{exc}</span>
-                      </li>
-                    ))}
+                    {(Array.isArray(currentPkg.excluded) ? currentPkg.excluded : []).map((exc: any, i: number) => {
+                      const text = typeof exc === 'string' ? exc : exc.item || '';
+                      return (
+                        <li key={i} className="flex items-start gap-3 text-xs sm:text-sm font-semibold text-secondary-700">
+                          <X className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                          <span>{text}</span>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               </div>
@@ -603,24 +646,17 @@ export default function PackageDetailPage({ params }: PageProps) {
             {activeTab === 'packing' && (
               <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-sm animate-fadeIn space-y-6">
                 <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-primary-600">Trek Preparation</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-primary-600">Persiapan Pendakian</span>
                   <h3 className="text-xl sm:text-2xl font-black text-secondary-950 mt-1">
-                    Recommended Packing Checklist
+                    Daftar Perlengkapan yang Disarankan
                   </h3>
                   <p className="text-xs sm:text-sm text-secondary-600 mt-1">
-                    Ensure your hike is comfortable and well-prepared for cool crater temperatures (ranging from 6°C - 12°C).
+                    Pastikan pendakian Anda nyaman menghadapi suhu sejuk kawah (sekitar 6°C - 12°C).
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {(currentPkg.packingList || [
-                    { item: 'Warm Jacket / Windbreaker', note: 'Summit temperatures can drop to 6°C - 10°C before dawn' },
-                    { item: 'Trekking Shoes / Non-Slip Sneakers', note: 'Sandy and steep terrain' },
-                    { item: 'Long Pants & Warm Socks', note: 'Protects legs and keeps body warm' },
-                    { item: 'Camera / Smartphone & Power Bank', note: 'To capture the Blue Fire & Golden Sunrise' },
-                    { item: 'Sufficient Local Cash (IDR)', note: 'For sulfur souvenir purchases or hot beverages' },
-                    { item: 'Personal Medication', note: 'Especially if you have a history of asthma or cold allergies' }
-                  ]).map((pack, idx) => (
+                  {(Array.isArray(currentPkg.packingList) ? currentPkg.packingList : []).map((pack: any, idx: number) => (
                     <div
                       key={idx}
                       className="p-4 rounded-2xl bg-secondary-50 border border-secondary-200/70 flex items-start gap-3"
@@ -628,9 +664,16 @@ export default function PackageDetailPage({ params }: PageProps) {
                       <div className="w-7 h-7 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 font-black text-xs mt-0.5">
                         {idx + 1}
                       </div>
-                      <div>
-                        <h5 className="font-black text-sm text-secondary-950">{pack.item}</h5>
-                        <p className="text-xs text-secondary-600 mt-0.5">{pack.note}</p>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          <h5 className="font-black text-sm text-secondary-950 truncate">{pack.item}</h5>
+                          {pack.category && (
+                            <span className="text-[10px] bg-secondary-200/70 text-secondary-700 px-2 py-0.5 rounded-md font-bold">
+                              {pack.category}
+                            </span>
+                          )}
+                        </div>
+                        {pack.note && <p className="text-xs text-secondary-600 mt-0.5 leading-relaxed">{pack.note}</p>}
                       </div>
                     </div>
                   ))}
@@ -642,19 +685,14 @@ export default function PackageDetailPage({ params }: PageProps) {
             {activeTab === 'faq' && (
               <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-sm animate-fadeIn space-y-4">
                 <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-primary-600">Help & Information</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-primary-600">Bantuan & Informasi</span>
                   <h3 className="text-xl sm:text-2xl font-black text-secondary-950 mt-1">
-                    Frequently Asked Questions (FAQ)
+                    Pertanyaan Seputar Paket (FAQ)
                   </h3>
                 </div>
 
                 <div className="space-y-3 pt-2">
-                  {(currentPkg.faqs || [
-                    { q: 'Can beginners or children join this tour?', a: 'Absolutely! The main hiking trail is wide and well-marked. If anyone feels exhausted, local hand-pulled trolley taxi services are available to take you all the way to the crater rim.' },
-                    { q: 'When is the best time to see the Blue Fire?', a: 'The ideal window is between 03:00 and 04:30 AM while the night sky is at its darkest. We time our departure so you arrive right at peak observation hours.' },
-                    { q: 'Is the sulfur gas smell harmful?', a: 'We supply high-efficiency respirator masks with active carbon filters that safely filter sulfur fumes. Our guides continuously monitor wind direction for your safety.' },
-                    { q: 'How does payment and cancellation work?', a: 'Bookings are confirmed with a flexible deposit via bank transfer / QRIS / online methods. Free reschedule is available up to 48 hours before departure.' }
-                  ]).map((faq, idx) => {
+                  {(Array.isArray(currentPkg.faqs) ? currentPkg.faqs : []).map((faq: any, idx: number) => {
                     const isOpen = openFaq === idx;
                     return (
                       <div
@@ -673,7 +711,7 @@ export default function PackageDetailPage({ params }: PageProps) {
                           <ChevronDown className={`w-4 h-4 text-secondary-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
                         </button>
                         {isOpen && (
-                          <div className="p-4 sm:p-5 bg-white border-t border-secondary-200 text-xs sm:text-sm text-secondary-700 leading-relaxed">
+                          <div className="p-4 sm:p-5 bg-white border-t border-secondary-200 text-xs sm:text-sm text-secondary-700 leading-relaxed whitespace-pre-line">
                             {faq.a}
                           </div>
                         )}
@@ -683,100 +721,46 @@ export default function PackageDetailPage({ params }: PageProps) {
                 </div>
               </div>
             )}
-
-            {/* VERIFIED CUSTOMER REVIEWS */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-sm">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-secondary-100">
-                <div>
-                  <h3 className="text-xl sm:text-2xl font-black text-secondary-950">Traveler Reviews</h3>
-                  <p className="text-xs sm:text-sm text-secondary-600 mt-0.5">Authentic reviews from fellow explorers with Ijen Tour</p>
-                </div>
-                <div className="flex items-center gap-2 bg-primary-50 border border-primary-200 px-4 py-2 rounded-2xl">
-                  <Star className="w-5 h-5 fill-primary-500 text-primary-500" />
-                  <span className="text-lg font-black text-secondary-950">{(currentPkg.rating || 5.0).toFixed(1)}</span>
-                  <span className="text-xs text-secondary-600 font-medium">/ 5.0</span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {[
-                  {
-                    name: 'Dimas Pratama',
-                    origin: 'Jakarta',
-                    comment: 'Incredible experience! The guide was very friendly—a former sulfur miner who knew all the best photo spots without the crowded queues.',
-                    rating: 5,
-                    date: 'September 2026'
-                  },
-                  {
-                    name: 'Sarah & Michael',
-                    origin: 'Australia',
-                    comment: 'The midnight tour was fantastic! Clear sky, breathtaking blue fire, and the gas masks provided were top quality.',
-                    rating: 5,
-                    date: 'August 2026'
-                  }
-                ].map((review, i) => (
-                  <div key={i} className="p-4 sm:p-5 rounded-2xl bg-secondary-50 border border-secondary-200/70">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-full bg-primary-500 text-secondary-950 flex items-center justify-center font-bold text-xs">
-                          {review.name.charAt(0)}
-                        </div>
-                        <div>
-                          <p className="font-bold text-xs sm:text-sm text-secondary-950">{review.name}</p>
-                          <p className="text-[10px] text-secondary-500">{review.origin} • {review.date}</p>
-                        </div>
-                      </div>
-                      <div className="flex text-primary-500">
-                        {[...Array(review.rating)].map((_, idx) => (
-                          <Star key={idx} className="w-3 h-3 fill-primary-500" />
-                        ))}
-                      </div>
-                    </div>
-                    <p className="text-xs text-secondary-700 italic leading-relaxed">
-                      &quot;{review.comment}&quot;
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
           </div>
 
           {/* RIGHT 4 COLUMNS: INTERACTIVE BOOKING CALCULATOR (STICKY) */}
           <div className="lg:col-span-4 sticky top-28">
             <div className="bg-white rounded-3xl p-6 sm:p-7 border border-secondary-200/90 shadow-xl space-y-6">
-
               {/* Price Banner */}
               <div className="pb-4 border-b border-secondary-100">
                 <span className="text-[11px] font-extrabold uppercase tracking-wider text-secondary-500 block mb-1">
-                  Official Package Rate
+                  Tarif Resmi Paket
                 </span>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-2xl sm:text-3xl font-black text-primary-600">{currentPkg.price}</span>
-                  <span className="text-xs font-semibold text-secondary-600">/ person</span>
+                  <span className="text-2xl sm:text-3xl font-black text-primary-600">
+                    {currentPkg.price || `Rp ${cleanPrice.toLocaleString('id-ID')}`}
+                  </span>
+                  <span className="text-xs font-semibold text-secondary-600">
+                    {currentPkg.pricingUnit ? `/ ${currentPkg.pricingUnit}` : '/ orang'}
+                  </span>
                 </div>
-                <p className="text-[11px] text-emerald-600 font-bold mt-1">✓ Includes official permits & licensed guide</p>
+                <p className="text-[11px] text-emerald-600 font-bold mt-1">
+                  ✓ Termasuk tiket resmi BKSDA & pemandu lokal berlisensi
+                </p>
               </div>
 
               {/* Form Input: Date Picker */}
               <div>
                 <label className="block text-xs font-extrabold text-secondary-950 uppercase tracking-wider mb-2">
-                  1. Select Departure Date
+                  1. Pilih Tanggal Keberangkatan
                 </label>
-                <div className="relative">
-                  <input
-                    type="date"
-                    value={selectedDate}
-                    onChange={(e) => setSelectedDate(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-secondary-200 bg-secondary-50 text-secondary-950 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
-                  />
-                </div>
+                <input
+                  type="date"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl border border-secondary-200 bg-secondary-50 text-secondary-950 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+                />
               </div>
 
               {/* Form Input: Number of Pax Selector */}
               <div>
                 <label className="block text-xs font-extrabold text-secondary-950 uppercase tracking-wider mb-2">
-                  2. Number of Guests (Pax)
+                  2. Jumlah Peserta (Pax)
                 </label>
                 <div className="flex items-center justify-between bg-secondary-50 border border-secondary-200 rounded-xl p-2">
                   <button
@@ -788,7 +772,7 @@ export default function PackageDetailPage({ params }: PageProps) {
                   </button>
                   <div className="text-center">
                     <span className="text-lg font-black text-secondary-950">{selectedPax}</span>
-                    <span className="text-xs text-secondary-500 font-medium block">Guests</span>
+                    <span className="text-xs text-secondary-500 font-medium block">Peserta</span>
                   </div>
                   <button
                     type="button"
@@ -800,56 +784,64 @@ export default function PackageDetailPage({ params }: PageProps) {
                 </div>
               </div>
 
-              {/* Add-ons Checklist */}
-              <div>
-                <label className="block text-xs font-extrabold text-secondary-950 uppercase tracking-wider mb-2">
-                  3. Optional Add-ons
-                </label>
-                <div className="space-y-2.5">
-                  {ADDONS.map((addon) => (
-                    <label
-                      key={addon.id}
-                      className={`flex items-start gap-3 p-3 rounded-xl border transition cursor-pointer ${selectedAddons[addon.id]
-                          ? 'border-primary-500 bg-primary-50/30'
-                          : 'border-secondary-200/80 bg-white hover:border-secondary-300'
+              {/* Dynamic Add-ons Checklist */}
+              {rawAddons.length > 0 && (
+                <div>
+                  <label className="block text-xs font-extrabold text-secondary-950 uppercase tracking-wider mb-2">
+                    3. Layanan Tambahan (Add-ons Opsional)
+                  </label>
+                  <div className="space-y-2.5">
+                    {rawAddons.map((addon: any) => (
+                      <label
+                        key={addon.id}
+                        className={`flex items-start gap-3 p-3 rounded-xl border transition cursor-pointer ${
+                          selectedAddons[addon.id]
+                            ? 'border-primary-500 bg-primary-50/40'
+                            : 'border-secondary-200/80 bg-white hover:border-secondary-300'
                         }`}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={!!selectedAddons[addon.id]}
-                        onChange={(e) =>
-                          setSelectedAddons((prev) => ({
-                            ...prev,
-                            [addon.id]: e.target.checked
-                          }))
-                        }
-                        className="mt-1 w-4 h-4 accent-primary-600 rounded cursor-pointer"
-                      />
-                      <div className="text-xs">
-                        <p className="font-bold text-secondary-950 leading-tight">{addon.name}</p>
-                        <p className="text-[11px] text-primary-700 font-black mt-0.5">
-                          +Rp {addon.price.toLocaleString('id-ID')}
-                        </p>
-                      </div>
-                    </label>
-                  ))}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={!!selectedAddons[addon.id]}
+                          onChange={(e) =>
+                            setSelectedAddons((prev) => ({
+                              ...prev,
+                              [addon.id]: e.target.checked,
+                            }))
+                          }
+                          className="mt-1 w-4 h-4 accent-primary-600 rounded cursor-pointer"
+                        />
+                        <div className="text-xs">
+                          <p className="font-bold text-secondary-950 leading-tight">{addon.name}</p>
+                          <p className="text-[11px] text-primary-700 font-black mt-0.5">
+                            +Rp {Number(addon.price).toLocaleString('id-ID')} {addon.pricingUnit ? `(${addon.pricingUnit})` : ''}
+                          </p>
+                          {addon.description && (
+                            <p className="text-[10px] text-secondary-500 mt-0.5 leading-snug">{addon.description}</p>
+                          )}
+                        </div>
+                      </label>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Total Calculation Display */}
               <div className="bg-secondary-100 p-4 rounded-2xl border border-secondary-200">
                 <div className="flex justify-between text-xs text-secondary-600 mb-1">
-                  <span>{cleanPrice.toLocaleString('id-ID')} x {selectedPax} guests</span>
+                  <span>
+                    Rp {cleanPrice.toLocaleString('id-ID')} x {selectedPax} peserta
+                  </span>
                   <span>Rp {(cleanPrice * selectedPax).toLocaleString('id-ID')}</span>
                 </div>
                 {calculatedAddonTotal > 0 && (
                   <div className="flex justify-between text-xs text-secondary-600 mb-1">
-                    <span>Selected Add-ons</span>
+                    <span>Layanan Tambahan (Add-ons)</span>
                     <span>Rp {calculatedAddonTotal.toLocaleString('id-ID')}</span>
                   </div>
                 )}
                 <div className="border-t border-secondary-300/60 pt-2 mt-2 flex justify-between items-baseline">
-                  <span className="font-black text-xs uppercase tracking-wider text-secondary-950">Estimated Total</span>
+                  <span className="font-black text-xs uppercase tracking-wider text-secondary-950">Estimasi Total</span>
                   <span className="text-xl font-black text-primary-600">{formattedTotal}</span>
                 </div>
               </div>
@@ -861,7 +853,7 @@ export default function PackageDetailPage({ params }: PageProps) {
                 className="w-full py-4 px-6 rounded-2xl bg-primary-500 hover:bg-primary-400 text-secondary-950 font-black text-sm tracking-wide shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer transform hover:-translate-y-0.5"
               >
                 <Sparkles className="w-5 h-5 text-secondary-950" />
-                <span>BOOK NOW (ONLINE RESERVATION)</span>
+                <span>PESAN SEKARANG (RESERVASI ONLINE)</span>
               </button>
 
               <button
@@ -870,15 +862,14 @@ export default function PackageDetailPage({ params }: PageProps) {
                 className="w-full py-3 px-6 rounded-2xl bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/40 text-[#128C7E] font-bold text-xs tracking-wide transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <FaWhatsapp className="w-4 h-4 text-[#25D366]" />
-                <span>CONSULT ON WHATSAPP</span>
+                <span>KONSULTASI VIA WHATSAPP</span>
               </button>
 
               <p className="text-[11px] text-center text-secondary-500 leading-tight">
-                🔒 No hidden fees. Instant confirmation code and guaranteed departure slots.
+                🔒 Tanpa biaya tersembunyi. Konfirmasi instan dan jadwal armada terjamin.
               </p>
             </div>
           </div>
-
         </div>
 
         {/* RELATED PACKAGES SECTION */}
@@ -886,14 +877,14 @@ export default function PackageDetailPage({ params }: PageProps) {
           <div className="mt-20 pt-12 border-t border-secondary-200/80">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-primary-600">Other Experiences</span>
-                <h3 className="text-2xl sm:text-3xl font-black text-secondary-950 mt-1">Related Tour Packages</h3>
+                <span className="text-xs font-bold uppercase tracking-wider text-primary-600">Eksplorasi Lainnya</span>
+                <h3 className="text-2xl sm:text-3xl font-black text-secondary-950 mt-1">Paket Wisata Terkait</h3>
               </div>
               <Link
                 href="/packages"
                 className="inline-flex items-center gap-2 text-sm font-bold text-primary-600 hover:text-primary-700 transition"
               >
-                View All Packages <ArrowRight className="w-4 h-4" />
+                Lihat Semua Paket <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
@@ -906,7 +897,7 @@ export default function PackageDetailPage({ params }: PageProps) {
                   <div>
                     <div className="relative aspect-16/10 overflow-hidden bg-secondary-100">
                       <img
-                        src={pkg.image || '/images/pkg-bluefire.png'}
+                        src={pkg.coverImage || pkg.image || '/images/pkg-bluefire.png'}
                         alt={pkg.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                       />
@@ -918,27 +909,27 @@ export default function PackageDetailPage({ params }: PageProps) {
                     <div className="p-5">
                       <div className="flex items-center gap-1 text-primary-500 text-xs mb-2 font-bold">
                         <Star className="w-3.5 h-3.5 fill-primary-500" />
-                        <span>{(pkg.rating || 4.9).toFixed(1)}</span>
+                        <span>{(pkg.rating || 5.0).toFixed(1)}</span>
                       </div>
                       <h4 className="font-extrabold text-base text-secondary-950 group-hover:text-primary-600 transition leading-snug line-clamp-2 mb-2">
                         {pkg.title}
                       </h4>
                       <p className="text-xs text-secondary-600 line-clamp-2">
-                        {pkg.highlights.join(' • ')}
+                        {Array.isArray(pkg.highlights) ? pkg.highlights.join(' • ') : pkg.description}
                       </p>
                     </div>
                   </div>
 
                   <div className="p-5 pt-0 border-t border-secondary-100 mt-4 flex items-center justify-between">
                     <div>
-                      <span className="text-[10px] text-secondary-500 block">Starting from</span>
+                      <span className="text-[10px] text-secondary-500 block">Mulai dari</span>
                       <span className="text-sm font-black text-primary-600">{pkg.price}</span>
                     </div>
                     <Link
-                      href={`/packages/${pkg.id}`}
+                      href={`/packages/${pkg.slug || pkg.id}`}
                       className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-secondary-950 hover:bg-primary-500 hover:text-secondary-950 text-white text-xs font-bold transition-all"
                     >
-                      <span>Details</span>
+                      <span>Detail</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>
@@ -947,7 +938,6 @@ export default function PackageDetailPage({ params }: PageProps) {
             </div>
           </div>
         )}
-
       </div>
 
       {/* FULLSCREEN LIGHTBOX MODAL */}
@@ -957,7 +947,9 @@ export default function PackageDetailPage({ params }: PageProps) {
           onClick={() => setIsLightboxOpen(false)}
         >
           <div className="flex items-center justify-between text-white max-w-7xl mx-auto w-full">
-            <span className="text-sm font-bold">{currentPkg.title} - Photo {activeImageIndex + 1} of {galleryList.length}</span>
+            <span className="text-sm font-bold">
+              {currentPkg.title} - Foto {activeImageIndex + 1} dari {galleryList.length}
+            </span>
             <button
               onClick={() => setIsLightboxOpen(false)}
               className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition cursor-pointer"
@@ -978,12 +970,13 @@ export default function PackageDetailPage({ params }: PageProps) {
           </div>
 
           <div className="flex items-center justify-center gap-3 overflow-x-auto py-2" onClick={(e) => e.stopPropagation()}>
-            {galleryList.map((img, i) => (
+            {galleryList.map((img: string, i: number) => (
               <button
                 key={i}
                 onClick={() => setActiveImageIndex(i)}
-                className={`w-16 h-12 rounded-lg overflow-hidden border-2 transition cursor-pointer ${activeImageIndex === i ? 'border-primary-500 scale-110' : 'border-white/40 opacity-60'
-                  }`}
+                className={`w-16 h-12 rounded-lg overflow-hidden border-2 transition cursor-pointer ${
+                  activeImageIndex === i ? 'border-primary-500 scale-110' : 'border-white/40 opacity-60'
+                }`}
               >
                 <img src={img} alt="thumb" className="w-full h-full object-cover" />
               </button>
@@ -1005,7 +998,7 @@ export default function PackageDetailPage({ params }: PageProps) {
             <div className="flex items-center justify-between pb-4 border-b border-secondary-100 mb-6">
               <div>
                 <span className="text-[11px] font-black uppercase tracking-wider text-primary-600 block">
-                  Confirm Reservation
+                  Konfirmasi Pemesanan Tur
                 </span>
                 <h3 className="text-xl font-black text-secondary-950">{currentPkg.title}</h3>
               </div>
@@ -1028,15 +1021,15 @@ export default function PackageDetailPage({ params }: PageProps) {
             {/* Summary preview */}
             <div className="bg-secondary-50 p-4 rounded-2xl border border-secondary-200/80 mb-6 text-xs space-y-1.5">
               <div className="flex justify-between">
-                <span className="text-secondary-600">Departure Date:</span>
-                <span className="font-bold text-secondary-950">{selectedDate || 'Upcoming'}</span>
+                <span className="text-secondary-600">Tanggal Keberangkatan:</span>
+                <span className="font-bold text-secondary-950">{selectedDate || 'Mendatang'}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-secondary-600">Guests:</span>
-                <span className="font-bold text-secondary-950">{selectedPax} Guests</span>
+                <span className="text-secondary-600">Jumlah Peserta:</span>
+                <span className="font-bold text-secondary-950">{selectedPax} Peserta</span>
               </div>
               <div className="flex justify-between border-t border-secondary-200 pt-1.5 font-bold">
-                <span>Estimated Total:</span>
+                <span>Total Estimasi:</span>
                 <span className="text-primary-600 text-sm">{formattedTotal}</span>
               </div>
             </div>
@@ -1044,14 +1037,14 @@ export default function PackageDetailPage({ params }: PageProps) {
             <form onSubmit={handleOnlineBookingSubmit} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-secondary-800 mb-1.5">
-                  Full Name *
+                  Nama Lengkap Pemesan *
                 </label>
                 <input
                   type="text"
                   required
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
-                  placeholder="e.g. John Doe"
+                  placeholder="Contoh: Dimas Pratama"
                   className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
               </div>
@@ -1059,26 +1052,26 @@ export default function PackageDetailPage({ params }: PageProps) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-secondary-800 mb-1.5">
-                    WhatsApp Phone Number *
+                    Nomor WhatsApp Aktif *
                   </label>
                   <input
                     type="tel"
                     required
                     value={whatsappNumber}
                     onChange={(e) => setWhatsappNumber(e.target.value)}
-                    placeholder="+62 812 3456 7890"
+                    placeholder="081234567890"
                     className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-secondary-800 mb-1.5">
-                    Email Address (Optional)
+                    Email (Opsional)
                   </label>
                   <input
                     type="email"
                     value={customerEmail}
                     onChange={(e) => setCustomerEmail(e.target.value)}
-                    placeholder="name@email.com"
+                    placeholder="nama@email.com"
                     className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   />
                 </div>
@@ -1086,26 +1079,26 @@ export default function PackageDetailPage({ params }: PageProps) {
 
               <div>
                 <label className="block text-xs font-bold text-secondary-800 mb-1.5">
-                  Pickup Location in Banyuwangi
+                  Lokasi Penjemputan di Banyuwangi
                 </label>
                 <input
                   type="text"
                   value={pickupLocation}
                   onChange={(e) => setPickupLocation(e.target.value)}
-                  placeholder="e.g. Ketapang Indah Hotel / Banyuwangi Train Station"
+                  placeholder="Contoh: Hotel Ketapang Indah / Stasiun Banyuwangi Kota"
                   className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-secondary-800 mb-1.5">
-                  Notes / Special Requests
+                  Permintaan Khusus / Catatan Tambahan
                 </label>
                 <textarea
                   rows={2}
                   value={specialRequests}
                   onChange={(e) => setSpecialRequests(e.target.value)}
-                  placeholder="Dietary requirements, child respirator mask size, etc."
+                  placeholder="Catatan menu makanan khusus, ukuran masker anak, dll."
                   className="w-full px-4 py-2 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 ></textarea>
               </div>
@@ -1117,9 +1110,9 @@ export default function PackageDetailPage({ params }: PageProps) {
                   className="w-full py-3.5 px-6 rounded-2xl bg-primary-500 hover:bg-primary-400 text-secondary-950 font-black text-sm tracking-wide shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
                 >
                   {isSubmitting ? (
-                    <span>PROCESSING RESERVATION...</span>
+                    <span>MEMPROSES RESERVASI...</span>
                   ) : (
-                    <span>CONFIRM RESERVATION NOW</span>
+                    <span>KONFIRMASI RESERVASI SEKARANG</span>
                   )}
                 </button>
               </div>
@@ -1143,43 +1136,41 @@ export default function PackageDetailPage({ params }: PageProps) {
             </div>
 
             <span className="text-xs font-black uppercase tracking-wider text-emerald-600 block mb-1">
-              Reservation Confirmed!
+              Reservasi Berhasil Dibuat!
             </span>
-            <h3 className="text-2xl font-black text-secondary-950 mb-2">Your Reservation Code</h3>
+            <h3 className="text-2xl font-black text-secondary-950 mb-2">Kode Reservasi Anda</h3>
 
             <div className="bg-primary-50 border-2 border-dashed border-primary-400 p-3 rounded-2xl mb-4 font-mono text-xl font-black text-primary-700 tracking-wider">
               {confirmedBooking.bookingCode}
             </div>
 
             <p className="text-xs text-secondary-600 leading-relaxed mb-6">
-              Booking details for <span className="font-bold text-secondary-950">{confirmedBooking.customerName}</span> ({confirmedBooking.numParticipants} Guests) have been recorded in our system.
+              Rincian booking untuk <span className="font-bold text-secondary-950">{confirmedBooking.customerName}</span> ({confirmedBooking.numParticipants} Peserta) telah tercatat di sistem kami.
             </p>
 
             <div className="space-y-3">
               <a
                 href={getWhatsAppLink(
-                  `Hello Ijen Tour Admin! I have made a reservation with Booking Code: *${confirmedBooking.bookingCode}* for the package *${confirmedBooking.packageName}* on ${confirmedBooking.departureDate}. Please confirm our fleet and guide availability. Thank you!`
+                  `Halo Admin Ijen Tour! Saya telah melakukan reservasi online dengan Kode Booking: *${confirmedBooking.bookingCode}* untuk paket *${confirmedBooking.packageName}* pada tanggal ${confirmedBooking.departureDate}. Mohon konfirmasi ketersediaan armada dan guide. Terima kasih!`
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full py-3.5 px-6 rounded-2xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-black text-sm flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
               >
                 <FaWhatsapp className="w-5 h-5" />
-                <span>CONFIRM ON WHATSAPP</span>
+                <span>KONFIRMASI VIA WHATSAPP</span>
               </a>
 
               <Link
                 href="/booking"
                 className="block w-full py-3 px-6 rounded-2xl bg-secondary-100 hover:bg-secondary-200 text-secondary-800 font-bold text-xs transition"
               >
-                Track Reservation Status
+                Cek Status Pemesanan
               </Link>
             </div>
           </div>
         </div>
       )}
-
     </div>
   );
 }
-

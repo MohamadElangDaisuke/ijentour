@@ -19,7 +19,7 @@ export default function ChatbotPage() {
         Ijen Tour Assistant
       </h1>
       <p className="text-sm text-secondary-600 leading-relaxed mb-6">
-        Our official customer assistant is open in the bottom-right window. Feel free to ask questions about tour packages, Blue Fire midnight schedules, pricing, and custom itineraries.
+        Our official customer assistant is open in the bottom-right window. Explore our tour packages, Blue Fire midnight schedules, pricing, and travel destinations through our interactive menu.
       </p>
 
       <div className="flex flex-wrap items-center justify-center gap-3">

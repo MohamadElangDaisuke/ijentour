@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import {
   ShieldCheck, Map, HeartHandshake, Award
@@ -6,12 +8,19 @@ import { defaultFeatures } from '../../lib/featuresStorage';
 import FaqSection from '@/app/component/ui/faqSection';
 import FinalCta from '@/app/component/ui/finalCta';
 
-const iconMap = {
-  Map: <Map size={32} className="text-secondary-600" />,
-  Award: <Award size={32} className="text-primary-600" />,
-  HeartHandshake: <HeartHandshake size={32} className="text-secondary-600" />,
-  ShieldCheck: <ShieldCheck size={32} className="text-primary-600" />
-};
+function renderFeatureIcon(name: string) {
+  switch (name) {
+    case 'Map':
+      return <Map size={32} className="text-secondary-600" />;
+    case 'Award':
+      return <Award size={32} className="text-primary-600" />;
+    case 'HeartHandshake':
+      return <HeartHandshake size={32} className="text-secondary-600" />;
+    case 'ShieldCheck':
+    default:
+      return <ShieldCheck size={32} className="text-primary-600" />;
+  }
+}
 
 export default function AboutPage() {
   return (
@@ -88,7 +97,7 @@ export default function AboutPage() {
             {defaultFeatures.map((feature) => (
               <div key={feature.id || feature.title} className="flex flex-col items-center text-center p-4">
                 <div className="w-16 h-16 rounded-2xl bg-secondary-50 flex items-center justify-center mb-4 border border-secondary-200/60 shadow-xs">
-                  {iconMap[feature.iconName] || <ShieldCheck size={32} className="text-primary-600" />}
+                  {renderFeatureIcon(feature.iconName)}
                 </div>
                 <h3 className="font-bold text-secondary-950 mb-2">{feature.title}</h3>
                 <p className="text-sm text-secondary-700 leading-relaxed">{feature.description}</p>

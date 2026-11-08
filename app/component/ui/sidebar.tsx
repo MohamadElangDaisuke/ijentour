@@ -32,6 +32,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   }
 
   const isItemActive = (item: NavDropdownItem): boolean => {
+    if (!pathname) return false
     if (item.href) {
       return item.href === '/'
         ? pathname === '/'

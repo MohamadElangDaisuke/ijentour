@@ -1,20 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase, supabaseAdmin } from "@/lib/supabase";
 import { requireAdmin } from "@/lib/auth";
-import path from "path";
-import fs from "fs/promises";
+import {
+  MAX_FILE_SIZE,
+  ALLOWED_MIME_TYPES,
+  normalizeStorageFolder,
+  validateImageBuffer,
+  generateSafeWebpFileName,
+} from "@/lib/storage/mediaValidation";
+import { optimizeImage } from "@/lib/storage/imageOptimizer";
+import { safeDeleteMediaFile } from "@/lib/storage/mediaCleanup";
 
-// Max size: 5MB
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
-const ALLOWED_MIME_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-];
+export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
   try {
+    // 1. Authentication & Authorization: Admin only
     const admin = await requireAdmin(request);
     if (!admin) {
       return NextResponse.json(
@@ -23,11 +24,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 1. Parse FormData
+    // 2. Parse FormData
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
-    const rawFolder = (formData.get("folder") as string) || "general";
-    const folder = rawFolder.replace(/[^a-zA-Z0-9_-]/g, "");
+    const rawFolder = formData.get("folder") as string | null;
+    const folder = normalizeStorageFolder(rawFolder);
 
     if (!file) {
       return NextResponse.json(
@@ -36,15 +37,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 3. Validation: Size & MIME type
+    // 3. Fast client-header validation
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        { success: false, error: "File too large. Maximum image size is 5 MB." },
+        {
+          success: false,
+          error: `File is too large (${(file.size / (1024 * 1024)).toFixed(2)} MB). Maximum limit is 5 MB.`,
+        },
         { status: 400 }
       );
     }
 
-    if (!ALLOWED_MIME_TYPES.includes(file.type.toLowerCase())) {
+    const clientType = file.type?.toLowerCase() || "";
+    if (clientType && !ALLOWED_MIME_TYPES.includes(clientType)) {
       return NextResponse.json(
         {
           success: false,
@@ -54,87 +59,83 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 4. Generate unique, clean filename
-    const originalName = file.name || "image.webp";
-    const ext = originalName.split(".").pop()?.toLowerCase() || "webp";
-    const cleanBase = originalName
-      .substring(0, originalName.lastIndexOf(".") || originalName.length)
-      .toLowerCase()
-      .replace(/[^a-z0-9]/g, "-")
-      .slice(0, 32);
-
-    const uniqueId = Math.random().toString(36).substring(2, 8);
-    const fileName = `${cleanBase}-${Date.now()}-${uniqueId}.${ext}`;
-    const storagePath = `${folder}/${fileName}`;
-
+    // 4. Convert file to Buffer & perform strict binary content validation via sharp
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    // 5. Always write local copy to public/uploads/ for development and reliable fallback
-    let localPublicUrl = "";
-    try {
-      const publicUploadsDir = path.join(process.cwd(), "public", "uploads", folder);
-      await fs.mkdir(publicUploadsDir, { recursive: true });
-      const localFilePath = path.join(publicUploadsDir, fileName);
-      await fs.writeFile(localFilePath, buffer);
-      localPublicUrl = `/uploads/${folder}/${fileName}`;
-    } catch (fsErr) {
-      console.warn("Local storage write warning (expected in read-only environments like Vercel):", fsErr);
+    const validation = await validateImageBuffer(buffer);
+    if (!validation.valid) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: validation.error || "The uploaded file is not a valid or supported image.",
+        },
+        { status: 400 }
+      );
     }
 
-    // 6. Upload to Supabase Storage bucket 'images'
+    // 5. Automatic Image Optimization: resize (>1920px) & convert to WebP (quality 82, alpha preserved)
+    const optimized = await optimizeImage(buffer, validation);
+
+    // 6. Ensure Supabase Storage is configured
     const targetClient = supabaseAdmin || supabase;
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://xuoazdinvasiglkmrbbq.supabase.co";
 
-    if (targetClient) {
-      try {
-        const { data: uploadData, error: uploadError } = await targetClient.storage
-          .from("images")
-          .upload(storagePath, buffer, {
-            contentType: file.type,
-            upsert: true,
-          });
-
-        if (!uploadError && uploadData) {
-          const publicUrl = `${supabaseUrl}/storage/v1/object/public/images/${storagePath}`;
-          return NextResponse.json({
-            success: true,
-            url: publicUrl,
-            path: storagePath,
-            source: "supabase",
-          });
-        } else if (uploadError) {
-          console.warn("Supabase upload returned error, using local fallback:", uploadError.message);
-        }
-      } catch (sbErr: any) {
-        console.warn("Supabase upload exception:", sbErr.message);
-      }
+    if (!targetClient) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Supabase Storage credentials are not configured on the server. Please ensure SUPABASE_SERVICE_ROLE_KEY and NEXT_PUBLIC_SUPABASE_URL are set.",
+        },
+        { status: 503 }
+      );
     }
 
-    // If Supabase upload client was not available or errored, return the local fallback URL
-    if (localPublicUrl) {
-      return NextResponse.json({
-        success: true,
-        url: localPublicUrl,
-        path: storagePath,
-        source: "local",
+    // 7. Generate safe unique filename
+    const fileName = generateSafeWebpFileName(file.name || "image");
+    const storagePath = `${folder}/${fileName}`;
+
+    // 8. Upload directly to Supabase Storage bucket 'images' (NEVER write to local Vercel filesystem)
+    const { data: uploadData, error: uploadError } = await targetClient.storage
+      .from("images")
+      .upload(storagePath, optimized.buffer, {
+        contentType: "image/webp",
+        upsert: true,
       });
+
+    if (uploadError || !uploadData) {
+      console.error("Supabase Storage upload error:", uploadError);
+      return NextResponse.json(
+        {
+          success: false,
+          error: uploadError?.message || "Failed to upload image to Supabase Storage.",
+        },
+        { status: 502 }
+      );
     }
 
-    // Direct Supabase public URL construct
-    const directSupabaseUrl = `${supabaseUrl}/storage/v1/object/public/images/${storagePath}`;
+    // 9. Construct canonical public CDN URL
+    const publicUrl = `${supabaseUrl}/storage/v1/object/public/images/${storagePath}`;
+
     return NextResponse.json({
       success: true,
-      url: directSupabaseUrl,
+      url: publicUrl,
       path: storagePath,
-      source: "supabase_direct",
+      folder,
+      format: "webp",
+      width: optimized.width,
+      height: optimized.height,
+      sizeBytes: optimized.sizeBytes,
+      originalSizeBytes: optimized.originalSizeBytes,
+      wasResized: optimized.wasResized,
     });
   } catch (error: any) {
-    console.error("Upload error:", error);
+    console.error("Upload handler error:", error);
     return NextResponse.json(
       {
         success: false,
-        error: error.message || "Failed to process image upload.",
+        error: error.message || "An unexpected error occurred while processing the upload.",
       },
       { status: 500 }
     );
@@ -143,6 +144,7 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
+    // 1. Authentication & Authorization: Admin only
     const admin = await requireAdmin(request);
     if (!admin) {
       return NextResponse.json(
@@ -152,19 +154,27 @@ export async function DELETE(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const storagePath = searchParams.get("path");
+    const rawPath = searchParams.get("path") || searchParams.get("url");
 
-    if (!storagePath) {
-      return NextResponse.json({ success: false, error: "Path parameter is required." }, { status: 400 });
+    if (!rawPath) {
+      return NextResponse.json(
+        { success: false, error: "Path or URL parameter is required." },
+        { status: 400 }
+      );
     }
 
-    const targetClient = supabaseAdmin || supabase;
-    if (targetClient) {
-      await targetClient.storage.from("images").remove([storagePath]);
-    }
+    // Perform reference-safe deletion
+    const result = await safeDeleteMediaFile(rawPath);
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({
+      success: result.deleted,
+      message: result.reason,
+    });
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    console.error("DELETE /api/upload error:", error);
+    return NextResponse.json(
+      { success: false, error: error.message || "Failed to delete image." },
+      { status: 500 }
+    );
   }
 }

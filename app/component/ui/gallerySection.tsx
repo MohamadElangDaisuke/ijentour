@@ -2,6 +2,7 @@
 
 import { ArrowRight, X } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { defaultStories, storiesStorageKey, type Story } from "../../lib/stories";
@@ -106,11 +107,12 @@ export default function GallerySection() {
                 className={`group relative overflow-hidden rounded-3xl bg-secondary-100 text-left cursor-pointer ${index === 0 ? 'col-span-2 row-span-2' : ''} ${index === 1 ? 'sm:col-start-3 sm:row-start-1' : ''} ${index === 2 ? 'sm:col-start-4 sm:row-start-1 sm:row-span-2' : ''} ${index === 3 ? 'sm:col-start-3 sm:row-start-2' : ''}`}
               >
                 {story.image ? (
-                  <img
+                  <Image
                     src={story.image}
-                    onError={(e) => { (e.target as HTMLImageElement).src = '/images/pkg-bluefire.png'; }}
                     alt={`${story.title} - Banyuwangi travel gallery`}
-                    className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover transition duration-700 group-hover:scale-105"
                   />
                 ) : (
                   <div className="flex h-full items-center justify-center p-4 text-center text-xs text-secondary-400">No image available</div>

@@ -40,6 +40,7 @@ const SIDEBAR_ITEMS = [
 
 export default function AdminClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const currentPath = pathname || "";
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
@@ -48,7 +49,7 @@ export default function AdminClientLayout({ children }: { children: React.ReactN
   const [currentAdmin, setCurrentAdmin] = useState<any>(null);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  const isLoginPage = pathname === "/admin/login";
+  const isLoginPage = currentPath === "/admin/login";
 
   // Load current admin profile
   useEffect(() => {
@@ -56,7 +57,7 @@ export default function AdminClientLayout({ children }: { children: React.ReactN
     fetch("/api/auth/me")
       .then((res) => {
         if (!res.ok) {
-          router.push(`/admin/login?from=${encodeURIComponent(pathname)}`);
+          router.push(`/admin/login?from=${encodeURIComponent(currentPath)}`);
           return null;
         }
         return res.json();
@@ -247,8 +248,8 @@ export default function AdminClientLayout({ children }: { children: React.ReactN
             </span>
             {SIDEBAR_ITEMS.map((item) => {
               const isActive =
-                pathname === item.href ||
-                (item.href !== "/admin/dashboard" && pathname.startsWith(item.href));
+                currentPath === item.href ||
+                (item.href !== "/admin/dashboard" && currentPath.startsWith(item.href));
               return (
                 <Link
                   key={item.href}
@@ -312,8 +313,8 @@ export default function AdminClientLayout({ children }: { children: React.ReactN
                 <div className="space-y-1">
                   {SIDEBAR_ITEMS.map((item) => {
                     const isActive =
-                      pathname === item.href ||
-                      (item.href !== "/admin/dashboard" && pathname.startsWith(item.href));
+                      currentPath === item.href ||
+                      (item.href !== "/admin/dashboard" && currentPath.startsWith(item.href));
                     return (
                       <Link
                         key={item.href}

@@ -1,5 +1,6 @@
 export interface TourPackage {
   id: string;
+  slug?: string;
   title: string;
   category: 'regular' | 'private' | 'midnight';
   duration: string;

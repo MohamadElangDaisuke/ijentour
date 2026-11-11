@@ -17,17 +17,6 @@ import {
 export default function PackagesSections() {
   const [packagesData, setPackagesData] = useState<TourPackage[]>(defaultPackages);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
-
-  // Detect mobile device
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 1024);
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize, { passive: true });
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   // Sync package data from Database API / LocalStorage
   useEffect(() => {
@@ -169,16 +158,16 @@ export default function PackagesSections() {
         {/* RIGHT COLUMN: Packages Carousel (Mobile: Shadcn UI Carousel, Desktop: 3D Cards Stage) */}
         <motion.div
           variants={itemVariants}
-          className="col-span-1 lg:col-span-7 flex flex-col items-center justify-center relative min-h-80 sm:min-h-95 lg:items-center lg:pr-14"
+          className="col-span-1 lg:col-span-7 flex flex-col items-center justify-center relative min-h-80 sm:min-h-95 lg:items-center lg:pr-4 xl:pr-10 w-full overflow-hidden lg:overflow-visible"
         >
           {/* --- MOBILE VIEW: SHADCN UI CAROUSEL --- */}
-          <div className="w-full flex lg:hidden flex-col items-center justify-center px-4">
+          <div className="w-full flex lg:hidden flex-col items-center justify-center px-2 sm:px-4">
             <Carousel
               opts={{
                 align: 'center',
                 loop: true,
               }}
-              className="w-full max-w-[18.5rem] sm:max-w-xs"
+              className="w-full max-w-[19rem] sm:max-w-xs"
             >
               <CarouselContent>
                 {packagesData.map((pkg) => (
@@ -243,8 +232,8 @@ export default function PackagesSections() {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="-left-4 sm:-left-6" />
-              <CarouselNext className="-right-4 sm:-right-6" />
+              <CarouselPrevious className="-left-2 sm:-left-4" />
+              <CarouselNext className="-right-2 sm:-right-4" />
             </Carousel>
 
             {/* Mobile View All Button (Ditempatkan di bawah carousel agar alur visual natural) */}
@@ -260,7 +249,7 @@ export default function PackagesSections() {
           </div>
 
           {/* --- DESKTOP VIEW: INTERACTIVE 3D CARDS STAGE --- */}
-          <div className="hidden lg:flex relative h-112 w-72 items-center justify-center">
+          <div className="hidden lg:flex relative h-112 w-72 items-center justify-center mx-auto">
             {/* Desktop Prev Nav Button */}
             <motion.button
               type="button"
@@ -270,7 +259,7 @@ export default function PackagesSections() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               transition={{ ease: easeIn, duration: 0.2 }}
-              className="absolute -left-16 top-1/2 -translate-y-1/2 z-40 items-center justify-center w-10 h-10 rounded-full bg-white text-secondary-950 shadow-md hover:shadow-xl transition-all hover:bg-primary-500 cursor-pointer flex"
+              className="absolute -left-12 xl:-left-16 top-1/2 -translate-y-1/2 z-40 items-center justify-center w-10 h-10 rounded-full bg-white text-secondary-950 shadow-md hover:shadow-xl transition-all hover:bg-primary-500 cursor-pointer flex"
             >
               <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
             </motion.button>
@@ -284,7 +273,7 @@ export default function PackagesSections() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               transition={{ ease: easeIn, duration: 0.2 }}
-              className="absolute -right-16 top-1/2 -translate-y-1/2 z-40 items-center justify-center w-10 h-10 rounded-full bg-white text-secondary-950 shadow-md hover:shadow-xl transition-all hover:bg-primary-500 cursor-pointer flex"
+              className="absolute -right-12 xl:-right-16 top-1/2 -translate-y-1/2 z-40 items-center justify-center w-10 h-10 rounded-full bg-white text-secondary-950 shadow-md hover:shadow-xl transition-all hover:bg-primary-500 cursor-pointer flex"
             >
               <ChevronRight className="w-5 h-5 stroke-[2.5]" />
             </motion.button>

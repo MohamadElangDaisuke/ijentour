@@ -108,6 +108,27 @@ export async function POST(request: Request) {
     const pax = Math.max(1, Math.min(50, Number(numParticipants) || 1));
     const validDepartureDate = departureDate || new Date().toISOString().split("T")[0];
 
+    // Prevent accidental duplicate submissions (e.g. rapid double-clicks on mobile)
+    const recentDuplicate = await prisma.booking.findFirst({
+      where: {
+        customerName: customerName.trim(),
+        whatsappNumber: sanitizedWhatsApp,
+        departureDate: validDepartureDate,
+        createdAt: {
+          gte: new Date(Date.now() - 15000), // within last 15 seconds
+        },
+      },
+    });
+
+    if (recentDuplicate) {
+      return NextResponse.json({
+        success: true,
+        message: "Your reservation has been received! Confirmation code below.",
+        bookingCode: recentDuplicate.bookingCode,
+        booking: recentDuplicate,
+      });
+    }
+
     // ==========================================
     // 1. HANDLE CUSTOM TOUR PACKAGE REQUEST
     // ==========================================

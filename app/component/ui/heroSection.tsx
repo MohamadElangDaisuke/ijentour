@@ -43,11 +43,11 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="group relative isolate overflow-hidden bg-secondary-50 px-5 pb-16 pt-28 sm:px-8 sm:pb-20 sm:pt-32 lg:-mt-16 lg:h-screen lg:px-12 lg:pb-6 lg:pt-24"
+      className="group relative isolate overflow-hidden bg-secondary-50 px-4 pb-14 pt-24 sm:px-8 sm:pb-20 sm:pt-28 lg:min-h-[calc(100vh-4rem)] lg:flex lg:items-center lg:px-12 lg:py-16"
     >
       <div className="pointer-events-none absolute right-0 top-0 -z-10 hidden h-136 w-1/2 rounded-bl-[8rem] bg-primary-50 lg:block" />
 
-      <div className="mx-auto grid max-w-7xl items-center gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:gap-12">
+      <div className="mx-auto grid max-w-7xl w-full items-center gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:gap-12">
         <motion.div
           initial={{ opacity: 0, x: -32, y: 15 }}
           animate={{ opacity: 1, x: 0, y: 0 }}
@@ -109,8 +109,8 @@ export default function HeroSection() {
         >
           <div className="absolute inset-0 rounded-[2.5rem] bg-secondary-100 sm:rounded-[3.5rem]" />
           <div className="absolute -bottom-4 -left-4 -z-10 h-32 w-32 rounded-4xl bg-primary-200 sm:-bottom-6 sm:-left-6" />
-          <div className="absolute -right-3 top-8 z-20 flex items-center gap-2 rounded-full border border-white/70 bg-white/90 px-4 py-3 text-xs font-bold text-secondary-950 shadow-xl shadow-secondary-950/10 backdrop-blur sm:-right-5 sm:top-14">
-            <Compass className="h-4 w-4 text-primary-600" /> Local guide, real stories
+          <div className="absolute -right-1 sm:-right-5 top-8 z-20 flex items-center gap-2 rounded-full border border-white/70 bg-white/90 px-3 sm:px-4 py-2 sm:py-3 text-[11px] sm:text-xs font-bold text-secondary-950 shadow-xl shadow-secondary-950/10 backdrop-blur sm:top-14">
+            <Compass className="h-4 w-4 text-primary-600 shrink-0" /> Local guide, real stories
           </div>
           <div className="absolute inset-3 overflow-hidden rounded-[2.2rem] sm:inset-5 sm:rounded-[3rem]">
             <AnimatePresence mode="wait" initial={false}>
@@ -141,18 +141,18 @@ export default function HeroSection() {
               </motion.div>
             </AnimatePresence>
           </div>
-          <div className="absolute bottom-8 right-8 z-20 flex gap-2 sm:bottom-12 sm:right-12">
-            <button type="button" onClick={() => changeDestination(-1)} aria-label="Previous destination" className="flex h-9 w-9 items-center justify-center rounded-full border border-white/50 bg-secondary-950/70 text-white backdrop-blur transition hover:bg-primary-500 hover:text-secondary-950">
+          <div className="absolute bottom-4 right-4 z-20 flex gap-2 sm:bottom-12 sm:right-12">
+            <button type="button" onClick={() => changeDestination(-1)} aria-label="Previous destination" className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full border border-white/50 bg-secondary-950/70 text-white backdrop-blur transition hover:bg-primary-500 hover:text-secondary-950 cursor-pointer">
               <ArrowLeft className="h-4 w-4" />
             </button>
-            <button type="button" onClick={() => changeDestination(1)} aria-label="Next destination" className="flex h-9 w-9 items-center justify-center rounded-full border border-white/50 bg-secondary-950/70 text-white backdrop-blur transition hover:bg-primary-500 hover:text-secondary-950">
+            <button type="button" onClick={() => changeDestination(1)} aria-label="Next destination" className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full border border-white/50 bg-secondary-950/70 text-white backdrop-blur transition hover:bg-primary-500 hover:text-secondary-950 cursor-pointer">
               <ArrowRight className="h-4 w-4" />
             </button>
           </div>
-          <div className="absolute bottom-8 left-8 z-20 max-w-52 rounded-2xl bg-secondary-950/90 p-4 text-white shadow-2xl sm:bottom-12 sm:left-12">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary-300"><span translate="no" className="notranslate">Banyuwangi</span>{' '}destination</p>
-            <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.18em] text-primary-300">{destination.name}</p>
-            <p className="mt-1 text-sm font-bold leading-snug">{destination.description}</p>
+          <div className="absolute bottom-4 left-4 z-20 max-w-[calc(100%-5.5rem)] sm:max-w-52 rounded-2xl bg-secondary-950/90 p-3 sm:p-4 text-white shadow-2xl sm:bottom-12 sm:left-12">
+            <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.2em] text-primary-300"><span translate="no" className="notranslate">Banyuwangi</span>{' '}destination</p>
+            <p className="mt-0.5 sm:mt-1 text-[10px] sm:text-xs font-bold uppercase tracking-[0.18em] text-primary-300 truncate">{destination.name}</p>
+            <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm font-bold leading-snug line-clamp-2">{destination.description}</p>
           </div>
         </motion.div>
       </div>

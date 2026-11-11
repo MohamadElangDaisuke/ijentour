@@ -82,7 +82,7 @@ export default function DestinationInspiration() {
             onClick={() => handleScroll('left')}
             disabled={!canScrollLeft}
             aria-label="Scroll left"
-            className={`absolute -left-3 sm:-left-5 top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full bg-white text-secondary-950 shadow-xl transition-all duration-200 cursor-pointer ${
+            className={`absolute -left-3 sm:-left-5 top-1/2 -translate-y-1/2 z-20 hidden sm:flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full bg-white text-secondary-950 shadow-xl transition-all duration-200 cursor-pointer ${
               canScrollLeft
                 ? 'opacity-100 hover:bg-primary-500 hover:scale-105 active:scale-95'
                 : 'opacity-0 pointer-events-none'
@@ -97,7 +97,7 @@ export default function DestinationInspiration() {
             onClick={() => handleScroll('right')}
             disabled={!canScrollRight}
             aria-label="Scroll right"
-            className={`absolute -right-3 sm:-right-5 top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full bg-white text-secondary-950 shadow-xl transition-all duration-200 cursor-pointer ${
+            className={`absolute -right-3 sm:-right-5 top-1/2 -translate-y-1/2 z-20 hidden sm:flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-full bg-white text-secondary-950 shadow-xl transition-all duration-200 cursor-pointer ${
               canScrollRight
                 ? 'opacity-100 hover:bg-primary-500 hover:scale-105 active:scale-95'
                 : 'opacity-0 pointer-events-none'

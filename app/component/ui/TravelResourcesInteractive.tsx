@@ -170,14 +170,17 @@ const tabsData: TabItem[] = [
 export function TravelResourcesInteractive() {
   const [activeTabId, setActiveTabId] = useState<string>("documents");
 
+  const activeTab = tabsData.find((tab) => tab.id === activeTabId) || tabsData[0];
+  const IconComponent = activeTab.icon;
+
   return (
-    <div className="w-full">
-      {/* Main container in theme palette (Crater Teal Soft & Accent Gold) with clean square edges */}
-      <div className="border border-secondary-200 bg-secondary-50/70 p-4 sm:p-6 lg:p-10 shadow-xs dark:border-secondary-800 dark:bg-secondary-950">
-        <div className="grid gap-5 sm:gap-8 lg:grid-cols-12 lg:gap-10">
+    <div className="w-full min-w-0 max-w-full">
+      {/* Main container in theme palette (Crater Teal Soft & Accent Gold) with clean edges */}
+      <div className="w-full min-w-0 max-w-full border border-secondary-200 bg-secondary-50/70 p-3.5 sm:p-6 lg:p-10 shadow-xs dark:border-secondary-800 dark:bg-secondary-950 rounded-2xl sm:rounded-3xl">
+        <div className="grid w-full min-w-0 max-w-full grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-10">
           {/* LEFT SIDE: TAB BUTTONS */}
-          <div className="lg:col-span-4 xl:col-span-4 flex flex-col justify-between">
-            <div>
+          <div className="w-full min-w-0 max-w-full lg:col-span-4 xl:col-span-4 flex flex-col justify-between">
+            <div className="w-full min-w-0 max-w-full">
               <div className="flex items-center justify-between mb-2.5 sm:mb-3">
                 <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary-700 dark:text-primary-400">
                   Guide Categories
@@ -187,39 +190,41 @@ export function TravelResourcesInteractive() {
                 </span>
               </div>
 
-              {/* Tab Navigation: Horizontal swipe on mobile, Vertical stack on desktop - zero radius */}
-              <div className="flex gap-2 overflow-x-auto pb-1 sm:pb-2 lg:flex-col lg:overflow-visible lg:pb-0 scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                {tabsData.map((tab) => {
-                  const isActive = tab.id === activeTabId;
-                  const TabIcon = tab.icon;
-                  return (
-                    <button
-                      key={tab.id}
-                      type="button"
-                      onClick={() => setActiveTabId(tab.id)}
-                      className={`group flex items-center gap-2.5 sm:gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3.5 text-xs sm:text-sm font-bold transition-all duration-200 shrink-0 whitespace-nowrap lg:w-full text-left cursor-pointer border ${
-                        isActive
-                          ? "bg-primary-500 text-secondary-950 border-primary-500 shadow-xs font-black"
-                          : "bg-white text-secondary-800 hover:bg-secondary-100 hover:text-secondary-950 border-secondary-200/90 shadow-2xs dark:bg-secondary-900/90 dark:text-secondary-200 dark:border-secondary-800 dark:hover:bg-secondary-800 dark:hover:text-white"
-                      }`}
-                    >
-                      <TabIcon
-                        className={`h-4 w-4 transition-colors shrink-0 ${
+              {/* Tab Navigation: Horizontal swipe on mobile (contained within parent width), Vertical stack on desktop */}
+              <div className="w-full min-w-0 max-w-full overflow-hidden">
+                <div className="flex w-full min-w-0 max-w-full gap-2 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0 scroll-smooth snap-x snap-mandatory overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                  {tabsData.map((tab) => {
+                    const isActive = tab.id === activeTabId;
+                    const TabIcon = tab.icon;
+                    return (
+                      <button
+                        key={tab.id}
+                        type="button"
+                        onClick={() => setActiveTabId(tab.id)}
+                        className={`group flex items-center gap-2 sm:gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3.5 min-h-[44px] text-xs sm:text-sm font-bold transition-all duration-200 shrink-0 whitespace-nowrap snap-start lg:w-full text-left cursor-pointer border rounded-xl ${
                           isActive
-                            ? "text-secondary-950"
-                            : "text-secondary-500 group-hover:text-primary-600 dark:text-secondary-400 dark:group-hover:text-primary-400"
+                            ? "bg-primary-500 text-secondary-950 border-primary-500 shadow-xs font-black"
+                            : "bg-white text-secondary-800 hover:bg-secondary-100 hover:text-secondary-950 border-secondary-200/90 shadow-2xs dark:bg-secondary-900/90 dark:text-secondary-200 dark:border-secondary-800 dark:hover:bg-secondary-800 dark:hover:text-white"
                         }`}
-                        aria-hidden="true"
-                      />
-                      <span>{tab.tabLabel}</span>
-                    </button>
-                  );
-                })}
+                      >
+                        <TabIcon
+                          className={`h-4 w-4 transition-colors shrink-0 ${
+                            isActive
+                              ? "text-secondary-950"
+                              : "text-secondary-500 group-hover:text-primary-600 dark:text-secondary-400 dark:group-hover:text-primary-400"
+                          }`}
+                          aria-hidden="true"
+                        />
+                        <span className="truncate">{tab.tabLabel}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
-            {/* Note / Info Callout below left tabs on desktop - zero radius */}
-            <div className="mt-6 hidden lg:flex items-start gap-3 border border-secondary-200/90 bg-white/90 p-4 text-xs text-secondary-600 shadow-2xs dark:border-secondary-800/80 dark:bg-secondary-900/60 dark:text-secondary-300">
+            {/* Note / Info Callout below left tabs on desktop */}
+            <div className="mt-6 hidden lg:flex items-start gap-3 border border-secondary-200/90 bg-white/90 p-4 text-xs text-secondary-600 shadow-2xs dark:border-secondary-800/80 dark:bg-secondary-900/60 dark:text-secondary-300 rounded-xl">
               <Info className="h-4 w-4 shrink-0 text-primary-600 dark:text-primary-400 mt-0.5" />
               <p className="leading-relaxed">
                 Select a category above to review mandatory travel documents, recommended equipment, and essential guidelines before your trek.
@@ -227,84 +232,70 @@ export function TravelResourcesInteractive() {
             </div>
           </div>
 
-          {/* RIGHT SIDE: ACTIVE DETAIL CONTENT (WITH FIXED CONTAINER HEIGHT) */}
-          <div className="lg:col-span-8 xl:col-span-8">
-            {/* Stacking Grid: Locks height to the tallest tab to eliminate layout shift */}
-            <div className="grid grid-cols-1 grid-rows-1">
-              {tabsData.map((tab) => {
-                const isActive = tab.id === activeTabId;
-                const IconComponent = tab.icon;
-                return (
+          {/* RIGHT SIDE: ACTIVE DETAIL CONTENT (Fluid 100% width on mobile) */}
+          <div className="w-full min-w-0 max-w-full lg:col-span-8 xl:col-span-8">
+            <div key={activeTab.id} className="w-full min-w-0 max-w-full flex flex-col justify-start transition-opacity duration-200">
+              {/* Right Content Header: Icon + Title */}
+              <div className="w-full min-w-0 max-w-full">
+                <div className="flex items-center gap-2.5 sm:gap-3">
+                  <div className="flex h-9 w-9 sm:h-11 sm:w-11 items-center justify-center border border-primary-200 bg-primary-100/80 text-primary-700 shadow-2xs dark:border-primary-500/30 dark:bg-primary-500/15 dark:text-primary-400 shrink-0 rounded-xl">
+                    <IconComponent className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-lg font-black tracking-tight text-secondary-950 sm:text-2xl lg:text-3xl dark:text-white break-words">
+                      {activeTab.title}
+                    </h3>
+                  </div>
+                </div>
+
+                {/* Subtitle / Intro text */}
+                <p className="mt-2 sm:mt-3 text-xs sm:text-sm lg:text-base leading-relaxed text-secondary-700 dark:text-secondary-200 break-words">
+                  {activeTab.subtitle}
+                </p>
+              </div>
+
+              {/* CONTENT GRID: 1 column on mobile, 2 columns on tablet/desktop */}
+              <div className="mt-4 sm:mt-5 grid w-full min-w-0 max-w-full grid-cols-1 sm:grid-cols-2 border border-secondary-200/90 bg-white shadow-2xs dark:border-secondary-800 dark:bg-secondary-900 rounded-xl sm:rounded-2xl overflow-hidden">
+                {activeTab.items.map((item, idx) => (
                   <div
-                    key={tab.id}
-                    className={`col-start-1 row-start-1 flex flex-col justify-start transition-opacity duration-200 ${
-                      isActive
-                        ? "opacity-100 z-10 visible"
-                        : "opacity-0 z-0 invisible pointer-events-none"
+                    key={item.title}
+                    className={`w-full min-w-0 max-w-full flex flex-col justify-between p-4 sm:p-5 min-h-0 sm:min-h-[145px] transition hover:bg-secondary-50/70 dark:hover:bg-secondary-800/50 ${
+                      idx % 2 === 0
+                        ? "sm:border-r border-secondary-200/90 dark:border-secondary-800"
+                        : ""
+                    } ${
+                      idx < activeTab.items.length - 1
+                        ? "max-sm:border-b border-secondary-200/90 dark:border-secondary-800"
+                        : ""
+                    } ${
+                      idx < 2
+                        ? "sm:border-b border-secondary-200/90 dark:border-secondary-800"
+                        : ""
                     }`}
                   >
-                    {/* Right Content Header: Icon + Title */}
-                    <div>
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 sm:h-11 sm:w-11 items-center justify-center border border-primary-200 bg-primary-100/80 text-primary-700 shadow-2xs dark:border-primary-500/30 dark:bg-primary-500/15 dark:text-primary-400 shrink-0">
-                          <IconComponent className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-black tracking-tight text-secondary-950 sm:text-2xl lg:text-3xl dark:text-white">
-                            {tab.title}
-                          </h3>
-                        </div>
+                    <div className="w-full min-w-0">
+                      <div className="flex items-start gap-2.5">
+                        <CheckCircle2
+                          className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-primary-600 dark:text-primary-400 mt-0.5"
+                          aria-hidden="true"
+                        />
+                        <h4 className="font-bold text-secondary-950 text-sm sm:text-base leading-snug dark:text-white break-words min-w-0 flex-1">
+                          {item.title}
+                        </h4>
                       </div>
-
-                      {/* Subtitle / Intro text */}
-                      <p className="mt-2 sm:mt-3 text-xs sm:text-sm lg:text-base leading-relaxed text-secondary-700 dark:text-secondary-200">
-                        {tab.subtitle}
+                      <p className="mt-2 text-xs sm:text-sm text-secondary-600 leading-relaxed dark:text-secondary-300 break-words">
+                        {item.desc}
                       </p>
                     </div>
 
-                    {/* ZERO RADIUS & ZERO GAP CONTENT GRID */}
-                    <div className="mt-4 sm:mt-5 grid grid-cols-1 sm:grid-cols-2 border border-secondary-200/90 bg-white shadow-2xs dark:border-secondary-800 dark:bg-secondary-900">
-                      {tab.items.map((item, idx) => (
-                        <div
-                          key={item.title}
-                          className={`flex flex-col justify-between p-4 sm:p-5 min-h-0 sm:min-h-[145px] transition hover:bg-secondary-50/70 dark:hover:bg-secondary-800/50 ${
-                            idx % 2 === 0
-                              ? "sm:border-r border-secondary-200/90 dark:border-secondary-800"
-                              : ""
-                          } ${
-                            idx < 2
-                              ? "border-b border-secondary-200/90 dark:border-secondary-800"
-                              : idx === 2
-                              ? "max-sm:border-b border-secondary-200/90 dark:border-secondary-800"
-                              : ""
-                          }`}
-                        >
-                          <div>
-                            <div className="flex items-start gap-2.5">
-                              <CheckCircle2
-                                className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-primary-600 dark:text-primary-400 mt-0.5"
-                                aria-hidden="true"
-                              />
-                              <h4 className="font-bold text-secondary-950 text-sm sm:text-base leading-snug dark:text-white">
-                                {item.title}
-                              </h4>
-                            </div>
-                            <p className="mt-2 text-xs sm:text-sm text-secondary-600 leading-relaxed dark:text-secondary-300">
-                              {item.desc}
-                            </p>
-                          </div>
-
-                          {item.highlight && (
-                            <div className="mt-3 sm:mt-3.5 border-l-2 border-primary-500 bg-primary-50/80 px-2.5 py-1.5 sm:px-3 sm:py-2 text-[11px] sm:text-xs text-primary-950 dark:bg-primary-500/10 dark:text-primary-200">
-                              <strong className="text-primary-800 dark:text-primary-300">Note:</strong> {item.highlight}
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
+                    {item.highlight && (
+                      <div className="mt-3 sm:mt-3.5 w-full min-w-0 border-l-2 border-primary-500 bg-primary-50/80 px-2.5 py-1.5 sm:px-3 sm:py-2 text-[11px] sm:text-xs text-primary-950 dark:bg-primary-500/10 dark:text-primary-200 rounded-r-md break-words">
+                        <strong className="text-primary-800 dark:text-primary-300">Note:</strong> {item.highlight}
+                      </div>
+                    )}
                   </div>
-                );
-              })}
+                ))}
+              </div>
             </div>
           </div>
         </div>

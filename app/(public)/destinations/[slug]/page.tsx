@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { prisma } from "@/lib/prisma";
@@ -6,6 +7,49 @@ import { defaultPackages } from "@/app/lib/packagesStorage";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const aliases = [
+    slug,
+    slug === "ijen" ? "kawah-ijen" : slug === "kawah-ijen" ? "ijen" : null,
+    slug === "baluran" ? "tn-baluran" : slug === "tn-baluran" ? "baluran" : null,
+    slug === "djawatan" ? "de-djawatan" : slug === "de-djawatan" ? "djawatan" : null,
+  ].filter(Boolean) as string[];
+
+  let dest: any = null;
+  try {
+    dest = await prisma.destination.findFirst({
+      where: {
+        OR: [
+          ...aliases.map((s) => ({ slug: s })),
+          ...aliases.map((s) => ({ id: s })),
+        ],
+      },
+    });
+  } catch {}
+
+  if (!dest) {
+    dest = getDestinationBySlugFromList(defaultDestinations, slug) || defaultDestinations[0];
+  }
+
+  const name = dest?.name || "Banyuwangi Destination";
+  const desc = dest?.description || `Explore ${name} in Banyuwangi with official Mount Ijen Tour guides.`;
+
+  return {
+    title: `${name} | Mount Ijen Tour Destination`,
+    description: desc,
+    alternates: {
+      canonical: `https://www.mountijentour.com/destinations/${slug}`,
+    },
+    openGraph: {
+      title: `${name} | Mount Ijen Tour`,
+      description: desc,
+      url: `https://www.mountijentour.com/destinations/${slug}`,
+      images: dest?.image ? [{ url: dest.image, alt: name }] : [],
+    },
+  };
 }
 
 export default async function DestinationDetailPage({ params }: PageProps) {

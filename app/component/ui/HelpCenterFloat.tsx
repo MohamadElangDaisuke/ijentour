@@ -310,10 +310,10 @@ export default function HelpCenterFloat() {
           aria-label={isOpen ? "Close Help Center" : "Open Help Center"}
           whileHover={{ scale: 1.04 }}
           whileTap={{ scale: 0.96 }}
-          className={`flex items-center justify-center rounded-full shadow-md hover:shadow-lg transition-all cursor-pointer border ${
+          className={`flex items-center justify-center rounded-full shadow-md hover:shadow-lg transition-all cursor-pointer border min-h-[44px] min-w-[44px] ${
             isOpen
               ? "p-2.5 sm:px-4 sm:py-2.5 gap-2 sm:gap-2.5 bg-secondary-100 text-secondary-900 border-secondary-300 dark:bg-secondary-800 dark:text-white dark:border-secondary-700"
-              : "p-2.5 sm:px-4 sm:py-2.5 gap-2 sm:gap-2.5 bg-white/95 text-secondary-900 border-secondary-200/90 hover:bg-secondary-50/90 dark:bg-secondary-900/95 dark:text-white dark:border-secondary-700/80 dark:hover:bg-secondary-800/90 shadow-lg shadow-secondary-950/10 dark:shadow-secondary-950/40 backdrop-blur-md"
+              : "p-2.5 sm:px-4 sm:py-2.5 gap-2 sm:gap-2.5 bg-white/95 text-secondary-950 border-secondary-200/90 hover:bg-secondary-50/90 dark:bg-secondary-900/95 dark:text-white dark:border-secondary-700/80 dark:hover:bg-secondary-800/90 shadow-lg shadow-secondary-950/10 dark:shadow-secondary-950/40 backdrop-blur-md"
           }`}
         >
           {isOpen ? (

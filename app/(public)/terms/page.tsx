@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Terms & Conditions",
+  description: "Terms and conditions for tour bookings, customized itineraries, and travel services with Mount Ijen Tour Banyuwangi.",
+  alternates: {
+    canonical: "https://www.mountijentour.com/terms",
+  },
+};
+
 const sections = [
   {
     title: "Booking requests",

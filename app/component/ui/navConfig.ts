@@ -1,6 +1,6 @@
 /**
- * Navigation Configuration for Ijen Tour
- * Structured specifically for international travelers and natural English phrasing.
+ * Navigation Configuration for Mount Ijen Tour
+ * Structured specifically for international travelers and intuitive discovery.
  */
 
 export interface NavChildItem {
@@ -17,7 +17,7 @@ export interface NavSection {
 
 export interface NavDropdownItem {
   label: string;
-  href?: string; // Set if direct link without dropdown (e.g. Home)
+  href?: string; // Set if direct link without dropdown (e.g. Home, About Us, Contact)
   sections?: NavSection[];
 }
 
@@ -27,117 +27,69 @@ export const MAIN_NAV_ITEMS: NavDropdownItem[] = [
     href: "/",
   },
   {
-    label: "Explore",
+    label: "Tours",
     sections: [
       {
-        title: "Tour Packages",
         items: [
           {
-            title: "All Tour Packages",
+            title: "Tour Packages",
             href: "/packages",
-            description: "Explore all guided trekking and overland packages",
-          },
-          {
-            title: "Midnight Blue Fire Trek",
-            href: "/packages?category=midnight",
-            description: "00:00 AM expedition to witness rare electric blue flames",
+            description: "Guided trekking, midnight blue fire & overland expeditions",
             badge: "Popular",
           },
           {
-            title: "Private Family & Group Tours",
-            href: "/packages?category=private",
-            description: "Dedicated vehicle, private guide, and flexible itinerary",
-          },
-          {
-            title: "Regular Open Trips",
-            href: "/packages?category=regular",
-            description: "Budget-friendly shared adventures with fellow travelers",
-          },
-        ],
-      },
-      {
-        title: "Top Destinations",
-        items: [
-          {
-            title: "All Destinations",
-            href: "/destinations",
-            description: "Complete guide to East Java's natural wonders",
-          },
-          {
-            title: "Mount Ijen Crater",
-            href: "/destinations/kawah-ijen",
-            description: "Electric blue fire and turquoise acidic crater lake",
-          },
-          {
-            title: "Baluran National Park",
-            href: "/destinations/tn-baluran",
-            description: "Wildlife safari savanna dubbed 'Africa van Java'",
-          },
-          {
-            title: "De Djawatan Forest",
-            href: "/destinations/de-djawatan",
-            description: "Enchanted ancient trembesi forest like Lord of the Rings",
-          },
-        ],
-      },
-      {
-        title: "Visual Gallery",
-        items: [
-          {
-            title: "Photo & Video Gallery",
-            href: "/gallery",
-            description: "Authentic moments captured by our travelers & guides",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: "Plan Your Trip",
-    sections: [
-      {
-        title: "Trip Planning & Booking",
-        items: [
-          {
-            title: "Build Your Own Trip",
+            title: "Custom Trip",
             href: "/custom-package",
-            description: "Select destinations, private transport, and local guides",
+            description: "Design your personalized private adventure with local guides",
             badge: "Customizer",
           },
           {
-            title: "Track Reservation Status",
+            title: "Reservation Status",
             href: "/booking",
-            description: "Check your booking code, departure time, and status",
+            description: "Track your booking code, departure time, and status",
           },
         ],
       },
     ],
   },
   {
-    label: "Travel Guide",
+    label: "Explore",
     sections: [
       {
-        title: "Insights & Advice",
         items: [
           {
-            title: "Travel Articles & Stories",
+            title: "Destinations",
+            href: "/destinations",
+            description: "Explore Kawah Ijen, Baluran Safari, and De Djawatan Forest",
+          },
+          {
+            title: "Travel Gallery",
+            href: "/gallery",
+            description: "Authentic photos and stories from travelers & local guides",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    label: "Discover",
+    sections: [
+      {
+        items: [
+          {
+            title: "Travel Blog",
             href: "/blog",
-            description: "In-depth guides and insider tips from local Banyuwangi guides",
+            description: "Insider stories, travel tips, and volcano insights",
           },
           {
-            title: "Hiking & Safety Preparation",
-            href: "/blog?category=Tips%20%26%20Tricks",
-            description: "Fitness checklist, 3-layer clothing system, and gas masks",
+            title: "Travel Guides",
+            href: "/blog?category=Guides",
+            description: "Fitness prep, 3-layer clothing, and respirator safety advice",
           },
           {
-            title: "Ijen Volcanic Insights",
-            href: "/blog?category=Ijen%20Insights",
-            description: "The rare science of blue fire and sulfur mining culture",
-          },
-          {
-            title: "Frequently Asked Questions",
+            title: "FAQ",
             href: "/about#faq",
-            description: "Clear answers on weather, fitness, and equipment rental",
+            description: "Frequently asked questions on weather, fitness, and gear",
           },
         ],
       },
@@ -145,22 +97,10 @@ export const MAIN_NAV_ITEMS: NavDropdownItem[] = [
   },
   {
     label: "About Us",
-    sections: [
-      {
-        title: "Who We Are",
-        items: [
-          {
-            title: "Our Story & Team",
-            href: "/about",
-            description: "Certified local guides dedicated to sustainable eco-tourism",
-          },
-          {
-            title: "Contact & Direct Support",
-            href: "/contact",
-            description: "24/7 WhatsApp assistance, coordinator team, and inquiries",
-          },
-        ],
-      },
-    ],
+    href: "/about",
+  },
+  {
+    label: "Contact",
+    href: "/contact",
   },
 ];

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence, PanInfo } from 'framer-motion'
@@ -17,7 +17,34 @@ interface SidebarProps {
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname()
   const { openBookingModal } = useBookingModal()
-  const [openAccordions, setOpenAccordions] = useState<string[]>([])
+  const [openAccordions, setOpenAccordions] = useState<string[]>(['Tours'])
+
+  // Lock body scroll when mobile drawer is open to prevent background scrolling
+  useEffect(() => {
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow
+      document.body.style.overflow = 'hidden'
+      return () => {
+        document.body.style.overflow = originalOverflow
+      }
+    }
+  }, [isOpen])
+
+  // Close drawer on Escape key press
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen, onClose])
+
+  // Close drawer on route change
+  useEffect(() => {
+    onClose()
+  }, [pathname, onClose])
 
   const handleDragEnd = (_: unknown, info: PanInfo) => {
     if (info.offset.x < -80 || info.velocity.x < -300) {
@@ -41,7 +68,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     if (item.sections) {
       return item.sections.some((sec) =>
         sec.items.some((sub) => {
-          // In-page hash anchors (e.g. /#how-it-works or /about#faq) do not activate top-level dropdown
           if (sub.href.includes('#')) return false
           const basePath = sub.href.split('?')[0]
           if (!basePath || basePath === '/') return false
@@ -56,7 +82,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop Transparan */}
+          {/* Backdrop Overlay */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -67,7 +93,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             aria-hidden="true"
           />
 
-          {/* Panel Sidebar dengan Drag Gesture */}
+          {/* Drawer Sidebar Panel */}
           <motion.aside
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
@@ -77,26 +103,29 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 240, mass: 0.8 }}
-            className="fixed inset-y-0 left-0 z-50 flex w-80 max-w-[85vw] flex-col justify-between border-r border-secondary-200 dark:border-secondary-800 bg-white/95 dark:bg-secondary-950/95 p-5 sm:p-6 text-secondary-950 dark:text-white shadow-2xl backdrop-blur-2xl touch-pan-y select-none lg:hidden overflow-y-auto"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile Navigation Menu"
+            className="fixed inset-y-0 left-0 z-50 flex w-80 max-w-[calc(100vw-2.5rem)] flex-col justify-between border-r border-secondary-200 dark:border-secondary-800 bg-white/98 dark:bg-secondary-950/98 p-5 text-secondary-950 dark:text-white shadow-2xl backdrop-blur-2xl touch-pan-y select-none lg:hidden overflow-y-auto"
           >
             <div>
-              {/* Header Sidebar: Logo, Theme Mode, & Close Button */}
+              {/* Header: Logo, Theme Mode, & Close Button */}
               <div className="flex items-center justify-between border-b border-secondary-200 dark:border-secondary-800 pb-4">
                 <Link
                   href="/"
                   onClick={onClose}
-                  className="relative flex items-center transition-transform hover:scale-105"
+                  className="relative flex items-center transition-transform hover:scale-102"
                   aria-label="Mount Ijen Tour Home"
                 >
                   <img
                     src="/images/logo-light.png"
                     alt="Mount Ijen Tour and Trip Organizer"
-                    className="h-10 w-auto object-contain dark:hidden sm:h-11"
+                    className="h-9 w-auto object-contain dark:hidden sm:h-10"
                   />
                   <img
                     src="/images/logo-dark.png"
                     alt="Mount Ijen Tour and Trip Organizer"
-                    className="hidden h-10 w-auto object-contain dark:block sm:h-11"
+                    className="hidden h-9 w-auto object-contain dark:block sm:h-10"
                   />
                 </Link>
                 <div className="flex items-center gap-2">
@@ -104,7 +133,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                   <button
                     type="button"
                     onClick={onClose}
-                    className="rounded-xl p-2 text-secondary-500 hover:bg-secondary-100 dark:hover:bg-secondary-800 hover:text-secondary-950 dark:hover:text-white transition-colors cursor-pointer"
+                    className="rounded-xl p-2.5 text-secondary-500 hover:bg-secondary-100 dark:hover:bg-secondary-800 hover:text-secondary-950 dark:hover:text-white transition-colors cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
                     aria-label="Close navigation"
                   >
                     <X className="w-5 h-5" />
@@ -116,7 +145,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               <form
                 action="/blog"
                 onSubmit={onClose}
-                className="mt-4 flex items-center overflow-hidden rounded-2xl border border-secondary-200 dark:border-secondary-800 bg-secondary-50 dark:bg-secondary-900 px-3.5 py-2.5 transition focus-within:border-primary-500 focus-within:bg-white dark:focus-within:bg-secondary-900 focus-within:ring-2 focus-within:ring-primary-500/20"
+                className="mt-4 flex items-center overflow-hidden rounded-xl border border-secondary-200 dark:border-secondary-800 bg-secondary-50 dark:bg-secondary-900 px-3.5 py-2.5 transition focus-within:border-primary-500 focus-within:bg-white dark:focus-within:bg-secondary-900 focus-within:ring-2 focus-within:ring-primary-500/20"
               >
                 <Search className="h-4 w-4 shrink-0 text-secondary-400 dark:text-secondary-500" />
                 <input
@@ -129,7 +158,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               </form>
 
               {/* Accordion Public Navigation */}
-              <nav className="mt-5 space-y-1.5" aria-label="Mobile Navigation">
+              <nav className="mt-4 space-y-1.5" aria-label="Mobile Navigation">
                 {MAIN_NAV_ITEMS.map((item) => {
                   const active = isItemActive(item)
                   const hasDropdown = Boolean(item.sections && item.sections.length > 0)
@@ -141,7 +170,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                         key={item.label}
                         href={item.href}
                         onClick={onClose}
-                        className={`flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-bold transition-colors ${
+                        className={`flex items-center justify-between rounded-xl px-4 py-3 min-h-[44px] text-sm font-bold transition-colors ${
                           active
                             ? 'bg-primary-50 dark:bg-primary-950/40 text-primary-700 dark:text-primary-400'
                             : 'text-secondary-800 dark:text-secondary-200 hover:bg-secondary-100 dark:hover:bg-secondary-900'
@@ -155,13 +184,13 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                   return (
                     <div
                       key={item.label}
-                      className="rounded-2xl border border-secondary-100 dark:border-secondary-800/80 overflow-hidden bg-secondary-50/50 dark:bg-secondary-900/40"
+                      className="rounded-xl border border-secondary-100 dark:border-secondary-800/80 overflow-hidden bg-secondary-50/50 dark:bg-secondary-900/40"
                     >
                       {/* Accordion Trigger */}
                       <button
                         type="button"
                         onClick={() => toggleAccordion(item.label)}
-                        className={`w-full flex items-center justify-between px-4 py-3 text-sm font-bold transition-colors cursor-pointer ${
+                        className={`w-full flex items-center justify-between px-4 py-3 min-h-[44px] text-sm font-bold transition-colors cursor-pointer ${
                           active
                             ? 'text-primary-700 dark:text-primary-400 font-black'
                             : 'text-secondary-800 dark:text-secondary-200'
@@ -183,17 +212,17 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: 'auto', opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.25, ease: 'easeInOut' }}
-                            className="overflow-hidden bg-white/70 dark:bg-secondary-950/50 border-t border-secondary-100 dark:border-secondary-800/80 px-3 py-2 space-y-3"
+                            transition={{ duration: 0.22, ease: 'easeInOut' }}
+                            className="overflow-hidden bg-white/70 dark:bg-secondary-950/50 border-t border-secondary-100 dark:border-secondary-800/80 px-2 py-2 space-y-1"
                           >
                             {item.sections.map((section, sIdx) => (
                               <div key={sIdx} className="space-y-1">
                                 {section.title && (
-                                  <div className="text-[10px] font-black uppercase tracking-wider text-primary-600 dark:text-primary-400 px-2 py-1">
+                                  <div className="text-[10px] font-black uppercase tracking-wider text-primary-600 dark:text-primary-400 px-2.5 py-1">
                                     {section.title}
                                   </div>
                                 )}
-                                <div className="space-y-1 pl-1">
+                                <div className="space-y-1">
                                   {section.items.map((subItem) => {
                                     const basePath = subItem.href.split('?')[0].split('#')[0]
                                     const isSubActive =
@@ -207,7 +236,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                                         key={subItem.title}
                                         href={subItem.href}
                                         onClick={onClose}
-                                        className={`flex flex-col px-3 py-2 rounded-xl transition ${
+                                        className={`flex flex-col px-3 py-2.5 min-h-[44px] rounded-lg transition ${
                                           isSubActive
                                             ? 'bg-primary-50 dark:bg-primary-950/40 text-primary-700 dark:text-primary-400 font-bold'
                                             : 'hover:bg-secondary-100/70 dark:hover:bg-secondary-900/60 text-secondary-700 dark:text-secondary-300'
@@ -223,7 +252,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                                             </span>
                                           )}
                                         </div>
-                                        <span className="text-[10px] text-secondary-500 dark:text-secondary-400 line-clamp-1 mt-0.5">
+                                        <span className="text-[11px] text-secondary-500 dark:text-secondary-400 line-clamp-1 mt-0.5">
                                           {subItem.description}
                                         </span>
                                       </Link>
@@ -249,7 +278,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                   onClose()
                   openBookingModal()
                 }}
-                className="w-full flex items-center justify-center rounded-2xl bg-primary-500 hover:bg-primary-400 active:scale-95 px-4 py-3.5 text-center text-xs font-black text-secondary-950 shadow-lg shadow-primary-500/20 transition cursor-pointer"
+                className="w-full flex items-center justify-center rounded-xl bg-primary-500 hover:bg-primary-400 active:scale-95 px-4 py-3.5 min-h-[46px] text-center text-xs font-black text-secondary-950 shadow-lg shadow-primary-500/20 transition cursor-pointer"
               >
                 <span>Book Your Trip Now</span>
               </button>

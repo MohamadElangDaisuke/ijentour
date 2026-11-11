@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
@@ -8,8 +8,20 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F1FAFA" },
+    { media: "(prefers-color-scheme: dark)", color: "#102329" },
+  ],
+};
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://www.mountijentour.com";
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://mountijentour.vercel.app"),
+  metadataBase: new URL(APP_URL),
   title: {
     default: "Mount Ijen Tour | Mount Ijen Crater & Blue Fire Banyuwangi",
     template: "%s | Mount Ijen Tour Banyuwangi",
@@ -44,11 +56,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Mount Ijen Tour | Mount Ijen Crater & Blue Fire Banyuwangi",
     description: "Explore the wonder of Mount Ijen's electric blue fire and the best landscapes of Banyuwangi with licensed local guides.",
-    url: "https://mountijentour.vercel.app",
+    url: APP_URL,
     siteName: "Mount Ijen Tour Banyuwangi",
     images: [
       {
-        url: "https://mountijentour.vercel.app/images/HeroSection.webp",
+        url: `${APP_URL}/images/HeroSection.webp`,
         width: 1200,
         height: 630,
         alt: "Mount Ijen Crater Exploration Banyuwangi",
@@ -61,7 +73,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Mount Ijen Tour | Mount Ijen Crater & Blue Fire Banyuwangi",
     description: "Official Mount Ijen tour packages with gas respirators, certified local guides, and hotel pickup.",
-    images: ["https://mountijentour.vercel.app/images/HeroSection.webp"],
+    images: [`${APP_URL}/images/HeroSection.webp`],
   },
 };
 
@@ -72,7 +84,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={plusJakartaSans.variable} data-scroll-behavior="smooth" suppressHydrationWarning>
-      <body className={`${plusJakartaSans.className} font-sans text-secondary-950 bg-secondary-50 min-h-screen flex flex-col antialiased`}>
+      <body className={`${plusJakartaSans.className} font-sans text-secondary-950 bg-secondary-50 min-h-screen flex flex-col antialiased overflow-x-clip`}>
         <script
           id="theme-init"
           dangerouslySetInnerHTML={{

@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description: "Learn how Mount Ijen Tour collects, handles, and protects customer inquiry and reservation data.",
+  alternates: {
+    canonical: "https://www.mountijentour.com/privacy",
+  },
+};
+
 const sections = [
   {
     title: "Information we collect",

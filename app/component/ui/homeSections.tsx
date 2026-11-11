@@ -90,7 +90,7 @@ export function ExploreByInterestSection() {
             <Link
               key={label}
               href={`/blog?category=${encodeURIComponent(category)}`}
-              className="group relative isolate flex min-h-48 transform-gpu flex-col justify-end overflow-hidden border border-white/20 p-5 transition duration-500 ease-out hover:z-20 hover:scale-[1.03] focus-visible:z-20 focus-visible:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-primary-400 sm:min-h-56 sm:p-6 motion-reduce:transform-none motion-reduce:transition-none"
+              className="group relative isolate flex min-h-40 sm:min-h-56 transform-gpu flex-col justify-end overflow-hidden border border-white/20 p-3.5 sm:p-6 transition duration-500 ease-out hover:z-20 hover:scale-[1.03] focus-visible:z-20 focus-visible:scale-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-primary-400 motion-reduce:transform-none motion-reduce:transition-none"
             >
               <Image
                 src={image}
@@ -104,9 +104,9 @@ export function ExploreByInterestSection() {
                 className="absolute inset-0 -z-0 bg-gradient-to-t from-black/85 via-black/35 to-black/10 transition-colors duration-500 group-hover:from-black/70 group-focus-visible:from-black/70"
               />
               <span className="relative z-10">
-                <span className="block text-lg font-bold text-white sm:text-xl">{label}</span>
-                <span className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-primary-300 transition-colors group-hover:text-primary-200 group-focus-visible:text-primary-200">
-                  Explore articles <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                <span className="block text-base font-bold text-white sm:text-xl">{label}</span>
+                <span className="mt-1 sm:mt-2 inline-flex items-center gap-1 text-[11px] sm:text-xs font-semibold text-primary-300 transition-colors group-hover:text-primary-200 group-focus-visible:text-primary-200">
+                  Explore articles <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" aria-hidden="true" />
                 </span>
               </span>
             </Link>
@@ -196,15 +196,15 @@ export function TravelResourcesSection() {
     <section
       id="travel-resources"
       aria-labelledby="travel-resources-heading"
-      className="bg-white px-4 py-16 sm:px-8 sm:py-20 lg:py-24"
+      className="bg-white px-3.5 py-14 sm:px-8 sm:py-20 lg:py-24 w-full min-w-0 max-w-full overflow-hidden"
     >
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-10 max-w-3xl">
+      <div className="mx-auto max-w-7xl w-full min-w-0 max-w-full">
+        <div className="mb-8 sm:mb-10 max-w-3xl w-full min-w-0">
           <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary-600">Travel planning resources</p>
-          <h2 id="travel-resources-heading" className="mt-3 text-2xl font-black tracking-tight text-secondary-950 sm:text-4xl">
+          <h2 id="travel-resources-heading" className="mt-3 text-xl font-black tracking-tight text-secondary-950 sm:text-4xl break-words">
             Mount Ijen Trekking Guide &amp; Preparation Checklist
           </h2>
-          <p className="mt-3 text-sm leading-relaxed text-secondary-700 sm:text-base">
+          <p className="mt-2.5 sm:mt-3 text-xs sm:text-sm leading-relaxed text-secondary-700 sm:text-base break-words">
             Select a guide category to explore mandatory documents, cold-weather clothing (&lt;10°C), sulfur respirator gear, and vital tips before your trek.
           </p>
         </div>

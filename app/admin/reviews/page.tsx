@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Star,
   Plus,
@@ -11,10 +11,18 @@ import {
   Search,
   X,
   Save,
+  Check,
+  Eye,
+  MessageSquare,
+  Sparkles,
 } from "lucide-react";
 import ImageUpload from "@/app/component/ui/ImageUpload";
 import { AdminTableSkeleton } from "@/app/component/ui/skeleton";
 import { safeJsonParse } from "@/lib/utils";
+import AdminBadge from "@/app/component/admin/AdminBadge";
+import AdminPageHeader from "@/app/component/admin/AdminPageHeader";
+import AdminStatsCard from "@/app/component/admin/AdminStatsCard";
+import AdminDrawer from "@/app/component/admin/AdminDrawer";
 
 export default function AdminReviewsPage() {
   const [reviews, setReviews] = useState<any[]>([]);
@@ -24,9 +32,9 @@ export default function AdminReviewsPage() {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  // Modal State
-  const [modalMode, setModalMode] = useState<"create" | "edit" | null>(null);
-  const [editingReview, setEditingReview] = useState<any>(null);
+  // Drawer / Form State
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [editingReview, setEditingReview] = useState<any | null>(null);
   const [authorName, setAuthorName] = useState("");
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
@@ -50,8 +58,12 @@ export default function AdminReviewsPage() {
     loadReviews();
   }, []);
 
+  const showToast = (msg: string) => {
+    setSuccessMessage(msg);
+    setTimeout(() => setSuccessMessage(""), 3500);
+  };
+
   const openCreateModal = () => {
-    setModalMode("create");
     setEditingReview(null);
     setAuthorName("");
     setRating(5);
@@ -59,10 +71,10 @@ export default function AdminReviewsPage() {
     setPhotoUrl("");
     setIsApproved(true);
     setError("");
+    setIsDrawerOpen(true);
   };
 
   const openEditModal = (rev: any) => {
-    setModalMode("edit");
     setEditingReview(rev);
     setAuthorName(rev.authorName || "");
     setRating(rev.rating || 5);
@@ -71,12 +83,7 @@ export default function AdminReviewsPage() {
     setPhotoUrl(photos[0] || "");
     setIsApproved(rev.isApproved ?? true);
     setError("");
-  };
-
-  const closeModal = () => {
-    setModalMode(null);
-    setEditingReview(null);
-    setError("");
+    setIsDrawerOpen(true);
   };
 
   const handleToggleApprove = async (id: string, currentStatus: boolean) => {
@@ -90,8 +97,7 @@ export default function AdminReviewsPage() {
         setReviews((prev) =>
           prev.map((r) => (r.id === id ? { ...r, isApproved: !currentStatus } : r))
         );
-        setSuccessMessage(`Status ulasan berhasil diubah menjadi ${!currentStatus ? "Aktif (Disetujui)" : "Tertunda"}.`);
-        setTimeout(() => setSuccessMessage(""), 3000);
+        showToast(!currentStatus ? "Review approved and published live!" : "Review moved to pending queue.");
       }
     } catch (e) {
       console.error(e);
@@ -101,7 +107,7 @@ export default function AdminReviewsPage() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!authorName.trim() || !comment.trim()) {
-      setError("Nama pembuat ulasan dan komentar wajib diisi.");
+      setError("Customer name and review comment are required.");
       return;
     }
 
@@ -109,373 +115,400 @@ export default function AdminReviewsPage() {
     setError("");
 
     try {
-      if (modalMode === "create") {
-        const res = await fetch("/api/reviews", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            authorName,
-            rating,
-            comment,
-            photoUrls: photoUrl ? [photoUrl] : [],
-          }),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Gagal menambahkan ulasan.");
+      const payload: any = {
+        authorName: authorName.trim(),
+        rating: Number(rating),
+        comment: comment.trim(),
+        isApproved,
+        photoUrls: photoUrl ? JSON.stringify([photoUrl]) : null,
+      };
 
-        setReviews((prev) => [data.review, ...prev]);
-        setSuccessMessage("Ulasan berhasil ditambahkan!");
-      } else if (modalMode === "edit" && editingReview) {
+      if (editingReview) {
         const res = await fetch(`/api/reviews/${editingReview.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            authorName,
-            rating,
-            comment,
-            photoUrls: photoUrl ? [photoUrl] : [],
-            isApproved,
-          }),
+          body: JSON.stringify(payload),
         });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Gagal memperbarui ulasan.");
+        if (!res.ok) throw new Error(data.error || "Failed to update review.");
 
         setReviews((prev) =>
           prev.map((r) => (r.id === editingReview.id ? data.review : r))
         );
-        setSuccessMessage("Ulasan berhasil diperbarui!");
+        showToast("Review successfully updated!");
+      } else {
+        const res = await fetch("/api/reviews", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed to add review.");
+
+        setReviews((prev) => [data.review, ...prev]);
+        showToast("New review published!");
       }
 
-      closeModal();
-      setTimeout(() => setSuccessMessage(""), 4000);
+      setIsDrawerOpen(false);
     } catch (err: any) {
-      setError(err.message || "Terjadi kesalahan.");
+      setError(err.message || "Failed to save review.");
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleDelete = async (id: string, author: string) => {
-    if (!confirm(`Hapus ulasan dari "${author}"?`)) return;
+  const handleDelete = async (id: string, name: string) => {
+    if (!confirm(`Permanently delete review from "${name}"?`)) return;
 
     try {
       const res = await fetch(`/api/reviews/${id}`, { method: "DELETE" });
-      if (res.ok) {
-        setReviews((prev) => prev.filter((r) => r.id !== id));
-        setSuccessMessage("Ulasan berhasil dihapus.");
-        setTimeout(() => setSuccessMessage(""), 3000);
-      }
-    } catch (e) {
-      console.error(e);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to delete review.");
+
+      setReviews((prev) => prev.filter((r) => r.id !== id));
+      showToast(`Review from "${name}" was deleted.`);
+    } catch (err: any) {
+      alert(err.message || "Failed to delete review.");
     }
   };
 
-  const filtered = reviews.filter((r) => {
-    const matchesStatus =
-      filterStatus === "ALL" ||
-      (filterStatus === "APPROVED" && r.isApproved) ||
-      (filterStatus === "PENDING" && !r.isApproved);
-    const matchesSearch =
-      r.authorName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      r.comment?.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesStatus && matchesSearch;
-  });
+  // Metrics
+  const metrics = useMemo(() => {
+    const approved = reviews.filter((r) => r.isApproved).length;
+    const pending = reviews.filter((r) => !r.isApproved).length;
+    const avgRating =
+      reviews.length > 0
+        ? (reviews.reduce((acc, r) => acc + (Number(r.rating) || 5), 0) / reviews.length).toFixed(1)
+        : "5.0";
+    return { total: reviews.length, approved, pending, avgRating };
+  }, [reviews]);
+
+  // Filtered reviews
+  const filteredReviews = useMemo(() => {
+    return reviews.filter((r) => {
+      if (filterStatus === "APPROVED" && !r.isApproved) return false;
+      if (filterStatus === "PENDING" && r.isApproved) return false;
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const matchesName = (r.authorName || "").toLowerCase().includes(q);
+        const matchesComment = (r.comment || "").toLowerCase().includes(q);
+        if (!matchesName && !matchesComment) return false;
+      }
+      return true;
+    });
+  }, [reviews, filterStatus, searchQuery]);
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <AdminTableSkeleton />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 pb-12">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-primary-600">
-            Ulasan & Testimoni
-          </span>
-          <h1 className="text-2xl sm:text-3xl font-black text-secondary-950 tracking-tight">
-            Kelola Ulasan Wisatawan
-          </h1>
-          <p className="text-xs sm:text-sm text-secondary-600 mt-1">
-            Moderasi, publikasikan ulasan, dan tambahkan testimoni traveler yang tampil di halaman depan.
-          </p>
-        </div>
-
-        <button
-          onClick={openCreateModal}
-          className="px-5 py-2.5 rounded-2xl bg-primary-500 hover:bg-primary-400 text-secondary-950 font-black text-xs transition shadow-sm inline-flex items-center gap-2 self-start sm:self-auto cursor-pointer"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Tambah Ulasan Baru</span>
-        </button>
-      </div>
-
-      {/* Success Notification */}
+      {/* Toast Feedback */}
       {successMessage && (
-        <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center justify-between gap-3 animate-in fade-in duration-200">
-          <div className="flex items-center gap-2.5">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span className="font-semibold">{successMessage}</span>
-          </div>
-          <button onClick={() => setSuccessMessage("")} className="text-emerald-700 hover:text-emerald-950 cursor-pointer">
-            <X className="w-4 h-4" />
-          </button>
+        <div className="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2.5 text-xs font-bold border border-slate-700 animate-in fade-in duration-200">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+          <span>{successMessage}</span>
         </div>
       )}
 
-      {/* Filter Tabs & Search */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-3xl border border-secondary-200 shadow-xs">
-        <div className="flex gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-          {[
-            { label: "Semua", val: "ALL" },
-            { label: "Disetujui / Tampil", val: "APPROVED" },
-            { label: "Menunggu Moderasi", val: "PENDING" },
-          ].map((tab) => (
-            <button
-              key={tab.val}
-              onClick={() => setFilterStatus(tab.val as any)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
-                filterStatus === tab.val
-                  ? "bg-secondary-950 text-white shadow-2xs"
-                  : "bg-secondary-50 text-secondary-700 hover:bg-secondary-100"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
+      {/* Header */}
+      <AdminPageHeader
+        title="Customer Reviews & Testimonials"
+        description="Moderate, curate, and showcase traveler feedback and 5-star Google & TripAdvisor reviews."
+        badge={`${metrics.total} Reviews`}
+        breadcrumbs={[{ label: "Reviews" }]}
+        actions={
+          <button
+            onClick={openCreateModal}
+            className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition shadow-sm flex items-center gap-2 cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add Customer Review</span>
+          </button>
+        }
+      />
 
-        <div className="relative w-full sm:w-72">
-          <Search className="w-4 h-4 text-secondary-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+      {/* Metrics Row */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        <AdminStatsCard
+          label="Total Reviews"
+          value={metrics.total}
+          icon={<MessageSquare className="w-4 h-4" />}
+          subtitle="All guest testimonials"
+          theme="slate"
+        />
+        <AdminStatsCard
+          label="Approved / Live"
+          value={metrics.approved}
+          icon={<CheckCircle2 className="w-4 h-4" />}
+          subtitle="Displayed on website"
+          theme="emerald"
+        />
+        <AdminStatsCard
+          label="Pending Moderation"
+          value={metrics.pending}
+          icon={<AlertCircle className="w-4 h-4" />}
+          subtitle="Awaiting review approval"
+          theme="amber"
+        />
+        <AdminStatsCard
+          label="Average Rating"
+          value={`${metrics.avgRating} ★`}
+          icon={<Star className="w-4 h-4" />}
+          subtitle="Across all expeditions"
+          theme="purple"
+        />
+      </div>
+
+      {/* Search & Filter Toolbar */}
+      <div className="bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="relative flex-1 max-w-md">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
+            placeholder="Search traveler name, review content..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Cari nama atau isi ulasan..."
-            className="w-full pl-10 pr-4 py-2 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 transition"
           />
+        </div>
+
+        <div className="flex items-center gap-2.5">
+          <select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value as any)}
+            className="px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 focus:outline-none focus:border-amber-500 transition cursor-pointer"
+          >
+            <option value="ALL">All Statuses</option>
+            <option value="APPROVED">Approved Only</option>
+            <option value="PENDING">Pending Only</option>
+          </select>
         </div>
       </div>
 
-      {/* Table */}
-      {loading ? (
-        <AdminTableSkeleton columns={5} rows={5} />
-      ) : filtered.length === 0 ? (
-        <div className="bg-white rounded-3xl border border-secondary-200/80 shadow-xs overflow-hidden py-20 text-center text-xs text-secondary-500">
-          Tidak ada ulasan pada kategori ini.
-        </div>
-      ) : (
-        <div className="bg-white rounded-3xl border border-secondary-200/80 shadow-xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="bg-secondary-50 border-b border-secondary-100 text-[11px] font-bold text-secondary-500 uppercase tracking-wider">
-                  <th className="py-4 px-6">Wisatawan</th>
-                  <th className="py-4 px-6">Rating</th>
-                  <th className="py-4 px-6">Komentar / Ulasan</th>
-                  <th className="py-4 px-6 text-center">Status Publikasi</th>
-                  <th className="py-4 px-6 text-right">Aksi</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-secondary-100">
-                {filtered.map((rev) => {
-                  const photos = safeJsonParse<string[]>(rev.photoUrls, []);
-                  const avatar = photos[0];
-                  return (
-                    <tr key={rev.id} className="hover:bg-secondary-50/60 transition">
-                      <td className="py-4 px-6">
-                        <div className="flex items-center gap-3">
-                          {avatar ? (
-                            <img
-                              src={avatar}
-                              alt={rev.authorName}
-                              className="w-10 h-10 rounded-full object-cover border border-secondary-200 shrink-0"
-                            />
-                          ) : (
-                            <div className="w-10 h-10 rounded-full bg-primary-100 text-primary-800 font-black flex items-center justify-center shrink-0 text-xs">
-                              {rev.authorName.slice(0, 2).toUpperCase()}
-                            </div>
-                          )}
-                          <div>
-                            <p className="font-bold text-sm text-secondary-950">{rev.authorName}</p>
-                            <span className="text-[10px] text-secondary-400">
-                              {new Date(rev.createdAt).toLocaleDateString("id-ID")}
-                            </span>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="py-4 px-6">
-                        <div className="flex items-center text-amber-500 gap-1 font-bold">
-                          <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                          <span>{rev.rating}.0</span>
-                        </div>
-                      </td>
-                      <td className="py-4 px-6 text-secondary-700 leading-relaxed max-w-md">
-                        <p className="line-clamp-2">"{rev.comment}"</p>
-                      </td>
-                      <td className="py-4 px-6 text-center">
-                        <button
-                          onClick={() => handleToggleApprove(rev.id, rev.isApproved)}
-                          className={`px-3 py-1 rounded-full text-[10px] font-bold cursor-pointer transition ${
-                            rev.isApproved
-                              ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200"
-                              : "bg-amber-100 text-amber-800 hover:bg-amber-200"
-                          }`}
-                          title="Klik untuk mengubah status publikasi"
-                        >
-                          {rev.isApproved ? "✓ Disetujui" : "⏳ Menunggu"}
-                        </button>
-                      </td>
-                      <td className="py-4 px-6 text-right space-x-2 whitespace-nowrap">
-                        <button
-                          onClick={() => openEditModal(rev)}
-                          className="p-2 rounded-xl bg-primary-100 hover:bg-primary-200 text-primary-800 inline-block transition cursor-pointer"
-                          title="Sunting Ulasan"
-                        >
-                          <Edit3 className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(rev.id, rev.authorName)}
-                          className="p-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 transition cursor-pointer"
-                          title="Hapus Ulasan"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
+      {/* Reviews Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {filteredReviews.map((rev) => {
+          const photos = safeJsonParse<string[]>(rev.photoUrls, []);
+          const photo = photos[0];
 
-      {/* CREATE / EDIT MODAL */}
-      {modalMode && (
-        <div
-          className="fixed inset-0 z-50 bg-secondary-950/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
-          onClick={closeModal}
-        >
-          <div
-            className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full border border-secondary-200 shadow-2xl relative my-8 text-secondary-950"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between pb-4 border-b border-secondary-100 mb-6">
-              <h2 className="text-xl font-black text-secondary-950">
-                {modalMode === "create" ? "Tambah Ulasan Baru" : "Sunting Ulasan"}
-              </h2>
-              <button onClick={closeModal} className="p-2 rounded-full hover:bg-secondary-100 text-secondary-500">
-                <X className="w-5 h-5" />
-              </button>
+          return (
+            <div
+              key={rev.id}
+              className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 p-6 shadow-xs hover:shadow-md transition-all flex flex-col justify-between"
+            >
+              <div className="space-y-4">
+                {/* Header: Author + Star Rating */}
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-10 h-10 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-600 dark:text-amber-400 font-black text-sm flex items-center justify-center shrink-0">
+                      {rev.authorName ? rev.authorName.substring(0, 2).toUpperCase() : "G"}
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <h4 className="font-extrabold text-xs sm:text-sm text-slate-900 dark:text-white truncate">
+                          {rev.authorName || "Verified Traveler"}
+                        </h4>
+                        {rev.emailVerified && (
+                          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                            ✓ Verified Email
+                          </span>
+                        )}
+                        {rev.isVerifiedCustomer && (
+                          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                            ★ Verified Customer
+                          </span>
+                        )}
+                      </div>
+                      {rev.authorEmail && (
+                        <p className="text-[10px] text-slate-400 font-mono truncate">{rev.authorEmail}</p>
+                      )}
+                      <div className="flex items-center gap-0.5 mt-0.5">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-3 h-3 ${
+                              i < (rev.rating || 5)
+                                ? "fill-amber-400 text-amber-400"
+                                : "text-slate-300 dark:text-slate-700"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => handleToggleApprove(rev.id, rev.isApproved)}
+                    className={`text-[10px] font-black px-2.5 py-1 rounded-full cursor-pointer transition ${
+                      rev.isApproved
+                        ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-200"
+                        : "bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200 animate-pulse"
+                    }`}
+                  >
+                    {rev.isApproved ? "● Live" : "○ Pending"}
+                  </button>
+                </div>
+
+                {/* Comment */}
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed italic line-clamp-4">
+                  &ldquo;{rev.comment}&rdquo;
+                </p>
+
+                {/* Optional traveler photo */}
+                {photo && (
+                  <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700">
+                    <img src={photo} alt="Review attachment" className="w-full h-full object-cover" />
+                  </div>
+                )}
+              </div>
+
+              {/* Card Footer Actions */}
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 mt-4 flex items-center justify-between">
+                <span className="text-[10px] text-slate-400 font-mono">
+                  {rev.createdAt ? new Date(rev.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "Recent"}
+                </span>
+
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => openEditModal(rev)}
+                    className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+                    title="Edit Review"
+                  >
+                    <Edit3 className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(rev.id, rev.authorName)}
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition cursor-pointer"
+                    title="Delete Review"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
             </div>
+          );
+        })}
+      </div>
 
-            {error && (
-              <div className="mb-4 p-3.5 bg-red-50 border border-red-200 text-red-700 rounded-xl text-xs flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 shrink-0" />
-                <span>{error}</span>
-              </div>
-            )}
+      {/* Drawer Form for Add / Edit Review */}
+      <AdminDrawer
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        title={editingReview ? "Edit Customer Review" : "Add Customer Testimonial"}
+        subtitle="Manage public visitor reviews displayed across destination and package pages."
+        width="md"
+        footer={
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setIsDrawerOpen(false)}
+              className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={submitting}
+              className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition disabled:opacity-50 flex items-center gap-1.5"
+            >
+              <Save className="w-3.5 h-3.5" />
+              <span>{submitting ? "Saving..." : editingReview ? "Update Review" : "Publish Review"}</span>
+            </button>
+          </div>
+        }
+      >
+        <form onSubmit={handleSave} className="space-y-4 text-xs">
+          {error && (
+            <div className="p-3 rounded-xl bg-rose-50 text-rose-700 border border-rose-200 text-xs font-bold flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0" />
+              <span>{error}</span>
+            </div>
+          )}
 
-            <form onSubmit={handleSave} className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-secondary-800 mb-1.5">
-                  Nama Wisatawan *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={authorName}
-                  onChange={(e) => setAuthorName(e.target.value)}
-                  placeholder="Contoh: Sarah Jenkins / Budi Santoso"
-                  className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                />
-              </div>
+          <div>
+            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block mb-1">
+              Customer / Author Name *
+            </label>
+            <input
+              type="text"
+              value={authorName}
+              onChange={(e) => setAuthorName(e.target.value)}
+              placeholder="e.g. Jessica Miller (Netherlands)"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:border-amber-500"
+              required
+            />
+          </div>
 
-              <div>
-                <label className="block text-xs font-bold text-secondary-800 mb-1.5">
-                  Rating Bintang (1 - 5)
-                </label>
-                <div className="flex items-center gap-2">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      type="button"
-                      onClick={() => setRating(star)}
-                      className="p-1 cursor-pointer transition transform hover:scale-110"
-                    >
-                      <Star
-                        className={`w-6 h-6 ${
-                          star <= rating
-                            ? "fill-amber-400 text-amber-400"
-                            : "text-secondary-300"
-                        }`}
-                      />
-                    </button>
-                  ))}
-                  <span className="text-xs font-bold text-secondary-600 ml-2">
-                    {rating} dari 5 Bintang
-                  </span>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-secondary-800 mb-1.5">
-                  Komentar / Pengalaman Wisata *
-                </label>
-                <textarea
-                  required
-                  rows={4}
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  placeholder="Tuliskan ulasan autentik mengenai pemandu, armada, dan pemandangan..."
-                  className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                />
-              </div>
-
-              <div>
-                <ImageUpload
-                  value={photoUrl}
-                  onChange={(url) => setPhotoUrl(url)}
-                  folder="avatars"
-                  label="Foto Wisatawan (Opsional)"
-                  aspectRatio="square"
-                  helperText="Upload foto profil wisatawan atau avatar (Maks. 5 MB)."
-                />
-              </div>
-
-              {modalMode === "edit" && (
-                <div className="flex items-center gap-2 pt-1">
-                  <input
-                    type="checkbox"
-                    id="isApproved"
-                    checked={isApproved}
-                    onChange={(e) => setIsApproved(e.target.checked)}
-                    className="w-4 h-4 rounded text-primary-600 focus:ring-primary-500"
-                  />
-                  <label htmlFor="isApproved" className="text-xs font-bold text-secondary-800 cursor-pointer">
-                    Publikasikan ulasan ini di homepage (Status Disetujui)
-                  </label>
-                </div>
-              )}
-
-              <div className="flex justify-end gap-2 pt-4 border-t border-secondary-100">
+          <div>
+            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block mb-1">
+              Rating (1 to 5 Stars)
+            </label>
+            <div className="flex items-center gap-2 py-1">
+              {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   type="button"
-                  onClick={closeModal}
-                  className="px-5 py-2.5 rounded-xl border border-secondary-200 bg-white hover:bg-secondary-100 text-secondary-700 font-bold text-xs"
+                  key={star}
+                  onClick={() => setRating(star)}
+                  className="p-1 cursor-pointer transition-transform hover:scale-125"
                 >
-                  Batal
+                  <Star
+                    className={`w-6 h-6 ${
+                      star <= rating ? "fill-amber-400 text-amber-400" : "text-slate-300 dark:text-slate-700"
+                    }`}
+                  />
                 </button>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="px-6 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-400 text-secondary-950 font-bold text-xs shadow-sm flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
-                >
-                  <Save className="w-4 h-4" />
-                  <span>{submitting ? "Menyimpan..." : "Simpan Ulasan"}</span>
-                </button>
-              </div>
-            </form>
+              ))}
+              <span className="text-xs font-black text-amber-600 ml-2">{rating} Stars</span>
+            </div>
           </div>
-        </div>
-      )}
+
+          <div>
+            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block mb-1">
+              Review Comment *
+            </label>
+            <textarea
+              rows={4}
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="Describe the traveler's experience with the Blue Fire, guide, and transport..."
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 leading-relaxed"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block mb-1.5">
+              Guest Photo Attachment (Optional)
+            </label>
+            <ImageUpload
+              value={photoUrl}
+              onChange={(url) => setPhotoUrl(url)}
+              folder="reviews"
+            />
+          </div>
+
+          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={isApproved}
+                onChange={(e) => setIsApproved(e.target.checked)}
+                className="w-4 h-4 rounded text-amber-500 focus:ring-amber-400"
+              />
+              <span className="font-bold text-slate-800 dark:text-slate-200">
+                Approve and publish to website immediately
+              </span>
+            </label>
+          </div>
+        </form>
+      </AdminDrawer>
     </div>
   );
 }

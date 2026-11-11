@@ -74,7 +74,7 @@ export default function EditTripPage({ params }: PageProps) {
   }
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="w-full">
       <PackageForm mode="edit" packageId={tripId} initialData={packageData} />
     </div>
   );

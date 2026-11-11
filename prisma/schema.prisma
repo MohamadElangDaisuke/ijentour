@@ -9,18 +9,20 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String
-  email         String    @unique
-  emailVerified DateTime?
-  passwordHash  String?
-  phone         String?
-  nationality   String?
-  avatarUrl     String?
-  role          String    @default("CUSTOMER") // "CUSTOMER", "CUSTOMER_PRO", "MITRA", "ADMIN"
-  isActive      Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id                      String    @id @default(cuid())
+  username                String?   @unique
+  name                    String
+  email                   String    @unique
+  emailVerified           DateTime?
+  passwordHash            String?
+  phone                   String?
+  nationality             String?
+  avatarUrl               String?
+  role                    String    @default("CUSTOMER") // "CUSTOMER", "CUSTOMER_PRO", "MITRA", "ADMIN", "SUPER_ADMIN"
+  notificationPreferences String?   @default("{\"booking\":true,\"customTrip\":true,\"review\":true,\"contact\":true}")
+  isActive                Boolean   @default(true)
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
 
   bookings Booking[]
   reviews  Review[]
@@ -227,19 +229,24 @@ model Faq {
 }
 
 model Review {
-  id            String   @id @default(cuid())
-  userId        String?
-  tripPackageId String?
-  authorName    String
-  rating        Int      @default(5)
-  comment       String
-  photoUrls     String   @default("[]")
-  isApproved    Boolean  @default(true)
-  createdAt     DateTime @default(now())
+  id                 String   @id @default(cuid())
+  userId             String?
+  tripPackageId      String?
+  authorName         String
+  authorEmail        String?
+  rating             Int      @default(5)
+  comment            String
+  photoUrls          String   @default("[]")
+  isApproved         Boolean  @default(false)
+  emailVerified      Boolean  @default(false)
+  isVerifiedCustomer Boolean  @default(false)
+  createdAt          DateTime @default(now())
 
   user        User?        @relation(fields: [userId], references: [id])
   tripPackage TripPackage? @relation(fields: [tripPackageId], references: [id])
 
+  @@index([emailVerified, isApproved])
+  @@index([authorEmail])
   @@map("reviews")
 }
 
@@ -269,4 +276,35 @@ model Staff {
 
   @@map("staff")
 }
+
+model EmailVerificationOtp {
+  id        String   @id @default(cuid())
+  email     String
+  otpHash   String
+  type      String   @default("ADMIN_VERIFY") // "ADMIN_VERIFY", "REVIEW_VERIFY", "PASSWORD_RESET"
+  targetId  String?
+  expiresAt DateTime
+  attempts  Int      @default(0)
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([email, type])
+  @@index([email, type, targetId])
+  @@map("email_verification_otps")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  adminName String?
+  action    String   // "CREATE_ADMIN", "UPDATE_ADMIN", "DEACTIVATE_ADMIN", "DELETE_ADMIN", "PASSWORD_RESET", "AUTH_FAILURE"
+  targetId  String?
+  details   String?  // JSON string of event details
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  @@index([action, createdAt])
+  @@map("audit_logs")
+}
+
 

@@ -1,74 +1,119 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { signAdminToken, COOKIE_NAME } from "@/lib/auth";
+import { loginRateLimiter, getClientIp } from "@/lib/rateLimit";
+import { recordAuditLog } from "@/lib/audit";
 import * as bcrypt from "bcryptjs";
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json().catch(() => null);
-    if (!body || !body.email || !body.password) {
+    const clientIp = getClientIp(request);
+    if (loginRateLimiter.isLimited(clientIp)) {
       return NextResponse.json(
-        { success: false, error: "Email dan kata sandi wajib diisi." },
+        {
+          success: false,
+          error: "Terlalu banyak percobaan login yang gagal. Silakan coba lagi setelah 15 menit.",
+        },
+        { status: 429 }
+      );
+    }
+
+    const body = await request.json().catch(() => null);
+    if (!body || !body.username || !body.password) {
+      return NextResponse.json(
+        { success: false, error: "Username dan kata sandi wajib diisi." },
         { status: 400 }
       );
     }
 
-    const email = String(body.email).trim().toLowerCase();
+    const username = String(body.username).trim().toLowerCase();
     const password = String(body.password);
 
-    // Rate-limit safety check / minimal validation
     if (password.length < 4 || password.length > 100) {
       return NextResponse.json(
-        { success: false, error: "Email atau kata sandi tidak valid." },
+        { success: false, error: "Username atau kata sandi tidak valid." },
         { status: 401 }
       );
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email },
+    // Lookup user by unique username (case-insensitive)
+    const user = await (prisma as any).user.findFirst({
+      where: {
+        username: {
+          equals: username,
+          mode: "insensitive",
+        },
+      },
     });
 
     if (!user || !user.passwordHash || !user.isActive) {
+      await recordAuditLog({
+        action: "AUTH_FAILURE",
+        details: { attemptedUsername: username, reason: "Account not found or inactive" },
+        ipAddress: clientIp,
+      });
       return NextResponse.json(
-        { success: false, error: "Email atau kata sandi tidak valid." },
+        { success: false, error: "Username atau kata sandi tidak valid." },
         { status: 401 }
       );
     }
 
-    // Role check - only ADMIN accounts are permitted
-    if (user.role !== "ADMIN") {
+    // Role check - only ADMIN and SUPER_ADMIN are permitted
+    if (user.role !== "ADMIN" && user.role !== "SUPER_ADMIN") {
+      await recordAuditLog({
+        userId: user.id,
+        adminName: user.name,
+        action: "AUTH_FAILURE",
+        details: { attemptedUsername: username, role: user.role, reason: "Non-admin role" },
+        ipAddress: clientIp,
+      });
       return NextResponse.json(
         { success: false, error: "Akses ditolak. Akun ini tidak memiliki hak akses administrator." },
         { status: 403 }
       );
     }
 
-    // Verify hashed password
+    // Verify hashed password with bcrypt
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
     if (!isPasswordValid) {
+      await recordAuditLog({
+        userId: user.id,
+        adminName: user.name,
+        action: "AUTH_FAILURE",
+        details: { attemptedUsername: username, reason: "Invalid password match" },
+        ipAddress: clientIp,
+      });
       return NextResponse.json(
-        { success: false, error: "Email atau kata sandi tidak valid." },
+        { success: false, error: "Username atau kata sandi tidak valid." },
         { status: 401 }
       );
     }
 
-    // Sign JWT token
+    // Sign JWT token with username, role, and email verification status
+    const isEmailVerified = Boolean(user.emailVerified);
     const token = await signAdminToken({
       id: user.id,
+      username: user.username || username,
       email: user.email,
       name: user.name,
       role: user.role,
+      emailVerified: isEmailVerified,
     });
 
     const response = NextResponse.json({
       success: true,
-      message: "Login berhasil. Selamat datang kembali!",
+      message: isEmailVerified
+        ? "Login berhasil. Selamat datang kembali!"
+        : "Login berhasil. Mohon selesaikan verifikasi email OTP untuk mengaktifkan akses penuh.",
       user: {
         id: user.id,
+        username: user.username || username,
         email: user.email,
         name: user.name,
         role: user.role,
+        emailVerified: isEmailVerified,
       },
+      redirectTo: isEmailVerified ? "/admin/dashboard" : "/admin/verify-email",
     });
 
     // Set secure HttpOnly cookie

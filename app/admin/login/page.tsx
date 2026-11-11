@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   Lock,
-  Mail,
+  User,
   Eye,
   EyeOff,
   ArrowLeft,
@@ -28,7 +28,7 @@ export default function AdminLoginPage() {
     }
   }, []);
 
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -36,8 +36,8 @@ export default function AdminLoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) {
-      setError("Silakan masukkan email dan kata sandi.");
+    if (!username.trim() || !password) {
+      setError("Silakan masukkan username dan kata sandi.");
       return;
     }
 
@@ -48,7 +48,7 @@ export default function AdminLoginPage() {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username: username.trim(), password }),
       });
 
       const data = await res.json();
@@ -118,23 +118,23 @@ export default function AdminLoginPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Email Field */}
+            {/* Username Field */}
             <div>
               <label className="block text-xs font-black uppercase tracking-wider text-secondary-800 mb-1.5">
-                Email Administrator
+                Username Administrator
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-secondary-400">
-                  <Mail className="w-4 h-4" />
+                  <User className="w-4 h-4" />
                 </div>
                 <input
-                  type="email"
+                  type="text"
                   required
                   autoFocus
-                  autoComplete="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@mountijentour.com"
+                  autoComplete="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="superadmin atau username admin"
                   className="w-full pl-10 pr-4 py-3 bg-secondary-50 border border-secondary-200 rounded-2xl text-xs sm:text-sm font-medium text-secondary-950 placeholder:text-secondary-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
                 />
               </div>

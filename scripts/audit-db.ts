@@ -15,7 +15,10 @@ async function auditDb() {
     'contacts',
     'notifications',
     'faqs',
-    'reviews'
+    'reviews',
+    'staff',
+    'email_verification_otps',
+    'audit_logs'
   ];
 
   for (const table of tables) {
@@ -28,16 +31,22 @@ async function auditDb() {
     }
   }
 
-  // Check admin users
-  const admins = await prisma.user.findMany({ where: { role: 'ADMIN' } });
-  console.log('\n=== ADMIN USERS ===');
-  console.log(admins.map(a => ({ id: a.id, email: a.email, name: a.name, hasPassword: !!a.passwordHash })));
-
-  const dests = await prisma.destination.findMany();
-  console.log('\n=== DESTINATIONS ===');
-  console.log(dests);
+  const admin = await prisma.user.findFirst();
+  console.log('\n=== CURRENT USERS IN DB ===');
+  console.log({
+    id: admin?.id,
+    name: admin?.name,
+    username: admin?.username,
+    email: admin?.email,
+    role: admin?.role,
+    isActive: admin?.isActive,
+    emailVerified: admin?.emailVerified
+  });
 }
 
 auditDb()
   .catch(console.error)
-  .finally(() => process.exit(0));
+  .finally(async () => {
+    await prisma.$disconnect();
+    process.exit(0);
+  });

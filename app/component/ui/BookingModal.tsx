@@ -280,11 +280,18 @@ export default function BookingModal() {
 
     // Asynchronously record lead to backend if API exists (non-blocking)
     try {
+      const selectedPkgObj = packageOptions.find(
+        (p) => p.title === selectedPackage || p.id === selectedPackage
+      );
+      const isCustomChoice = selectedPkgObj?.id === "custom-private";
+
       fetch('/api/bookings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          packageName: selectedPackage,
+          bookingType: isCustomChoice ? "CUSTOM" : "REGULAR",
+          tripPackageId: isCustomChoice ? null : (selectedPkgObj?.id || null),
+          packageName: selectedPkgObj?.title || selectedPackage,
           customerName: fullName.trim(),
           customerEmail: email.trim(),
           whatsappNumber: whatsapp.trim(),

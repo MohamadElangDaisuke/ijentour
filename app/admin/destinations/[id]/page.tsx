@@ -74,7 +74,7 @@ export default function EditDestinationPage({ params }: PageProps) {
   }
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="w-full">
       <DestinationForm
         mode="edit"
         initialData={destinationData}

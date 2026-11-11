@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { GoogleGenAI, Type } from "@google/genai";
+import { requireAdmin } from "@/lib/auth";
+import { z } from "zod";
 
 export const runtime = "nodejs";
 
@@ -157,9 +159,51 @@ function parseGeminiError(err: any): ExtractedError {
   return { code, status, message, isRetryable };
 }
 
+const generateBlogSchema = z.object({
+  topic: z
+    .string()
+    .trim()
+    .min(3, "Article topic is too short (minimum 3 characters).")
+    .max(300, "Article topic exceeds 300 characters limit."),
+  category: z.string().trim().max(100).optional().default(""),
+  focus: z.string().trim().max(300).optional().default(""),
+  targetAudience: z.union([z.string().max(300), z.array(z.string().max(100))]).optional().default(""),
+  purpose: z.string().trim().max(300).optional().default(""),
+  writingStyle: z.enum(["Travel Blog", "Informative", "Promotional", "Storytelling"]).optional().default("Travel Blog"),
+  articleLength: z.enum(["500 words", "800 words", "1200 words", "1500 words", "Short", "Medium", "Long", "Comprehensive"]).optional().default("800 words"),
+  primaryKeyword: z.string().trim().max(100).optional().default(""),
+  secondaryKeywords: z.array(z.string().trim().max(100)).max(10).optional().default([]),
+  seoOptions: z
+    .object({
+      generateTitle: z.boolean().optional().default(true),
+      generateMetaDescription: z.boolean().optional().default(true),
+      generateSlug: z.boolean().optional().default(true),
+      generateKeywords: z.boolean().optional().default(true),
+      generateFaq: z.boolean().optional().default(true),
+    })
+    .optional()
+    .default({
+      generateTitle: true,
+      generateMetaDescription: true,
+      generateSlug: true,
+      generateKeywords: true,
+      generateFaq: true,
+    }),
+  includeCta: z.boolean().optional().default(true),
+});
+
 export async function POST(request: Request) {
   try {
-    // 1. Check API Key configuration
+    // 1. Strict Administrator Authorization Check
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized. Administrator privileges required." },
+        { status: 401 }
+      );
+    }
+
+    // 2. Check API Key configuration
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey || apiKey.trim() === "") {
       return NextResponse.json(
@@ -172,7 +216,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // 2. Simple Rate Limiting check
+    // 3. Simple Rate Limiting check
     const clientIp =
       request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
       request.headers.get("x-real-ip") ||
@@ -188,10 +232,10 @@ export async function POST(request: Request) {
       );
     }
 
-    // 3. Parse and validate body
-    let body: GenerateBlogRequest;
+    // 4. Parse and validate body with Zod
+    let rawBody: any;
     try {
-      body = await request.json();
+      rawBody = await request.json();
     } catch {
       return NextResponse.json(
         { success: false, error: "Invalid JSON payload." },
@@ -199,47 +243,32 @@ export async function POST(request: Request) {
       );
     }
 
+    const parseResult = generateBlogSchema.safeParse(rawBody);
+    if (!parseResult.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: parseResult.error.issues[0]?.message || "Validation error in request payload.",
+        },
+        { status: 400 }
+      );
+    }
+
     const {
       topic,
-      category = "",
-      focus = "",
-      targetAudience = "",
-      purpose = "",
-      writingStyle = "Travel Blog",
-      articleLength = "800 words",
-      primaryKeyword = "",
-      secondaryKeywords = [],
-      seoOptions = {
-        generateTitle: true,
-        generateMetaDescription: true,
-        generateSlug: true,
-        generateKeywords: true,
-        generateFaq: true,
-      },
-      includeCta = true,
-    } = body;
+      category,
+      focus,
+      targetAudience,
+      purpose,
+      writingStyle,
+      articleLength,
+      primaryKeyword,
+      secondaryKeywords,
+      seoOptions,
+      includeCta,
+    } = parseResult.data;
 
-    const trimmedTopic = topic?.trim();
-    if (!trimmedTopic) {
-      return NextResponse.json(
-        { success: false, error: "Article topic is required." },
-        { status: 400 }
-      );
-    }
-
-    if (trimmedTopic.length < 3) {
-      return NextResponse.json(
-        { success: false, error: "Article topic is too short (minimum 3 characters)." },
-        { status: 400 }
-      );
-    }
-
-    if (trimmedTopic.length > 300) {
-      return NextResponse.json(
-        { success: false, error: "Article topic exceeds 300 characters limit." },
-        { status: 400 }
-      );
-    }
+    const trimmedTopic = topic;
 
     const audienceStr = Array.isArray(targetAudience)
       ? targetAudience.join(", ")

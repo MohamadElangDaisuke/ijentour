@@ -3,7 +3,13 @@ import { prisma } from "@/lib/prisma";
 import { generateBookingCode } from "@/lib/utils";
 import { requireAdmin } from "@/lib/auth";
 import { ADDON_OPTIONS, DURATION_OPTIONS, GUIDE_OPTIONS, TRANSPORT_OPTIONS } from "@/lib/customTour";
+import { createInternalNotification } from "@/lib/notifications";
+import { bookingCreationRateLimiter, getClientIp } from "@/lib/rateLimit";
 import { revalidatePath } from "next/cache";
+import {
+  sendBookingEmailNotification,
+  sendCustomTripEmailNotification,
+} from "@/lib/email/notifications";
 
 export async function GET(request: Request) {
   try {
@@ -50,6 +56,16 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const clientIp = getClientIp(request);
+    if (bookingCreationRateLimiter.isLimited(clientIp)) {
+      return NextResponse.json(
+        {
+          error: "Too many reservation attempts from your connection. Please wait a few minutes before trying again.",
+        },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
     const {
       bookingType = "REGULAR",
@@ -169,16 +185,26 @@ export async function POST(request: Request) {
         },
       });
 
-      // Notify Admin
-      await prisma.notification.create({
-        data: {
-          type: "booking",
-          title: "New Custom Trip Request",
-          description: `${customerName.trim()} requested a custom trip: ${verifiedDestinations.map((d) => d.name).join(", ")} (${pax} pax). A travel agent will prepare the proposal manually.`,
-          link: "/admin/bookings",
-          unread: true,
-        },
+      // Notify Admin safely via internal helper
+      await createInternalNotification({
+        type: "booking",
+        title: "New Custom Trip Request",
+        description: `${customerName.trim()} requested a custom trip: ${verifiedDestinations.map((d) => d.name).join(", ")} (${pax} pax). A travel agent will prepare the proposal manually.`,
+        link: "/admin/bookings",
+        referenceId: bookingCode,
       });
+
+      // Dispatch Email Notification via Resend (Strictly Non-Blocking)
+      sendCustomTripEmailNotification({
+        bookingCode,
+        customerName: customerName.trim(),
+        customerEmail: customerEmail ? customerEmail.trim() : null,
+        whatsappNumber: sanitizedWhatsApp,
+        destinationsSummary: verifiedDestinations.map((d) => d.name).join(" + "),
+        numParticipants: pax,
+        departureDate: validDepartureDate,
+        specialRequests: specialRequests ? specialRequests.trim() : null,
+      }).catch((err) => console.error("[Bookings] Non-fatal custom trip email dispatch error:", err));
 
       try {
         revalidatePath("/admin/bookings");
@@ -195,39 +221,114 @@ export async function POST(request: Request) {
     // ==========================================
     // 2. HANDLE REGULAR TOUR PACKAGE RESERVATION
     // ==========================================
-    if (!packageName) {
+    if (!tripPackageId || typeof tripPackageId !== "string") {
       return NextResponse.json(
-        { error: "Tour package name is required for regular booking." },
+        { error: "Trip package ID (tripPackageId) is required for regular reservations." },
         { status: 400 }
       );
     }
 
-    const addonList = Array.isArray(addons) ? addons : [];
-    const addonTotal = addonList.reduce((sum: number, a: any) => sum + (Number(a.price) || 0), 0);
-    const subtotal = Number(basePrice) * pax;
+    // Fetch official package record from database
+    const dbPackage = await prisma.tripPackage.findUnique({
+      where: { id: tripPackageId },
+    });
+
+    if (!dbPackage || !dbPackage.isActive) {
+      return NextResponse.json(
+        { error: "Selected tour package not found or currently unavailable." },
+        { status: 404 }
+      );
+    }
+
+    // Extract official base price directly from database (handles "Rp 1.650.000" or numeric string)
+    const rawPriceDigits = String(dbPackage.price || "0").replace(/[^0-9]/g, "");
+    const verifiedBasePrice = parseInt(rawPriceDigits, 10) || 0;
+    const verifiedPackageName = dbPackage.title;
+
+    // Parse official addons list from package record
+    let officialAddonsList: Array<{ id: string; name: string; price: number }> = [];
+    if (dbPackage.addons) {
+      try {
+        const parsed = typeof dbPackage.addons === "string" ? JSON.parse(dbPackage.addons) : dbPackage.addons;
+        if (Array.isArray(parsed)) {
+          officialAddonsList = parsed.map((a: any) => ({
+            id: String(a.id),
+            name: String(a.name || a.id),
+            price:
+              typeof a.price === "string"
+                ? parseInt(a.price.replace(/[^0-9]/g, ""), 10) || 0
+                : Number(a.price) || 0,
+          }));
+        }
+      } catch {
+        officialAddonsList = [];
+      }
+    }
+
+    // Validate client requested addons against database
+    const clientAddons = Array.isArray(addons) ? addons : [];
+    const seenAddonIds = new Set<string>();
+    let verifiedAddonTotal = 0;
+    const verifiedSelectedAddons: Array<{ id: string; name: string; price: number }> = [];
+
+    for (const item of clientAddons) {
+      const addonId = typeof item === "string" ? item : item?.id;
+      if (!addonId || typeof addonId !== "string") {
+        return NextResponse.json(
+          { error: "Invalid add-on format provided." },
+          { status: 400 }
+        );
+      }
+
+      if (seenAddonIds.has(addonId)) {
+        return NextResponse.json(
+          { error: `Duplicate add-on '${addonId}' is not allowed.` },
+          { status: 400 }
+        );
+      }
+      seenAddonIds.add(addonId);
+
+      const matchedAddon = officialAddonsList.find((a) => a.id === addonId);
+      if (!matchedAddon) {
+        return NextResponse.json(
+          { error: `Add-on '${addonId}' is not available for this tour package.` },
+          { status: 400 }
+        );
+      }
+
+      verifiedAddonTotal += matchedAddon.price;
+      verifiedSelectedAddons.push({
+        id: matchedAddon.id,
+        name: matchedAddon.name,
+        price: matchedAddon.price,
+      });
+    }
+
+    // Flat fee pricing calculation based strictly on server database values:
+    const subtotal = verifiedBasePrice * pax;
     const discountAmount = 0;
-    const totalPrice = subtotal + addonTotal - discountAmount;
+    const calculatedTotalPrice = subtotal + verifiedAddonTotal - discountAmount;
 
     const booking = await prisma.booking.create({
       data: {
         bookingCode,
         bookingType: "REGULAR",
         userId: null,
-        tripPackageId: tripPackageId || null,
-        packageName,
+        tripPackageId: dbPackage.id,
+        packageName: verifiedPackageName,
         customerName: customerName.trim(),
         customerEmail: customerEmail ? customerEmail.trim() : null,
         customerPhone: customerPhone || sanitizedWhatsApp,
         whatsappNumber: sanitizedWhatsApp,
         departureDate: validDepartureDate,
         numParticipants: pax,
-        basePrice: Number(basePrice),
-        addons: JSON.stringify(addonList),
-        addonTotal,
+        basePrice: verifiedBasePrice,
+        addons: JSON.stringify(verifiedSelectedAddons),
+        addonTotal: verifiedAddonTotal,
         discountAmount,
-        totalPrice,
-        estimatedPrice: totalPrice,
-        finalPrice: totalPrice,
+        totalPrice: calculatedTotalPrice,
+        estimatedPrice: calculatedTotalPrice,
+        finalPrice: calculatedTotalPrice,
         specialRequests: specialRequests ? specialRequests.trim() : null,
         pickupLocation: pickupLocation ? pickupLocation.trim() : "Banyuwangi",
         status: "PENDING",
@@ -235,16 +336,27 @@ export async function POST(request: Request) {
       },
     });
 
-    // Notify Administrator in database
-    await prisma.notification.create({
-      data: {
-        type: "booking",
-        title: "New Reservation Received",
-        description: `${customerName.trim()} booked '${packageName}' (${pax} pax). Code: ${bookingCode}`,
-        link: "/admin/bookings",
-        unread: true,
-      },
+    // Notify Administrator in database safely
+    await createInternalNotification({
+      type: "booking",
+      title: "New Reservation Received",
+      description: `${customerName.trim()} booked '${verifiedPackageName}' (${pax} pax). Code: ${bookingCode}`,
+      link: "/admin/bookings",
+      referenceId: bookingCode,
     });
+
+    // Dispatch Email Notification via Resend (Strictly Non-Blocking)
+    sendBookingEmailNotification({
+      bookingCode,
+      customerName: customerName.trim(),
+      customerEmail: customerEmail ? customerEmail.trim() : null,
+      whatsappNumber: sanitizedWhatsApp,
+      packageName: verifiedPackageName,
+      numParticipants: pax,
+      departureDate: validDepartureDate,
+      totalPrice: calculatedTotalPrice,
+      specialRequests: specialRequests ? specialRequests.trim() : null,
+    }).catch((err) => console.error("[Bookings] Non-fatal booking email dispatch error:", err));
 
     try {
       revalidatePath("/admin/bookings");

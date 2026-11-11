@@ -1,7 +1,71 @@
 import { NextResponse } from "next/server";
 import { GoogleGenAI, Type } from "@google/genai";
+import { requireAdmin } from "@/lib/auth";
+import { z } from "zod";
 
 export const runtime = "nodejs";
+
+// In-memory sliding window rate limiter (15 requests / minute / IP)
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+const MAX_SUGGESTION_REQUESTS = 15;
+
+function isSuggestionRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+
+  if (rateLimitMap.size > 1000) {
+    for (const [key, val] of rateLimitMap.entries()) {
+      if (now > val.resetTime) rateLimitMap.delete(key);
+    }
+  }
+
+  if (!entry || now > entry.resetTime) {
+    rateLimitMap.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    return false;
+  }
+
+  if (entry.count >= MAX_SUGGESTION_REQUESTS) {
+    return true;
+  }
+
+  entry.count += 1;
+  return false;
+}
+
+const suggestionSchema = z.object({
+  type: z.enum([
+    "topics",
+    "categories",
+    "focus",
+    "audiences",
+    "purposes",
+    "primaryKeywords",
+    "secondaryKeywords",
+  ]),
+  context: z
+    .object({
+      topic: z.string().trim().max(300).optional().default(""),
+      category: z.string().trim().max(100).optional().default(""),
+      focus: z.string().trim().max(300).optional().default(""),
+      targetAudience: z.union([z.string().max(300), z.array(z.string().max(100))]).optional().default(""),
+      purpose: z.string().trim().max(300).optional().default(""),
+      writingStyle: z.string().trim().max(100).optional().default(""),
+      primaryKeyword: z.string().trim().max(100).optional().default(""),
+      existingCategories: z.array(z.string().trim().max(100)).max(20).optional().default([]),
+    })
+    .optional()
+    .default({
+      topic: "",
+      category: "",
+      focus: "",
+      targetAudience: "",
+      purpose: "",
+      writingStyle: "",
+      primaryKeyword: "",
+      existingCategories: [],
+    }),
+});
 
 export type SuggestionType =
   | "topics"
@@ -48,6 +112,16 @@ const SYSTEM_CATEGORIES = [
 
 export async function POST(request: Request) {
   try {
+    // 1. Strict Administrator Authorization Check
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized. Administrator privileges required." },
+        { status: 401 }
+      );
+    }
+
+    // 2. Check API Key configuration
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey || apiKey.trim() === "") {
       return NextResponse.json(
@@ -59,9 +133,26 @@ export async function POST(request: Request) {
       );
     }
 
-    let body: BlogSuggestionRequest;
+    // 3. Rate Limiting Check
+    const clientIp =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      request.headers.get("x-real-ip") ||
+      "admin-client";
+
+    if (isSuggestionRateLimited(clientIp)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Too many suggestion requests in a short period. Please wait 1 minute before trying again.",
+        },
+        { status: 429 }
+      );
+    }
+
+    // 4. Parse & Validate Body with Zod
+    let rawBody: any;
     try {
-      body = await request.json();
+      rawBody = await request.json();
     } catch {
       return NextResponse.json(
         { success: false, error: "Invalid JSON payload." },
@@ -69,14 +160,25 @@ export async function POST(request: Request) {
       );
     }
 
-    const { type, context = {} } = body;
+    const parseResult = suggestionSchema.safeParse(rawBody);
+    if (!parseResult.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: parseResult.error.issues[0]?.message || "Validation error in suggestion request.",
+        },
+        { status: 400 }
+      );
+    }
+
+    const { type, context } = parseResult.data;
     const {
-      topic = "",
-      category = "",
-      focus = "",
-      targetAudience = "",
-      purpose = "",
-      primaryKeyword = "",
+      topic,
+      category,
+      focus,
+      targetAudience,
+      purpose,
+      primaryKeyword,
     } = context;
 
     const audienceStr = Array.isArray(targetAudience)

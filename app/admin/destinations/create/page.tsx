@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function CreateDestinationPage() {
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="w-full">
       <DestinationForm mode="create" />
     </div>
   );

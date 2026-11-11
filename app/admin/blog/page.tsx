@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
 import {
   BookOpen,
@@ -14,18 +14,32 @@ import {
   X,
   Save,
   Columns,
+  Search,
+  ExternalLink,
+  Bold,
+  Italic,
+  Heading2,
+  List,
+  Quote,
+  Code,
+  Link2,
+  ArrowRight,
+  RotateCcw,
 } from "lucide-react";
 import { defaultArticles, Article } from "@/app/lib/articlesStorage";
 import ImageUpload from "@/app/component/ui/ImageUpload";
 import GeminiBlogModal from "./GeminiBlogModal";
 import MarkdownRenderer from "@/app/component/ui/MarkdownRenderer";
 import { AdminTableSkeleton } from "@/app/component/ui/skeleton";
+import AdminBadge from "@/app/component/admin/AdminBadge";
+import AdminPageHeader from "@/app/component/admin/AdminPageHeader";
+import AdminStatsCard from "@/app/component/admin/AdminStatsCard";
 
 export default function AdminBlogPage() {
   const [articles, setArticles] = useState<Article[]>(defaultArticles);
   const [loading, setLoading] = useState(true);
 
-  // Form state
+  // Form states
   const [editingId, setEditingId] = useState<string | null>(null);
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("Guide");
@@ -37,13 +51,16 @@ export default function AdminBlogPage() {
   const [successMessage, setSuccessMessage] = useState("");
 
   // Editor View Mode: "edit" | "preview" | "split"
-  const [contentViewMode, setContentViewMode] = useState<"edit" | "preview" | "split">("edit");
+  const [contentViewMode, setContentViewMode] = useState<"edit" | "preview" | "split">("split");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
 
-  // AI Modal state
+  // AI Modal
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
 
-  const formRef = useRef<HTMLDivElement>(null);
+  // Filters
+  const [searchQuery, setSearchQuery] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("ALL");
 
   const handleInsertSyntax = (prefix: string, suffix: string = "") => {
     if (!textareaRef.current) {
@@ -91,8 +108,6 @@ export default function AdminBlogPage() {
     setImage(art.image || "/images/pkg-bluefire.png");
     setError("");
     setSuccessMessage("");
-
-    // Smooth scroll to form
     formRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -107,9 +122,7 @@ export default function AdminBlogPage() {
   };
 
   const handleDeleteArticle = async (id: string, articleTitle: string) => {
-    if (!confirm(`Delete article "${articleTitle}"? This action cannot be undone.`)) {
-      return;
-    }
+    if (!confirm(`Delete article "${articleTitle}"? This action cannot be undone.`)) return;
 
     try {
       const res = await fetch(`/api/articles/${id}`, { method: "DELETE" });
@@ -119,10 +132,7 @@ export default function AdminBlogPage() {
       setArticles((prev) => prev.filter((a) => a.id !== id && a.slug !== id));
       setSuccessMessage("Article deleted successfully.");
       setTimeout(() => setSuccessMessage(""), 4000);
-
-      if (editingId === id) {
-        handleCancelEdit();
-      }
+      if (editingId === id) handleCancelEdit();
     } catch (err: any) {
       alert(err.message || "Failed to delete article.");
     }
@@ -141,7 +151,6 @@ export default function AdminBlogPage() {
 
     try {
       if (editingId) {
-        // Edit mode (PUT)
         const res = await fetch(`/api/articles/${editingId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -163,7 +172,6 @@ export default function AdminBlogPage() {
         setSuccessMessage("Article updated successfully!");
         handleCancelEdit();
       } else {
-        // Create mode (POST)
         const res = await fetch("/api/articles", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -179,501 +187,467 @@ export default function AdminBlogPage() {
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Failed to create article.");
 
-        setArticles([data.article, ...articles]);
+        setArticles((prev) => [data.article, ...prev]);
         setSuccessMessage("New article published successfully!");
         handleCancelEdit();
       }
-
-      setTimeout(() => setSuccessMessage(""), 5000);
+      setTimeout(() => setSuccessMessage(""), 4000);
     } catch (err: any) {
-      setError(err.message || "An error occurred while saving the article.");
+      setError(err.message || "Failed to save article.");
     } finally {
       setSubmitting(false);
     }
   };
 
-  const handleApplyAiArticle = (data: {
-    title: string;
-    category: string;
-    excerpt: string;
-    content: string;
-    slug?: string;
-    readTime?: string;
-  }) => {
-    setTitle(data.title);
-    setCategory(data.category || category);
-    setExcerpt(data.excerpt);
-    setContent(data.content);
-    setContentViewMode("split");
+  // Metrics
+  const metrics = useMemo(() => {
+    const categories = new Set(articles.map((a) => a.category || "General")).size;
+    return { total: articles.length, categories };
+  }, [articles]);
 
-    setSuccessMessage(
-      "✨ Gemini AI article successfully drafted! You can review, edit text, or update the cover image before publishing."
+  // Categories list
+  const categoriesList = useMemo(() => {
+    return Array.from(new Set(articles.map((a) => a.category || "Guide")));
+  }, [articles]);
+
+  // Filtered articles
+  const filteredArticles = useMemo(() => {
+    return articles.filter((a) => {
+      if (categoryFilter !== "ALL" && (a.category || "Guide") !== categoryFilter) return false;
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const matchesTitle = (a.title || "").toLowerCase().includes(q);
+        const matchesExcerpt = (a.excerpt || "").toLowerCase().includes(q);
+        if (!matchesTitle && !matchesExcerpt) return false;
+      }
+      return true;
+    });
+  }, [articles, categoryFilter, searchQuery]);
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <AdminTableSkeleton />
+      </div>
     );
-
-    // Scroll to form so admin can inspect the drafted content
-    formRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  }
 
   return (
-    <div className="space-y-8 pb-12">
-      {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-primary-600">
-            Publishing & Education
-          </span>
-          <h1 className="text-2xl sm:text-3xl font-black text-secondary-950 tracking-tight">
-            Manage Articles & Travel News
-          </h1>
-          <p className="text-xs sm:text-sm text-secondary-600 mt-1">
-            Publish trekking guides, safety advice, and Banyuwangi destination highlights.
-          </p>
-        </div>
-
-        {/* Global AI Generator Button */}
-        <button
-          type="button"
-          onClick={() => setIsAiModalOpen(true)}
-          className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500 to-primary-500 hover:from-amber-400 hover:to-primary-400 text-secondary-950 font-black text-xs transition shadow-md inline-flex items-center gap-2 self-start sm:self-auto cursor-pointer"
-        >
-          <Sparkles className="w-4 h-4" />
-          <span>✨ Generate with Gemini</span>
-        </button>
-      </div>
-
-      {/* Success Notification */}
+    <div className="space-y-8 pb-16">
+      {/* Toast */}
       {successMessage && (
-        <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center justify-between gap-3 animate-in fade-in duration-200">
-          <div className="flex items-center gap-2.5">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span className="font-semibold">{successMessage}</span>
-          </div>
-          <button
-            onClick={() => setSuccessMessage("")}
-            className="text-emerald-700 hover:text-emerald-950 cursor-pointer"
-          >
-            <X className="w-4 h-4" />
-          </button>
+        <div className="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2.5 text-xs font-bold border border-slate-700 animate-in fade-in duration-200">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+          <span>{successMessage}</span>
         </div>
       )}
 
-      {/* Article Form (Create or Edit) */}
+      {/* Header */}
+      <AdminPageHeader
+        title="Blog Articles & AI Content Studio"
+        description="Write, curate, and generate SEO-optimized travel guides for Mount Ijen using our integrated Gemini AI assistant."
+        badge={`${metrics.total} Articles`}
+        breadcrumbs={[{ label: "Blog & Content" }]}
+        actions={
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={() => setIsAiModalOpen(true)}
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-xs transition shadow-sm flex items-center gap-2 cursor-pointer"
+            >
+              <Sparkles className="w-4 h-4" />
+              <span>Generate with Gemini AI</span>
+            </button>
+            <button
+              onClick={() => formRef.current?.scrollIntoView({ behavior: "smooth" })}
+              className="px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-slate-800 text-white font-bold text-xs hover:bg-slate-800 transition flex items-center gap-2 cursor-pointer"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Write Manually</span>
+            </button>
+          </div>
+        }
+      />
+
+      {/* Metrics Row */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+        <AdminStatsCard
+          label="Total Articles"
+          value={metrics.total}
+          icon={<BookOpen className="w-4 h-4" />}
+          subtitle="All published insights & guides"
+          theme="slate"
+        />
+        <AdminStatsCard
+          label="Content Categories"
+          value={metrics.categories}
+          icon={<Columns className="w-4 h-4" />}
+          subtitle="Guides, gear, culture, itineraries"
+          theme="teal"
+        />
+        <AdminStatsCard
+          label="AI Writer Integration"
+          value="Google Gemini"
+          icon={<Sparkles className="w-4 h-4" />}
+          subtitle="Official @google/genai SDK"
+          theme="amber"
+        />
+      </div>
+
+      {/* Published Articles List Card */}
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs overflow-hidden">
+        {/* Table Toolbar */}
+        <div className="p-4 border-b border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="relative flex-1 max-w-md">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Search published articles by title..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-amber-500 transition"
+            />
+          </div>
+
+          <div className="flex items-center gap-2.5">
+            <select
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              className="px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 focus:outline-none focus:border-amber-500 transition cursor-pointer"
+            >
+              <option value="ALL">All Categories</option>
+              {categoriesList.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Table */}
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 uppercase text-[10px] font-black tracking-wider">
+                <th className="py-3.5 pl-6">Article</th>
+                <th className="py-3.5">Category</th>
+                <th className="py-3.5">Read Time</th>
+                <th className="py-3.5">Date</th>
+                <th className="py-3.5 pr-6 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
+              {filteredArticles.map((art) => (
+                <tr key={art.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition">
+                  <td className="py-3.5 pl-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0">
+                        <img
+                          src={art.image || "/images/pkg-bluefire.png"}
+                          alt={art.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="font-extrabold text-slate-900 dark:text-white truncate max-w-[280px]">
+                          {art.title}
+                        </p>
+                        <p className="text-[10px] text-slate-400 font-mono truncate max-w-[220px]">
+                          /{art.slug || art.id}
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td className="py-3.5">
+                    <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                      {art.category || "Guide"}
+                    </span>
+                  </td>
+
+                  <td className="py-3.5 text-slate-500 dark:text-slate-400 font-medium">
+                    {art.readTime || "5 min read"}
+                  </td>
+
+                  <td className="py-3.5 text-slate-500 dark:text-slate-400 font-medium whitespace-nowrap">
+                    {art.date || "Recent"}
+                  </td>
+
+                  <td className="py-3.5 pr-6 text-right whitespace-nowrap">
+                    <div className="flex items-center justify-end gap-1.5">
+                      <Link
+                        href={`/blog/${art.slug || art.id}`}
+                        target="_blank"
+                        className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-amber-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
+                        title="View Live Article"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </Link>
+                      <button
+                        onClick={() => handleStartEdit(art)}
+                        className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+                        title="Edit Article"
+                      >
+                        <Edit3 className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteArticle(art.id, art.title)}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition cursor-pointer"
+                        title="Delete Article"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Editor Form Section */}
       <div
         ref={formRef}
-        className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-xs relative"
+        className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 p-6 sm:p-8 shadow-xs space-y-6"
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-secondary-100 mb-6 gap-3">
-          <div className="flex items-center gap-2.5">
-            <h2 className="text-base font-black text-secondary-950 uppercase tracking-wider">
-              {editingId ? "Edit Article" : "Write New Article"}
-            </h2>
-            {editingId && (
-              <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-bold">
-                Edit Mode
-              </span>
-            )}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200/80 dark:border-slate-800">
+          <div>
+            <span className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider block">
+              {editingId ? "Edit Mode" : "New Post Creation"}
+            </span>
+            <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">
+              {editingId ? `Editing: ${title || "Untitled Article"}` : "Create Travel Guide / Article"}
+            </h3>
           </div>
 
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setIsAiModalOpen(true)}
-              className="px-3.5 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-950 border border-amber-300 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-              <span>✨ {editingId ? "Rewrite with AI" : "Generate with Gemini"}</span>
-            </button>
-
             {editingId && (
               <button
                 type="button"
                 onClick={handleCancelEdit}
-                className="px-3 py-1.5 rounded-xl bg-secondary-100 hover:bg-secondary-200 text-secondary-700 text-xs font-bold transition cursor-pointer"
+                className="px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-bold text-xs hover:bg-slate-100 cursor-pointer"
               >
                 Cancel Edit
               </button>
             )}
+            <button
+              type="button"
+              onClick={handleSaveArticle}
+              disabled={submitting}
+              className="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition flex items-center gap-2 cursor-pointer disabled:opacity-50"
+            >
+              <Save className="w-4 h-4" />
+              <span>{submitting ? "Publishing..." : editingId ? "Save Changes" : "Publish Article"}</span>
+            </button>
           </div>
         </div>
 
         {error && (
-          <div className="p-3 mb-4 rounded-xl bg-red-50 text-red-700 text-xs flex items-center gap-2">
+          <div className="p-4 rounded-2xl bg-rose-50 text-rose-700 border border-rose-200 text-xs font-bold flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
-        <form onSubmit={handleSaveArticle} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="md:col-span-2">
-              <label className="block text-xs font-bold text-secondary-800 mb-1.5">
+        <div className="space-y-5 text-xs">
+          {/* Title & Category */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="sm:col-span-2">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block mb-1.5">
                 Article Title *
               </label>
               <input
                 type="text"
-                required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="e.g. 5 Essential Tips to Safely Witness Ijen Blue Fire"
-                className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                placeholder="e.g. Complete 2026 Guide to Mount Ijen Blue Fire Expedition"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-bold text-slate-900 dark:text-white focus:outline-none focus:border-amber-500"
+                required
               />
             </div>
+
             <div>
-              <label className="block text-xs font-bold text-secondary-800 mb-1.5">Category</label>
+              <label className="text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block mb-1.5">
+                Category
+              </label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-800 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:border-amber-500"
               >
-                <option value="Guide">Guide</option>
-                <option value="Tips & Tricks">Tips & Tricks</option>
-                <option value="Ijen Geology & Nature">Ijen Geology & Nature</option>
-                <option value="Local Culture">Local Culture</option>
-                <option value="Destinations">Destinations</option>
-                <option value="Culinary">Culinary</option>
-                {category && !["Guide", "Tips & Tricks", "Ijen Geology & Nature", "Local Culture", "Destinations", "Culinary"].includes(category) && (
-                  <option value={category}>{category}</option>
-                )}
+                <option value="Guide">Trekking & Hiking Guide</option>
+                <option value="Destinations">Destination Showcase</option>
+                <option value="Preparation">Safety & Gear Preparation</option>
+                <option value="Culture">Local Heritage & Miners</option>
+                <option value="Tips">Travel Advice & Best Times</option>
               </select>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-secondary-800 mb-1.5">
-                  Summary / Excerpt
-                </label>
-                <textarea
-                  rows={4}
-                  value={excerpt}
-                  onChange={(e) => setExcerpt(e.target.value)}
-                  placeholder="Short 1-2 sentence summary for catalog preview..."
-                  className="w-full px-4 py-2 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                />
-              </div>
-            </div>
-
-            <div>
-              <ImageUpload
-                value={image}
-                onChange={(url) => setImage(url)}
-                folder="blog"
-                label="Article Cover Image (Supabase Storage)"
-                required
-                aspectRatio="video"
-                helperText="Upload the main banner image for the article (Max 5 MB)."
-              />
-            </div>
+          {/* Excerpt */}
+          <div>
+            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block mb-1.5">
+              Short SEO Excerpt / Summary
+            </label>
+            <textarea
+              rows={2}
+              value={excerpt}
+              onChange={(e) => setExcerpt(e.target.value)}
+              placeholder="Brief summary appearing on blog index cards and Google search results..."
+              className="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-amber-500"
+            />
           </div>
 
-          {/* Markdown Content Section with Editor & Preview */}
-          <div className="space-y-2">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1">
-              <div className="flex items-center gap-2">
-                <label className="text-xs font-bold text-secondary-900">
-                  Article Content (Markdown)
-                </label>
-                <span className="px-2 py-0.5 rounded-full bg-secondary-100 text-secondary-700 text-[10px] font-bold">
-                  ## H2, ### H3, - List, 1. Step, **Bold**
-                </span>
-              </div>
+          {/* Cover Image Upload */}
+          <div>
+            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block mb-1.5">
+              Article Cover Image
+            </label>
+            <ImageUpload
+              value={image}
+              onChange={(url) => setImage(url)}
+              folder="blog"
+            />
+          </div>
 
-              {/* View Switcher Tabs */}
-              <div className="flex items-center gap-1 bg-secondary-100/80 p-1 rounded-xl self-start sm:self-auto">
+          {/* Markdown Content Studio */}
+          <div className="space-y-2 pt-2">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                Markdown Article Body
+              </label>
+
+              {/* View mode toggle */}
+              <div className="inline-flex items-center p-1 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold">
                 <button
                   type="button"
                   onClick={() => setContentViewMode("edit")}
-                  className={`px-3 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-3 py-1 rounded-lg transition ${
                     contentViewMode === "edit"
-                      ? "bg-white text-secondary-950 shadow-xs"
-                      : "text-secondary-600 hover:text-secondary-950"
+                      ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs"
+                      : "text-slate-500 hover:text-slate-900 dark:text-slate-400"
                   }`}
-                  title="Show text editor only"
                 >
-                  <Edit3 className="w-3.5 h-3.5" />
-                  <span>Editor</span>
+                  Write Only
                 </button>
-
-                <button
-                  type="button"
-                  onClick={() => setContentViewMode("preview")}
-                  className={`px-3 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
-                    contentViewMode === "preview"
-                      ? "bg-white text-secondary-950 shadow-xs"
-                      : "text-secondary-600 hover:text-secondary-950"
-                  }`}
-                  title="View rendered article preview"
-                >
-                  <Eye className="w-3.5 h-3.5" />
-                  <span>Preview</span>
-                </button>
-
                 <button
                   type="button"
                   onClick={() => setContentViewMode("split")}
-                  className={`hidden sm:flex px-3 py-1 rounded-lg text-xs font-bold transition items-center gap-1.5 cursor-pointer ${
+                  className={`px-3 py-1 rounded-lg transition ${
                     contentViewMode === "split"
-                      ? "bg-white text-secondary-950 shadow-xs"
-                      : "text-secondary-600 hover:text-secondary-950"
+                      ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs"
+                      : "text-slate-500 hover:text-slate-900 dark:text-slate-400"
                   }`}
-                  title="Editor and preview side-by-side"
                 >
-                  <Columns className="w-3.5 h-3.5" />
-                  <span>Split View</span>
+                  Split View
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setContentViewMode("preview")}
+                  className={`px-3 py-1 rounded-lg transition ${
+                    contentViewMode === "preview"
+                      ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs"
+                      : "text-slate-500 hover:text-slate-900 dark:text-slate-400"
+                  }`}
+                >
+                  Preview Only
                 </button>
               </div>
             </div>
 
-            {/* Quick Markdown Toolbar (Only visible in edit or split mode) */}
-            {contentViewMode !== "preview" && (
-              <div className="flex flex-wrap items-center gap-1 p-1.5 bg-secondary-100/60 rounded-xl border border-secondary-200/60 text-xs">
-                <span className="text-[10px] font-bold text-secondary-400 uppercase tracking-wider px-2 hidden sm:inline">
-                  Format:
-                </span>
-                <button
-                  type="button"
-                  onClick={() => handleInsertSyntax("\n## ", "\n")}
-                  className="px-2 py-1 rounded-md bg-white hover:bg-secondary-200/80 text-secondary-800 text-[11px] font-bold transition cursor-pointer shadow-2xs border border-secondary-200/50"
-                  title="Heading 2 (Main Section)"
-                >
-                  H2
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleInsertSyntax("\n### ", "\n")}
-                  className="px-2 py-1 rounded-md bg-white hover:bg-secondary-200/80 text-secondary-800 text-[11px] font-bold transition cursor-pointer shadow-2xs border border-secondary-200/50"
-                  title="Heading 3 (Sub-section)"
-                >
-                  H3
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleInsertSyntax("**", "**")}
-                  className="px-2 py-1 rounded-md bg-white hover:bg-secondary-200/80 text-secondary-800 text-[11px] font-bold transition cursor-pointer shadow-2xs border border-secondary-200/50"
-                  title="Bold text"
-                >
-                  **B**
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleInsertSyntax("*", "*")}
-                  className="px-2 py-1 rounded-md bg-white hover:bg-secondary-200/80 text-secondary-800 text-[11px] italic font-serif transition cursor-pointer shadow-2xs border border-secondary-200/50"
-                  title="Italic text"
-                >
-                  *I*
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleInsertSyntax("\n- ", "")}
-                  className="px-2 py-1 rounded-md bg-white hover:bg-secondary-200/80 text-secondary-800 text-[11px] font-bold transition cursor-pointer shadow-2xs border border-secondary-200/50"
-                  title="Bullet list (-)"
-                >
-                  • List
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleInsertSyntax("\n1. ", "")}
-                  className="px-2 py-1 rounded-md bg-white hover:bg-secondary-200/80 text-secondary-800 text-[11px] font-bold transition cursor-pointer shadow-2xs border border-secondary-200/50"
-                  title="Numbered list (1.)"
-                >
-                  1. Step
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleInsertSyntax("\n> ", "\n")}
-                  className="px-2 py-1 rounded-md bg-white hover:bg-secondary-200/80 text-secondary-800 text-[11px] font-bold transition cursor-pointer shadow-2xs border border-secondary-200/50"
-                  title="Blockquote / Important note"
-                >
-                  "Quote"
-                </button>
-                <div className="ml-auto pr-2 text-[11px] text-secondary-400 font-medium">
-                  {content.split(/\s+/).filter(Boolean).length} words
-                </div>
-              </div>
-            )}
-
-            {/* Main Content Area */}
-            <div
-              className={
-                contentViewMode === "split"
-                  ? "grid grid-cols-1 lg:grid-cols-2 gap-4"
-                  : "w-full"
-              }
-            >
-              {/* Textarea Editor */}
-              {(contentViewMode === "edit" || contentViewMode === "split") && (
-                <div className="flex flex-col">
-                  {contentViewMode === "split" && (
-                    <div className="text-[11px] font-bold uppercase tracking-wider text-secondary-500 mb-1.5 flex items-center gap-1.5">
-                      <Edit3 className="w-3.5 h-3.5 text-secondary-600" />
-                      <span>Markdown Editor</span>
-                    </div>
-                  )}
-                  <textarea
-                    ref={textareaRef}
-                    rows={14}
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    placeholder="Write the full article content here in Markdown format...&#10;&#10;Example:&#10;Mount Ijen is world-renowned for its surreal volcanic beauty and mesmerizing Blue Fire phenomenon.&#10;&#10;## The Allure of Ijen Crater&#10;The turquoise acidic crater lake presents a dramatic vista...&#10;&#10;### Essential Gear Checklist&#10;- Gas respirator mask&#10;- Warm jacket&#10;- Sturdy trekking boots"
-                    className="w-full flex-1 min-h-[360px] px-4 py-3 bg-secondary-50 border border-secondary-200 rounded-2xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500 font-mono leading-relaxed"
-                  ></textarea>
-                </div>
-              )}
-
-              {/* Rendered Markdown Preview */}
-              {(contentViewMode === "preview" || contentViewMode === "split") && (
-                <div className="flex flex-col">
-                  {contentViewMode === "split" && (
-                    <div className="text-[11px] font-bold uppercase tracking-wider text-secondary-500 mb-1.5 flex items-center justify-between">
-                      <span className="flex items-center gap-1.5">
-                        <Eye className="w-3.5 h-3.5 text-primary-600" />
-                        <span>Live Preview (Visitor View)</span>
-                      </span>
-                      <span className="text-[10px] text-secondary-400 font-normal">
-                        Auto-rendering
-                      </span>
-                    </div>
-                  )}
-                  <div className="w-full flex-1 min-h-[360px] max-h-[500px] overflow-y-auto p-5 sm:p-6 bg-white border border-secondary-200 rounded-2xl shadow-2xs">
-                    {content.trim() ? (
-                      <MarkdownRenderer content={content} />
-                    ) : (
-                      <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-center p-8 text-secondary-400">
-                        <BookOpen className="w-8 h-8 mb-2 text-secondary-300 stroke-[1.5]" />
-                        <p className="text-xs font-semibold text-secondary-600">
-                          No content to preview yet
-                        </p>
-                        <p className="text-[11px] text-secondary-400 mt-1 max-w-xs">
-                          Type Markdown text in the Editor tab or use the{" "}
-                          <strong>✨ Generate with Gemini</strong> button to create an article automatically.
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="flex items-center justify-end gap-3 pt-2">
-            {editingId && (
+            {/* Markdown Toolbar */}
+            <div className="flex flex-wrap items-center gap-1.5 p-2 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
               <button
                 type="button"
-                onClick={handleCancelEdit}
-                className="px-4 py-2.5 rounded-xl border border-secondary-200 bg-white hover:bg-secondary-100 text-secondary-700 font-bold text-xs transition cursor-pointer"
+                onClick={() => handleInsertSyntax("**", "**")}
+                className="p-1.5 rounded-lg hover:bg-slate-200/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300"
+                title="Bold"
               >
-                Cancel
+                <Bold className="w-3.5 h-3.5" />
               </button>
-            )}
+              <button
+                type="button"
+                onClick={() => handleInsertSyntax("*", "*")}
+                className="p-1.5 rounded-lg hover:bg-slate-200/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300"
+                title="Italic"
+              >
+                <Italic className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => handleInsertSyntax("## ", "")}
+                className="p-1.5 rounded-lg hover:bg-slate-200/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300"
+                title="Heading 2"
+              >
+                <Heading2 className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => handleInsertSyntax("- ", "")}
+                className="p-1.5 rounded-lg hover:bg-slate-200/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300"
+                title="Bullet List"
+              >
+                <List className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => handleInsertSyntax("> ", "")}
+                className="p-1.5 rounded-lg hover:bg-slate-200/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300"
+                title="Blockquote"
+              >
+                <Quote className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => handleInsertSyntax("[Link Text](", ")")}
+                className="p-1.5 rounded-lg hover:bg-slate-200/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300"
+                title="Link"
+              >
+                <Link2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
 
-            <button
-              type="submit"
-              disabled={submitting}
-              className="px-6 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-400 text-secondary-950 font-bold text-xs shadow-sm transition flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
-            >
-              {editingId ? (
-                <>
-                  <Save className="w-4 h-4" />
-                  <span>{submitting ? "Saving Changes..." : "Save Changes"}</span>
-                </>
-              ) : (
-                <>
-                  <Plus className="w-4 h-4" />
-                  <span>{submitting ? "Publishing..." : "Publish Article"}</span>
-                </>
+            {/* Split Editor / Preview */}
+            <div className={`grid gap-4 ${contentViewMode === "split" ? "grid-cols-1 lg:grid-cols-2" : "grid-cols-1"}`}>
+              {contentViewMode !== "preview" && (
+                <textarea
+                  ref={textareaRef}
+                  rows={16}
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  placeholder="Type your markdown article here..."
+                  className="w-full p-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-mono text-xs leading-relaxed focus:outline-none focus:border-amber-500 custom-scrollbar"
+                />
               )}
-            </button>
+
+              {contentViewMode !== "edit" && (
+                <div className="p-5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-y-auto max-h-[380px] custom-scrollbar prose prose-sm dark:prose-invert">
+                  {content.trim() ? (
+                    <MarkdownRenderer content={content} />
+                  ) : (
+                    <p className="text-slate-400 italic text-xs">Article preview will render here...</p>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
-        </form>
-      </div>
-
-      {/* Articles Table */}
-      {loading ? (
-        <AdminTableSkeleton columns={5} rows={4} />
-      ) : (
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-xs">
-          <div className="flex items-center justify-between pb-3 border-b border-secondary-100 mb-6">
-            <h2 className="text-base font-black text-secondary-950 uppercase tracking-wider">
-              Article List ({articles.length})
-            </h2>
-            <span className="text-xs text-secondary-400">
-              Total {articles.length} registered articles
-            </span>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-            <thead>
-              <tr className="border-b border-secondary-100 text-[11px] font-bold text-secondary-500 uppercase tracking-wider">
-                <th className="pb-3">Article Title</th>
-                <th className="pb-3">Category</th>
-                <th className="pb-3">Author</th>
-                <th className="pb-3">Date</th>
-                <th className="pb-3 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-secondary-100">
-              {articles.map((art) => {
-                const articleSlug = art.slug || art.id;
-                return (
-                  <tr key={art.id} className="hover:bg-secondary-50/70 transition">
-                    <td className="py-3.5 font-bold text-secondary-950 max-w-xs truncate">
-                      {art.title}
-                    </td>
-                    <td className="py-3.5">
-                      <span className="px-2 py-0.5 rounded-md bg-secondary-100 text-secondary-800 text-[10px] font-bold">
-                        {art.category}
-                      </span>
-                    </td>
-                    <td className="py-3.5 text-secondary-600">{art.author || "Ijen Tour Team"}</td>
-                    <td className="py-3.5 text-secondary-500">{art.date}</td>
-                    <td className="py-3.5 text-right space-x-1.5 whitespace-nowrap">
-                      {/* View on Blog */}
-                      <Link
-                        href={`/blog/${articleSlug}`}
-                        target="_blank"
-                        className="p-1.5 rounded-lg bg-secondary-100 hover:bg-secondary-200 text-secondary-800 inline-block transition"
-                        title="View on Public Site"
-                      >
-                        <Eye className="w-3.5 h-3.5" />
-                      </Link>
-
-                      {/* Edit */}
-                      <button
-                        type="button"
-                        onClick={() => handleStartEdit(art)}
-                        className="p-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 inline-block transition cursor-pointer border border-amber-200/60"
-                        title="Edit Article"
-                      >
-                        <Edit3 className="w-3.5 h-3.5" />
-                      </button>
-
-                      {/* Delete */}
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteArticle(art.id, art.title)}
-                        className="p-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-700 inline-block transition cursor-pointer border border-red-200/60"
-                        title="Delete Article"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
         </div>
       </div>
-    )}
 
-      {/* Gemini AI Blog Generator Modal */}
+      {/* Gemini AI Modal Integration */}
       <GeminiBlogModal
         isOpen={isAiModalOpen}
         onClose={() => setIsAiModalOpen(false)}
-        onApplyArticle={handleApplyAiArticle}
-        initialCategory={category}
+        onApplyArticle={(gen) => {
+          setTitle(gen.title);
+          setCategory(gen.category);
+          setExcerpt(gen.excerpt);
+          setContent(gen.content);
+          formRef.current?.scrollIntoView({ behavior: "smooth" });
+          setSuccessMessage("Gemini AI article loaded into editor!");
+          setTimeout(() => setSuccessMessage(""), 4000);
+        }}
       />
     </div>
   );

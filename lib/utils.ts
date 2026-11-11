@@ -21,6 +21,32 @@ export function formatCurrency(amount: number): string {
 }
 
 /**
+ * Format compact Indonesian Rupiah (e.g. Rp150 rb, Rp1,22 jt)
+ */
+export function formatCompactRupiah(amount: number): string {
+  if (!amount || isNaN(amount) || amount === 0) return "Rp0";
+  const absAmount = Math.abs(amount);
+  const sign = amount < 0 ? "-" : "";
+
+  if (absAmount >= 1_000_000_000) {
+    const val = absAmount / 1_000_000_000;
+    const formatted = val.toFixed(2).replace(/\.?0+$/, "").replace(".", ",");
+    return `${sign}Rp${formatted} M`;
+  }
+  if (absAmount >= 1_000_000) {
+    const val = absAmount / 1_000_000;
+    const formatted = val.toFixed(2).replace(/\.?0+$/, "").replace(".", ",");
+    return `${sign}Rp${formatted} jt`;
+  }
+  if (absAmount >= 1_000) {
+    const val = absAmount / 1_000;
+    const formatted = val.toFixed(2).replace(/\.?0+$/, "").replace(".", ",");
+    return `${sign}Rp${formatted} rb`;
+  }
+  return `${sign}Rp${absAmount}`;
+}
+
+/**
  * Format date to readable string
  */
 export function formatDate(date: Date | string, locale: string = "en-US"): string {

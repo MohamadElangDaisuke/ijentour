@@ -7,6 +7,14 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json(
+        { error: "Unauthorized. Administrator session required." },
+        { status: 401 }
+      );
+    }
+
     const { id } = await params;
     const booking = await prisma.booking.findFirst({
       where: { OR: [{ id }, { bookingCode: id }] },

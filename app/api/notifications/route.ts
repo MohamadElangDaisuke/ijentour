@@ -1,6 +1,15 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
+import { sanitizeInternalLink } from "@/lib/notifications";
+import { z } from "zod";
+
+const createNotificationSchema = z.object({
+  title: z.string().trim().min(1, "Title is required").max(150, "Title is too long"),
+  description: z.string().trim().min(1, "Description is required").max(500, "Description is too long"),
+  link: z.string().trim().optional(),
+  type: z.enum(["booking", "contact", "review", "system", "user"]).default("system"),
+});
 
 export async function GET(request: Request) {
   try {
@@ -77,16 +86,37 @@ export async function PUT(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const { title, description, link = "/admin/notifications", type = "booking" } = await request.json();
-    if (!title || !description) {
-      return NextResponse.json({ error: "Notification title and description are required." }, { status: 400 });
+    const admin = await requireAdmin(request);
+    if (!admin) {
+      return NextResponse.json(
+        { error: "Unauthorized. Administrator session required." },
+        { status: 401 }
+      );
     }
+
+    let body: any;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON request payload." }, { status: 400 });
+    }
+
+    const parseResult = createNotificationSchema.safeParse(body);
+    if (!parseResult.success) {
+      return NextResponse.json(
+        { error: parseResult.error.issues[0]?.message || "Validation error." },
+        { status: 400 }
+      );
+    }
+
+    const { title, description, link, type } = parseResult.data;
+    const safeLink = sanitizeInternalLink(link);
 
     const notif = await prisma.notification.create({
       data: {
         title,
         description,
-        link,
+        link: safeLink,
         type,
         unread: true,
       },

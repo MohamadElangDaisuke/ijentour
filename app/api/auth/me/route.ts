@@ -16,16 +16,19 @@ export async function GET(request: NextRequest) {
       where: { id: session.id },
       select: {
         id: true,
+        username: true,
         name: true,
         email: true,
         role: true,
         phone: true,
         avatarUrl: true,
+        isActive: true,
+        emailVerified: true,
         createdAt: true,
       },
     });
 
-    if (!user || user.role !== "ADMIN") {
+    if (!user || (user.role !== "ADMIN" && user.role !== "SUPER_ADMIN") || !user.isActive) {
       return NextResponse.json(
         { success: false, authenticated: false },
         { status: 401 }

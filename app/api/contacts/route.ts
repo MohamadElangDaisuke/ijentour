@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
+import { createInternalNotification } from "@/lib/notifications";
+import { contactRateLimiter, getClientIp } from "@/lib/rateLimit";
+import { sendContactEmailNotification } from "@/lib/email/notifications";
 
 export async function GET(request: Request) {
   try {
@@ -21,6 +24,16 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const clientIp = getClientIp(request);
+    if (contactRateLimiter.isLimited(clientIp)) {
+      return NextResponse.json(
+        {
+          error: "Too many messages sent. Please wait a few minutes before submitting another inquiry.",
+        },
+        { status: 429 }
+      );
+    }
+
     const { name, email, phone, subject, message } = await request.json();
 
     if (!name || !email || !message) {
@@ -41,16 +54,23 @@ export async function POST(request: Request) {
       },
     });
 
-    // Alert admin about new inquiry
-    await prisma.notification.create({
-      data: {
-        type: "contact",
-        title: "New Contact Message",
-        description: `New message from ${contact.name} (${contact.subject})`,
-        link: "/admin/contacts",
-        unread: true,
-      },
+    // Alert admin about new inquiry safely via internal helper
+    await createInternalNotification({
+      type: "contact",
+      title: "New Contact Message",
+      description: `New message from ${contact.name} (${contact.subject})`,
+      link: "/admin/contacts",
+      referenceId: contact.id,
     });
+
+    // Dispatch Contact Email Notification via Resend (Strictly Non-Blocking)
+    sendContactEmailNotification({
+      name: contact.name,
+      email: contact.email,
+      phone: contact.phone,
+      subject: contact.subject,
+      message: contact.message,
+    }).catch((err) => console.error("[Contacts] Non-fatal contact email dispatch error:", err));
 
     return NextResponse.json({
       success: true,

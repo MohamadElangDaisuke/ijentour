@@ -10,23 +10,34 @@ import { BookingResultSkeleton } from "@/app/component/ui/skeleton";
 
 export default function BookingLookupPage() {
   const [bookingCode, setBookingCode] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [loading, setLoading] = useState(false);
   const [booking, setBooking] = useState<any>(null);
   const [error, setError] = useState("");
 
   const handleLookup = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!bookingCode.trim()) return;
+    if (!bookingCode.trim() || !identifier.trim()) {
+      setError("Please enter both your booking code and contact detail (email or WhatsApp).");
+      return;
+    }
 
     setLoading(true);
     setError("");
     setBooking(null);
 
     try {
-      const res = await fetch(`/api/bookings/${bookingCode.trim()}`);
+      const res = await fetch("/api/bookings/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          bookingCode: bookingCode.trim(),
+          identifier: identifier.trim(),
+        }),
+      });
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || "Reservation code not found.");
+        throw new Error(data.error || "Reservation not found or verification details did not match.");
       }
       setBooking(data.booking);
     } catch (err: any) {
@@ -52,7 +63,7 @@ export default function BookingLookupPage() {
             Check Your Reservation Status
           </h1>
           <p className="text-sm text-secondary-200 mt-2">
-            Enter your booking code to view your reservation details and trip schedule.
+            Enter your booking code and verification details to view your reservation status securely.
           </p>
         </div>
       </section>
@@ -61,26 +72,42 @@ export default function BookingLookupPage() {
       <div className="max-w-2xl mx-auto px-4 -mt-8 relative z-20">
         <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-secondary-200">
           <form onSubmit={handleLookup} className="space-y-4">
-            <label className="block text-xs font-black text-secondary-950 uppercase tracking-wider">
-              Enter Official Booking Code
-            </label>
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div>
+              <label className="block text-xs font-black text-secondary-950 uppercase tracking-wider mb-1.5">
+                Official Booking Code <span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
                 required
                 value={bookingCode}
                 onChange={(e) => setBookingCode(e.target.value.toUpperCase())}
                 placeholder="e.g. IJN-20260925-B101"
-                className="grow px-4 py-3 bg-secondary-50 border border-secondary-200 rounded-2xl text-sm font-mono font-bold uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-4 py-3 bg-secondary-50 border border-secondary-200 rounded-2xl text-sm font-mono font-bold uppercase tracking-wider focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
-              <button
-                type="submit"
-                disabled={loading}
-                className="px-6 py-3 bg-primary-500 hover:bg-primary-400 text-secondary-950 font-black text-sm rounded-2xl transition shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
-              >
-                <Search className="w-4 h-4" />
-                <span>{loading ? "Searching..." : "Track Booking"}</span>
-              </button>
+            </div>
+
+            <div>
+              <label className="block text-xs font-black text-secondary-950 uppercase tracking-wider mb-1.5">
+                Verification (Email or WhatsApp Number) <span className="text-red-500">*</span>
+              </label>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <input
+                  type="text"
+                  required
+                  value={identifier}
+                  onChange={(e) => setIdentifier(e.target.value)}
+                  placeholder="e.g. your.email@example.com or 081234567890"
+                  className="grow px-4 py-3 bg-secondary-50 border border-secondary-200 rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500"
+                />
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="px-6 py-3 bg-primary-500 hover:bg-primary-400 text-secondary-950 font-black text-sm rounded-2xl transition shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 shrink-0"
+                >
+                  <Search className="w-4 h-4" />
+                  <span>{loading ? "Verifying..." : "Track Booking"}</span>
+                </button>
+              </div>
             </div>
           </form>
 
@@ -89,14 +116,20 @@ export default function BookingLookupPage() {
             <span className="text-secondary-500 font-medium">Sample Demo Codes:</span>
             <button
               type="button"
-              onClick={() => setBookingCode("IJN-20260925-B101")}
+              onClick={() => {
+                setBookingCode("IJN-20260925-B101");
+                setIdentifier("081234567801");
+              }}
               className="px-2.5 py-1 rounded-lg bg-secondary-100 hover:bg-primary-100 font-mono font-bold text-secondary-800 transition cursor-pointer"
             >
               IJN-20260925-B101
             </button>
             <button
               type="button"
-              onClick={() => setBookingCode("IJN-20260925-C202")}
+              onClick={() => {
+                setBookingCode("IJN-20260925-C202");
+                setIdentifier("081234567802");
+              }}
               className="px-2.5 py-1 rounded-lg bg-secondary-100 hover:bg-primary-100 font-mono font-bold text-secondary-800 transition cursor-pointer"
             >
               IJN-20260925-C202
@@ -280,13 +313,6 @@ export default function BookingLookupPage() {
                 </div>
               )}
             </div>
-
-            {booking.adminNotes && (
-              <div className="mb-6 p-4 rounded-2xl bg-blue-50 border border-blue-200 text-blue-900 text-xs">
-                <span className="font-bold block mb-1">Coordinator Notes:</span>
-                <p>{booking.adminNotes}</p>
-              </div>
-            )}
 
             <div className="pt-4 border-t border-secondary-100 flex flex-col sm:flex-row gap-3 justify-end">
               <a

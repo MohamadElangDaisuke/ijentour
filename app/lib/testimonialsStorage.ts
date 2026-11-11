@@ -6,36 +6,11 @@ export interface Testimonial {
   image: string;
   rating: number;
   date?: string;
+  isVerifiedCustomer?: boolean;
 }
 
-export const defaultTestimonials: Testimonial[] = [
-  {
-    id: 'testi-1',
-    name: 'Dimas Pratama & Friends',
-    origin: 'Jakarta, Indonesia',
-    quote: 'A warm, seamless, and well-organized trip that allowed us to marvel at Mount Ijen without the stress of managing anything ourselves.',
-    image: '/images/pkg-bluefire.png',
-    rating: 5,
-    date: 'September 2026'
-  },
-  {
-    id: 'testi-2',
-    name: 'Sarah & Michael',
-    origin: 'Sydney, Australia',
-    quote: 'The midnight expedition was breathtaking! Exceptional local guide, safe gas masks, and the blue flame was truly magical.',
-    image: '/images/the-best-view-of-kawah.webp',
-    rating: 5,
-    date: 'August 2026'
-  },
-  {
-    id: 'testi-3',
-    name: 'The Hendra Family',
-    origin: 'Surabaya, Indonesia',
-    quote: 'Our private tour to Baluran and Mount Ijen was very family-friendly. The driver was patient, and the air-conditioned van was immaculate.',
-    image: '/images/ijen-expedition-tour.webp',
-    rating: 5,
-    date: 'July 2026'
-  }
-];
+// Fabricated testimonials have been removed in compliance with Phase 3 integrity audit.
+// Real customer reviews are retrieved from the verified database.
+export const defaultTestimonials: Testimonial[] = [];
 
 export const testimonialsStorageKey = 'ijen-tour-testimonials';

@@ -2,10 +2,15 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 
-const JWT_SECRET_STRING =
-  process.env.JWT_SECRET || "ijen-tour-secret-key-super-secure-fullstack-2026";
-const JWT_SECRET = new TextEncoder().encode(JWT_SECRET_STRING);
 const COOKIE_NAME = "admin_token";
+
+function getJwtSecretKey(): Uint8Array | null {
+  const secret = process.env.JWT_SECRET;
+  if (!secret || typeof secret !== "string" || secret.trim().length < 32) {
+    return null;
+  }
+  return new TextEncoder().encode(secret.trim());
+}
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -16,23 +21,39 @@ export async function proxy(request: NextRequest) {
   }
 
   const token = request.cookies.get(COOKIE_NAME)?.value;
+  const secretKey = getJwtSecretKey();
 
   let isValidAdmin = false;
-  if (token) {
+  let isSuperAdmin = false;
+  let isEmailVerified = false;
+  if (token && secretKey) {
     try {
-      const { payload } = await jwtVerify(token, JWT_SECRET);
-      if (payload && payload.role === "ADMIN") {
+      const { payload } = await jwtVerify(token, secretKey);
+      if (
+        payload &&
+        (payload.role === "ADMIN" || payload.role === "SUPER_ADMIN")
+      ) {
         isValidAdmin = true;
+        if (payload.role === "SUPER_ADMIN") {
+          isSuperAdmin = true;
+        }
+        // If explicitly false, email is unverified; undefined/true defaults to verified
+        isEmailVerified = payload.emailVerified !== false;
       }
     } catch {
       isValidAdmin = false;
+      isSuperAdmin = false;
+      isEmailVerified = false;
     }
   }
 
   // 1. If user is trying to view the login page
   if (pathname === "/admin/login") {
     if (isValidAdmin) {
-      // Already authenticated, send to dashboard
+      if (!isEmailVerified) {
+        const verifyUrl = new URL("/admin/verify-email", request.url);
+        return NextResponse.redirect(verifyUrl);
+      }
       const dashboardUrl = new URL("/admin/dashboard", request.url);
       return NextResponse.redirect(dashboardUrl);
     }
@@ -47,6 +68,36 @@ export async function proxy(request: NextRequest) {
       loginUrl.searchParams.set("from", pathname);
     }
     return NextResponse.redirect(loginUrl);
+  }
+
+  // 3. Email verification gate for unverified accounts
+  if (!isEmailVerified) {
+    if (pathname === "/admin/verify-email") {
+      return NextResponse.next(); // Allow accessing verification screen
+    }
+    // Unverified admin attempting to access any privileged route -> redirect to verify-email
+    const verifyUrl = new URL("/admin/verify-email", request.url);
+    return NextResponse.redirect(verifyUrl);
+  }
+
+  // 4. If already verified but accessing /admin/verify-email -> redirect to dashboard
+  if (pathname === "/admin/verify-email" && isEmailVerified) {
+    const dashboardUrl = new URL("/admin/dashboard", request.url);
+    return NextResponse.redirect(dashboardUrl);
+  }
+
+  // 5. Super Admin-only routes enforcement: /admin/users, /admin/email-settings, /admin/security, /admin/audit-logs, /admin/settings
+  if (
+    (pathname.startsWith("/admin/users") ||
+      pathname.startsWith("/admin/email-settings") ||
+      pathname.startsWith("/admin/security") ||
+      pathname.startsWith("/admin/audit-logs") ||
+      pathname.startsWith("/admin/settings")) &&
+    !isSuperAdmin
+  ) {
+    // Normal admins cannot access Super Admin pages; redirect to dashboard
+    const dashboardUrl = new URL("/admin/dashboard", request.url);
+    return NextResponse.redirect(dashboardUrl);
   }
 
   return NextResponse.next();

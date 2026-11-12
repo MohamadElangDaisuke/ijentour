@@ -84,14 +84,14 @@ type TabKey =
   | "seo";
 
 const TABS: { id: TabKey; label: string; short: string; icon: any }[] = [
-  { id: "general", label: "Informasi Umum", short: "Umum", icon: Package },
-  { id: "pricing", label: "Harga & Jadwal", short: "Harga", icon: DollarSign },
-  { id: "media", label: "Media & Foto", short: "Media", icon: ImageIcon },
-  { id: "itinerary", label: "Rencana Perjalanan", short: "Itinerary", icon: Calendar },
-  { id: "facilities", label: "Fasilitas (Inklusi)", short: "Fasilitas", icon: ShieldCheck },
-  { id: "highlights_packing", label: "Perlengkapan", short: "Checklist", icon: Sparkles },
-  { id: "faqs_addons", label: "FAQ & Add-on", short: "FAQ & Addon", icon: HelpCircle },
-  { id: "seo", label: "SEO & Publikasi", short: "Publikasi", icon: Globe },
+  { id: "general", label: "General Info", short: "General", icon: Package },
+  { id: "pricing", label: "Pricing & Schedule", short: "Pricing", icon: DollarSign },
+  { id: "media", label: "Media & Photos", short: "Media", icon: ImageIcon },
+  { id: "itinerary", label: "Itinerary", short: "Itinerary", icon: Calendar },
+  { id: "facilities", label: "Facilities (Inclusions)", short: "Facilities", icon: ShieldCheck },
+  { id: "highlights_packing", label: "Packing List", short: "Checklist", icon: Sparkles },
+  { id: "faqs_addons", label: "FAQs & Add-ons", short: "FAQ & Addon", icon: HelpCircle },
+  { id: "seo", label: "SEO & Publishing", short: "Publish", icon: Globe },
 ];
 
 export default function PackageForm({ initialData, mode, packageId }: PackageFormProps) {
@@ -106,17 +106,17 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
   const [autoSlug, setAutoSlug] = useState(mode === "create");
   const [category, setCategory] = useState(initialData?.category || "midnight");
   const [packageType, setPackageType] = useState(initialData?.packageType || "Open Trip");
-  const [duration, setDuration] = useState(initialData?.duration || "1 Hari (Midnight)");
+  const [duration, setDuration] = useState(initialData?.duration || "1 Day (Midnight)");
   const [durationDays, setDurationDays] = useState<number>(initialData?.durationDays ?? 1);
   const [durationNights, setDurationNights] = useState<number>(initialData?.durationNights ?? 0);
   const [minParticipants, setMinParticipants] = useState<number>(initialData?.minParticipants ?? 1);
   const [maxParticipants, setMaxParticipants] = useState<number>(initialData?.maxParticipants ?? 15);
-  const [difficulty, setDifficulty] = useState(initialData?.difficulty || "Sedang (Trekking 3 Km)");
-  const [altitude, setAltitude] = useState(initialData?.altitude || "2.769 mdpl");
-  const [meetingPoint, setMeetingPoint] = useState(initialData?.meetingPoint || "Banyuwangi (Hotel / Stasiun / Bandara)");
+  const [difficulty, setDifficulty] = useState(initialData?.difficulty || "Moderate (3 km Trekking)");
+  const [altitude, setAltitude] = useState(initialData?.altitude || "2,769 masl");
+  const [meetingPoint, setMeetingPoint] = useState(initialData?.meetingPoint || "Banyuwangi (Hotel / Station / Airport)");
   const [pickupArea, setPickupArea] = useState(initialData?.pickupArea || "Banyuwangi City Area & Surrounds");
-  const [departureTime, setDepartureTime] = useState(initialData?.departureTime || "00:00 - 00:30 WIB Dini Hari");
-  const [recommendedAge, setRecommendedAge] = useState(initialData?.recommendedAge || "7 - 65 Tahun");
+  const [departureTime, setDepartureTime] = useState(initialData?.departureTime || "00:00 - 00:30 WIB (Midnight)");
+  const [recommendedAge, setRecommendedAge] = useState(initialData?.recommendedAge || "7 - 65 Years");
   const [shortDescription, setShortDescription] = useState(initialData?.shortDescription || "");
   const [description, setDescription] = useState(initialData?.description || "");
   const [safetyInfo, setSafetyInfo] = useState(initialData?.safetyInfo || "");
@@ -126,7 +126,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
   const [basePrice, setBasePrice] = useState<number>(initialData?.basePrice ?? 750000);
   const [price, setPrice] = useState(initialData?.price || "Rp 750.000");
   const [currency, setCurrency] = useState(initialData?.currency || "IDR");
-  const [pricingUnit, setPricingUnit] = useState(initialData?.pricingUnit || "per orang");
+  const [pricingUnit, setPricingUnit] = useState(initialData?.pricingUnit || "per person");
   const [discountPrice, setDiscountPrice] = useState<string>(
     initialData?.discountPrice !== null && initialData?.discountPrice !== undefined
       ? String(initialData.discountPrice)
@@ -158,63 +158,63 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
         day: "00:00 WIB",
         startTime: "00:00",
         endTime: "01:30",
-        title: "Penjemputan di Hotel / Stasiun",
-        desc: "Driver kami akan menjemput Anda di hotel atau stasiun area Banyuwangi dengan armada nyaman ber-AC.",
+        title: "Pickup at Hotel / Station",
+        desc: "Our driver will pick you up at your hotel or station in the Banyuwangi area with a comfortable air-conditioned vehicle.",
         location: "Banyuwangi City Area",
-        note: "Harap bersiap 15 menit sebelum waktu penjemputan.",
+        note: "Please be ready 15 minutes before pickup time.",
       },
       {
         day: "01:30 WIB",
         startTime: "01:30",
         endTime: "02:00",
-        title: "Tiba di Basecamp Paltuding & Briefing",
-        desc: "Briefing keselamatan dari guide lokal, pembagian masker respirator gas belerang dan senter kepala.",
-        location: "Pos Paltuding",
-        note: "Cek kelengkapan masker dan headlamp.",
+        title: "Arrive at Paltuding Basecamp & Briefing",
+        desc: "Safety briefing from our local guide and distribution of sulfur gas respirator masks and headlamps.",
+        location: "Paltuding Post",
+        note: "Check respirator mask fit and headlamp battery.",
       },
       {
         day: "02:00 WIB",
         startTime: "02:00",
         endTime: "03:45",
-        title: "Mulai Pendakian Jalur Kawah Ijen",
-        desc: "Trekking santai sejauh 3 km menuju bibir kawah di bawah keindahan langit malam bertabur bintang.",
-        location: "Jalur Trekking Ijen",
-        note: "Jalur awal menanjak, atur ritme langkah dengan santai.",
+        title: "Start Ascent via Mount Ijen Trail",
+        desc: "Guided 3 km hike toward the crater rim beneath a starry night sky.",
+        location: "Ijen Trekking Trail",
+        note: "The initial trail is steep; maintain a steady, comfortable pace.",
       },
       {
         day: "03:45 WIB",
         startTime: "03:45",
         endTime: "05:15",
-        title: "Eksplorasi Fenomena Blue Fire",
-        desc: "Turun ke dasar kawah didampingi guide untuk mengagumi nyala api biru yang langka dan magis.",
-        location: "Dasar Kawah Ijen",
-        note: "Gunakan masker respirator dengan benar saat mendekati area solfatara.",
+        title: "Blue Fire Phenomenon Exploration",
+        desc: "Descend to the crater floor with your guide to witness the rare and mesmerizing electric-blue flames.",
+        location: "Ijen Crater Floor",
+        note: "Wear your respirator mask properly when approaching the solfatara vents.",
       },
       {
         day: "05:15 WIB",
         startTime: "05:15",
         endTime: "07:00",
-        title: "Golden Sunrise & Danau Kawah Toska",
-        desc: "Menyaksikan matahari terbit yang menyinari danau asam terbesar di dunia.",
-        location: "Bibir Kawah Ijen",
-        note: "Spot foto terbaik bersama pemandu.",
+        title: "Golden Sunrise & Turquoise Acid Lake",
+        desc: "Watch the sunrise illuminate the world's largest acidic crater lake.",
+        location: "Ijen Crater Rim",
+        note: "Best photo spot with your guide.",
       },
       {
         day: "07:00 WIB",
         startTime: "07:00",
         endTime: "08:30",
-        title: "Kembali ke Basecamp & Refreshment",
-        desc: "Perjalanan turun santai, rehat sejenak menikmati minuman hangat dan kudapan.",
-        location: "Pos Paltuding",
+        title: "Return to Basecamp & Refreshment",
+        desc: "Relaxed descent back to basecamp for hot drinks and light snacks.",
+        location: "Paltuding Post",
       },
       {
         day: "08:30 WIB",
         startTime: "08:30",
         endTime: "10:00",
-        title: "Transfer Kembali ke Penginapan / Stasiun",
-        desc: "Perjalanan pulang menuju hotel atau titik drop-off yang telah disepakati.",
+        title: "Drop-off at Hotel / Station",
+        desc: "Return transfer to your hotel or agreed drop-off point in Banyuwangi.",
         location: "Banyuwangi",
-        note: "Tour selesai dengan sejuta kenangan indah.",
+        note: "Tour concludes with unforgettable memories.",
       },
     ];
   });
@@ -228,13 +228,13 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
       );
     }
     return [
-      { item: "Transportasi AC PP dari Hotel/Stasiun Banyuwangi" },
-      { item: "Tiket Masuk Resmi BKSDA / Kawah Ijen & Asuransi Pengunjung" },
-      { item: "Pemandu Lokal Berlisensi (Former Sulfur Miner)" },
-      { item: "Masker Gas Respirator Medis Standar Belerang" },
-      { item: "Headlamp / Senter Kepala Penerangan" },
-      { item: "Air Mineral & Snack Hangat" },
-      { item: "P3K Dasar Standar Gunung" },
+      { item: "Round-Trip AC Transportation from Banyuwangi Hotel/Station" },
+      { item: "Official BKSDA / Mount Ijen Entrance Ticket & Visitor Insurance" },
+      { item: "Licensed Local Guide (Former Sulfur Miner)" },
+      { item: "Sulfur-Grade Medical Gas Respirator Mask" },
+      { item: "Headlamp / Illumination Gear" },
+      { item: "Mineral Water & Warm Snacks" },
+      { item: "Standard Mountain First-Aid Kit" },
     ];
   });
 
@@ -246,10 +246,10 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
       );
     }
     return [
-      { item: "Pengeluaran Pribadi di Luar Paket" },
-      { item: "Taksi Troly Dorong Kawah (Opsional jika lelah)" },
-      { item: "Makan Berat Tambahan" },
-      { item: "Tip Sukarela untuk Guide / Driver" },
+      { item: "Personal Expenses Outside the Package" },
+      { item: "Crater Trolley Taxi Cart (Optional if fatigued)" },
+      { item: "Additional Full Meals" },
+      { item: "Voluntary Tips for Guide / Driver" },
     ];
   });
 
@@ -259,11 +259,11 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
       return initialData.highlights;
     }
     return [
-      "Berangkat Jam 00:00 Dini Hari dari Banyuwangi",
-      "Guide Penambang Belerang Lokal Berlisensi",
-      "Masker Respirator Standar Keamanan & Senter Kepala",
-      "Spot Foto Sunrise & Danau Asam Terbesar di Dunia",
-      "Antar-Jemput Privat Armada Ber-AC",
+      "Midnight 00:00 Departure from Banyuwangi",
+      "Licensed Local Sulfur-Miner Guide",
+      "Safety-Standard Respirator Mask & Headlamp",
+      "Sunrise & World's Largest Acidic Lake Photo Spot",
+      "Private AC Vehicle Pickup & Drop-off",
     ];
   });
 
@@ -273,12 +273,12 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
       return initialData.packingList;
     }
     return [
-      { item: "Jaket Tebal / Windbreaker", note: "Suhu puncak dini hari bisa mencapai 6°C - 10°C", category: "Pakaian" },
-      { item: "Sepatu Trekking / Sneakers Anti-Slip", note: "Jalur berpasir dan menanjak", category: "Alas Kaki" },
-      { item: "Celana Panjang & Kaos Kaki Tebal", note: "Melindungi dari hawa dingin dan debu", category: "Pakaian" },
-      { item: "Kamera / Smartphone & Powerbank", note: "Untuk mengabadikan momen Blue Fire & Sunrise", category: "Elektronik" },
-      { item: "Uang Tunai Secukupnya", note: "Untuk cinderamata belerang atau minuman hangat di pos", category: "Dokumen & Uang" },
-      { item: "Obat-obatan Pribadi", note: "Khusus bagi yang memiliki riwayat asma atau alergi dingin", category: "Kesehatan" },
+      { item: "Warm Jacket / Windbreaker", note: "Early-morning summit temperatures can drop to 6°C - 10°C", category: "Clothing" },
+      { item: "Trekking Shoes / Anti-Slip Sneakers", note: "Sandy and steep uphill trail", category: "Footwear" },
+      { item: "Long Pants & Thick Socks", note: "Protection against cold temperatures and dust", category: "Clothing" },
+      { item: "Camera / Smartphone & Powerbank", note: "To capture Blue Fire & Sunrise moments", category: "Electronics" },
+      { item: "Sufficient Cash (IDR)", note: "For sulfur souvenirs or hot drinks at basecamp", category: "Documents & Cash" },
+      { item: "Personal Medication", note: "Especially for guests with asthma or cold sensitivity", category: "Health" },
     ];
   });
 
@@ -289,20 +289,20 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
     }
     return [
       {
-        q: "Apakah pemula atau anak-anak bisa mengikuti tour ini?",
-        a: "Sangat bisa! Jalur pendakian cukup lebar dan jelas. Jika merasa lelah, tersedia jasa troli dorong lokal (trolley taxi) yang siap mengantar sampai ke puncak.",
+        q: "Can beginners or children join this tour?",
+        a: "Yes! The trekking trail is wide and well-defined. If you get tired, local trolley taxi carts are available to take you up to the summit.",
       },
       {
-        q: "Kapan waktu terbaik melihat Blue Fire?",
-        a: "Waktu terbaik adalah antara pukul 03:00 hingga 04:30 WIB saat langit masih gelap pekat. Kami mengatur jadwal agar Anda tiba tepat waktu di spot terbaik.",
+        q: "When is the best time to see the Blue Fire?",
+        a: "The best viewing window is between 03:00 and 04:30 WIB while the sky is still pitch dark. We schedule departures so you arrive at the best vantage point on time.",
       },
       {
-        q: "Apakah bau gas belerang berbahaya?",
-        a: "Kami menyediakan masker respirator khusus berfilter aktif yang aman menyaring asap belerang. Guide kami juga selalu memantau arah angin demi keamanan Anda.",
+        q: "Is the sulfur gas odor dangerous?",
+        a: "We provide specialized active-filter gas respirator masks that safely filter sulfur fumes. Our guides continuously monitor wind direction for your safety.",
       },
       {
-        q: "Bagaimana sistem pembayaran dan pembatalan?",
-        a: "Pemesanan dikonfirmasi dengan deposit fleksibel melalui transfer bank / QRIS. Reschedule gratis dapat dilakukan hingga 48 jam sebelum jadwal keberangkatan.",
+        q: "How do payment and cancellation policies work?",
+        a: "Bookings are confirmed with a flexible deposit via bank transfer or QRIS. Free rescheduling is available up to 48 hours before departure.",
       },
     ];
   });
@@ -315,29 +315,29 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
     return [
       {
         id: "trolley",
-        name: "Kawah Ijen Trolley Taxi (PP)",
-        description: "Layanan becak dorong tradisional oleh penambang lokal untuk tamu yang ingin menghemat tenaga fisik",
+        name: "Mount Ijen Trolley Taxi (Round-Trip)",
+        description: "Traditional hand-cart service operated by local miners for guests who prefer to conserve energy",
         price: 800000,
         currency: "IDR",
-        pricingUnit: "per troli",
+        pricingUnit: "per trolley",
         isActive: true,
       },
       {
         id: "drone",
-        name: "Dokumentasi Drone & Kamera 4K",
-        description: "Video sinematik highlight + puluhan foto resolusi tinggi berlatar Blue Fire & Sunrise",
+        name: "4K Drone & Camera Documentation",
+        description: "Cinematic highlight video + high-resolution photos with Blue Fire & Sunrise backdrop",
         price: 650000,
         currency: "IDR",
-        pricingUnit: "per grup",
+        pricingUnit: "per group",
         isActive: true,
       },
       {
         id: "pickup",
-        name: "Antar-Jemput Bandara Juanda Surabaya / Malang",
-        description: "Private car transfer via tol antar kota langsung ke hotel Banyuwangi",
+        name: "Surabaya Juanda / Malang Airport Transfer",
+        description: "Private highway car transfer directly to your Banyuwangi hotel",
         price: 600000,
         currency: "IDR",
-        pricingUnit: "per mobil",
+        pricingUnit: "per car",
         isActive: true,
       },
     ];
@@ -374,12 +374,12 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) {
-      setError("Nama paket wisata wajib diisi.");
+      setError("Tour package title is required.");
       setActiveTab("general");
       return;
     }
     if (!description.trim()) {
-      setError("Deskripsi paket wajib diisi.");
+      setError("Package description is required.");
       setActiveTab("general");
       return;
     }
@@ -446,17 +446,17 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || "Gagal menyimpan paket wisata.");
+        throw new Error(data.error || "Failed to save tour package.");
       }
 
-      setSuccessMessage(mode === "create" ? "Paket wisata berhasil dibuat!" : "Perubahan paket berhasil disimpan!");
+      setSuccessMessage(mode === "create" ? "Tour package created successfully!" : "Package changes saved successfully!");
       setTimeout(() => {
         router.push("/admin/trips");
         router.refresh();
       }, 1200);
     } catch (err: any) {
       console.error(err);
-      setError(err.message || "Terjadi kesalahan saat menyimpan paket.");
+      setError(err.message || "An error occurred while saving the package.");
     } finally {
       setSubmitting(false);
     }
@@ -468,12 +468,12 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
     setItinerary([
       ...itinerary,
       {
-        day: `Hari ${nextIdx}`,
+        day: `Day ${nextIdx}`,
         startTime: "08:00",
         endTime: "10:00",
-        title: "Aktivitas Perjalanan Baru",
-        desc: "Deskripsi kegiatan perjalanan dan hal menarik yang akan disaksikan wisatawan.",
-        location: "Kawah Ijen / Banyuwangi",
+        title: "New Trip Activity",
+        desc: "Description of travel activity and highlights visitors will experience.",
+        location: "Mount Ijen / Banyuwangi",
       },
     ]);
   };
@@ -539,7 +539,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
 
   // Packing list helpers
   const addPackingItem = () => {
-    setPackingList([...packingList, { item: "", note: "", category: "Peralatan" }]);
+    setPackingList([...packingList, { item: "", note: "", category: "Gear" }]);
   };
   const updatePackingItem = (index: number, field: keyof PackingItem, val: string) => {
     const updated = [...packingList];
@@ -570,11 +570,11 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
       ...addons,
       {
         id,
-        name: "Layanan Ekstra Tambahan",
-        description: "Deskripsi fasilitas ekstra atau kenyamanan perjalanan",
+        name: "Additional Extra Service",
+        description: "Description of extra facility or trip convenience",
         price: 150000,
         currency: "IDR",
-        pricingUnit: "per orang",
+        pricingUnit: "per person",
         isActive: true,
       },
     ]);
@@ -601,16 +601,16 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
           <Link
             href="/admin/trips"
             className="w-10 h-10 rounded-xl border border-secondary-200 hover:bg-secondary-100 text-secondary-600 transition inline-flex items-center justify-center shrink-0"
-            title="Kembali ke Daftar Paket"
+            title="Back to Packages List"
           >
             <ArrowLeft className="w-4 h-4 shrink-0" />
           </Link>
           <div className="min-w-0">
             <h1 className="text-lg sm:text-2xl font-black text-secondary-950 truncate">
-              {mode === "create" ? "Tambah Paket Wisata Baru" : `Sunting Paket: ${title || "Tour Package"}`}
+              {mode === "create" ? "Create New Tour Package" : `Edit Package: ${title || "Tour Package"}`}
             </h1>
             <div className="flex items-center gap-2 text-xs text-secondary-500 font-mono truncate mt-0.5">
-              <span>Slug: /packages/{slug || "url-paket"}</span>
+              <span>Slug: /packages/{slug || "package-url"}</span>
               <span>•</span>
               <span className={`font-bold ${isActive ? "text-emerald-600" : "text-amber-600"}`}>
                 {isActive ? "● Published" : "○ Draft Mode"}
@@ -629,11 +629,11 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                 ? "bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100"
                 : "bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100"
             }`}
-            title="Klik untuk mengubah status Draft / Published"
+            title="Click to toggle Draft / Published status"
           >
             <span className={`w-2 h-2 rounded-full ${isActive ? "bg-emerald-500" : "bg-amber-500"}`} />
-            <span className="hidden sm:inline">{isActive ? "Status: Publik" : "Status: Draft"}</span>
-            <span className="sm:hidden">{isActive ? "Publik" : "Draft"}</span>
+            <span className="hidden sm:inline">{isActive ? "Status: Public" : "Status: Draft"}</span>
+            <span className="sm:hidden">{isActive ? "Public" : "Draft"}</span>
           </button>
 
           {/* Cancel button */}
@@ -641,7 +641,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
             href="/admin/trips"
             className="px-3.5 py-2 rounded-xl border border-secondary-200 hover:bg-secondary-100 text-secondary-700 font-bold text-xs transition inline-flex items-center justify-center"
           >
-            Batal
+            Cancel
           </Link>
 
           {/* Submit Button */}
@@ -651,7 +651,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
             className="px-5 py-2 rounded-xl bg-primary-500 hover:bg-primary-400 text-secondary-950 font-black text-xs transition shadow-sm inline-flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
           >
             <Save className="w-4 h-4 shrink-0" />
-            <span>{submitting ? "Menyimpan..." : mode === "create" ? "Buat Paket" : "Simpan Perubahan"}</span>
+            <span>{submitting ? "Saving..." : mode === "create" ? "Create Package" : "Save Changes"}</span>
           </button>
         </div>
       </div>
@@ -669,6 +669,17 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
           <span className="font-bold leading-relaxed">{successMessage}</span>
         </div>
       )}
+
+      {/* ENGLISH CONTENT GUIDANCE */}
+      <div className="p-4 bg-blue-50/80 border border-blue-200/90 text-blue-950 rounded-2xl text-xs flex items-start gap-3">
+        <Globe className="w-4 h-4 shrink-0 text-blue-600 mt-0.5" />
+        <div className="space-y-0.5">
+          <p className="font-bold">English Public Content Guidance</p>
+          <p className="text-blue-800 leading-relaxed">
+            Please manually enter all public-facing package content in clear, natural English (package title, descriptions, itinerary, inclusions, exclusions, highlights, packing list, add-ons, FAQs, and SEO metadata). Database content is displayed directly to visitors without automatic translation.
+          </p>
+        </div>
+      </div>
 
       {/* TAB NAVIGATION HEADER (RESPONSIVE HORIZONTAL SCROLL) */}
       <div className="border-b border-secondary-200/80 w-full overflow-x-auto no-scrollbar">
@@ -700,9 +711,9 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
       {activeTab === "general" && (
         <div className="bg-white rounded-3xl p-5 sm:p-8 border border-secondary-200/80 shadow-xs space-y-6">
           <div className="border-b border-secondary-100 pb-4">
-            <h3 className="text-lg font-black text-secondary-950">1. Informasi & Spesifikasi Paket</h3>
+            <h3 className="text-lg font-black text-secondary-950">1. Package Info & Specifications</h3>
             <p className="text-xs text-secondary-500 mt-0.5">
-              Atur nama wisata, tautan slug unik, deskripsi naratif, serta parameter perjalanan.
+              Set the tour title, unique URL slug, narrative description, and travel parameters.
             </p>
           </div>
 
@@ -710,14 +721,14 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
             {/* Package Title */}
             <div className="md:col-span-2">
               <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">
-                Nama / Judul Paket Wisata *
+                Tour Package Name / Title *
               </label>
               <input
                 type="text"
                 required
                 value={title}
                 onChange={(e) => handleTitleChange(e.target.value)}
-                placeholder="Contoh: Midnight Expedition Blue Fire Ijen"
+                placeholder="e.g. Midnight Expedition Blue Fire Ijen"
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs sm:text-sm font-bold text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
               />
             </div>
@@ -726,14 +737,14 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
             <div className="md:col-span-2">
               <div className="flex items-center justify-between mb-1.5">
                 <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider">
-                  Slug URL Unik (Tautan Detail Paket) *
+                  Unique URL Slug (Package Detail Link) *
                 </label>
                 <button
                   type="button"
                   onClick={() => setAutoSlug(!autoSlug)}
                   className="text-[11px] font-bold text-primary-700 hover:underline cursor-pointer"
                 >
-                  {autoSlug ? "✓ Auto-generate aktif" : "Kustom manual"}
+                  {autoSlug ? "✓ Auto-generate active" : "Custom manual"}
                 </button>
               </div>
               <div className="flex items-center rounded-xl bg-secondary-50 border border-secondary-200 px-3 py-2 text-xs">
@@ -752,28 +763,28 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
 
             {/* Category */}
             <div>
-              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Kategori Utama *</label>
+              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Main Category *</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
               >
-                <option value="midnight">Midnight Expedition (Dini Hari)</option>
-                <option value="regular">Regular Tour (Tur Reguler Santai)</option>
-                <option value="private">Private Exclusive Tour (Privat)</option>
+                <option value="midnight">Midnight Expedition (Early Morning)</option>
+                <option value="regular">Regular Tour (Relaxed Pace)</option>
+                <option value="private">Private Exclusive Tour</option>
               </select>
             </div>
 
             {/* Package Type */}
             <div>
-              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Tipe Paket Tour</label>
+              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Tour Package Type</label>
               <select
                 value={packageType}
                 onChange={(e) => setPackageType(e.target.value)}
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
               >
-                <option value="Open Trip">Open Trip (Gabungan)</option>
-                <option value="Private Tour">Private Tour (Eksklusif)</option>
+                <option value="Open Trip">Open Trip (Shared Group)</option>
+                <option value="Private Tour">Private Tour (Exclusive)</option>
                 <option value="Midnight Expedition">Midnight Expedition</option>
                 <option value="Family / Group">Family / Corporate Group</option>
               </select>
@@ -781,13 +792,13 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
 
             {/* Duration Display String */}
             <div>
-              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Durasi Tampilan *</label>
+              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Display Duration *</label>
               <input
                 type="text"
                 required
                 value={duration}
                 onChange={(e) => setDuration(e.target.value)}
-                placeholder="1 Hari (Midnight) atau 2H1M"
+                placeholder="1 Day (Midnight) or 2D1N"
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
               />
             </div>
@@ -795,7 +806,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
             {/* Duration Days & Nights */}
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Hari (Days)</label>
+                <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Days</label>
                 <input
                   type="number"
                   min={1}
@@ -805,7 +816,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Malam (Nights)</label>
+                <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Nights</label>
                 <input
                   type="number"
                   min={0}
@@ -818,7 +829,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
 
             {/* Min & Max Participants */}
             <div>
-              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Min Peserta</label>
+              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Min Participants</label>
               <input
                 type="number"
                 min={1}
@@ -829,7 +840,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Max Peserta</label>
+              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Max Participants</label>
               <input
                 type="number"
                 min={1}
@@ -841,41 +852,41 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
 
             {/* Difficulty & Altitude */}
             <div>
-              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Tingkat Kesulitan Trekking</label>
+              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Trekking Difficulty Level</label>
               <input
                 type="text"
                 value={difficulty}
                 onChange={(e) => setDifficulty(e.target.value)}
-                placeholder="Sedang (Trekking 3 Km / 2 Jam)"
+                placeholder="Moderate (3 km Trek / 2 Hours)"
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Ketinggian Puncak (Altitude)</label>
+              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Summit Altitude</label>
               <input
                 type="text"
                 value={altitude}
                 onChange={(e) => setAltitude(e.target.value)}
-                placeholder="2.769 mdpl"
+                placeholder="2,769 masl"
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
               />
             </div>
 
             {/* Meeting Point & Departure Time */}
             <div>
-              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Titik Kumpul (Meeting Point)</label>
+              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Meeting Point</label>
               <input
                 type="text"
                 value={meetingPoint}
                 onChange={(e) => setMeetingPoint(e.target.value)}
-                placeholder="Banyuwangi (Hotel / Stasiun / Bandara)"
+                placeholder="Banyuwangi (Hotel / Station / Airport)"
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Area Penjemputan (Pickup Area)</label>
+              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Pickup Area</label>
               <input
                 type="text"
                 value={pickupArea}
@@ -886,23 +897,23 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Waktu Keberangkatan (Departure)</label>
+              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Departure Time</label>
               <input
                 type="text"
                 value={departureTime}
                 onChange={(e) => setDepartureTime(e.target.value)}
-                placeholder="00:00 - 00:30 WIB Dini Hari"
+                placeholder="00:00 - 00:30 WIB (Midnight)"
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Usia yang Direkomendasikan</label>
+              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Recommended Age</label>
               <input
                 type="text"
                 value={recommendedAge}
                 onChange={(e) => setRecommendedAge(e.target.value)}
-                placeholder="7 - 65 Tahun"
+                placeholder="7 - 65 Years"
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
               />
             </div>
@@ -910,13 +921,13 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
             {/* Short Description */}
             <div className="md:col-span-2">
               <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">
-                Ringkasan Singkat (Short Summary)
+                Short Summary
               </label>
               <textarea
                 rows={2}
                 value={shortDescription}
                 onChange={(e) => setShortDescription(e.target.value)}
-                placeholder="Ringkasan 1-2 kalimat pemikat untuk kartu paket di halaman beranda..."
+                placeholder="Compelling 1-2 sentence summary for package cards on the homepage..."
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs sm:text-sm text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
               />
             </div>
@@ -924,14 +935,14 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
             {/* Full Narrative Description */}
             <div className="md:col-span-2">
               <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">
-                Deskripsi Lengkap Tur (Full Overview) *
+                Full Tour Description (Overview) *
               </label>
               <textarea
                 rows={5}
                 required
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Tuliskan pengalaman menyeluruh yang akan dirasakan wisatawan..."
+                placeholder="Describe the complete experience guests will enjoy..."
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs sm:text-sm text-secondary-950 leading-relaxed focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
               />
             </div>
@@ -939,26 +950,26 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
             {/* Safety & Important Notes */}
             <div>
               <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">
-                Informasi Keselamatan (Safety Info)
+                Safety Information
               </label>
               <textarea
                 rows={3}
                 value={safetyInfo}
                 onChange={(e) => setSafetyInfo(e.target.value)}
-                placeholder="Peringatan gas belerang, batasan peserta dengan riwayat asma/jantung..."
+                placeholder="Sulfur gas warnings, restrictions for guests with asthma/heart conditions..."
                 className="w-full px-4 py-2 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
               />
             </div>
 
             <div>
               <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">
-                Catatan Penting (Important Notes)
+                Important Notes
               </label>
               <textarea
                 rows={3}
                 value={importantNotes}
                 onChange={(e) => setImportantNotes(e.target.value)}
-                placeholder="Syarat surat keterangan sehat, jam buka loket BKSDA..."
+                placeholder="Health certificate requirements, BKSDA ticket counter hours..."
                 className="w-full px-4 py-2 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
               />
             </div>
@@ -970,9 +981,9 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
       {activeTab === "pricing" && (
         <div className="bg-white rounded-3xl p-5 sm:p-8 border border-secondary-200/80 shadow-xs space-y-6">
           <div className="border-b border-secondary-100 pb-4">
-            <h3 className="text-lg font-black text-secondary-950">2. Struktur Harga & Skema Diskon</h3>
+            <h3 className="text-lg font-black text-secondary-950">2. Pricing Structure & Discount Scheme</h3>
             <p className="text-xs text-secondary-500 mt-0.5">
-              Atur harga dasar untuk kalkulasi reservasi, mata uang, potongan harga, dan ketentuan biaya tambahan.
+              Configure base price for booking calculations, currency, promotional discounts, and pricing terms.
             </p>
           </div>
 
@@ -980,7 +991,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
             {/* Base Price Numeric */}
             <div>
               <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">
-                Harga Dasar Numerik (Base Price) *
+                Numeric Base Price *
               </label>
               <div className="relative">
                 <span className="absolute left-3.5 top-2.5 text-xs font-bold text-secondary-400">Rp</span>
@@ -996,14 +1007,14 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                 />
               </div>
               <span className="text-[10px] text-secondary-500 mt-1 block">
-                Digunakan untuk kalkulator booking otomatis di halaman publik.
+                Used for the automated booking calculator on the public page.
               </span>
             </div>
 
             {/* Price Display String */}
             <div>
               <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">
-                Teks Display Harga (Label Publik) *
+                Display Price Text (Public Label) *
               </label>
               <input
                 type="text"
@@ -1017,7 +1028,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
 
             {/* Currency & Unit */}
             <div>
-              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Mata Uang (Currency)</label>
+              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Currency</label>
               <input
                 type="text"
                 value={currency}
@@ -1028,22 +1039,22 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Satuan Penetapan Harga</label>
+              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Pricing Unit</label>
               <select
                 value={pricingUnit}
                 onChange={(e) => setPricingUnit(e.target.value)}
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
               >
-                <option value="per orang">per orang (Per Person)</option>
-                <option value="per grup">per grup (Per Group)</option>
-                <option value="per booking">per reservasi (Per Booking)</option>
-                <option value="per mobil">per mobil (Private Vehicle)</option>
+                <option value="per person">per person</option>
+                <option value="per group">per group</option>
+                <option value="per booking">per booking</option>
+                <option value="per car">per car (Private Vehicle)</option>
               </select>
             </div>
 
             {/* Discount Price */}
             <div>
-              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Harga Promo / Coret (Opsional)</label>
+              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Promo / Strikethrough Price (Optional)</label>
               <div className="relative">
                 <span className="absolute left-3.5 top-2.5 text-xs font-bold text-secondary-400">Rp</span>
                 <input
@@ -1052,7 +1063,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                   step={1000}
                   value={discountPrice}
                   onChange={(e) => setDiscountPrice(e.target.value)}
-                  placeholder="Kosongkan jika tidak ada promo"
+                  placeholder="Leave blank if no promotion"
                   className="w-full pl-10 pr-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
                 />
               </div>
@@ -1060,7 +1071,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
 
             {/* Group Discount Percent */}
             <div>
-              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Diskon Rombongan (%)</label>
+              <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">Group Discount (%)</label>
               <input
                 type="number"
                 min={0}
@@ -1075,13 +1086,13 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
             {/* Price Notes */}
             <div className="md:col-span-2">
               <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">
-                Catatan Ketentuan Harga (Price Notes)
+                Pricing Terms & Notes
               </label>
               <textarea
                 rows={3}
                 value={priceNotes}
                 onChange={(e) => setPriceNotes(e.target.value)}
-                placeholder="Contoh: Harga sudah termasuk tiket masuk wisatawan domestik. Tambahan biaya tiket WNA berlaku sesuai regulasi BKSDA..."
+                placeholder="e.g. Price includes domestic entrance tickets. International visitor ticket surcharge applies per BKSDA regulations..."
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
               />
             </div>
@@ -1093,38 +1104,38 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
       {activeTab === "media" && (
         <div className="bg-white rounded-3xl p-5 sm:p-8 border border-secondary-200/80 shadow-xs space-y-6">
           <div className="border-b border-secondary-100 pb-4">
-            <h3 className="text-lg font-black text-secondary-950">3. Foto Cover & Galeri Wisata</h3>
+            <h3 className="text-lg font-black text-secondary-950">3. Cover Photo & Tour Gallery</h3>
             <p className="text-xs text-secondary-500 mt-0.5">
-              Unggah cover beresolusi tinggi dan beberapa foto galeri pendukung (terhubung langsung ke Supabase Storage).
+              Upload a high-resolution cover image and supporting gallery photos (connected directly to Supabase Storage).
             </p>
           </div>
 
           <div className="space-y-6">
             <div>
               <label className="block text-xs font-black text-secondary-950 uppercase tracking-wider mb-2">
-                Foto Sampul Utama (Cover Image) *
+                Main Cover Photo (Cover Image) *
               </label>
               <ImageUpload
                 value={coverImage}
                 onChange={(url) => setCoverImage(url)}
                 folder="trips"
-                label="Unggah Cover Utama"
+                label="Upload Main Cover"
                 aspectRatio="video"
                 required
-                helperText="Format JPG, PNG, atau WebP resolusi tinggi (Maks. 5 MB)."
+                helperText="High-resolution JPG, PNG, or WebP format (Max. 5 MB)."
               />
             </div>
 
             <div className="pt-4 border-t border-secondary-100">
               <label className="block text-xs font-black text-secondary-950 uppercase tracking-wider mb-2">
-                Galeri Foto Pendukung (Multi-Image Gallery)
+                Supporting Photo Gallery (Multi-Image Gallery)
               </label>
               <MultiImageUpload
                 value={galleryImages}
                 onChange={(urls) => setGalleryImages(urls)}
                 folder="trips"
                 maxFiles={8}
-                label="Unggah Foto Galeri"
+                label="Upload Gallery Photos"
               />
             </div>
           </div>
@@ -1136,9 +1147,9 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
         <div className="bg-white rounded-3xl p-5 sm:p-8 border border-secondary-200/80 shadow-xs space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-secondary-100 pb-4">
             <div>
-              <h3 className="text-lg font-black text-secondary-950">4. Rencana Perjalanan (Itinerary)</h3>
+              <h3 className="text-lg font-black text-secondary-950">4. Travel Schedule (Itinerary)</h3>
               <p className="text-xs text-secondary-500 mt-0.5">
-                Kelola urutan aktivitas perjalanan, waktu, nama agenda, deskripsi, lokasi, dan catatan operasional.
+                Manage itinerary activity sequence, timing, agenda titles, descriptions, locations, and operational notes.
               </p>
             </div>
             <button
@@ -1147,20 +1158,20 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
               className="px-4 py-2 rounded-xl bg-secondary-950 hover:bg-secondary-900 text-white font-bold text-xs transition inline-flex items-center justify-center gap-1.5 self-start sm:self-auto cursor-pointer"
             >
               <Plus className="w-4 h-4 shrink-0" />
-              <span>Tambah Aktivitas</span>
+              <span>Add Activity</span>
             </button>
           </div>
 
           {itinerary.length === 0 ? (
             <div className="text-center py-12 border-2 border-dashed border-secondary-200 rounded-3xl p-6">
-              <p className="text-xs font-bold text-secondary-500 mb-3">Belum ada item itinerary untuk paket ini.</p>
+              <p className="text-xs font-bold text-secondary-500 mb-3">No itinerary items configured for this package yet.</p>
               <button
                 type="button"
                 onClick={addItineraryItem}
                 className="px-4 py-2 rounded-xl bg-primary-500 text-secondary-950 font-bold text-xs inline-flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <Plus className="w-4 h-4 shrink-0" />
-                <span>Tambah Aktivitas Pertama</span>
+                <span>Add First Activity</span>
               </button>
             </div>
           ) : (
@@ -1175,7 +1186,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                       <span className="w-6 h-6 rounded-full bg-primary-500 text-secondary-950 font-black text-xs inline-flex items-center justify-center">
                         {idx + 1}
                       </span>
-                      <span className="text-xs font-black text-secondary-950">Aktivitas #{idx + 1}</span>
+                      <span className="text-xs font-black text-secondary-950">Activity #{idx + 1}</span>
                     </div>
 
                     <div className="inline-flex items-center gap-1">
@@ -1184,7 +1195,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                         onClick={() => moveItineraryItem(idx, "up")}
                         disabled={idx === 0}
                         className="w-8 h-8 rounded-xl border border-secondary-200 hover:bg-white text-secondary-600 disabled:opacity-30 inline-flex items-center justify-center transition shrink-0 cursor-pointer"
-                        title="Geser ke Atas"
+                        title="Move Up"
                       >
                         <ChevronUp className="w-4 h-4 shrink-0" />
                       </button>
@@ -1193,7 +1204,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                         onClick={() => moveItineraryItem(idx, "down")}
                         disabled={idx === itinerary.length - 1}
                         className="w-8 h-8 rounded-xl border border-secondary-200 hover:bg-white text-secondary-600 disabled:opacity-30 inline-flex items-center justify-center transition shrink-0 cursor-pointer"
-                        title="Geser ke Bawah"
+                        title="Move Down"
                       >
                         <ChevronDown className="w-4 h-4 shrink-0" />
                       </button>
@@ -1201,7 +1212,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                         type="button"
                         onClick={() => removeItineraryItem(idx)}
                         className="w-8 h-8 rounded-xl border border-red-200 text-red-600 hover:bg-red-50 inline-flex items-center justify-center transition shrink-0 cursor-pointer ml-1"
-                        title="Hapus Aktivitas Ini"
+                        title="Delete This Activity"
                       >
                         <Trash2 className="w-4 h-4 shrink-0" />
                       </button>
@@ -1212,61 +1223,61 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                     {/* Day / Time Label */}
                     <div className="sm:col-span-4">
                       <label className="block text-[11px] font-bold text-secondary-700 uppercase tracking-wider mb-1">
-                        Label Waktu / Hari (e.g. 00:00 WIB / Hari 1)
+                        Time / Day Label (e.g. 00:00 WIB / Day 1)
                       </label>
                       <input
                         type="text"
                         value={item.day}
                         onChange={(e) => updateItineraryItem(idx, "day", e.target.value)}
-                        placeholder="00:00 WIB atau Hari 1"
+                        placeholder="00:00 WIB or Day 1"
                         className="w-full px-3 py-2 bg-white border border-secondary-200 rounded-xl text-xs text-secondary-950 font-bold focus:outline-none focus:ring-2 focus:ring-primary-500"
                       />
                     </div>
 
                     {/* Activity Title */}
                     <div className="sm:col-span-8">
-                      <label className="block text-[11px] font-bold text-secondary-700 uppercase tracking-wider mb-1">Judul Aktivitas *</label>
+                      <label className="block text-[11px] font-bold text-secondary-700 uppercase tracking-wider mb-1">Activity Title *</label>
                       <input
                         type="text"
                         required
                         value={item.title}
                         onChange={(e) => updateItineraryItem(idx, "title", e.target.value)}
-                        placeholder="Contoh: Fenomena Blue Fire Elektrik"
+                        placeholder="e.g. Electric Blue Fire Phenomenon"
                         className="w-full px-3 py-2 bg-white border border-secondary-200 rounded-xl text-xs text-secondary-950 font-bold focus:outline-none focus:ring-2 focus:ring-primary-500"
                       />
                     </div>
 
                     {/* Description */}
                     <div className="sm:col-span-12">
-                      <label className="block text-[11px] font-bold text-secondary-700 uppercase tracking-wider mb-1">Deskripsi Kegiatan</label>
+                      <label className="block text-[11px] font-bold text-secondary-700 uppercase tracking-wider mb-1">Activity Description</label>
                       <textarea
                         rows={2}
                         value={item.desc}
                         onChange={(e) => updateItineraryItem(idx, "desc", e.target.value)}
-                        placeholder="Jelaskan detail aktivitas yang dilakukan wisatawan..."
+                        placeholder="Describe what travelers will do during this step..."
                         className="w-full px-3 py-2 bg-white border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
                       />
                     </div>
 
                     {/* Location & Note */}
                     <div className="sm:col-span-6">
-                      <label className="block text-[11px] font-bold text-secondary-700 uppercase tracking-wider mb-1">Lokasi (Opsional)</label>
+                      <label className="block text-[11px] font-bold text-secondary-700 uppercase tracking-wider mb-1">Location (Optional)</label>
                       <input
                         type="text"
                         value={item.location || ""}
                         onChange={(e) => updateItineraryItem(idx, "location", e.target.value)}
-                        placeholder="Dasar Kawah Ijen / Basecamp Paltuding"
+                        placeholder="Ijen Crater Floor / Paltuding Basecamp"
                         className="w-full px-3 py-2 bg-white border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
                       />
                     </div>
 
                     <div className="sm:col-span-6">
-                      <label className="block text-[11px] font-bold text-secondary-700 uppercase tracking-wider mb-1">Catatan Khusus (Opsional)</label>
+                      <label className="block text-[11px] font-bold text-secondary-700 uppercase tracking-wider mb-1">Special Note (Optional)</label>
                       <input
                         type="text"
                         value={item.note || ""}
                         onChange={(e) => updateItineraryItem(idx, "note", e.target.value)}
-                        placeholder="Gunakan masker gas & senter kepala"
+                        placeholder="Wear gas respirator mask & headlamp"
                         className="w-full px-3 py-2 bg-white border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
                       />
                     </div>
@@ -1289,8 +1300,8 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                   ✓
                 </span>
                 <div>
-                  <h4 className="text-base font-black text-secondary-950">Termasuk (Inclusions)</h4>
-                  <p className="text-[11px] text-emerald-700 font-medium">Fasilitas yang disediakan oleh pengelola</p>
+                  <h4 className="text-base font-black text-secondary-950">Included (Inclusions)</h4>
+                  <p className="text-[11px] text-emerald-700 font-medium">Facilities provided by the operator</p>
                 </div>
               </div>
               <button
@@ -1299,7 +1310,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                 className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition inline-flex items-center justify-center gap-1 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5 shrink-0" />
-                <span>Tambah</span>
+                <span>Add</span>
               </button>
             </div>
 
@@ -1311,14 +1322,14 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                     type="text"
                     value={inc.item}
                     onChange={(e) => updateInclusion(i, e.target.value)}
-                    placeholder="Contoh: Masker Gas Respirator Medis"
+                    placeholder="e.g. Medical Gas Respirator Mask"
                     className="w-full px-3.5 py-2 bg-emerald-50/40 border border-emerald-200 rounded-xl text-xs font-semibold text-secondary-950 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                   <button
                     type="button"
                     onClick={() => removeInclusion(i)}
                     className="w-8 h-8 rounded-xl text-red-500 hover:text-red-700 hover:bg-red-50 inline-flex items-center justify-center transition shrink-0 cursor-pointer"
-                    title="Hapus Item"
+                    title="Delete Item"
                   >
                     <Trash2 className="w-4 h-4 shrink-0" />
                   </button>
@@ -1335,8 +1346,8 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                   ✕
                 </span>
                 <div>
-                  <h4 className="text-base font-black text-secondary-950">Tidak Termasuk (Exclusions)</h4>
-                  <p className="text-[11px] text-rose-700 font-medium">Biaya opsional di luar tanggungan paket</p>
+                  <h4 className="text-base font-black text-secondary-950">Not Included (Exclusions)</h4>
+                  <p className="text-[11px] text-rose-700 font-medium">Optional costs outside package coverage</p>
                 </div>
               </div>
               <button
@@ -1345,7 +1356,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                 className="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs transition inline-flex items-center justify-center gap-1 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5 shrink-0" />
-                <span>Tambah</span>
+                <span>Add</span>
               </button>
             </div>
 
@@ -1357,14 +1368,14 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                     type="text"
                     value={exc.item}
                     onChange={(e) => updateExclusion(i, e.target.value)}
-                    placeholder="Contoh: Taksi Troli Dorong Kawah"
+                    placeholder="e.g. Crater Trolley Taxi Cart"
                     className="w-full px-3.5 py-2 bg-rose-50/40 border border-rose-200 rounded-xl text-xs font-semibold text-secondary-950 focus:outline-none focus:ring-2 focus:ring-rose-500"
                   />
                   <button
                     type="button"
                     onClick={() => removeExclusion(i)}
                     className="w-8 h-8 rounded-xl text-red-500 hover:text-red-700 hover:bg-red-50 inline-flex items-center justify-center transition shrink-0 cursor-pointer"
-                    title="Hapus Item"
+                    title="Delete Item"
                   >
                     <Trash2 className="w-4 h-4 shrink-0" />
                   </button>
@@ -1382,8 +1393,8 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
           <div className="bg-white rounded-3xl p-5 sm:p-8 border border-secondary-200/80 shadow-xs space-y-4">
             <div className="flex items-center justify-between border-b border-secondary-100 pb-3">
               <div>
-                <h4 className="text-base font-black text-secondary-950">Keunggulan Utama (Package Highlights)</h4>
-                <p className="text-xs text-secondary-500">Poin jual utama yang tampil mencolok di halaman detail paket</p>
+                <h4 className="text-base font-black text-secondary-950">Key Selling Points (Package Highlights)</h4>
+                <p className="text-xs text-secondary-500">Top highlights featured prominently on the package detail page</p>
               </div>
               <button
                 type="button"
@@ -1391,7 +1402,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                 className="px-3.5 py-1.5 rounded-xl bg-secondary-950 text-white text-xs font-bold inline-flex items-center justify-center gap-1 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5 shrink-0" />
-                <span>Tambah Poin</span>
+                <span>Add Point</span>
               </button>
             </div>
 
@@ -1405,7 +1416,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                     type="text"
                     value={h}
                     onChange={(e) => updateHighlight(idx, e.target.value)}
-                    placeholder="Contoh: Spot Foto Sunrise & Danau Asam Terbesar"
+                    placeholder="e.g. Sunrise & World's Largest Acidic Lake Photo Spot"
                     className="w-full bg-transparent text-xs font-bold text-secondary-950 focus:outline-none"
                   />
                   <button
@@ -1424,8 +1435,8 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
           <div className="bg-white rounded-3xl p-5 sm:p-8 border border-secondary-200/80 shadow-xs space-y-4">
             <div className="flex items-center justify-between border-b border-secondary-100 pb-3">
               <div>
-                <h4 className="text-base font-black text-secondary-950">Daftar Barang Bawaan (Packing List)</h4>
-                <p className="text-xs text-secondary-500">Panduan perlengkapan yang disarankan untuk dibawa wisatawan</p>
+                <h4 className="text-base font-black text-secondary-950">Recommended Packing List</h4>
+                <p className="text-xs text-secondary-500">Recommended gear and clothing for travelers to bring</p>
               </div>
               <button
                 type="button"
@@ -1433,7 +1444,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                 className="px-3.5 py-1.5 rounded-xl bg-secondary-950 text-white text-xs font-bold inline-flex items-center justify-center gap-1 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5 shrink-0" />
-                <span>Tambah Barang</span>
+                <span>Add Item</span>
               </button>
             </div>
 
@@ -1445,7 +1456,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                       type="text"
                       value={p.item}
                       onChange={(e) => updatePackingItem(idx, "item", e.target.value)}
-                      placeholder="Nama Barang (e.g. Jaket Hangat)"
+                      placeholder="Item Name (e.g. Warm Jacket)"
                       className="w-full px-3 py-1.5 bg-white border border-secondary-200 rounded-xl text-xs font-bold text-secondary-950"
                     />
                   </div>
@@ -1454,7 +1465,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                       type="text"
                       value={p.category || ""}
                       onChange={(e) => updatePackingItem(idx, "category", e.target.value)}
-                      placeholder="Kategori (Pakaian / Alas Kaki)"
+                      placeholder="Category (Clothing / Footwear)"
                       className="w-full px-3 py-1.5 bg-white border border-secondary-200 rounded-xl text-xs text-secondary-950"
                     />
                   </div>
@@ -1463,7 +1474,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                       type="text"
                       value={p.note || ""}
                       onChange={(e) => updatePackingItem(idx, "note", e.target.value)}
-                      placeholder="Catatan suhu atau spesifikasi"
+                      placeholder="Temperature or specification notes"
                       className="w-full px-3 py-1.5 bg-white border border-secondary-200 rounded-xl text-xs text-secondary-600"
                     />
                   </div>
@@ -1490,9 +1501,9 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
           <div className="bg-white rounded-3xl p-5 sm:p-8 border border-secondary-200/80 shadow-xs space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-secondary-100 pb-3">
               <div>
-                <h4 className="text-base font-black text-secondary-950">Layanan Tambahan (Tour Add-ons)</h4>
+                <h4 className="text-base font-black text-secondary-950">Optional Services (Tour Add-ons)</h4>
                 <p className="text-xs text-secondary-500">
-                  Layanan opsional berbayar yang dapat dipilih tamu saat checkout (Taksi Troli, Dokumentasi Drone, dll)
+                  Paid optional add-ons guests can select during booking (Trolley Taxi, Drone Documentation, etc.)
                 </p>
               </div>
               <button
@@ -1501,7 +1512,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                 className="px-4 py-2 rounded-xl bg-secondary-950 text-white font-bold text-xs inline-flex items-center justify-center gap-1.5 cursor-pointer self-start sm:self-auto"
               >
                 <Plus className="w-4 h-4 shrink-0" />
-                <span>Tambah Add-on Baru</span>
+                <span>Add New Add-on</span>
               </button>
             </div>
 
@@ -1509,12 +1520,12 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
               {addons.map((ad, idx) => (
                 <div key={idx} className="p-4 rounded-2xl bg-secondary-50 border border-secondary-200 space-y-3 relative">
                   <div className="flex items-center justify-between border-b border-secondary-200/80 pb-2">
-                    <span className="text-xs font-black text-secondary-950">Opsi Add-on #{idx + 1}</span>
+                    <span className="text-xs font-black text-secondary-950">Add-on Option #{idx + 1}</span>
                     <button
                       type="button"
                       onClick={() => removeAddon(idx)}
                       className="w-8 h-8 rounded-xl text-red-500 hover:text-red-700 hover:bg-red-50 inline-flex items-center justify-center transition shrink-0 cursor-pointer"
-                      title="Hapus Add-on"
+                      title="Delete Add-on"
                     >
                       <Trash2 className="w-4 h-4 shrink-0" />
                     </button>
@@ -1522,19 +1533,19 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
 
                   <div className="space-y-2">
                     <div>
-                      <label className="block text-[10px] font-bold text-secondary-700 uppercase tracking-wider mb-1">Nama Layanan *</label>
+                      <label className="block text-[10px] font-bold text-secondary-700 uppercase tracking-wider mb-1">Service Name *</label>
                       <input
                         type="text"
                         value={ad.name}
                         onChange={(e) => updateAddon(idx, "name", e.target.value)}
-                        placeholder="Contoh: Taksi Troli Kawah Ijen PP"
+                        placeholder="e.g. Mount Ijen Trolley Taxi (Round-Trip)"
                         className="w-full px-3 py-1.5 bg-white border border-secondary-200 rounded-xl text-xs font-bold text-secondary-950"
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-2">
                       <div>
-                        <label className="block text-[10px] font-bold text-secondary-700 uppercase tracking-wider mb-1">Harga Tambahan (IDR)</label>
+                        <label className="block text-[10px] font-bold text-secondary-700 uppercase tracking-wider mb-1">Extra Price (IDR)</label>
                         <input
                           type="number"
                           min={0}
@@ -1545,24 +1556,24 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                         />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-bold text-secondary-700 uppercase tracking-wider mb-1">Satuan Harga</label>
+                        <label className="block text-[10px] font-bold text-secondary-700 uppercase tracking-wider mb-1">Pricing Unit</label>
                         <input
                           type="text"
-                          value={ad.pricingUnit || "per orang"}
+                          value={ad.pricingUnit || "per person"}
                           onChange={(e) => updateAddon(idx, "pricingUnit", e.target.value)}
-                          placeholder="per orang / per troli"
+                          placeholder="per person / per trolley"
                           className="w-full px-3 py-1.5 bg-white border border-secondary-200 rounded-xl text-xs text-secondary-950"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-[10px] font-bold text-secondary-700 uppercase tracking-wider mb-1">Deskripsi Fasilitas</label>
+                      <label className="block text-[10px] font-bold text-secondary-700 uppercase tracking-wider mb-1">Facility Description</label>
                       <textarea
                         rows={2}
                         value={ad.description || ""}
                         onChange={(e) => updateAddon(idx, "description", e.target.value)}
-                        placeholder="Uraikan detail fasilitas ekstra ini..."
+                        placeholder="Describe details of this extra service..."
                         className="w-full px-3 py-1.5 bg-white border border-secondary-200 rounded-xl text-xs text-secondary-950"
                       />
                     </div>
@@ -1575,7 +1586,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                           onChange={(e) => updateAddon(idx, "isActive", e.target.checked)}
                           className="w-4 h-4 rounded text-primary-600 focus:ring-primary-500"
                         />
-                        <span className="text-xs font-bold text-secondary-800">Status Aktif (Tampil di Booking)</span>
+                        <span className="text-xs font-bold text-secondary-800">Active Status (Visible at Checkout)</span>
                       </label>
                     </div>
                   </div>
@@ -1588,9 +1599,9 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
           <div className="bg-white rounded-3xl p-5 sm:p-8 border border-secondary-200/80 shadow-xs space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-secondary-100 pb-3">
               <div>
-                <h4 className="text-base font-black text-secondary-950">Pertanyaan Umum Khusus Paket (FAQ)</h4>
+                <h4 className="text-base font-black text-secondary-950">Package-Specific Frequently Asked Questions (FAQ)</h4>
                 <p className="text-xs text-secondary-500">
-                  Pertanyaan yang sering ditanyakan tamu seputar medan, masker gas, atau durasi tur ini
+                  Common questions guests ask about the terrain, gas masks, or duration of this tour
                 </p>
               </div>
               <button
@@ -1599,7 +1610,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                 className="px-4 py-2 rounded-xl bg-secondary-950 text-white font-bold text-xs inline-flex items-center justify-center gap-1.5 cursor-pointer self-start sm:self-auto"
               >
                 <Plus className="w-4 h-4 shrink-0" />
-                <span>Tambah FAQ</span>
+                <span>Add FAQ</span>
               </button>
             </div>
 
@@ -1607,7 +1618,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
               {faqs.map((f, idx) => (
                 <div key={idx} className="p-4 rounded-2xl bg-secondary-50 border border-secondary-200 space-y-2.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-black text-secondary-950">Pertanyaan #{idx + 1}</span>
+                    <span className="text-xs font-black text-secondary-950">Question #{idx + 1}</span>
                     <button
                       type="button"
                       onClick={() => removeFaq(idx)}
@@ -1621,7 +1632,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                       type="text"
                       value={f.q}
                       onChange={(e) => updateFaq(idx, "q", e.target.value)}
-                      placeholder="Pertanyaan (e.g. Apakah anak-anak aman mendaki?)"
+                      placeholder="Question (e.g., Is this hike safe for children?)"
                       className="w-full px-3 py-2 bg-white border border-secondary-200 rounded-xl text-xs font-bold text-secondary-950"
                     />
                   </div>
@@ -1630,7 +1641,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                       rows={2}
                       value={f.a}
                       onChange={(e) => updateFaq(idx, "a", e.target.value)}
-                      placeholder="Jawaban informatif dan ramah..."
+                      placeholder="Informative and helpful answer..."
                       className="w-full px-3 py-2 bg-white border border-secondary-200 rounded-xl text-xs text-secondary-950"
                     />
                   </div>
@@ -1645,58 +1656,58 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
       {activeTab === "seo" && (
         <div className="bg-white rounded-3xl p-5 sm:p-8 border border-secondary-200/80 shadow-xs space-y-6">
           <div className="border-b border-secondary-100 pb-4">
-            <h3 className="text-lg font-black text-secondary-950">8. Optimasi Mesin Pencari (SEO) & Publikasi</h3>
+            <h3 className="text-lg font-black text-secondary-950">8. Search Engine Optimization (SEO) & Publishing</h3>
             <p className="text-xs text-secondary-500 mt-0.5">
-              Atur meta title, meta description untuk snippet Google, serta status visibilitas paket.
+              Configure the meta title and meta description for Google search snippets, as well as package visibility settings.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">
-                Meta Title (Judul Tab & Google)
+                Meta Title (Browser Tab & Google Title)
               </label>
               <input
                 type="text"
                 value={metaTitle}
                 onChange={(e) => setMetaTitle(e.target.value)}
-                placeholder="Midnight Expedition Blue Fire Ijen - Tour Resmi Banyuwangi"
+                placeholder="Midnight Blue Fire Ijen Expedition - Official Banyuwangi Tour"
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
               <span className="text-[10px] text-secondary-500 mt-1 block">
-                Disarankan antara 50 - 60 karakter agar tidak terpotong di Google.
+                Recommended 50 - 60 characters so it is not truncated on Google.
               </span>
             </div>
 
             <div>
               <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">
-                Badge Promosi (Stiker Tag)
+                Promotional Badge (Tag Sticker)
               </label>
               <input
                 type="text"
                 value={badge}
                 onChange={(e) => setBadge(e.target.value)}
-                placeholder="Best Seller / Paling Populer / Midnight"
+                placeholder="Best Seller / Most Popular / Midnight"
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
 
             <div className="md:col-span-2">
               <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">
-                Meta Description (Deskripsi Cuplikan Google)
+                Meta Description (Google Search Snippet)
               </label>
               <textarea
                 rows={3}
                 value={metaDescription}
                 onChange={(e) => setMetaDescription(e.target.value)}
-                placeholder="Deskripsi rangkuman 150-160 karakter untuk Google search snippet..."
+                placeholder="150-160 character summary description for the Google search snippet..."
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
 
             <div>
               <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">
-                Urutan Tampil (Sort Order)
+                Display Order (Sort Order)
               </label>
               <input
                 type="number"
@@ -1708,13 +1719,13 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
 
             <div>
               <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">
-                Open Graph Image URL (Opsional)
+                Open Graph Image URL (Optional)
               </label>
               <input
                 type="text"
                 value={ogImage}
                 onChange={(e) => setOgImage(e.target.value)}
-                placeholder="URL gambar untuk share media sosial (otomatis pakai cover jika kosong)"
+                placeholder="Image URL for social media sharing (defaults to cover image if left blank)"
                 className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
@@ -1729,8 +1740,8 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                   className="w-4 h-4 rounded text-primary-600 focus:ring-primary-500"
                 />
                 <div>
-                  <span className="text-xs font-bold text-secondary-950 block">Publikasikan Paket</span>
-                  <span className="text-[10px] text-secondary-500">Tampil di halaman publik</span>
+                  <span className="text-xs font-bold text-secondary-950 block">Publish Package</span>
+                  <span className="text-[10px] text-secondary-500">Visible on public website</span>
                 </div>
               </label>
 
@@ -1743,7 +1754,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                 />
                 <div>
                   <span className="text-xs font-bold text-secondary-950 block">Featured Package</span>
-                  <span className="text-[10px] text-secondary-500">Sorotan beranda utama</span>
+                  <span className="text-[10px] text-secondary-500">Highlighted on homepage</span>
                 </div>
               </label>
 
@@ -1756,7 +1767,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                 />
                 <div>
                   <span className="text-xs font-bold text-secondary-950 block">Trending Tour</span>
-                  <span className="text-[10px] text-secondary-500">Badge paling diminati</span>
+                  <span className="text-[10px] text-secondary-500">Most popular badge</span>
                 </div>
               </label>
 
@@ -1768,8 +1779,8 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                   className="w-4 h-4 rounded text-primary-600 focus:ring-primary-500"
                 />
                 <div>
-                  <span className="text-xs font-bold text-secondary-950 block">Paket Terbaru</span>
-                  <span className="text-[10px] text-secondary-500">Tandai update terbaru</span>
+                  <span className="text-xs font-bold text-secondary-950 block">Latest Package</span>
+                  <span className="text-[10px] text-secondary-500">Mark as newly updated</span>
                 </div>
               </label>
             </div>
@@ -1787,14 +1798,14 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
               className="px-4 py-2 rounded-xl border border-secondary-200 bg-white hover:bg-secondary-100 text-secondary-700 font-bold text-xs inline-flex items-center justify-center gap-1.5 transition cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5 shrink-0" />
-              <span>Kembali ke: {prevTab.label}</span>
+              <span>Back to: {prevTab.label}</span>
             </button>
           ) : (
             <Link
               href="/admin/trips"
               className="px-4 py-2 rounded-xl border border-secondary-200 bg-white hover:bg-secondary-100 text-secondary-700 font-bold text-xs inline-flex items-center justify-center transition"
             >
-              Batal & Kembali ke Daftar
+              Cancel & Back to List
             </Link>
           )}
 
@@ -1804,7 +1815,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
               onClick={() => setActiveTab(nextTab.id)}
               className="px-4 py-2 rounded-xl border border-secondary-300 bg-secondary-100 hover:bg-secondary-200 text-secondary-950 font-bold text-xs inline-flex items-center justify-center gap-1.5 transition cursor-pointer"
             >
-              <span>Lanjut ke: {nextTab.label}</span>
+              <span>Next: {nextTab.label}</span>
               <ArrowRight className="w-3.5 h-3.5 shrink-0" />
             </button>
           )}
@@ -1815,7 +1826,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
             href="/admin/trips"
             className="hidden sm:inline-flex px-4 py-2.5 rounded-xl border border-secondary-200 text-secondary-700 hover:bg-secondary-100 font-bold text-xs items-center justify-center transition"
           >
-            Batal
+            Cancel
           </Link>
           <button
             type="submit"
@@ -1823,7 +1834,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
             className="w-full sm:w-auto px-6 py-3 rounded-xl bg-primary-500 hover:bg-primary-400 text-secondary-950 font-black text-xs transition shadow-md inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
           >
             <Save className="w-4 h-4 shrink-0" />
-            <span>{submitting ? "Menyimpan Data..." : mode === "create" ? "Buat Paket Wisata" : "Simpan Seluruh Perubahan"}</span>
+            <span>{submitting ? "Saving Data..." : mode === "create" ? "Create Tour Package" : "Save All Changes"}</span>
           </button>
         </div>
       </div>

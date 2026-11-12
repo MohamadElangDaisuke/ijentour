@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Akses ditolak. Log audit administratif hanya dapat diakses oleh Super Admin.",
+          error: "Access denied. Administrative audit logs can only be accessed by a Super Admin.",
         },
         { status: 403 }
       );
@@ -98,7 +98,7 @@ export async function GET(request: NextRequest) {
   } catch (error: any) {
     console.error("GET /api/admin/audit-logs error:", error);
     return NextResponse.json(
-      { success: false, error: "Gagal memuat log audit administratif." },
+      { success: false, error: "Failed to load administrative audit logs." },
       { status: 500 }
     );
   }

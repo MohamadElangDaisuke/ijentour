@@ -58,13 +58,13 @@ export default function AdminProfilePage() {
         body: JSON.stringify({ name, phone }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Gagal memperbarui profil.");
+      if (!res.ok) throw new Error(data.error || "Failed to update profile.");
 
       setCurrentUser((prev: any) => ({ ...prev, name, phone }));
-      setProfileMsg({ type: "success", text: "Profil berhasil diperbarui." });
+      setProfileMsg({ type: "success", text: "Profile updated successfully." });
       setTimeout(() => setProfileMsg(null), 4000);
     } catch (err: any) {
-      setProfileMsg({ type: "error", text: err.message || "Gagal memperbarui profil." });
+      setProfileMsg({ type: "error", text: err.message || "Failed to update profile." });
     } finally {
       setSavingProfile(false);
     }
@@ -76,12 +76,12 @@ export default function AdminProfilePage() {
     setPasswordMsg(null);
 
     if (password.length < 6) {
-      setPasswordMsg({ type: "error", text: "Kata sandi minimal 6 karakter." });
+      setPasswordMsg({ type: "error", text: "Password must be at least 6 characters." });
       return;
     }
 
     if (password !== confirmPassword) {
-      setPasswordMsg({ type: "error", text: "Konfirmasi kata sandi tidak cocok." });
+      setPasswordMsg({ type: "error", text: "Password confirmation does not match." });
       return;
     }
 
@@ -93,14 +93,14 @@ export default function AdminProfilePage() {
         body: JSON.stringify({ password }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Gagal memperbarui kata sandi.");
+      if (!res.ok) throw new Error(data.error || "Failed to update password.");
 
       setPassword("");
       setConfirmPassword("");
-      setPasswordMsg({ type: "success", text: "Kata sandi berhasil diperbarui." });
+      setPasswordMsg({ type: "success", text: "Password updated successfully." });
       setTimeout(() => setPasswordMsg(null), 4000);
     } catch (err: any) {
-      setPasswordMsg({ type: "error", text: err.message || "Gagal memperbarui kata sandi." });
+      setPasswordMsg({ type: "error", text: err.message || "Failed to update password." });
     } finally {
       setSavingPassword(false);
     }
@@ -113,9 +113,9 @@ export default function AdminProfilePage() {
           { label: "Dashboard", href: "/admin/dashboard" },
           { label: "My Profile" },
         ]}
-        categoryTag="Akun Pribadi"
-        title="Profil & Keamanan Akun"
-        description="Kelola nama lengkap, kontak nomor telepon/WhatsApp, dan pembaruan kata sandi akun administrator Anda."
+        categoryTag="Personal Account"
+        title="Account Profile & Security"
+        description="Manage your full name, phone/WhatsApp contact number, and administrator password."
       />
 
       {loading ? (
@@ -131,10 +131,10 @@ export default function AdminProfilePage() {
               <div>
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                   <User className="w-4 h-4 text-amber-500" />
-                  Profil Administrator
+                  Administrator Profile
                 </h3>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  Informasi identitas pribadi Anda di panel manajemen.
+                  Your personal identity details in the management panel.
                 </p>
               </div>
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30">
@@ -162,7 +162,7 @@ export default function AdminProfilePage() {
             <form onSubmit={handleUpdateProfile} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 mb-1.5">
-                  Alamat Email (Terkunci)
+                  Email Address (Locked)
                 </label>
                 <div className="relative">
                   <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -174,13 +174,13 @@ export default function AdminProfilePage() {
                   />
                 </div>
                 <span className="text-[11px] text-slate-400 mt-1 block">
-                  Alamat email terdaftar dan terikat pada otentikasi login.
+                  Registered email address linked to login authentication.
                 </span>
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 mb-1.5">
-                  Nama Lengkap
+                  Full Name
                 </label>
                 <input
                   type="text"
@@ -193,7 +193,7 @@ export default function AdminProfilePage() {
 
               <div>
                 <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 mb-1.5">
-                  Nomor WhatsApp / Telepon
+                  WhatsApp / Phone Number
                 </label>
                 <div className="relative">
                   <Phone className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -216,12 +216,12 @@ export default function AdminProfilePage() {
                   {savingProfile ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Menyimpan Perubahan...</span>
+                      <span>Saving Changes...</span>
                     </>
                   ) : (
                     <>
                       <Save className="w-4 h-4" />
-                      <span>Simpan Perubahan Profil</span>
+                      <span>Save Profile Changes</span>
                     </>
                   )}
                 </button>
@@ -234,10 +234,10 @@ export default function AdminProfilePage() {
             <div className="border-b border-slate-100 dark:border-slate-800 pb-3">
               <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <KeyRound className="w-4 h-4 text-amber-500" />
-                Ubah Kata Sandi
+                Change Password
               </h3>
               <p className="text-xs text-slate-500 mt-0.5">
-                Perbarui kata sandi akun Anda secara berkala untuk menjaga keamanan.
+                Update your account password periodically to keep it secure.
               </p>
             </div>
 
@@ -261,7 +261,7 @@ export default function AdminProfilePage() {
             <form onSubmit={handleUpdatePassword} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 mb-1.5">
-                  Kata Sandi Baru
+                  New Password
                 </label>
                 <div className="relative">
                   <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -270,7 +270,7 @@ export default function AdminProfilePage() {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Minimal 6 karakter"
+                    placeholder="Minimum 6 characters"
                     className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 font-medium"
                   />
                 </div>
@@ -278,7 +278,7 @@ export default function AdminProfilePage() {
 
               <div>
                 <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 mb-1.5">
-                  Konfirmasi Kata Sandi Baru
+                  Confirm New Password
                 </label>
                 <div className="relative">
                   <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -287,14 +287,14 @@ export default function AdminProfilePage() {
                     required
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Ulangi kata sandi baru"
+                    placeholder="Repeat new password"
                     className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 font-medium"
                   />
                 </div>
               </div>
 
               <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700 text-[11px] text-slate-500">
-                Kata sandi akan di-hash secara aman menggunakan algoritma Bcrypt (cost factor: 10) sebelum disimpan di database.
+                Passwords are securely hashed using the Bcrypt algorithm (cost factor: 10) before being stored in the database.
               </div>
 
               <div className="pt-2">
@@ -306,12 +306,12 @@ export default function AdminProfilePage() {
                   {savingPassword ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Menyimpan Kata Sandi...</span>
+                      <span>Saving Password...</span>
                     </>
                   ) : (
                     <>
                       <KeyRound className="w-4 h-4 text-amber-500" />
-                      <span>Perbarui Kata Sandi</span>
+                      <span>Update Password</span>
                     </>
                   )}
                 </button>

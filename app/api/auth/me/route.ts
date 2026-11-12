@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
     });
   } catch {
     return NextResponse.json(
-      { success: false, error: "Gagal memverifikasi sesi." },
+      { success: false, error: "Failed to verify session." },
       { status: 500 }
     );
   }

@@ -76,13 +76,13 @@ export default function AdminDestinationsPage() {
 
   // Tags list
   const tagsList = useMemo(() => {
-    return Array.from(new Set(destinations.map((d) => d.tag || "Destinasi")));
+    return Array.from(new Set(destinations.map((d) => d.tag || "Destination")));
   }, [destinations]);
 
   // Filtered list
   const filteredDestinations = useMemo(() => {
     return destinations.filter((d) => {
-      if (tagFilter !== "ALL" && (d.tag || "Destinasi") !== tagFilter) return false;
+      if (tagFilter !== "ALL" && (d.tag || "Destination") !== tagFilter) return false;
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         const matchesName = (d.name || "").toLowerCase().includes(q);

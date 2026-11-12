@@ -77,16 +77,16 @@ export default function VerifyEmailPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Gagal mengirimkan kode OTP.");
+      if (!res.ok) throw new Error(data.error || "Failed to send OTP code.");
 
       setSuccessMsg(
         data.devCode
-          ? `[Simulasi Dev: ${data.devCode}] Kode OTP 6 digit berhasil dibuat. Berlaku 10 menit.`
-          : `Kode OTP verifikasi telah dikirimkan ke email ${currentUser.email}.`
+          ? `[Dev Simulation: ${data.devCode}] 6-digit OTP code generated. Valid for 10 minutes.`
+          : `Verification OTP code has been sent to ${currentUser.email}.`
       );
       setCooldown(60);
     } catch (err: any) {
-      setError(err.message || "Gagal memproses permintaan OTP.");
+      setError(err.message || "Failed to process OTP request.");
     } finally {
       setSendingOtp(false);
     }
@@ -95,7 +95,7 @@ export default function VerifyEmailPage() {
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentUser || otpCode.trim().length !== 6) {
-      setError("Silakan masukkan 6 digit kode OTP verifikasi.");
+      setError("Please enter the 6-digit verification OTP code.");
       return;
     }
 
@@ -115,15 +115,15 @@ export default function VerifyEmailPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Kode OTP salah atau telah kedaluwarsa.");
+      if (!res.ok) throw new Error(data.error || "Invalid or expired OTP code.");
 
-      setSuccessMsg("Verifikasi berhasil! Mengalihkan ke dashboard admin...");
+      setSuccessMsg("Verification successful! Redirecting to admin dashboard...");
       setTimeout(() => {
         router.push("/admin/dashboard");
         router.refresh();
       }, 1000);
     } catch (err: any) {
-      setError(err.message || "Verifikasi OTP gagal.");
+      setError(err.message || "OTP verification failed.");
     } finally {
       setLoading(false);
     }
@@ -162,13 +162,13 @@ export default function VerifyEmailPage() {
           </div>
           <div>
             <span className="text-[10px] font-black uppercase tracking-widest text-amber-500 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
-              {currentUser?.role === "SUPER_ADMIN" ? "Super Admin Onboarding" : "Aktivasi Akun Admin"}
+              {currentUser?.role === "SUPER_ADMIN" ? "Super Admin Onboarding" : "Admin Account Activation"}
             </span>
             <h2 className="text-xl sm:text-2xl font-black tracking-tight mt-2.5">
-              Verifikasi Email Administrator
+              Administrator Email Verification
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-              Akun Anda telah terdaftar namun belum melewati verifikasi email. Hak akses administratif terkunci hingga verifikasi OTP selesai.
+              Your account is registered, but email verification is not yet complete. Administrative access remains locked until OTP verification is finished.
             </p>
           </div>
         </div>
@@ -182,7 +182,7 @@ export default function VerifyEmailPage() {
             </span>
           </div>
           <div className="flex justify-between items-center text-slate-500 dark:text-slate-400 text-[11px]">
-            <span>Email Terdaftar:</span>
+            <span>Registered Email:</span>
             <span className="font-semibold text-slate-800 dark:text-slate-200 truncate max-w-[200px]">
               {currentUser?.email}
             </span>
@@ -208,7 +208,7 @@ export default function VerifyEmailPage() {
         <form onSubmit={handleVerifyOtp} className="space-y-4">
           <div>
             <label className="block text-xs font-black uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
-              Kode OTP (6 Digit)
+              OTP Code (6 Digits)
             </label>
             <input
               type="text"
@@ -232,12 +232,12 @@ export default function VerifyEmailPage() {
               {sendingOtp ? (
                 <>
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  <span>Mengirimkan OTP...</span>
+                  <span>Sending OTP...</span>
                 </>
               ) : (
                 <>
                   <Send className="w-3.5 h-3.5" />
-                  <span>{cooldown > 0 ? `Kirim ulang (${cooldown}d)` : "Kirim Kode OTP ke Email"}</span>
+                  <span>{cooldown > 0 ? `Resend (${cooldown}s)` : "Send OTP Code to Email"}</span>
                 </>
               )}
             </button>
@@ -252,11 +252,11 @@ export default function VerifyEmailPage() {
               {loading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Memverifikasi Kode OTP...</span>
+                  <span>Verifying OTP Code...</span>
                 </>
               ) : (
                 <>
-                  <span>Verifikasi & Aktifkan Akses Penuh</span>
+                  <span>Verify & Activate Full Access</span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
@@ -271,7 +271,7 @@ export default function VerifyEmailPage() {
             className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-rose-500 transition cursor-pointer"
           >
             <LogOut className="w-3.5 h-3.5" />
-            <span>Keluar dari Akun Ini</span>
+            <span>Sign Out of This Account</span>
           </button>
         </div>
       </div>

@@ -25,12 +25,12 @@ export default function EditDestinationPage({ params }: PageProps) {
         if (data.success && data.destination) {
           setDestinationData(data.destination);
         } else {
-          setError(data.error || "Destinasi wisata tidak ditemukan.");
+          setError(data.error || "Tourist destination not found.");
         }
       })
       .catch((err) => {
         console.error(err);
-        setError("Gagal memuat detail destinasi wisata.");
+        setError("Failed to load tourist destination details.");
       })
       .finally(() => setLoading(false));
   }, [destinationId]);
@@ -60,14 +60,14 @@ export default function EditDestinationPage({ params }: PageProps) {
         <div className="w-16 h-16 rounded-full bg-red-100 text-red-600 inline-flex items-center justify-center mx-auto mb-4">
           <AlertCircle className="w-8 h-8" />
         </div>
-        <h2 className="text-xl font-black text-secondary-950 mb-2">Destinasi Tidak Ditemukan</h2>
-        <p className="text-xs text-secondary-600 mb-6">{error || "Data destinasi mungkin telah dihapus."}</p>
+        <h2 className="text-xl font-black text-secondary-950 mb-2">Destination Not Found</h2>
+        <p className="text-xs text-secondary-600 mb-6">{error || "Destination data may have been deleted."}</p>
         <Link
           href="/admin/destinations"
           className="px-5 py-2.5 rounded-xl bg-secondary-950 text-white font-bold text-xs inline-flex items-center justify-center gap-2 hover:bg-secondary-800 transition"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Kembali ke Katalog Destinasi</span>
+          <span>Back to Destinations Catalog</span>
         </Link>
       </div>
     );

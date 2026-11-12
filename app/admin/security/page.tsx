@@ -36,12 +36,12 @@ export default function AdminSecurityPage() {
       const res = await fetch("/api/admin/security");
       const data = await res.json();
       if (!res.ok || !data.success) {
-        throw new Error(data.error || "Gagal memuat status konfigurasi keamanan.");
+        throw new Error(data.error || "Failed to load security configuration status.");
       }
       setSecurityData(data.config);
     } catch (err: any) {
       console.error("Security load error:", err);
-      setErrorMsg(err.message || "Gagal memuat konfigurasi.");
+      setErrorMsg(err.message || "Failed to load configuration.");
     } finally {
       setLoading(false);
     }
@@ -64,7 +64,7 @@ export default function AdminSecurityPage() {
             className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700/60 shadow-xs transition"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
-            <span>Pindai Status Keamanan</span>
+            <span>Scan Security Status</span>
           </button>
         }
       />
@@ -79,14 +79,14 @@ export default function AdminSecurityPage() {
       {/* Top Security Overview Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <AdminStatsCard
-          title="Autentikasi JWT"
+          title="JWT Authentication"
           value="HS256"
           icon={<KeyRound className="w-5 h-5" />}
           subtitle="jose library / HttpOnly Cookie"
           theme="gold"
         />
         <AdminStatsCard
-          title="Hashing Password"
+          title="Password Hashing"
           value="Bcrypt 10"
           icon={<Lock className="w-5 h-5" />}
           subtitle="2^10 cost factor iterations"
@@ -100,7 +100,7 @@ export default function AdminSecurityPage() {
           theme="emerald"
         />
         <AdminStatsCard
-          title="Arsitektur Rate Limiter"
+          title="Rate Limiter Architecture"
           value="Hybrid Tier"
           icon={<Activity className="w-5 h-5" />}
           subtitle="In-Memory + Database Defense"
@@ -124,59 +124,59 @@ export default function AdminSecurityPage() {
                 </div>
                 <div>
                   <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                    Konfigurasi Autentikasi & Rahasia Kriptografi
+                    Authentication & Cryptographic Secrets Configuration
                   </h3>
                   <p className="text-[11px] text-slate-500">
-                    Standar penandatanganan token JWT dan proteksi kredensial login administrator.
+                    JWT token signing standards and administrator login credential protection.
                   </p>
                 </div>
               </div>
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                 <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Memenuhi Standar Keamanan</span>
+                <span>Meets Security Standards</span>
               </span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="p-3.5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200/80 dark:border-slate-700 space-y-1">
-                <span className="text-[10px] uppercase font-semibold text-slate-400">Algoritma Penandatanganan</span>
+                <span className="text-[10px] uppercase font-semibold text-slate-400">Signing Algorithm</span>
                 <p className="font-semibold text-slate-800 dark:text-slate-200">{securityData.authentication.algorithm}</p>
-                <p className="text-[11px] text-slate-500">Menggunakan library terenkripsi modern jose (Zero Dependencies).</p>
+                <p className="text-[11px] text-slate-500">Powered by the modern jose encryption library (Zero Dependencies).</p>
               </div>
 
               <div className="p-3.5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200/80 dark:border-slate-700 space-y-1">
-                <span className="text-[10px] uppercase font-semibold text-slate-400">Durasi Sesi Sesi Aktif</span>
+                <span className="text-[10px] uppercase font-semibold text-slate-400">Active Session Duration</span>
                 <p className="font-semibold text-slate-800 dark:text-slate-200">{securityData.authentication.sessionDuration}</p>
-                <p className="text-[11px] text-slate-500">Token diperbarui saat verifikasi OTP selesai.</p>
+                <p className="text-[11px] text-slate-500">Token is refreshed when OTP verification completes.</p>
               </div>
 
               <div className="p-3.5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200/80 dark:border-slate-700 space-y-1">
-                <span className="text-[10px] uppercase font-semibold text-slate-400">Metode Penyimpanan Token</span>
+                <span className="text-[10px] uppercase font-semibold text-slate-400">Token Storage Method</span>
                 <p className="font-semibold text-slate-800 dark:text-slate-200">{securityData.authentication.tokenType}</p>
-                <p className="text-[11px] text-slate-500">Kebijakan: HttpOnly=true, SameSite=Lax, Secure=Auto</p>
+                <p className="text-[11px] text-slate-500">Policy: HttpOnly=true, SameSite=Lax, Secure=Auto</p>
               </div>
 
               <div className="p-3.5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200/80 dark:border-slate-700 space-y-1">
-                <span className="text-[10px] uppercase font-semibold text-slate-400">Kekuatan Kunci JWT_SECRET</span>
+                <span className="text-[10px] uppercase font-semibold text-slate-400">JWT_SECRET Key Strength</span>
                 <div className="flex items-center gap-2">
                   <span className="font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400">
-                    {securityData.authentication.secretStatus.currentLength} Karakter
+                    {securityData.authentication.secretStatus.currentLength} Characters
                   </span>
-                  <span className="text-[10px] text-slate-400">(Minimal 32 karakter)</span>
+                  <span className="text-[10px] text-slate-400">(Minimum 32 characters)</span>
                 </div>
-                <p className="text-[11px] text-slate-500">Kunci terlindungi dan tidak dibocorkan ke browser.</p>
+                <p className="text-[11px] text-slate-500">Key is protected server-side and never exposed to browsers.</p>
               </div>
 
               <div className="p-3.5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200/80 dark:border-slate-700 space-y-1">
-                <span className="text-[10px] uppercase font-semibold text-slate-400">Hashing Kata Sandi</span>
+                <span className="text-[10px] uppercase font-semibold text-slate-400">Password Hashing</span>
                 <p className="font-semibold text-slate-800 dark:text-slate-200">
                   {securityData.authentication.passwordHashing.algorithm} ({securityData.authentication.passwordHashing.costFactor})
                 </p>
-                <p className="text-[11px] text-slate-500">Tahan terhadap serangan kamus (*dictionary*) dan brute-force.</p>
+                <p className="text-[11px] text-slate-500">Resistant to dictionary and brute-force attacks.</p>
               </div>
 
               <div className="p-3.5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200/80 dark:border-slate-700 space-y-1">
-                <span className="text-[10px] uppercase font-semibold text-slate-400">Lingkungan Server</span>
+                <span className="text-[10px] uppercase font-semibold text-slate-400">Server Environment</span>
                 <p className="font-semibold text-slate-800 dark:text-slate-200">
                   {securityData.environment.serverlessPlatform}
                 </p>
@@ -194,10 +194,10 @@ export default function AdminSecurityPage() {
                 </div>
                 <div>
                   <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                    Arsitektur Verifikasi Email OTP
+                    Email OTP Verification Architecture
                   </h3>
                   <p className="text-[11px] text-slate-500">
-                    Sistem kode verifikasi sekali pakai yang terikat langsung ke database PostgreSQL.
+                    One-time verification code system bound directly to PostgreSQL.
                   </p>
                 </div>
               </div>
@@ -208,27 +208,27 @@ export default function AdminSecurityPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="p-3.5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200/80 dark:border-slate-700 space-y-1">
-                <span className="text-[10px] uppercase font-semibold text-slate-400">Format & Masa Berlaku</span>
+                <span className="text-[10px] uppercase font-semibold text-slate-400">Format & Expiration</span>
                 <p className="font-semibold text-slate-800 dark:text-slate-200">{securityData.otpSystem.format}</p>
-                <p className="text-[11px] text-slate-500">Kedaluwarsa otomatis dalam {securityData.otpSystem.ttlMinutes} menit.</p>
+                <p className="text-[11px] text-slate-500">Automatically expires in {securityData.otpSystem.ttlMinutes} minutes.</p>
               </div>
 
               <div className="p-3.5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200/80 dark:border-slate-700 space-y-1">
-                <span className="text-[10px] uppercase font-semibold text-slate-400">Jeda Permintaan Ulang (Cooldown)</span>
-                <p className="font-semibold text-slate-800 dark:text-slate-200">{securityData.otpSystem.resendCooldownSeconds} Detik Cooldown</p>
-                <p className="text-[11px] text-slate-500">Mencegah spam email bertubi-tubi ke alamat yang sama.</p>
+                <span className="text-[10px] uppercase font-semibold text-slate-400">Resend Cooldown Interval</span>
+                <p className="font-semibold text-slate-800 dark:text-slate-200">{securityData.otpSystem.resendCooldownSeconds} Seconds Cooldown</p>
+                <p className="text-[11px] text-slate-500">Prevents repeated email spamming to the same address.</p>
               </div>
 
               <div className="p-3.5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200/80 dark:border-slate-700 space-y-1">
-                <span className="text-[10px] uppercase font-semibold text-slate-400">Batas Percobaan Maksimal</span>
-                <p className="font-semibold text-slate-800 dark:text-slate-200">{securityData.otpSystem.maxAttemptsPerOtp} Kali Kesempatan</p>
-                <p className="text-[11px] text-slate-500">Kode langsung dihanguskan bila salah 5 kali berturut-turut.</p>
+                <span className="text-[10px] uppercase font-semibold text-slate-400">Maximum Attempt Limit</span>
+                <p className="font-semibold text-slate-800 dark:text-slate-200">{securityData.otpSystem.maxAttemptsPerOtp} Attempts</p>
+                <p className="text-[11px] text-slate-500">Code is immediately invalidated after 5 consecutive wrong attempts.</p>
               </div>
 
               <div className="p-3.5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200/80 dark:border-slate-700 space-y-1">
-                <span className="text-[10px] uppercase font-semibold text-slate-400">Media Penyimpanan & Status</span>
+                <span className="text-[10px] uppercase font-semibold text-slate-400">Storage Medium & Status</span>
                 <p className="font-semibold text-emerald-600 dark:text-emerald-400">{securityData.otpSystem.storage}</p>
-                <p className="text-[11px] text-slate-500">Hashed via Bcrypt, persisten lintas instansi Vercel.</p>
+                <p className="text-[11px] text-slate-500">Hashed via Bcrypt, persistent across Vercel instances.</p>
               </div>
             </div>
           </div>
@@ -242,10 +242,10 @@ export default function AdminSecurityPage() {
                 </div>
                 <div>
                   <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                    Matriks Pembatasan Laju Permintaan (Rate Limiting)
+                    Request Rate Limiting Matrix
                   </h3>
                   <p className="text-[11px] text-slate-500">
-                    Spesifikasi ambang batas perlindungan terhadap serangan denial-of-service dan brute-force.
+                    Threshold specifications protecting against denial-of-service and brute-force attacks.
                   </p>
                 </div>
               </div>
@@ -256,10 +256,10 @@ export default function AdminSecurityPage() {
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
                   <tr className="bg-slate-50/80 dark:bg-slate-800/50 border-b border-slate-200/80 dark:border-slate-800 text-slate-500 font-semibold uppercase tracking-wider text-[10px]">
-                    <th className="py-2.5 px-3">Fitur / Endpoint</th>
-                    <th className="py-2.5 px-3">Batas Maksimum</th>
-                    <th className="py-2.5 px-3">Arsitektur Penyimpanan</th>
-                    <th className="py-2.5 px-3">Respons Saat Melampaui Batas</th>
+                    <th className="py-2.5 px-3">Feature / Endpoint</th>
+                    <th className="py-2.5 px-3">Maximum Limit</th>
+                    <th className="py-2.5 px-3">Storage Architecture</th>
+                    <th className="py-2.5 px-3">Response on Limit Exceeded</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 font-mono text-[11px]">
@@ -293,35 +293,35 @@ export default function AdminSecurityPage() {
           <div className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-xl p-6 shadow-xs space-y-4">
             <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100 border-b border-slate-100 dark:border-slate-800 pb-3 flex items-center gap-2">
               <Database className="w-4 h-4 text-primary-500" />
-              <span>Prinsip Perlindungan Data Pribadi & Hak Akses</span>
+              <span>Personal Data Protection & Access Control Principles</span>
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="p-3.5 border border-slate-200/80 dark:border-slate-800 rounded-xl space-y-1">
-                <span className="font-semibold text-slate-800 dark:text-slate-200">Privasi Ulasan Pelanggan (Data Minimization)</span>
+                <span className="font-semibold text-slate-800 dark:text-slate-200">Customer Review Privacy (Data Minimization)</span>
                 <p className="text-[11px] text-slate-500">
-                  {securityData.dataProtection.customerEmailPrivacy}. Email pelanggan tidak pernah diteruskan ke browser publik.
+                  {securityData.dataProtection.customerEmailPrivacy}. Customer emails are never forwarded to public browsers.
                 </p>
               </div>
 
               <div className="p-3.5 border border-slate-200/80 dark:border-slate-800 rounded-xl space-y-1">
-                <span className="font-semibold text-slate-800 dark:text-slate-200">Integritas Lencana Customer</span>
+                <span className="font-semibold text-slate-800 dark:text-slate-200">Customer Badge Integrity</span>
                 <p className="text-[11px] text-slate-500">
-                  {securityData.dataProtection.reviewCustomerBadge}. Mencegah klaim lencana verifikasi tanpa transaksi nyata.
+                  {securityData.dataProtection.reviewCustomerBadge}. Prevents claiming verified badges without an actual booking.
                 </p>
               </div>
 
               <div className="p-3.5 border border-slate-200/80 dark:border-slate-800 rounded-xl space-y-1">
-                <span className="font-semibold text-slate-800 dark:text-slate-200">Jejak Audit Administratif</span>
+                <span className="font-semibold text-slate-800 dark:text-slate-200">Administrative Audit Trail</span>
                 <p className="text-[11px] text-slate-500">
-                  {securityData.dataProtection.auditTrail}. Melacak riwayat pembuatan, perubahan profil, dan penghapusan akun staf/admin.
+                  {securityData.dataProtection.auditTrail}. Tracks creation, profile edits, and deletions of staff/admin accounts.
                 </p>
               </div>
 
               <div className="p-3.5 border border-slate-200/80 dark:border-slate-800 rounded-xl space-y-1">
-                <span className="font-semibold text-slate-800 dark:text-slate-200">Hierarki Hak Akses Ketat</span>
+                <span className="font-semibold text-slate-800 dark:text-slate-200">Strict Role Access Hierarchy</span>
                 <p className="text-[11px] text-slate-500">
-                  {securityData.dataProtection.roleHierarchy}. Admin biasa dilarang mengakses halaman pengaturan, log audit, atau akun admin.
+                  {securityData.dataProtection.roleHierarchy}. Regular admins are blocked from settings, audit logs, or admin account management.
                 </p>
               </div>
             </div>

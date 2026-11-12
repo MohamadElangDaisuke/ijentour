@@ -4,7 +4,7 @@ import { COOKIE_NAME } from "@/lib/auth";
 export async function POST() {
   const response = NextResponse.json({
     success: true,
-    message: "Logout berhasil.",
+    message: "Logged out successfully.",
   });
 
   // Clear cookie properly

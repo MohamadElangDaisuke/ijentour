@@ -16,7 +16,7 @@ export async function GET(
 
     if (!destination) {
       return NextResponse.json(
-        { success: false, error: "Destinasi tidak ditemukan." },
+        { success: false, error: "Destination not found." },
         { status: 404 }
       );
     }
@@ -24,7 +24,7 @@ export async function GET(
     return NextResponse.json({ success: true, destination });
   } catch (error: any) {
     return NextResponse.json(
-      { success: false, error: error.message || "Gagal memuat destinasi." },
+      { success: false, error: error.message || "Failed to load destination." },
       { status: 500 }
     );
   }
@@ -37,7 +37,7 @@ export async function PUT(
   try {
     const admin = await requireAdmin(request);
     if (!admin) {
-      return NextResponse.json({ success: false, error: "Akses ditolak. Silakan login sebagai administrator." }, { status: 401 });
+      return NextResponse.json({ success: false, error: "Access denied. Please sign in as an administrator." }, { status: 401 });
     }
 
     const { id } = await params;
@@ -47,7 +47,7 @@ export async function PUT(
 
     if (!existing) {
       return NextResponse.json(
-        { success: false, error: "Destinasi tidak ditemukan." },
+        { success: false, error: "Destination not found." },
         { status: 404 }
       );
     }
@@ -80,13 +80,13 @@ export async function PUT(
 
     return NextResponse.json({
       success: true,
-      message: "Destinasi berhasil diperbarui.",
+      message: "Destination updated successfully.",
       destination: updated,
     });
   } catch (error: any) {
     console.error("PUT /api/destinations/[id] error:", error);
     return NextResponse.json(
-      { success: false, error: error.message || "Gagal memperbarui destinasi." },
+      { success: false, error: error.message || "Failed to update destination." },
       { status: 500 }
     );
   }
@@ -99,7 +99,7 @@ export async function DELETE(
   try {
     const admin = await requireAdmin(request);
     if (!admin) {
-      return NextResponse.json({ success: false, error: "Akses ditolak. Silakan login sebagai administrator." }, { status: 401 });
+      return NextResponse.json({ success: false, error: "Access denied. Please sign in as an administrator." }, { status: 401 });
     }
 
     const { id } = await params;
@@ -109,7 +109,7 @@ export async function DELETE(
 
     if (!existing) {
       return NextResponse.json(
-        { success: false, error: "Destinasi tidak ditemukan atau sudah dihapus." },
+        { success: false, error: "Destination not found or already deleted." },
         { status: 404 }
       );
     }
@@ -129,12 +129,12 @@ export async function DELETE(
 
     return NextResponse.json({
       success: true,
-      message: "Destinasi berhasil dihapus.",
+      message: "Destination deleted successfully.",
     });
   } catch (error: any) {
     console.error("DELETE /api/destinations/[id] error:", error);
     return NextResponse.json(
-      { success: false, error: error.message || "Gagal menghapus destinasi." },
+      { success: false, error: error.message || "Failed to delete destination." },
       { status: 500 }
     );
   }

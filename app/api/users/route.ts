@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Akses ditolak. Pengelolaan akun administrator hanya diizinkan untuk Super Admin.",
+          error: "Access denied. Administrator account management is only permitted for Super Admins.",
         },
         { status: 403 }
       );
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
   } catch (error: any) {
     console.error("GET /api/users error:", error);
     return NextResponse.json(
-      { success: false, error: "Gagal memuat daftar administrator." },
+      { success: false, error: "Failed to load administrator list." },
       { status: 500 }
     );
   }
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Akses ditolak. Hanya Super Admin yang berwenang membuat akun administrator baru.",
+          error: "Access denied. Only Super Admins are authorized to create new administrator accounts.",
         },
         { status: 403 }
       );
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
 
     if (!username || !name || !email || !password) {
       return NextResponse.json(
-        { success: false, error: "Username, nama lengkap, email, dan kata sandi wajib diisi." },
+        { success: false, error: "Username, full name, email, and password are required." },
         { status: 400 }
       );
     }
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Username hanya boleh berisi huruf kecil, angka, garis bawah (_), dan panjang 3-30 karakter.",
+          error: "Username may only contain lowercase letters, numbers, underscores (_), and must be 3-30 characters long.",
         },
         { status: 400 }
       );
@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
     // 2. Email format validation
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
       return NextResponse.json(
-        { success: false, error: "Format alamat email tidak valid." },
+        { success: false, error: "Invalid email address format." },
         { status: 400 }
       );
     }
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
     // 3. Password strength
     if (String(password).length < 6) {
       return NextResponse.json(
-        { success: false, error: "Kata sandi minimal 6 karakter." },
+        { success: false, error: "Password must be at least 6 characters." },
         { status: 400 }
       );
     }
@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Pembuatan akun Super Admin tambahan tidak diizinkan melalui form pendaftaran admin biasa. Gunakan prosedur bootstrap aman di server.",
+          error: "Creating additional Super Admin accounts is not permitted through the standard admin creation form. Use the secure server bootstrap procedure.",
         },
         { status: 400 }
       );
@@ -128,12 +128,12 @@ export async function POST(request: NextRequest) {
     if (existing) {
       if (existing.username === cleanUsername) {
         return NextResponse.json(
-          { success: false, error: `Username '${cleanUsername}' sudah digunakan. Silakan pilih username lain.` },
+          { success: false, error: `Username '${cleanUsername}' is already taken. Please choose another username.` },
           { status: 400 }
         );
       }
       return NextResponse.json(
-        { success: false, error: `Email '${cleanEmail}' sudah terdaftar di sistem.` },
+        { success: false, error: `Email '${cleanEmail}' is already registered in the system.` },
         { status: 400 }
       );
     }
@@ -207,13 +207,13 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: `Akun ${newUser.role === "SUPER_ADMIN" ? "Super Admin" : "Admin"} '${newUser.name}' (@${newUser.username}) berhasil dibuat.`,
+      message: `${newUser.role === "SUPER_ADMIN" ? "Super Admin" : "Admin"} account '${newUser.name}' (@${newUser.username}) created successfully.`,
       user: newUser,
     });
   } catch (error: any) {
     console.error("POST /api/users error:", error);
     return NextResponse.json(
-      { success: false, error: error.message || "Gagal membuat akun administrator." },
+      { success: false, error: error.message || "Failed to create administrator account." },
       { status: 500 }
     );
   }

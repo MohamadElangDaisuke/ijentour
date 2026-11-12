@@ -36,7 +36,7 @@ export default function DestinationForm({
   const [autoSlug, setAutoSlug] = useState(mode === "create");
   const [description, setDescription] = useState(initialData?.description || "");
   const [image, setImage] = useState(initialData?.image || "");
-  const [tag, setTag] = useState(initialData?.tag || "Destinasi");
+  const [tag, setTag] = useState(initialData?.tag || "Destination");
   const [sortOrder, setSortOrder] = useState<number>(initialData?.sortOrder ?? 0);
   const [isFeatured, setIsFeatured] = useState<boolean>(initialData?.isFeatured ?? true);
 
@@ -54,15 +54,15 @@ export default function DestinationForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
-      setError("Nama destinasi wajib diisi.");
+      setError("Destination name is required.");
       return;
     }
     if (!description.trim()) {
-      setError("Deskripsi destinasi wajib diisi.");
+      setError("Destination description is required.");
       return;
     }
     if (!image) {
-      setError("Foto cover destinasi wajib diunggah.");
+      setError("Destination cover photo must be uploaded.");
       return;
     }
 
@@ -75,7 +75,7 @@ export default function DestinationForm({
         slug: slug.trim() || createSlug(name),
         description: description.trim(),
         image: image.trim(),
-        tag: tag.trim() || "Destinasi",
+        tag: tag.trim() || "Destination",
         sortOrder: Number(sortOrder) || 0,
         isFeatured: Boolean(isFeatured),
       };
@@ -94,13 +94,13 @@ export default function DestinationForm({
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || "Gagal menyimpan data destinasi.");
+        throw new Error(data.error || "Failed to save destination data.");
       }
 
       setSuccessMessage(
         mode === "create"
-          ? "Destinasi baru berhasil ditambahkan!"
-          : "Perubahan destinasi berhasil disimpan!"
+          ? "New destination added successfully!"
+          : "Destination changes saved successfully!"
       );
 
       setTimeout(() => {
@@ -109,7 +109,7 @@ export default function DestinationForm({
       }, 1200);
     } catch (err: any) {
       console.error(err);
-      setError(err.message || "Terjadi kesalahan saat memproses destinasi.");
+      setError(err.message || "An error occurred while processing the destination.");
     } finally {
       setSubmitting(false);
     }
@@ -123,19 +123,19 @@ export default function DestinationForm({
           <Link
             href="/admin/destinations"
             className="w-10 h-10 rounded-xl border border-secondary-200 hover:bg-secondary-100 text-secondary-600 transition inline-flex items-center justify-center shrink-0"
-            title="Kembali ke Daftar Destinasi"
+            title="Back to Destinations List"
           >
             <ArrowLeft className="w-4 h-4 shrink-0" />
           </Link>
           <div className="min-w-0">
             <h1 className="text-lg sm:text-2xl font-black text-secondary-950 truncate">
-              {mode === "create" ? "Tambah Destinasi Baru" : `Sunting Destinasi: ${name || "Destinasi"}`}
+              {mode === "create" ? "Add New Destination" : `Edit Destination: ${name || "Destination"}`}
             </h1>
             <div className="flex items-center gap-2 text-xs text-secondary-500 font-mono truncate mt-0.5">
-              <span>Slug: /destinations/{slug || "slug-destinasi"}</span>
+              <span>Slug: /destinations/{slug || "destination-slug"}</span>
               <span>•</span>
               <span className={`font-bold ${isFeatured ? "text-primary-600" : "text-secondary-400"}`}>
-                {isFeatured ? "★ Destinasi Unggulan" : "Standar"}
+                {isFeatured ? "★ Featured Destination" : "Standard"}
               </span>
             </div>
           </div>
@@ -146,7 +146,7 @@ export default function DestinationForm({
             href="/admin/destinations"
             className="px-4 py-2.5 rounded-xl border border-secondary-200 hover:bg-secondary-100 text-secondary-700 font-bold text-xs transition inline-flex items-center justify-center"
           >
-            Batal
+            Cancel
           </Link>
           <button
             type="submit"
@@ -154,7 +154,7 @@ export default function DestinationForm({
             className="px-5 py-2.5 rounded-xl bg-primary-500 hover:bg-primary-400 text-secondary-950 font-black text-xs transition shadow-sm inline-flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
           >
             <Save className="w-4 h-4 shrink-0" />
-            <span>{submitting ? "Menyimpan..." : mode === "create" ? "Tambah Destinasi" : "Simpan Perubahan"}</span>
+            <span>{submitting ? "Saving..." : mode === "create" ? "Add Destination" : "Save Changes"}</span>
           </button>
         </div>
       </div>
@@ -185,10 +185,10 @@ export default function DestinationForm({
               </div>
               <div>
                 <h2 className="text-sm sm:text-base font-black text-secondary-950">
-                  Informasi Dasar Destinasi
+                  Basic Destination Information
                 </h2>
                 <p className="text-[11px] text-secondary-500">
-                  Atur nama resmi tempat wisata, slug URL publik, dan label kategori.
+                  Set the official attraction name, public URL slug, and category label.
                 </p>
               </div>
             </div>
@@ -197,14 +197,14 @@ export default function DestinationForm({
               {/* Destination Name */}
               <div>
                 <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">
-                  Nama Destinasi Wisata *
+                  Tourist Destination Name *
                 </label>
                 <input
                   type="text"
                   required
                   value={name}
                   onChange={(e) => handleNameChange(e.target.value)}
-                  placeholder="Contoh: Kawah Ijen & Blue Fire"
+                  placeholder="e.g. Ijen Crater & Blue Fire"
                   className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs sm:text-sm font-bold text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
                 />
               </div>
@@ -213,14 +213,14 @@ export default function DestinationForm({
               <div>
                 <div className="flex items-center justify-between mb-1.5">
                   <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider">
-                    Slug URL Unik *
+                    Unique URL Slug *
                   </label>
                   <button
                     type="button"
                     onClick={() => setAutoSlug(!autoSlug)}
                     className="text-[11px] font-bold text-primary-700 hover:underline cursor-pointer"
                   >
-                    {autoSlug ? "✓ Otomatis dari nama" : "Kustom manual"}
+                    {autoSlug ? "✓ Auto-generated from name" : "Custom manual"}
                   </button>
                 </div>
                 <div className="flex items-center rounded-xl bg-secondary-50 border border-secondary-200 px-3 py-2 text-xs">
@@ -243,19 +243,19 @@ export default function DestinationForm({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">
-                    Label / Kategori Tag
+                    Category Tag / Label
                   </label>
                   <div className="relative">
                     <input
                       type="text"
                       value={tag}
                       onChange={(e) => setTag(e.target.value)}
-                      placeholder="Contoh: Kawah & Vulkanik"
+                      placeholder="e.g. Crater & Volcanic"
                       className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
                     />
                   </div>
                   <div className="flex flex-wrap gap-1.5 mt-2">
-                    {["Kawah & Vulkanik", "Taman Nasional", "Hutan Lindung", "Pantai & Bahari", "Wisata Budaya"].map(
+                    {["Crater & Volcanic", "National Park", "Protected Forest", "Beach & Marine", "Cultural Heritage"].map(
                       (quickTag) => (
                         <button
                           key={quickTag}
@@ -272,7 +272,7 @@ export default function DestinationForm({
 
                 <div>
                   <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">
-                    Nomor Urut Tampilan
+                    Display Sort Order
                   </label>
                   <input
                     type="number"
@@ -282,7 +282,7 @@ export default function DestinationForm({
                     className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-xs text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
                   />
                   <span className="text-[10px] text-secondary-400 mt-1 block">
-                    Semakin kecil angka (0, 1, 2), semakin awal destinasi tampil di katalog.
+                    Smaller numbers (0, 1, 2) appear earlier in the catalog.
                   </span>
                 </div>
               </div>
@@ -297,24 +297,24 @@ export default function DestinationForm({
               </div>
               <div>
                 <h2 className="text-sm sm:text-base font-black text-secondary-950">
-                  Deskripsi & Cerita Destinasi
+                  Destination Description & Story
                 </h2>
                 <p className="text-[11px] text-secondary-500">
-                  Jelaskan keindahan lanskap, daya tarik utama, dan informasi penting bagi wisatawan.
+                  Describe the scenic landscape, key attractions, and important visitor information.
                 </p>
               </div>
             </div>
 
             <div>
               <label className="block text-xs font-bold text-secondary-800 uppercase tracking-wider mb-1.5">
-                Deskripsi Lengkap Destinasi *
+                Full Destination Description *
               </label>
               <textarea
                 required
                 rows={6}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Tuliskan ulasan komprehensif mengenai panorama kawah, fenomena alam, akses pendakian, serta waktu terbaik berkunjung..."
+                placeholder="Write a comprehensive overview of the crater panorama, natural phenomena, hiking access, and best time to visit..."
                 className="w-full px-4 py-3 bg-secondary-50 border border-secondary-200 rounded-xl text-xs sm:text-sm text-secondary-950 leading-relaxed focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
               />
             </div>
@@ -331,10 +331,10 @@ export default function DestinationForm({
               </div>
               <div>
                 <h2 className="text-sm sm:text-base font-black text-secondary-950">
-                  Foto Dokumentasi
+                  Documentation Photo
                 </h2>
                 <p className="text-[11px] text-secondary-500">
-                  Unggah foto resolusi tinggi ke Supabase Storage.
+                  Upload high-resolution photo to Supabase Storage.
                 </p>
               </div>
             </div>
@@ -344,10 +344,10 @@ export default function DestinationForm({
                 value={image}
                 onChange={(url) => setImage(url)}
                 folder="destinations"
-                label="Cover Image Destinasi *"
+                label="Destination Cover Image *"
                 aspectRatio="video"
                 required
-                helperText="Format JPG, PNG, atau WebP resolusi tinggi (Maks. 5 MB)."
+                helperText="High-resolution JPG, PNG, or WebP format (Max. 5 MB)."
               />
             </div>
           </div>
@@ -360,10 +360,10 @@ export default function DestinationForm({
               </div>
               <div>
                 <h2 className="text-sm sm:text-base font-black text-secondary-950">
-                  Pengaturan Publikasi
+                  Publication Settings
                 </h2>
                 <p className="text-[11px] text-secondary-500">
-                  Visibilitas dan status sorotan di halaman depan.
+                  Visibility and homepage highlight status.
                 </p>
               </div>
             </div>
@@ -377,10 +377,10 @@ export default function DestinationForm({
               />
               <div>
                 <span className="text-xs font-bold text-secondary-950 block">
-                  Destinasi Unggulan (Featured)
+                  Featured Destination
                 </span>
                 <span className="text-[11px] text-secondary-500 leading-relaxed block mt-0.5">
-                  Tampilkan destinasi ini pada grid rekomendasi utama di beranda.
+                  Display this destination in the main recommended grid on the homepage.
                 </span>
               </div>
             </label>
@@ -394,7 +394,7 @@ export default function DestinationForm({
           href="/admin/destinations"
           className="px-5 py-2.5 rounded-xl border border-secondary-200 text-secondary-700 hover:bg-secondary-100 font-bold text-xs text-center transition inline-flex items-center justify-center"
         >
-          Batal & Kembali ke Daftar
+          Cancel & Back to List
         </Link>
 
         <button
@@ -405,10 +405,10 @@ export default function DestinationForm({
           <Save className="w-4 h-4 shrink-0" />
           <span>
             {submitting
-              ? "Menyimpan Data..."
+              ? "Saving Data..."
               : mode === "create"
-              ? "Tambah Destinasi Baru"
-              : "Simpan Perubahan Destinasi"}
+              ? "Add New Destination"
+              : "Save Destination Changes"}
           </span>
         </button>
       </div>

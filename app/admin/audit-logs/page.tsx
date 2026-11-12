@@ -177,7 +177,7 @@ export default function AdminAuditLogsPage() {
             className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700/60 shadow-xs transition"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
-            <span>Segarkan Log</span>
+            <span>Refresh Logs</span>
           </button>
         }
       />
@@ -185,31 +185,31 @@ export default function AdminAuditLogsPage() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <AdminStatsCard
-          title="Total Log Audit"
+          title="Total Audit Logs"
           value={totalCount}
           icon={<ShieldCheck className="w-5 h-5" />}
-          subtitle="Terekam di PostgreSQL"
+          subtitle="Recorded in PostgreSQL"
           theme="gold"
         />
         <AdminStatsCard
-          title="Aktivitas Akun Admin"
+          title="Admin Account Events"
           value={stats.adminEvents}
           icon={<User className="w-5 h-5" />}
           subtitle="Create, update, deactivate"
           theme="teal"
         />
         <AdminStatsCard
-          title="Keamanan & Password"
+          title="Security & Password"
           value={stats.authEvents}
           icon={<Key className="w-5 h-5" />}
           subtitle="Password reset & auth events"
           theme="purple"
         />
         <AdminStatsCard
-          title="Perubahan Konfigurasi"
+          title="Configuration Changes"
           value={stats.configEvents}
           icon={<Clock className="w-5 h-5" />}
-          subtitle="Preferensi & pengaturan"
+          subtitle="Preferences & settings"
           theme="amber"
         />
       </div>
@@ -224,7 +224,7 @@ export default function AdminAuditLogsPage() {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Cari actor, target, detail, atau IP..."
+              placeholder="Search actor, target, details, or IP..."
               className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
@@ -239,7 +239,7 @@ export default function AdminAuditLogsPage() {
               }}
               className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
-              <option value="ALL">Semua Tipe Aksi</option>
+              <option value="ALL">All Action Types</option>
               <option value="CREATE_ADMIN">Create Admin Account</option>
               <option value="UPDATE_ADMIN">Update Admin Profile</option>
               <option value="ACTIVATE_ADMIN">Activate Admin</option>
@@ -260,7 +260,7 @@ export default function AdminAuditLogsPage() {
                 setPage(1);
               }}
               className="w-full px-2.5 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
-              title="Dari Tanggal"
+              title="Start Date"
             />
           </div>
 
@@ -274,7 +274,7 @@ export default function AdminAuditLogsPage() {
                 setPage(1);
               }}
               className="w-full px-2.5 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary-500"
-              title="Sampai Tanggal"
+              title="End Date"
             />
           </div>
 
@@ -304,12 +304,12 @@ export default function AdminAuditLogsPage() {
               <FileText className="w-6 h-6" />
             </div>
             <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-              Tidak Ada Log Audit Ditemukan
+              No Audit Logs Found
             </h4>
             <p className="text-xs text-slate-500 max-w-sm mx-auto">
               {search || selectedAction !== "ALL"
-                ? "Tidak ada rekaman log yang cocok dengan filter pencarian saat ini."
-                : "Belum ada aktivitas mutasi yang tercatat, atau tabel audit_logs sedang menunggu migrasi skema produksi."}
+                ? "No log records match the current search filters."
+                : "No mutation activity has been recorded yet, or the audit_logs table is awaiting synchronization."}
             </p>
           </div>
         ) : (
@@ -317,12 +317,12 @@ export default function AdminAuditLogsPage() {
             <table className="w-full text-left border-collapse text-xs">
               <thead>
                 <tr className="bg-slate-50/80 dark:bg-slate-800/50 border-b border-slate-200/80 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
-                  <th className="py-3 px-4">Waktu & Tanggal</th>
-                  <th className="py-3 px-4">Pelaku (Actor)</th>
-                  <th className="py-3 px-4">Tipe Aksi</th>
+                  <th className="py-3 px-4">Date & Time</th>
+                  <th className="py-3 px-4">Actor</th>
+                  <th className="py-3 px-4">Action Type</th>
                   <th className="py-3 px-4">Target ID</th>
-                  <th className="py-3 px-4">Alamat IP</th>
-                  <th className="py-3 px-4 text-right">Detail</th>
+                  <th className="py-3 px-4">IP Address</th>
+                  <th className="py-3 px-4 text-right">Details</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
@@ -385,7 +385,7 @@ export default function AdminAuditLogsPage() {
                           className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-medium rounded-lg text-primary-700 dark:text-primary-400 bg-primary-50 dark:bg-primary-950/40 hover:bg-primary-100 dark:hover:bg-primary-900/60 border border-primary-200 dark:border-primary-800 transition"
                         >
                           <Eye className="w-3.5 h-3.5" />
-                          <span>Periksa</span>
+                          <span>Inspect</span>
                         </button>
                       </td>
                     </tr>
@@ -400,7 +400,7 @@ export default function AdminAuditLogsPage() {
         {!loading && logs.length > 0 && (
           <div className="p-3 border-t border-slate-200/80 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
             <div>
-              Menampilkan {logs.length} dari total <span className="font-semibold text-slate-700 dark:text-slate-300">{totalCount}</span> entri audit
+              Showing {logs.length} of <span className="font-semibold text-slate-700 dark:text-slate-300">{totalCount}</span> audit entries
             </div>
             <div className="flex items-center gap-1.5">
               <button
@@ -429,8 +429,8 @@ export default function AdminAuditLogsPage() {
       <AdminDrawer
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
-        title="Detail Audit Log Keamanan"
-        subtitle="Informasi forensik lengkap dari aksi administratif yang terekam pada database."
+        title="Security Audit Log Details"
+        subtitle="Complete forensic details of the administrative action recorded in the database."
         width="lg"
       >
         {selectedLog && (
@@ -442,19 +442,19 @@ export default function AdminAuditLogsPage() {
                 <p className="font-mono text-slate-800 dark:text-slate-200 truncate">{selectedLog.id}</p>
               </div>
               <div>
-                <span className="text-[10px] uppercase font-semibold text-slate-400">Tipe Aksi</span>
+                <span className="text-[10px] uppercase font-semibold text-slate-400">Action Type</span>
                 <p className="font-semibold text-primary-600 dark:text-primary-400">{selectedLog.action}</p>
               </div>
               <div>
-                <span className="text-[10px] uppercase font-semibold text-slate-400">Pelaku (Actor)</span>
+                <span className="text-[10px] uppercase font-semibold text-slate-400">Actor</span>
                 <p className="font-medium text-slate-800 dark:text-slate-200">{selectedLog.adminName || "System"}</p>
               </div>
               <div>
-                <span className="text-[10px] uppercase font-semibold text-slate-400">Alamat IP</span>
+                <span className="text-[10px] uppercase font-semibold text-slate-400">IP Address</span>
                 <p className="font-mono text-slate-800 dark:text-slate-200">{selectedLog.ipAddress || "127.0.0.1"}</p>
               </div>
               <div>
-                <span className="text-[10px] uppercase font-semibold text-slate-400">Waktu Pencatatan</span>
+                <span className="text-[10px] uppercase font-semibold text-slate-400">Recorded At</span>
                 <p className="text-slate-800 dark:text-slate-200">
                   {format(new Date(selectedLog.createdAt), "dd MMMM yyyy, HH:mm:ss")} WIB
                 </p>
@@ -462,7 +462,7 @@ export default function AdminAuditLogsPage() {
               <div>
                 <span className="text-[10px] uppercase font-semibold text-slate-400">Target ID</span>
                 <p className="font-mono text-slate-800 dark:text-slate-200 truncate">
-                  {selectedLog.targetId || "Tidak ada target entitas"}
+                  {selectedLog.targetId || "No target entity"}
                 </p>
               </div>
             </div>
@@ -471,24 +471,24 @@ export default function AdminAuditLogsPage() {
             <div className="space-y-2">
               <label className="font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                 <FileText className="w-3.5 h-3.5 text-primary-500" />
-                <span>Payload Data & Rincian Aksi (Sanitized JSON)</span>
+                <span>Data Payload & Action Details (Sanitized JSON)</span>
               </label>
               <div className="bg-slate-950 text-slate-200 p-4 rounded-xl font-mono text-[11px] overflow-x-auto border border-slate-800">
                 <pre>
                   {selectedLog.details
                     ? JSON.stringify(JSON.parse(selectedLog.details), null, 2)
-                    : "// Tidak ada metadata tambahan"}
+                    : "// No additional metadata"}
                 </pre>
               </div>
               <p className="text-[11px] text-slate-500">
-                Semua parameter kredensial sensitif (kata sandi, hash, token) telah dibersihkan secara otomatis sebelum terekam di database.
+                All sensitive credential fields (passwords, hashes, tokens) are automatically stripped before recording to the database.
               </p>
             </div>
 
             <div className="p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 rounded-xl text-amber-800 dark:text-amber-300 text-[11px] flex items-start gap-2">
               <Lock className="w-4 h-4 shrink-0 mt-0.5 text-amber-600" />
               <span>
-                <strong>Jaminan Integritas:</strong> Log audit ini berstatus *read-only* (hanya-baca) dan tidak dapat diubah atau dihapus oleh administrator manapun untuk menjaga kepatuhan audit sistem informasi.
+                <strong>Integrity Guarantee:</strong> This audit log is read-only and cannot be modified or deleted by any administrator to maintain information security audit compliance.
               </span>
             </div>
           </div>

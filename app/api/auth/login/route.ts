@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Terlalu banyak percobaan login yang gagal. Silakan coba lagi setelah 15 menit.",
+          error: "Too many failed login attempts. Please try again in 15 minutes.",
         },
         { status: 429 }
       );
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json().catch(() => null);
     if (!body || !body.username || !body.password) {
       return NextResponse.json(
-        { success: false, error: "Username dan kata sandi wajib diisi." },
+        { success: false, error: "Username and password are required." },
         { status: 400 }
       );
     }
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
 
     if (password.length < 4 || password.length > 100) {
       return NextResponse.json(
-        { success: false, error: "Username atau kata sandi tidak valid." },
+        { success: false, error: "Invalid username or password." },
         { status: 401 }
       );
     }
@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
         ipAddress: clientIp,
       });
       return NextResponse.json(
-        { success: false, error: "Username atau kata sandi tidak valid." },
+        { success: false, error: "Invalid username or password." },
         { status: 401 }
       );
     }
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
         ipAddress: clientIp,
       });
       return NextResponse.json(
-        { success: false, error: "Akses ditolak. Akun ini tidak memiliki hak akses administrator." },
+        { success: false, error: "Access denied. This account does not have administrator privileges." },
         { status: 403 }
       );
     }
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
         ipAddress: clientIp,
       });
       return NextResponse.json(
-        { success: false, error: "Username atau kata sandi tidak valid." },
+        { success: false, error: "Invalid username or password." },
         { status: 401 }
       );
     }
@@ -103,8 +103,8 @@ export async function POST(request: NextRequest) {
     const response = NextResponse.json({
       success: true,
       message: isEmailVerified
-        ? "Login berhasil. Selamat datang kembali!"
-        : "Login berhasil. Mohon selesaikan verifikasi email OTP untuk mengaktifkan akses penuh.",
+        ? "Login successful. Welcome back!"
+        : "Login successful. Please complete email OTP verification to activate full access.",
       user: {
         id: user.id,
         username: user.username || username,
@@ -131,7 +131,7 @@ export async function POST(request: NextRequest) {
   } catch (error: any) {
     console.error("Login API error:", error);
     return NextResponse.json(
-      { success: false, error: "Terjadi kesalahan internal pada server." },
+      { success: false, error: "An internal server error occurred." },
       { status: 500 }
     );
   }

@@ -16,7 +16,7 @@ export async function PUT(
       return NextResponse.json(
         {
           success: false,
-          error: "Akses ditolak. Silakan masuk terlebih dahulu sebagai administrator.",
+          error: "Access denied. Please sign in first as an administrator.",
         },
         { status: 401 }
       );
@@ -32,7 +32,7 @@ export async function PUT(
         return NextResponse.json(
           {
             success: false,
-            error: "Akses ditolak. Administrator biasa hanya berwenang mengubah profil dan kata sandi akunnya sendiri.",
+            error: "Access denied. Standard administrators can only update their own account profile and password.",
           },
           { status: 403 }
         );
@@ -44,7 +44,7 @@ export async function PUT(
         return NextResponse.json(
           {
             success: false,
-            error: "Akses ditolak. Administrator biasa dilarang mengubah peran, status akun, username, email, atau preferensi sistem.",
+            error: "Access denied. Standard administrators are not permitted to modify role, account status, username, email, or system preferences.",
           },
           { status: 403 }
         );
@@ -54,7 +54,7 @@ export async function PUT(
     const existing = await (prisma as any).user.findUnique({ where: { id } });
     if (!existing) {
       return NextResponse.json(
-        { success: false, error: "Akun administrator tidak ditemukan." },
+        { success: false, error: "Administrator account not found." },
         { status: 404 }
       );
     }
@@ -77,7 +77,7 @@ export async function PUT(
     if (body.username !== undefined) {
       if (!isSuperAdmin) {
         return NextResponse.json(
-          { success: false, error: "Hanya Super Admin yang berwenang mengubah username." },
+          { success: false, error: "Only Super Admins are authorized to change usernames." },
           { status: 403 }
         );
       }
@@ -86,7 +86,7 @@ export async function PUT(
         return NextResponse.json(
           {
             success: false,
-            error: "Username hanya boleh berisi huruf kecil, angka, garis bawah (_), dan panjang 3-30 karakter.",
+            error: "Username may only contain lowercase letters, numbers, underscores (_), and must be 3-30 characters long.",
           },
           { status: 400 }
         );
@@ -101,7 +101,7 @@ export async function PUT(
         });
         if (usernameTaken) {
           return NextResponse.json(
-            { success: false, error: `Username '${cleanUsername}' sudah digunakan akun lain.` },
+            { success: false, error: `Username '${cleanUsername}' is already used by another account.` },
             { status: 400 }
           );
         }
@@ -114,14 +114,14 @@ export async function PUT(
     if (body.email !== undefined) {
       if (!isSuperAdmin) {
         return NextResponse.json(
-          { success: false, error: "Hanya Super Admin yang berwenang mengubah alamat email administrator." },
+          { success: false, error: "Only Super Admins are authorized to change administrator email addresses." },
           { status: 403 }
         );
       }
       const cleanEmail = String(body.email).trim().toLowerCase();
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
         return NextResponse.json(
-          { success: false, error: "Format alamat email tidak valid." },
+          { success: false, error: "Invalid email address format." },
           { status: 400 }
         );
       }
@@ -135,7 +135,7 @@ export async function PUT(
         });
         if (emailTaken) {
           return NextResponse.json(
-            { success: false, error: `Email '${cleanEmail}' sudah digunakan akun lain.` },
+            { success: false, error: `Email '${cleanEmail}' is already used by another account.` },
             { status: 400 }
           );
         }
@@ -149,7 +149,7 @@ export async function PUT(
     if (body.role !== undefined && body.role !== existing.role) {
       if (!isSuperAdmin) {
         return NextResponse.json(
-          { success: false, error: "Akses ditolak. Administrator biasa tidak dapat mengubah peran akun." },
+          { success: false, error: "Access denied. Standard administrators cannot change account roles." },
           { status: 403 }
         );
       }
@@ -159,7 +159,7 @@ export async function PUT(
       // Super Admin cannot demote themselves
       if (caller.id === id && targetRole !== "SUPER_ADMIN") {
         return NextResponse.json(
-          { success: false, error: "Anda tidak dapat menurunkan hak akses Super Admin pada akun Anda sendiri." },
+          { success: false, error: "You cannot demote Super Admin privileges on your own account." },
           { status: 400 }
         );
       }
@@ -171,7 +171,7 @@ export async function PUT(
         });
         if (activeSuperAdmins <= 1) {
           return NextResponse.json(
-            { success: false, error: "Tidak dapat mengubah role Super Admin terakhir di sistem." },
+            { success: false, error: "Cannot change the role of the last active Super Admin in the system." },
             { status: 400 }
           );
         }
@@ -185,7 +185,7 @@ export async function PUT(
     if (body.isActive !== undefined) {
       if (!isSuperAdmin) {
         return NextResponse.json(
-          { success: false, error: "Akses ditolak. Administrator biasa tidak dapat mengubah status aktif akun." },
+          { success: false, error: "Access denied. Standard administrators cannot change account active status." },
           { status: 403 }
         );
       }
@@ -194,7 +194,7 @@ export async function PUT(
 
       if (caller.id === id && !nextActive) {
         return NextResponse.json(
-          { success: false, error: "Anda tidak dapat menonaktifkan akun Super Admin Anda sendiri." },
+          { success: false, error: "You cannot deactivate your own Super Admin account." },
           { status: 400 }
         );
       }
@@ -206,7 +206,7 @@ export async function PUT(
         });
         if (activeSuperAdmins <= 1) {
           return NextResponse.json(
-            { success: false, error: "Tidak dapat menonaktifkan akun Super Admin aktif terakhir di sistem." },
+            { success: false, error: "Cannot deactivate the last active Super Admin account in the system." },
             { status: 400 }
           );
         }
@@ -222,7 +222,7 @@ export async function PUT(
     if (body.notificationPreferences !== undefined) {
       if (!isSuperAdmin) {
         return NextResponse.json(
-          { success: false, error: "Akses ditolak. Pengaturan notifikasi sistem hanya dapat diubah oleh Super Admin." },
+          { success: false, error: "Access denied. System notification preferences can only be changed by a Super Admin." },
           { status: 403 }
         );
       }
@@ -236,7 +236,7 @@ export async function PUT(
     if (body.password) {
       if (String(body.password).length < 6) {
         return NextResponse.json(
-          { success: false, error: "Kata sandi minimal 6 karakter." },
+          { success: false, error: "Password must be at least 6 characters." },
           { status: 400 }
         );
       }
@@ -294,13 +294,13 @@ export async function PUT(
 
     return NextResponse.json({
       success: true,
-      message: "Profil administrator berhasil diperbarui.",
+      message: "Administrator profile updated successfully.",
       user: updated,
     });
   } catch (error: any) {
     console.error("PUT /api/users/[id] error:", error);
     return NextResponse.json(
-      { success: false, error: error.message || "Gagal memperbarui akun administrator." },
+      { success: false, error: error.message || "Failed to update administrator account." },
       { status: 500 }
     );
   }
@@ -327,7 +327,7 @@ export async function DELETE(
       return NextResponse.json(
         {
           success: false,
-          error: "Akses ditolak. Penghapusan akun administrator hanya diizinkan untuk Super Admin.",
+          error: "Access denied. Deleting administrator accounts is only permitted for Super Admins.",
         },
         { status: 403 }
       );
@@ -339,7 +339,7 @@ export async function DELETE(
     // Safeguard 1: Cannot delete own account
     if (superAdmin.id === id) {
       return NextResponse.json(
-        { success: false, error: "Anda tidak dapat menghapus akun Super Admin Anda sendiri." },
+        { success: false, error: "You cannot delete your own Super Admin account." },
         { status: 400 }
       );
     }
@@ -347,7 +347,7 @@ export async function DELETE(
     const existing = await (prisma as any).user.findUnique({ where: { id } });
     if (!existing) {
       return NextResponse.json(
-        { success: false, error: "Akun administrator tidak ditemukan." },
+        { success: false, error: "Administrator account not found." },
         { status: 404 }
       );
     }
@@ -359,7 +359,7 @@ export async function DELETE(
       });
       if (totalSuperAdmins <= 1) {
         return NextResponse.json(
-          { success: false, error: "Tidak dapat menghapus Super Admin terakhir pada sistem." },
+          { success: false, error: "Cannot delete the last Super Admin in the system." },
           { status: 400 }
         );
       }
@@ -371,7 +371,7 @@ export async function DELETE(
     });
     if (totalAdmins <= 1) {
       return NextResponse.json(
-        { success: false, error: "Tidak dapat menghapus administrator terakhir pada sistem." },
+        { success: false, error: "Cannot delete the last administrator in the system." },
         { status: 400 }
       );
     }
@@ -398,12 +398,12 @@ export async function DELETE(
 
     return NextResponse.json({
       success: true,
-      message: `Akun administrator '${existing.name}' berhasil dihapus.`,
+      message: `Administrator account '${existing.name}' deleted successfully.`,
     });
   } catch (error: any) {
     console.error("DELETE /api/users/[id] error:", error);
     return NextResponse.json(
-      { success: false, error: error.message || "Gagal menghapus akun administrator." },
+      { success: false, error: error.message || "Failed to delete administrator account." },
       { status: 500 }
     );
   }

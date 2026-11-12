@@ -66,7 +66,7 @@ export async function PUT(request: Request) {
         where: { unread: true },
         data: { unread: false },
       });
-      return NextResponse.json({ success: true, message: "Semua notifikasi ditandai sudah dibaca." });
+      return NextResponse.json({ success: true, message: "All notifications marked as read." });
     }
 
     if (id) {
@@ -74,10 +74,10 @@ export async function PUT(request: Request) {
         where: { id },
         data: { unread: false },
       });
-      return NextResponse.json({ success: true, message: "Notifikasi ditandai sudah dibaca." });
+      return NextResponse.json({ success: true, message: "Notification marked as read." });
     }
 
-    return NextResponse.json({ error: "Parameter tidak valid." }, { status: 400 });
+    return NextResponse.json({ error: "Invalid parameters." }, { status: 400 });
   } catch (error: any) {
     console.error("PUT /api/notifications error:", error);
     return NextResponse.json({ error: "Failed to update notification." }, { status: 500 });

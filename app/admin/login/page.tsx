@@ -37,7 +37,7 @@ export default function AdminLoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!username.trim() || !password) {
-      setError("Silakan masukkan username dan kata sandi.");
+      setError("Please enter your username and password.");
       return;
     }
 
@@ -53,14 +53,14 @@ export default function AdminLoginPage() {
 
       const data = await res.json();
       if (!res.ok || !data.success) {
-        throw new Error(data.error || "Login gagal. Silakan periksa kredensial Anda.");
+        throw new Error(data.error || "Login failed. Please check your credentials.");
       }
 
       // Successful login -> redirect to destination
       router.push(from);
       router.refresh();
     } catch (err: any) {
-      setError(err.message || "Terjadi kesalahan saat masuk.");
+      setError(err.message || "An error occurred while signing in.");
     } finally {
       setLoading(false);
     }
@@ -98,13 +98,13 @@ export default function AdminLoginPage() {
           </Link>
           <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-500/15 border border-primary-500/30 text-primary-300 text-[11px] font-bold uppercase tracking-widest">
             <ShieldCheck className="w-3.5 h-3.5 text-primary-400" />
-            <span>Portal Administrator Resmi</span>
+            <span>Official Administrator Portal</span>
           </div>
           <h2 className="mt-4 text-2xl sm:text-3xl font-black text-white tracking-tight">
-            Masuk ke Panel Admin
+            Sign In to Admin Panel
           </h2>
           <p className="mt-1 text-xs text-secondary-400">
-            Kelola katalog tur, destinasi, ulasan, dan seluruh konten website Ijen Tour.
+            Manage tour packages, destinations, reviews, and all Mount Ijen Tour website content.
           </p>
         </div>
 
@@ -121,7 +121,7 @@ export default function AdminLoginPage() {
             {/* Username Field */}
             <div>
               <label className="block text-xs font-black uppercase tracking-wider text-secondary-800 mb-1.5">
-                Username Administrator
+                Administrator Username
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-secondary-400">
@@ -134,7 +134,7 @@ export default function AdminLoginPage() {
                   autoComplete="username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  placeholder="superadmin atau username admin"
+                  placeholder="superadmin or admin username"
                   className="w-full pl-10 pr-4 py-3 bg-secondary-50 border border-secondary-200 rounded-2xl text-xs sm:text-sm font-medium text-secondary-950 placeholder:text-secondary-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
                 />
               </div>
@@ -143,7 +143,7 @@ export default function AdminLoginPage() {
             {/* Password Field */}
             <div>
               <label className="block text-xs font-black uppercase tracking-wider text-secondary-800 mb-1.5">
-                Kata Sandi
+                Password
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-secondary-400">
@@ -162,7 +162,7 @@ export default function AdminLoginPage() {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-secondary-400 hover:text-secondary-700 transition cursor-pointer"
-                  title={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
+                  title={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -179,10 +179,10 @@ export default function AdminLoginPage() {
                 {loading ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Memverifikasi Kredensial...</span>
+                    <span>Verifying Credentials...</span>
                   </>
                 ) : (
-                  <span>Masuk ke Dashboard Admin →</span>
+                  <span>Sign In to Admin Dashboard →</span>
                 )}
               </button>
             </div>
@@ -191,7 +191,7 @@ export default function AdminLoginPage() {
           {/* Security Disclaimer */}
           <div className="mt-6 pt-5 border-t border-secondary-100 text-center">
             <p className="text-[11px] text-secondary-500 leading-relaxed">
-              Autentikasi dilindungi dengan sesi terenkripsi JWT (HttpOnly). Akses ini dikhususkan bagi staf administrator resmi Ijen Tour.
+              Authentication is protected with an encrypted JWT (HttpOnly) session. Access is restricted to authorized Mount Ijen Tour administrators.
             </p>
           </div>
         </div>
@@ -203,7 +203,7 @@ export default function AdminLoginPage() {
             className="inline-flex items-center gap-1.5 text-xs font-bold text-secondary-400 hover:text-white transition"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Kembali ke Website Publik</span>
+            <span>Back to Public Website</span>
           </Link>
         </div>
       </div>

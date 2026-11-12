@@ -253,7 +253,7 @@ export async function DELETE(
       return NextResponse.json({
         success: true,
         softDeleted: true,
-        message: `Paket dinonaktifkan (diarsipkan) karena memiliki ${existing._count.bookings} data pemesanan aktif. Histori reservasi tetap aman.`,
+        message: `Package has been deactivated (archived) because it has ${existing._count.bookings} active booking records. Reservation history remains preserved.`,
       });
     }
 

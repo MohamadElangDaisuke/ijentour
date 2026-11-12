@@ -139,15 +139,15 @@ export default function PackageDetailPage({ params }: PageProps) {
           <div className="w-16 h-16 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <AlertCircle className="w-8 h-8" />
           </div>
-          <h1 className="text-2xl font-black mb-2 text-secondary-950">Paket Tidak Ditemukan</h1>
+          <h1 className="text-2xl font-black mb-2 text-secondary-950">Package Not Found</h1>
           <p className="text-secondary-600 text-sm mb-6 leading-relaxed">
-            Maaf, paket tur yang Anda cari tidak tersedia, belum dipublikasikan, atau telah dipindahkan.
+            Sorry, the tour package you are looking for is unavailable, unpublished, or has been moved.
           </p>
           <Link
             href="/packages"
             className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-2xl bg-primary-500 hover:bg-primary-400 text-secondary-950 font-bold transition-all shadow-md"
           >
-            Lihat Semua Paket <ArrowRight className="w-4 h-4" />
+            View All Packages <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </div>
@@ -164,9 +164,9 @@ export default function PackageDetailPage({ params }: PageProps) {
   const rawAddons = Array.isArray(currentPkg.addons) && currentPkg.addons.length > 0
     ? currentPkg.addons.filter((a: any) => a.isActive !== false)
     : [
-        { id: 'trolley', name: 'Kawah Ijen Trolley Taxi (PP)', price: 800000, description: 'Layanan becak dorong tradisional oleh penambang lokal' },
-        { id: 'drone', name: 'Dokumentasi Drone & Kamera 4K', price: 650000, description: 'Video sinematik highlight + foto resolusi tinggi' },
-        { id: 'pickup', name: 'Antar-Jemput Bandara Juanda Surabaya / Malang', price: 600000, description: 'Private car transfer via tol langsung ke Banyuwangi' },
+        { id: 'trolley', name: 'Mount Ijen Trolley Taxi (Round-Trip)', price: 800000, description: 'Traditional hand-cart service operated by local miners' },
+        { id: 'drone', name: '4K Drone & Camera Documentation', price: 650000, description: 'Cinematic highlight video + high-resolution photos' },
+        { id: 'pickup', name: 'Surabaya Juanda / Malang Airport Transfer', price: 600000, description: 'Private car transfer via highway directly to Banyuwangi' },
       ];
 
   let calculatedAddonTotal = 0;
@@ -211,14 +211,14 @@ export default function PackageDetailPage({ params }: PageProps) {
       packageName: currentPkg.title,
       tourDate: selectedDate || '',
       participants: selectedPax,
-      specialRequests: selectedAddonNames ? `Tambahan Add-ons: ${selectedAddonNames}` : '',
+      specialRequests: selectedAddonNames ? `Selected Add-ons: ${selectedAddonNames}` : '',
     });
   };
 
   const handleOnlineBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!customerName || !whatsappNumber) {
-      setBookingError('Mohon isi nama lengkap dan nomor WhatsApp aktif Anda.');
+      setBookingError('Please fill in your full name and active WhatsApp number.');
       return;
     }
 
@@ -257,13 +257,13 @@ export default function PackageDetailPage({ params }: PageProps) {
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || 'Gagal memproses reservasi.');
+        throw new Error(data.error || 'Failed to process reservation.');
       }
 
       setConfirmedBooking(data.booking);
       setIsBookingModalOpen(false);
     } catch (err: any) {
-      setBookingError(err.message || 'Terjadi kesalahan sistem, silakan coba lagi.');
+      setBookingError(err.message || 'A system error occurred. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -275,9 +275,9 @@ export default function PackageDetailPage({ params }: PageProps) {
       <div className="border-b border-secondary-200/80 bg-white/70 backdrop-blur-md sticky top-16 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
           <nav className="flex items-center space-x-2 text-xs sm:text-sm text-secondary-600 font-medium overflow-x-auto whitespace-nowrap py-1">
-            <Link href="/" className="hover:text-primary-600 transition-colors">Beranda</Link>
+            <Link href="/" className="hover:text-primary-600 transition-colors">Home</Link>
             <ChevronRight className="w-3.5 h-3.5 text-secondary-400 shrink-0" />
-            <Link href="/packages" className="hover:text-primary-600 transition-colors">Paket Wisata</Link>
+            <Link href="/packages" className="hover:text-primary-600 transition-colors">Tour Packages</Link>
             <ChevronRight className="w-3.5 h-3.5 text-secondary-400 shrink-0" />
             <span className="text-secondary-950 font-bold truncate max-w-40 sm:max-w-xs">{currentPkg.title}</span>
           </nav>
@@ -286,10 +286,10 @@ export default function PackageDetailPage({ params }: PageProps) {
             <button
               onClick={handleShare}
               className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold border border-secondary-300 hover:border-primary-500 hover:bg-primary-50 text-secondary-800 transition-all cursor-pointer shadow-2xs"
-              title="Bagikan paket wisata ini"
+              title="Share this tour package"
             >
               <Share2 className="w-3.5 h-3.5 text-primary-600" />
-              <span>{copiedLink ? 'Link Tersalin! ✓' : 'Bagikan'}</span>
+              <span>{copiedLink ? 'Link Copied! ✓' : 'Share'}</span>
             </button>
           </div>
         </div>
@@ -301,7 +301,7 @@ export default function PackageDetailPage({ params }: PageProps) {
           <div className="flex flex-wrap items-center gap-2.5 mb-3">
             <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-primary-500 text-secondary-950 shadow-sm">
               <Flame className="w-3.5 h-3.5" />
-              {currentPkg.badge || 'Paket Pilihan'}
+              {currentPkg.badge || 'Featured Package'}
             </span>
             <span className="px-3 py-1 rounded-full text-xs font-bold bg-secondary-100 text-secondary-800 border border-secondary-200 capitalize">
               {currentPkg.category === 'midnight' ? '🌙 Midnight Trip' : currentPkg.category === 'private' ? '👑 Private Tour' : '🎒 Regular Tour'}
@@ -311,7 +311,7 @@ export default function PackageDetailPage({ params }: PageProps) {
             </span>
             {currentPkg.isTrending && (
               <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                🔥 Paling Diminati
+                🔥 Most Popular
               </span>
             )}
           </div>
@@ -329,17 +329,17 @@ export default function PackageDetailPage({ params }: PageProps) {
                 />
               ))}
               <span className="text-secondary-950 font-bold ml-1">{(currentPkg.rating || 5.0).toFixed(1)}</span>
-              <span className="text-secondary-500 font-normal">({currentPkg.savedCount || '1.5K+'} ulasan & favorit)</span>
+              <span className="text-secondary-500 font-normal">({currentPkg.savedCount || '1.5K+'} reviews & saves)</span>
             </div>
             <span className="hidden sm:inline text-secondary-300">•</span>
             <div className="flex items-center gap-1.5 text-secondary-700">
               <Clock className="w-4 h-4 text-primary-600" />
-              <span>Durasi: <strong>{currentPkg.duration}</strong></span>
+              <span>Duration: <strong>{currentPkg.duration}</strong></span>
             </div>
             <span className="hidden sm:inline text-secondary-300">•</span>
             <div className="flex items-center gap-1.5 text-secondary-700">
               <MapPin className="w-4 h-4 text-primary-600" />
-              <span>{currentPkg.meetingPoint || 'Kawah Ijen, Banyuwangi'}</span>
+              <span>{currentPkg.meetingPoint || 'Mount Ijen, Banyuwangi'}</span>
             </div>
           </div>
         </div>
@@ -350,7 +350,7 @@ export default function PackageDetailPage({ params }: PageProps) {
           <div className="lg:col-span-8 relative aspect-16/10 rounded-3xl overflow-hidden bg-secondary-900 border border-secondary-200 shadow-xl group">
             <img
               src={activePhoto}
-              alt={`${currentPkg.title} - Foto utama`}
+              alt={`${currentPkg.title} - Main photo`}
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-secondary-950/70 via-transparent to-black/20 pointer-events-none" />
@@ -360,11 +360,11 @@ export default function PackageDetailPage({ params }: PageProps) {
               className="absolute bottom-4 right-4 z-10 flex items-center gap-2 bg-secondary-950/80 hover:bg-secondary-950 text-white backdrop-blur-md px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-lg hover:scale-105"
             >
               <Maximize2 className="w-4 h-4 text-primary-400" />
-              <span>Lihat Foto Penuh</span>
+              <span>View Full Photo</span>
             </button>
 
             <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-xl text-xs font-black text-secondary-950 shadow-md">
-              Mulai {currentPkg.price || `Rp ${cleanPrice.toLocaleString('id-ID')}`} {currentPkg.pricingUnit ? `/ ${currentPkg.pricingUnit}` : '/ orang'}
+              From {currentPkg.price || `Rp ${cleanPrice.toLocaleString('id-ID')}`} {currentPkg.pricingUnit ? `/ ${currentPkg.pricingUnit}` : '/ person'}
             </div>
           </div>
 
@@ -382,11 +382,11 @@ export default function PackageDetailPage({ params }: PageProps) {
               >
                 <img
                   src={imgUrl}
-                  alt={`Galeri ${idx + 1}`}
+                  alt={`Gallery ${idx + 1}`}
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute bottom-2 left-2 bg-secondary-950/70 text-white text-[10px] font-bold px-2 py-0.5 rounded-md backdrop-blur-xs">
-                  Foto {idx + 1}
+                  Photo {idx + 1}
                 </div>
               </div>
             ))}
@@ -396,11 +396,11 @@ export default function PackageDetailPage({ params }: PageProps) {
         {/* QUICK SPECIFICATIONS MATRIX */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 mb-12">
           {[
-            { label: 'Durasi', value: currentPkg.duration, icon: Clock },
-            { label: 'Ketinggian', value: currentPkg.altitude || '2.769 mdpl', icon: Compass },
-            { label: 'Tingkat Fisik', value: currentPkg.difficulty || 'Sedang (3 Km)', icon: Sparkles },
-            { label: 'Waktu Berangkat', value: currentPkg.departureTime || '00:00 WIB', icon: Calendar },
-            { label: 'Peserta', value: `${currentPkg.minParticipants || 1} - ${currentPkg.maxParticipants || 15} Pax`, icon: Users },
+            { label: 'Duration', value: currentPkg.duration, icon: Clock },
+            { label: 'Elevation', value: currentPkg.altitude || '2,769 masl', icon: Compass },
+            { label: 'Fitness Level', value: currentPkg.difficulty || 'Moderate (3 km)', icon: Sparkles },
+            { label: 'Departure Time', value: currentPkg.departureTime || '00:00 WIB', icon: Calendar },
+            { label: 'Participants', value: `${currentPkg.minParticipants || 1} - ${currentPkg.maxParticipants || 15} Pax`, icon: Users },
             { label: 'Meeting Point', value: currentPkg.meetingPoint || 'Banyuwangi', icon: MapPin },
           ].map((item, idx) => {
             const IconComp = item.icon;
@@ -428,11 +428,11 @@ export default function PackageDetailPage({ params }: PageProps) {
             {/* TABS SELECTOR */}
             <div className="flex items-center gap-2 border-b border-secondary-200/80 overflow-x-auto pb-px no-scrollbar">
               {[
-                { id: 'overview', label: '✨ Ringkasan' },
-                { id: 'itinerary', label: '🗺️ Jadwal Itinerary' },
-                { id: 'facilities', label: '✅ Fasilitas' },
-                { id: 'packing', label: '🎒 Perlengkapan' },
-                { id: 'faq', label: '❓ FAQ Paket' },
+                { id: 'overview', label: '✨ Overview' },
+                { id: 'itinerary', label: '🗺️ Itinerary' },
+                { id: 'facilities', label: '✅ Facilities' },
+                { id: 'packing', label: '🎒 Packing List' },
+                { id: 'faq', label: '❓ Package FAQ' },
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -454,7 +454,7 @@ export default function PackageDetailPage({ params }: PageProps) {
                 {/* Description Narrative */}
                 <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-sm space-y-4">
                   <h3 className="text-xl sm:text-2xl font-black text-secondary-950">
-                    Tentang Paket Ini
+                    About This Package
                   </h3>
                   <p className="text-secondary-700 text-sm sm:text-base leading-relaxed whitespace-pre-line">
                     {currentPkg.description}
@@ -465,10 +465,10 @@ export default function PackageDetailPage({ params }: PageProps) {
                 {Array.isArray(currentPkg.highlights) && currentPkg.highlights.length > 0 && (
                   <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-sm">
                     <div className="flex items-center gap-2 text-primary-600 font-bold text-xs uppercase tracking-wider mb-2">
-                      <Sparkles className="w-4 h-4" /> Sorotan Wisata
+                      <Sparkles className="w-4 h-4" /> Tour Highlights
                     </div>
                     <h3 className="text-xl sm:text-2xl font-black text-secondary-950 mb-6">
-                      Daya Tarik Utama
+                      Key Attractions
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {currentPkg.highlights.map((highlight: string, idx: number) => (
@@ -496,19 +496,19 @@ export default function PackageDetailPage({ params }: PageProps) {
                     </div>
                     <div className="space-y-3">
                       <h4 className="text-base sm:text-lg font-black text-secondary-950">
-                        Standar Keselamatan & Kenyamanan Terbaik
+                        Top Safety & Comfort Standards
                       </h4>
                       <p className="text-xs sm:text-sm text-secondary-700 leading-relaxed">
                         {currentPkg.safetyInfo ||
-                          'Setiap peserta dibekali masker respirator gas khusus standar BKSDA untuk menyaring asap belerang kawah. Pemandu berlisensi kami membawa tabung oksigen darurat dan perlengkapan P3K.'}
+                          'Every participant is equipped with a BKSDA-certified gas respirator mask to filter crater sulfur fumes. Our licensed guides carry emergency oxygen tanks and first-aid kits.'}
                       </p>
 
                       <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-secondary-800 pt-1">
                         <span className="flex items-center gap-1.5">
-                          <Check className="w-4 h-4 text-emerald-600" /> Antar-Jemput: {currentPkg.pickupArea || 'Area Banyuwangi'}
+                          <Check className="w-4 h-4 text-emerald-600" /> Pickup & Drop-off: {currentPkg.pickupArea || 'Banyuwangi Area'}
                         </span>
                         <span className="flex items-center gap-1.5">
-                          <Check className="w-4 h-4 text-emerald-600" /> Asuransi Pengunjung Resmi
+                          <Check className="w-4 h-4 text-emerald-600" /> Official Visitor Insurance
                         </span>
                       </div>
                     </div>
@@ -522,7 +522,7 @@ export default function PackageDetailPage({ params }: PageProps) {
                       <Info className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
                       <div>
                         <h4 className="text-sm font-black text-amber-900 uppercase tracking-wider mb-1">
-                          Catatan Penting Perjalanan
+                          Important Travel Notes
                         </h4>
                         <p className="text-xs sm:text-sm text-amber-800 leading-relaxed whitespace-pre-line">
                           {currentPkg.importantNotes}
@@ -538,12 +538,12 @@ export default function PackageDetailPage({ params }: PageProps) {
             {activeTab === 'itinerary' && (
               <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-sm animate-fadeIn">
                 <div className="mb-6">
-                  <span className="text-xs font-bold uppercase tracking-wider text-primary-600">Rangkaian Perjalanan</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-primary-600">Journey Timeline</span>
                   <h3 className="text-xl sm:text-2xl font-black text-secondary-950 mt-1">
-                    Jadwal & Rute Lengkap (Itinerary)
+                    Full Schedule & Route (Itinerary)
                   </h3>
                   <p className="text-xs sm:text-sm text-secondary-600 mt-1">
-                    Jadwal fleksibel menyesuaikan kondisi cuaca dan ritme trekking wisatawan.
+                    Schedule is flexible depending on weather conditions and trekking pace.
                   </p>
                 </div>
 
@@ -555,7 +555,7 @@ export default function PackageDetailPage({ params }: PageProps) {
                         <div className="bg-secondary-50 p-4 sm:p-5 rounded-2xl border border-secondary-200/70 hover:border-primary-400 transition-all space-y-1.5">
                           <div className="flex flex-wrap items-center gap-2 mb-1">
                             <span className="inline-block px-3 py-1 rounded-lg bg-primary-100 text-primary-800 text-xs font-black">
-                              {item.day || item.startTime || `Langkah ${idx + 1}`}
+                              {item.day || item.startTime || `Step ${idx + 1}`}
                             </span>
                             {item.location && (
                               <span className="text-xs text-secondary-500 font-semibold flex items-center gap-1">
@@ -572,7 +572,7 @@ export default function PackageDetailPage({ params }: PageProps) {
                           </p>
                           {item.note && (
                             <p className="text-[11px] text-primary-800 bg-primary-50 px-2.5 py-1 rounded-lg font-medium inline-block mt-1">
-                              💡 Catatan: {item.note}
+                              💡 Note: {item.note}
                             </p>
                           )}
                         </div>
@@ -581,7 +581,7 @@ export default function PackageDetailPage({ params }: PageProps) {
                   </div>
                 ) : (
                   <div className="py-12 text-center text-xs text-secondary-500">
-                    Jadwal itinerary belum dikonfigurasi untuk paket ini.
+                    The itinerary has not been configured for this package yet.
                   </div>
                 )}
               </div>
@@ -597,8 +597,8 @@ export default function PackageDetailPage({ params }: PageProps) {
                       ✓
                     </div>
                     <div>
-                      <h4 className="text-base sm:text-lg font-black text-secondary-950">Termasuk (Inclusions)</h4>
-                      <p className="text-[11px] text-emerald-700 font-bold">Layanan & peralatan yang disediakan</p>
+                      <h4 className="text-base sm:text-lg font-black text-secondary-950">Included (Inclusions)</h4>
+                      <p className="text-[11px] text-emerald-700 font-bold">Services & equipment provided</p>
                     </div>
                   </div>
 
@@ -622,8 +622,8 @@ export default function PackageDetailPage({ params }: PageProps) {
                       ✕
                     </div>
                     <div>
-                      <h4 className="text-base sm:text-lg font-black text-secondary-950">Tidak Termasuk (Exclusions)</h4>
-                      <p className="text-[11px] text-rose-600 font-bold">Biaya opsional & keperluan pribadi</p>
+                      <h4 className="text-base sm:text-lg font-black text-secondary-950">Not Included (Exclusions)</h4>
+                      <p className="text-[11px] text-rose-600 font-bold">Optional costs & personal expenses</p>
                     </div>
                   </div>
 
@@ -646,12 +646,12 @@ export default function PackageDetailPage({ params }: PageProps) {
             {activeTab === 'packing' && (
               <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-sm animate-fadeIn space-y-6">
                 <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-primary-600">Persiapan Pendakian</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-primary-600">Trekking Preparation</span>
                   <h3 className="text-xl sm:text-2xl font-black text-secondary-950 mt-1">
-                    Daftar Perlengkapan yang Disarankan
+                    Recommended Packing List
                   </h3>
                   <p className="text-xs sm:text-sm text-secondary-600 mt-1">
-                    Pastikan pendakian Anda nyaman menghadapi suhu sejuk kawah (sekitar 6°C - 12°C).
+                    Stay comfortable during your hike in cool crater temperatures (around 6°C - 12°C).
                   </p>
                 </div>
 
@@ -685,9 +685,9 @@ export default function PackageDetailPage({ params }: PageProps) {
             {activeTab === 'faq' && (
               <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200/80 shadow-sm animate-fadeIn space-y-4">
                 <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-primary-600">Bantuan & Informasi</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-primary-600">Help & Information</span>
                   <h3 className="text-xl sm:text-2xl font-black text-secondary-950 mt-1">
-                    Pertanyaan Seputar Paket (FAQ)
+                    Frequently Asked Questions (FAQ)
                   </h3>
                 </div>
 
@@ -729,25 +729,25 @@ export default function PackageDetailPage({ params }: PageProps) {
               {/* Price Banner */}
               <div className="pb-4 border-b border-secondary-100">
                 <span className="text-[11px] font-extrabold uppercase tracking-wider text-secondary-500 block mb-1">
-                  Tarif Resmi Paket
+                  Official Package Rate
                 </span>
                 <div className="flex items-baseline gap-2">
                   <span className="text-2xl sm:text-3xl font-black text-primary-600">
                     {currentPkg.price || `Rp ${cleanPrice.toLocaleString('id-ID')}`}
                   </span>
                   <span className="text-xs font-semibold text-secondary-600">
-                    {currentPkg.pricingUnit ? `/ ${currentPkg.pricingUnit}` : '/ orang'}
+                    {currentPkg.pricingUnit ? `/ ${currentPkg.pricingUnit}` : '/ person'}
                   </span>
                 </div>
                 <p className="text-[11px] text-emerald-600 font-bold mt-1">
-                  ✓ Termasuk tiket resmi BKSDA & pemandu lokal berlisensi
+                  ✓ Includes official BKSDA entrance ticket & licensed local guide
                 </p>
               </div>
 
               {/* Form Input: Date Picker */}
               <div>
                 <label className="block text-xs font-extrabold text-secondary-950 uppercase tracking-wider mb-2">
-                  1. Pilih Tanggal Keberangkatan
+                  1. Select Departure Date
                 </label>
                 <input
                   type="date"
@@ -760,7 +760,7 @@ export default function PackageDetailPage({ params }: PageProps) {
               {/* Form Input: Number of Pax Selector */}
               <div>
                 <label className="block text-xs font-extrabold text-secondary-950 uppercase tracking-wider mb-2">
-                  2. Jumlah Peserta (Pax)
+                  2. Number of Participants (Pax)
                 </label>
                 <div className="flex items-center justify-between bg-secondary-50 border border-secondary-200 rounded-xl p-2">
                   <button
@@ -772,7 +772,7 @@ export default function PackageDetailPage({ params }: PageProps) {
                   </button>
                   <div className="text-center">
                     <span className="text-lg font-black text-secondary-950">{selectedPax}</span>
-                    <span className="text-xs text-secondary-500 font-medium block">Peserta</span>
+                    <span className="text-xs text-secondary-500 font-medium block">Participants</span>
                   </div>
                   <button
                     type="button"
@@ -788,7 +788,7 @@ export default function PackageDetailPage({ params }: PageProps) {
               {rawAddons.length > 0 && (
                 <div>
                   <label className="block text-xs font-extrabold text-secondary-950 uppercase tracking-wider mb-2">
-                    3. Layanan Tambahan (Add-ons Opsional)
+                    3. Optional Add-on Services
                   </label>
                   <div className="space-y-2.5">
                     {rawAddons.map((addon: any) => (
@@ -830,18 +830,18 @@ export default function PackageDetailPage({ params }: PageProps) {
               <div className="bg-secondary-100 p-4 rounded-2xl border border-secondary-200">
                 <div className="flex justify-between text-xs text-secondary-600 mb-1">
                   <span>
-                    Rp {cleanPrice.toLocaleString('id-ID')} x {selectedPax} peserta
+                    Rp {cleanPrice.toLocaleString('id-ID')} x {selectedPax} participants
                   </span>
                   <span>Rp {(cleanPrice * selectedPax).toLocaleString('id-ID')}</span>
                 </div>
                 {calculatedAddonTotal > 0 && (
                   <div className="flex justify-between text-xs text-secondary-600 mb-1">
-                    <span>Layanan Tambahan (Add-ons)</span>
+                    <span>Optional Add-ons</span>
                     <span>Rp {calculatedAddonTotal.toLocaleString('id-ID')}</span>
                   </div>
                 )}
                 <div className="border-t border-secondary-300/60 pt-2 mt-2 flex justify-between items-baseline">
-                  <span className="font-black text-xs uppercase tracking-wider text-secondary-950">Estimasi Total</span>
+                  <span className="font-black text-xs uppercase tracking-wider text-secondary-950">Estimated Total</span>
                   <span className="text-xl font-black text-primary-600">{formattedTotal}</span>
                 </div>
               </div>
@@ -853,7 +853,7 @@ export default function PackageDetailPage({ params }: PageProps) {
                 className="w-full py-4 px-6 rounded-2xl bg-primary-500 hover:bg-primary-400 text-secondary-950 font-black text-sm tracking-wide shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer transform hover:-translate-y-0.5"
               >
                 <Sparkles className="w-5 h-5 text-secondary-950" />
-                <span>PESAN SEKARANG (RESERVASI ONLINE)</span>
+                <span>BOOK NOW (ONLINE RESERVATION)</span>
               </button>
 
               <button
@@ -862,11 +862,11 @@ export default function PackageDetailPage({ params }: PageProps) {
                 className="w-full py-3 px-6 rounded-2xl bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/40 text-[#128C7E] font-bold text-xs tracking-wide transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <FaWhatsapp className="w-4 h-4 text-[#25D366]" />
-                <span>KONSULTASI VIA WHATSAPP</span>
+                <span>CONSULT VIA WHATSAPP</span>
               </button>
 
               <p className="text-[11px] text-center text-secondary-500 leading-tight">
-                🔒 Tanpa biaya tersembunyi. Konfirmasi instan dan jadwal armada terjamin.
+                🔒 No hidden fees. Instant confirmation and guaranteed transport schedule.
               </p>
             </div>
           </div>
@@ -877,14 +877,14 @@ export default function PackageDetailPage({ params }: PageProps) {
           <div className="mt-20 pt-12 border-t border-secondary-200/80">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-primary-600">Eksplorasi Lainnya</span>
-                <h3 className="text-2xl sm:text-3xl font-black text-secondary-950 mt-1">Paket Wisata Terkait</h3>
+                <span className="text-xs font-bold uppercase tracking-wider text-primary-600">More Adventures</span>
+                <h3 className="text-2xl sm:text-3xl font-black text-secondary-950 mt-1">Related Tour Packages</h3>
               </div>
               <Link
                 href="/packages"
                 className="inline-flex items-center gap-2 text-sm font-bold text-primary-600 hover:text-primary-700 transition"
               >
-                Lihat Semua Paket <ArrowRight className="w-4 h-4" />
+                View All Packages <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
@@ -922,14 +922,14 @@ export default function PackageDetailPage({ params }: PageProps) {
 
                   <div className="p-5 pt-0 border-t border-secondary-100 mt-4 flex items-center justify-between">
                     <div>
-                      <span className="text-[10px] text-secondary-500 block">Mulai dari</span>
+                      <span className="text-[10px] text-secondary-500 block">Starting from</span>
                       <span className="text-sm font-black text-primary-600">{pkg.price}</span>
                     </div>
                     <Link
                       href={`/packages/${pkg.slug || pkg.id}`}
                       className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-secondary-950 hover:bg-primary-500 hover:text-secondary-950 text-white text-xs font-bold transition-all"
                     >
-                      <span>Detail</span>
+                      <span>Details</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>
@@ -948,7 +948,7 @@ export default function PackageDetailPage({ params }: PageProps) {
         >
           <div className="flex items-center justify-between text-white max-w-7xl mx-auto w-full">
             <span className="text-sm font-bold">
-              {currentPkg.title} - Foto {activeImageIndex + 1} dari {galleryList.length}
+              {currentPkg.title} - Photo {activeImageIndex + 1} of {galleryList.length}
             </span>
             <button
               onClick={() => setIsLightboxOpen(false)}
@@ -998,7 +998,7 @@ export default function PackageDetailPage({ params }: PageProps) {
             <div className="flex items-center justify-between pb-4 border-b border-secondary-100 mb-6">
               <div>
                 <span className="text-[11px] font-black uppercase tracking-wider text-primary-600 block">
-                  Konfirmasi Pemesanan Tur
+                  Tour Booking Confirmation
                 </span>
                 <h3 className="text-xl font-black text-secondary-950">{currentPkg.title}</h3>
               </div>
@@ -1021,15 +1021,15 @@ export default function PackageDetailPage({ params }: PageProps) {
             {/* Summary preview */}
             <div className="bg-secondary-50 p-4 rounded-2xl border border-secondary-200/80 mb-6 text-xs space-y-1.5">
               <div className="flex justify-between">
-                <span className="text-secondary-600">Tanggal Keberangkatan:</span>
-                <span className="font-bold text-secondary-950">{selectedDate || 'Mendatang'}</span>
+                <span className="text-secondary-600">Departure Date:</span>
+                <span className="font-bold text-secondary-950">{selectedDate || 'Upcoming'}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-secondary-600">Jumlah Peserta:</span>
-                <span className="font-bold text-secondary-950">{selectedPax} Peserta</span>
+                <span className="text-secondary-600">Number of Participants:</span>
+                <span className="font-bold text-secondary-950">{selectedPax} Participants</span>
               </div>
               <div className="flex justify-between border-t border-secondary-200 pt-1.5 font-bold">
-                <span>Total Estimasi:</span>
+                <span>Estimated Total:</span>
                 <span className="text-primary-600 text-sm">{formattedTotal}</span>
               </div>
             </div>
@@ -1037,14 +1037,14 @@ export default function PackageDetailPage({ params }: PageProps) {
             <form onSubmit={handleOnlineBookingSubmit} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-secondary-800 mb-1.5">
-                  Nama Lengkap Pemesan *
+                  Full Name *
                 </label>
                 <input
                   type="text"
                   required
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
-                  placeholder="Contoh: Dimas Pratama"
+                  placeholder="e.g. John Doe"
                   className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
               </div>
@@ -1052,26 +1052,26 @@ export default function PackageDetailPage({ params }: PageProps) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-secondary-800 mb-1.5">
-                    Nomor WhatsApp Aktif *
+                    Active WhatsApp Number *
                   </label>
                   <input
                     type="tel"
                     required
                     value={whatsappNumber}
                     onChange={(e) => setWhatsappNumber(e.target.value)}
-                    placeholder="081234567890"
+                    placeholder="+62 812 3456 7890"
                     className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-secondary-800 mb-1.5">
-                    Email (Opsional)
+                    Email (Optional)
                   </label>
                   <input
                     type="email"
                     value={customerEmail}
                     onChange={(e) => setCustomerEmail(e.target.value)}
-                    placeholder="nama@email.com"
+                    placeholder="name@email.com"
                     className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   />
                 </div>
@@ -1079,26 +1079,26 @@ export default function PackageDetailPage({ params }: PageProps) {
 
               <div>
                 <label className="block text-xs font-bold text-secondary-800 mb-1.5">
-                  Lokasi Penjemputan di Banyuwangi
+                  Pickup Location in Banyuwangi
                 </label>
                 <input
                   type="text"
                   value={pickupLocation}
                   onChange={(e) => setPickupLocation(e.target.value)}
-                  placeholder="Contoh: Hotel Ketapang Indah / Stasiun Banyuwangi Kota"
+                  placeholder="e.g. Ketapang Indah Hotel / Banyuwangi Kota Station"
                   className="w-full px-4 py-2.5 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-secondary-800 mb-1.5">
-                  Permintaan Khusus / Catatan Tambahan
+                  Special Requests / Additional Notes
                 </label>
                 <textarea
                   rows={2}
                   value={specialRequests}
                   onChange={(e) => setSpecialRequests(e.target.value)}
-                  placeholder="Catatan menu makanan khusus, ukuran masker anak, dll."
+                  placeholder="Dietary requirements, child mask size, etc."
                   className="w-full px-4 py-2 bg-secondary-50 border border-secondary-200 rounded-xl text-sm text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 ></textarea>
               </div>
@@ -1110,9 +1110,9 @@ export default function PackageDetailPage({ params }: PageProps) {
                   className="w-full py-3.5 px-6 rounded-2xl bg-primary-500 hover:bg-primary-400 text-secondary-950 font-black text-sm tracking-wide shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
                 >
                   {isSubmitting ? (
-                    <span>MEMPROSES RESERVASI...</span>
+                    <span>PROCESSING RESERVATION...</span>
                   ) : (
-                    <span>KONFIRMASI RESERVASI SEKARANG</span>
+                    <span>CONFIRM RESERVATION NOW</span>
                   )}
                 </button>
               </div>
@@ -1136,36 +1136,36 @@ export default function PackageDetailPage({ params }: PageProps) {
             </div>
 
             <span className="text-xs font-black uppercase tracking-wider text-emerald-600 block mb-1">
-              Reservasi Berhasil Dibuat!
+              Reservation Created Successfully!
             </span>
-            <h3 className="text-2xl font-black text-secondary-950 mb-2">Kode Reservasi Anda</h3>
+            <h3 className="text-2xl font-black text-secondary-950 mb-2">Your Booking Code</h3>
 
             <div className="bg-primary-50 border-2 border-dashed border-primary-400 p-3 rounded-2xl mb-4 font-mono text-xl font-black text-primary-700 tracking-wider">
               {confirmedBooking.bookingCode}
             </div>
 
             <p className="text-xs text-secondary-600 leading-relaxed mb-6">
-              Rincian booking untuk <span className="font-bold text-secondary-950">{confirmedBooking.customerName}</span> ({confirmedBooking.numParticipants} Peserta) telah tercatat di sistem kami.
+              Booking details for <span className="font-bold text-secondary-950">{confirmedBooking.customerName}</span> ({confirmedBooking.numParticipants} Participants) have been recorded in our system.
             </p>
 
             <div className="space-y-3">
               <a
                 href={getWhatsAppLink(
-                  `Halo Admin Ijen Tour! Saya telah melakukan reservasi online dengan Kode Booking: *${confirmedBooking.bookingCode}* untuk paket *${confirmedBooking.packageName}* pada tanggal ${confirmedBooking.departureDate}. Mohon konfirmasi ketersediaan armada dan guide. Terima kasih!`
+                  `Hello Mount Ijen Tour Admin! I have completed an online reservation with Booking Code: *${confirmedBooking.bookingCode}* for the *${confirmedBooking.packageName}* package on ${confirmedBooking.departureDate}. Please confirm vehicle and guide availability. Thank you!`
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full py-3.5 px-6 rounded-2xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-black text-sm flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
               >
                 <FaWhatsapp className="w-5 h-5" />
-                <span>KONFIRMASI VIA WHATSAPP</span>
+                <span>CONFIRM VIA WHATSAPP</span>
               </a>
 
               <Link
                 href="/booking"
                 className="block w-full py-3 px-6 rounded-2xl bg-secondary-100 hover:bg-secondary-200 text-secondary-800 font-bold text-xs transition"
               >
-                Cek Status Pemesanan
+                Check Booking Status
               </Link>
             </div>
           </div>

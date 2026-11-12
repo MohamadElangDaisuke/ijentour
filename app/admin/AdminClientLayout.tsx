@@ -150,12 +150,31 @@ export default function AdminClientLayout({ children }: { children: React.ReactN
     });
   };
 
+  const closeSidebar = useCallback(() => setIsSidebarOpen(false), []);
+
   // Close menus on path change
   useEffect(() => {
     setIsSidebarOpen(false);
     setIsNotifOpen(false);
     setIsProfileOpen(false);
   }, [pathname]);
+
+  // Lock background scroll & close on Escape while mobile admin drawer is open
+  useEffect(() => {
+    if (!isSidebarOpen) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsSidebarOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isSidebarOpen]);
 
   // Load current admin profile
   useEffect(() => {
@@ -395,9 +414,11 @@ export default function AdminClientLayout({ children }: { children: React.ReactN
           {/* Left section: mobile hamburger + breadcrumb / page title */}
           <div className="flex items-center gap-3 min-w-0">
             <button
+              type="button"
               onClick={() => setIsSidebarOpen(true)}
               className="p-2 rounded-xl border border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 lg:hidden cursor-pointer"
               aria-label="Open mobile navigation"
+              aria-expanded={isSidebarOpen}
             >
               <Menu className="w-5 h-5" />
             </button>
@@ -604,13 +625,17 @@ export default function AdminClientLayout({ children }: { children: React.ReactN
 
       {/* 4. MOBILE DRAWER NAVIGATION */}
       {isSidebarOpen && (
-        <div
-          className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs lg:hidden flex"
-          onClick={() => setIsSidebarOpen(false)}
-        >
+        <div className="fixed inset-0 z-50 lg:hidden flex">
           <div
-            className="w-72 sm:w-80 bg-white dark:bg-slate-900 h-full p-5 flex flex-col justify-between overflow-y-auto border-r border-slate-200 dark:border-slate-800 shadow-2xl animate-in slide-in-from-left duration-200"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 bg-slate-950/70 backdrop-blur-xs"
+            onClick={closeSidebar}
+            aria-hidden="true"
+          />
+          <aside
+            role="dialog"
+            aria-modal="true"
+            aria-label="Admin Mobile Navigation"
+            className="relative z-10 w-72 max-w-[calc(100vw-2.5rem)] sm:w-80 bg-white dark:bg-slate-900 h-full p-5 flex flex-col justify-between overflow-y-auto overscroll-contain border-r border-slate-200 dark:border-slate-800 shadow-2xl animate-in slide-in-from-left duration-200"
           >
             <div>
               <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800 mb-5">
@@ -628,8 +653,10 @@ export default function AdminClientLayout({ children }: { children: React.ReactN
                   </div>
                 </div>
                 <button
-                  onClick={() => setIsSidebarOpen(false)}
-                  className="p-1.5 rounded-xl text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+                  type="button"
+                  onClick={closeSidebar}
+                  className="p-1.5 rounded-xl text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+                  aria-label="Close mobile navigation"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -653,7 +680,7 @@ export default function AdminClientLayout({ children }: { children: React.ReactN
                         <Link
                           key={item.href}
                           href={item.href}
-                          onClick={() => setIsSidebarOpen(false)}
+                          onClick={closeSidebar}
                           className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition ${
                             isActive
                               ? "bg-amber-500 text-slate-950 font-extrabold shadow-sm"
@@ -674,12 +701,14 @@ export default function AdminClientLayout({ children }: { children: React.ReactN
               <Link
                 href="/"
                 target="_blank"
+                onClick={closeSidebar}
                 className="w-full py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs flex items-center justify-center gap-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
               >
                 <ExternalLink className="w-4 h-4 text-amber-500" />
                 <span>Visit Public Site</span>
               </Link>
               <button
+                type="button"
                 onClick={handleLogout}
                 className="w-full py-2.5 rounded-xl bg-rose-50 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400 font-bold text-xs flex items-center justify-center gap-2 border border-rose-200 dark:border-rose-800/50 cursor-pointer"
               >
@@ -687,7 +716,7 @@ export default function AdminClientLayout({ children }: { children: React.ReactN
                 <span>Sign Out</span>
               </button>
             </div>
-          </div>
+          </aside>
         </div>
       )}
     </div>

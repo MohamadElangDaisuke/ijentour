@@ -25,12 +25,12 @@ export default function EditTripPage({ params }: PageProps) {
         if (data.success && data.package) {
           setPackageData(data.package);
         } else {
-          setError(data.error || "Paket wisata tidak ditemukan.");
+          setError(data.error || "Tour package not found.");
         }
       })
       .catch((err) => {
         console.error(err);
-        setError("Gagal memuat detail paket wisata.");
+        setError("Failed to load tour package details.");
       })
       .finally(() => setLoading(false));
   }, [tripId]);
@@ -60,14 +60,14 @@ export default function EditTripPage({ params }: PageProps) {
         <div className="w-16 h-16 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto mb-4">
           <AlertCircle className="w-8 h-8" />
         </div>
-        <h2 className="text-xl font-black text-secondary-950 mb-2">Gagal Membuka Paket</h2>
-        <p className="text-xs sm:text-sm text-secondary-600 mb-6">{error || "Data paket tidak tersedia."}</p>
+        <h2 className="text-xl font-black text-secondary-950 mb-2">Failed to Open Package</h2>
+        <p className="text-xs sm:text-sm text-secondary-600 mb-6">{error || "Package data is unavailable."}</p>
         <Link
           href="/admin/trips"
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-500 text-secondary-950 font-bold text-xs"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Kembali ke Daftar Paket</span>
+          <span>Back to Packages List</span>
         </Link>
       </div>
     );

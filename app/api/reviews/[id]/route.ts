@@ -10,7 +10,7 @@ export async function PUT(
   try {
     const admin = await requireAdmin(request);
     if (!admin) {
-      return NextResponse.json({ success: false, error: "Akses ditolak. Silakan login sebagai administrator." }, { status: 401 });
+      return NextResponse.json({ success: false, error: "Access denied. Please sign in as an administrator." }, { status: 401 });
     }
 
     const { id } = await params;
@@ -18,7 +18,7 @@ export async function PUT(
 
     if (!existing) {
       return NextResponse.json(
-        { success: false, error: "Ulasan tidak ditemukan." },
+        { success: false, error: "Review not found." },
         { status: 404 }
       );
     }
@@ -47,13 +47,13 @@ export async function PUT(
 
     return NextResponse.json({
       success: true,
-      message: "Ulasan berhasil diperbarui.",
+      message: "Review updated successfully.",
       review: updated,
     });
   } catch (error: any) {
     console.error("PUT /api/reviews/[id] error:", error);
     return NextResponse.json(
-      { success: false, error: error.message || "Gagal memperbarui ulasan." },
+      { success: false, error: error.message || "Failed to update review." },
       { status: 500 }
     );
   }
@@ -66,7 +66,7 @@ export async function DELETE(
   try {
     const admin = await requireAdmin(request);
     if (!admin) {
-      return NextResponse.json({ success: false, error: "Akses ditolak. Silakan login sebagai administrator." }, { status: 401 });
+      return NextResponse.json({ success: false, error: "Access denied. Please sign in as an administrator." }, { status: 401 });
     }
 
     const { id } = await params;
@@ -74,7 +74,7 @@ export async function DELETE(
 
     if (!existing) {
       return NextResponse.json(
-        { success: false, error: "Ulasan tidak ditemukan atau sudah dihapus." },
+        { success: false, error: "Review not found or already deleted." },
         { status: 404 }
       );
     }
@@ -87,12 +87,12 @@ export async function DELETE(
 
     return NextResponse.json({
       success: true,
-      message: "Ulasan berhasil dihapus.",
+      message: "Review deleted successfully.",
     });
   } catch (error: any) {
     console.error("DELETE /api/reviews/[id] error:", error);
     return NextResponse.json(
-      { success: false, error: error.message || "Gagal menghapus ulasan." },
+      { success: false, error: error.message || "Failed to delete review." },
       { status: 500 }
     );
   }

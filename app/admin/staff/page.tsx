@@ -62,10 +62,10 @@ export default function AdminStaffPage() {
   const [specialty, setSpecialty] = useState("");
   const [description, setDescription] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
-  const [experience, setExperience] = useState("5+ Tahun");
-  const [languages, setLanguages] = useState("Bahasa Indonesia, English");
+  const [experience, setExperience] = useState("5+ Years");
+  const [languages, setLanguages] = useState("English, Indonesian");
   const [rating, setRating] = useState("5.0");
-  const [badge, setBadge] = useState("Lisensi HPI");
+  const [badge, setBadge] = useState("HPI Licensed");
   const [phone, setPhone] = useState("+62 822-6817-7188");
   const [isFeatured, setIsFeatured] = useState(true);
   const [isActive, setIsActive] = useState(true);
@@ -98,10 +98,10 @@ export default function AdminStaffPage() {
     setSpecialty("");
     setDescription("");
     setAvatarUrl("");
-    setExperience("5+ Tahun");
-    setLanguages("Bahasa Indonesia, English");
+    setExperience("5+ Years");
+    setLanguages("English, Indonesian");
     setRating("5.0");
-    setBadge("Lisensi HPI");
+    setBadge("HPI Licensed");
     setPhone("+62 822-6817-7188");
     setIsFeatured(true);
     setIsActive(true);
@@ -116,8 +116,8 @@ export default function AdminStaffPage() {
     setSpecialty(staff.specialty || "");
     setDescription(staff.description || "");
     setAvatarUrl(staff.avatarUrl || "");
-    setExperience(staff.experience || "5+ Tahun");
-    setLanguages(staff.languages || "Bahasa Indonesia, English");
+    setExperience(staff.experience || "5+ Years");
+    setLanguages(staff.languages || "English, Indonesian");
     setRating(String(staff.rating || 5.0));
     setBadge(staff.badge || "");
     setPhone(staff.phone || "");
@@ -539,7 +539,7 @@ export default function AdminStaffPage() {
                 type="text"
                 value={experience}
                 onChange={(e) => setExperience(e.target.value)}
-                placeholder="5+ Tahun"
+                placeholder="5+ Years"
                 className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-amber-500"
               />
             </div>

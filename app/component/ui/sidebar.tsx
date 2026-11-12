@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence, PanInfo } from 'framer-motion'
@@ -18,6 +18,12 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname()
   const { openBookingModal } = useBookingModal()
   const [openAccordions, setOpenAccordions] = useState<string[]>(['Tours'])
+  const onCloseRef = useRef(onClose)
+  const prevPathnameRef = useRef(pathname)
+
+  useEffect(() => {
+    onCloseRef.current = onClose
+  }, [onClose])
 
   // Lock body scroll when mobile drawer is open to prevent background scrolling
   useEffect(() => {
@@ -32,19 +38,23 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   // Close drawer on Escape key press
   useEffect(() => {
+    if (!isOpen) return
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        onClose()
+      if (e.key === 'Escape') {
+        onCloseRef.current()
       }
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, onClose])
+  }, [isOpen])
 
-  // Close drawer on route change
+  // Close drawer only when route actually changes (never on parent re-renders)
   useEffect(() => {
-    onClose()
-  }, [pathname, onClose])
+    if (prevPathnameRef.current !== pathname) {
+      prevPathnameRef.current = pathname
+      onCloseRef.current()
+    }
+  }, [pathname])
 
   const handleDragEnd = (_: unknown, info: PanInfo) => {
     if (info.offset.x < -80 || info.velocity.x < -300) {
@@ -106,7 +116,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             role="dialog"
             aria-modal="true"
             aria-label="Mobile Navigation Menu"
-            className="fixed inset-y-0 left-0 z-50 flex w-80 max-w-[calc(100vw-2.5rem)] flex-col justify-between border-r border-secondary-200 dark:border-secondary-800 bg-white/98 dark:bg-secondary-950/98 p-5 text-secondary-950 dark:text-white shadow-2xl backdrop-blur-2xl touch-pan-y select-none lg:hidden overflow-y-auto"
+            className="fixed inset-y-0 left-0 z-50 flex w-80 max-w-[calc(100vw-2.5rem)] flex-col justify-between border-r border-secondary-200 dark:border-secondary-800 bg-white/98 dark:bg-secondary-950/98 p-5 text-secondary-950 dark:text-white shadow-2xl backdrop-blur-2xl touch-pan-y select-none lg:hidden overflow-y-auto overscroll-contain"
           >
             <div>
               {/* Header: Logo, Theme Mode, & Close Button */}

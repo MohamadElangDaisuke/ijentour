@@ -1,8 +1,8 @@
 import DestinationForm from "../DestinationForm";
 
 export const metadata = {
-  title: "Tambah Destinasi Baru | Admin Ijen Tour",
-  description: "Formulir penambahan katalog destinasi wisata Banyuwangi dan Kawah Ijen.",
+  title: "Add New Destination | Mount Ijen Tour Admin",
+  description: "Form to add a new Banyuwangi and Mount Ijen destination to the catalog.",
 };
 
 export default function CreateDestinationPage() {

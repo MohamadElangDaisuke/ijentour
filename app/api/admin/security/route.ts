@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Akses ditolak. Pengaturan keamanan hanya dapat diakses oleh Super Admin.",
+          error: "Access denied. Security settings can only be accessed by a Super Admin.",
         },
         { status: 403 }
       );
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
       },
       authentication: {
         algorithm: "HS256 (HMAC with SHA-256 via jose)",
-        sessionDuration: "7 Hari (604,800 detik)",
+        sessionDuration: "7 Days (604,800 seconds)",
         tokenType: "HttpOnly Cookie ('admin_token')",
         cookieFlags: {
           httpOnly: true,
@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
         resendCooldownSeconds: 60,
         maxAttemptsPerOtp: 5,
         storage: "PostgreSQL Database ('email_verification_otps')",
-        storagePersistence: "Distributed Persistent (Lolos Lintas Serverless Instance)",
+        storagePersistence: "Distributed Persistent (Persists Across Serverless Instances)",
         hashingAlgorithm: "Bcrypt (Hash stored, plain code sent directly to user email)",
         bindingTypes: ["ADMIN_VERIFY", "REVIEW_VERIFY", "PASSWORD_RESET"],
       },
@@ -66,49 +66,49 @@ export async function GET(request: NextRequest) {
         limits: [
           {
             name: "Admin Login Attempts",
-            limit: "10 percobaan per 15 menit per IP",
+            limit: "10 attempts per 15 minutes per IP",
             storage: "In-Memory Sliding Window (Container)",
             actionOnLimit: "HTTP 429 Too Many Requests",
           },
           {
             name: "OTP Verification Brute-Force",
-            limit: "Maksimal 5 kali percobaan kode salah",
+            limit: "Maximum 5 failed code attempts",
             storage: "PostgreSQL Database (Global Persistent)",
-            actionOnLimit: "Kode OTP dihanguskan (verified=true, wajib minta baru)",
+            actionOnLimit: "OTP code invalidated (verified=true, new request required)",
           },
           {
             name: "OTP Resend Cooldown",
-            limit: "1 permintaan per 60 detik per email",
+            limit: "1 request per 60 seconds per email",
             storage: "PostgreSQL Database (Global Persistent)",
             actionOnLimit: "HTTP 400 Cooldown Error",
           },
           {
             name: "Customer Review Submission",
-            limit: "5 ulasan per 15 menit per IP",
+            limit: "5 reviews per 15 minutes per IP",
             storage: "In-Memory Sliding Window (Container)",
             actionOnLimit: "HTTP 429 Too Many Requests",
           },
           {
             name: "Booking Reservations",
-            limit: "15 reservasi per 10 menit per IP",
+            limit: "15 reservations per 10 minutes per IP",
             storage: "In-Memory Sliding Window (Container)",
             actionOnLimit: "HTTP 429 Too Many Requests",
           },
           {
             name: "Contact Inquiries",
-            limit: "10 pesan per 10 menit per IP",
+            limit: "10 messages per 10 minutes per IP",
             storage: "In-Memory Sliding Window (Container)",
             actionOnLimit: "HTTP 429 Too Many Requests",
           },
         ],
         serverlessNote:
-          "Batas percobaan brute-force OTP dan cooldown resend tersimpan permanen di PostgreSQL Supabase sehingga 100% aman lintas kontainer serverless Vercel. Rate limiter IP berbasis in-memory bertindak sebagai filter lapis pertama untuk mencegah banjir lalu lintas berlebihan.",
+          "OTP brute-force attempt limits and resend cooldowns are stored permanently in Supabase PostgreSQL so they remain 100% secure across Vercel serverless containers. The in-memory IP rate limiter acts as a first-layer filter to prevent excessive traffic floods.",
       },
       dataProtection: {
-        customerEmailPrivacy: "Redaksi otomatis pada endpoint ulasan publik (Data Minimization)",
-        reviewCustomerBadge: "Hanya aktif untuk reservasi berstatus CONFIRMED atau COMPLETED",
-        auditTrail: "Pencatatan otomatis seluruh aksi mutasi administrator di database ('audit_logs')",
-        roleHierarchy: "SUPER_ADMIN (Penuh) vs ADMIN (Operasional Tanpa Kelola Akun/Sistem)",
+        customerEmailPrivacy: "Automatic redaction on public review endpoints (Data Minimization)",
+        reviewCustomerBadge: "Only active for reservations with CONFIRMED or COMPLETED status",
+        auditTrail: "Automatic logging of all administrator mutation actions in database ('audit_logs')",
+        roleHierarchy: "SUPER_ADMIN (Full Access) vs ADMIN (Operational Without Account/System Management)",
       },
     };
 
@@ -119,7 +119,7 @@ export async function GET(request: NextRequest) {
   } catch (error: any) {
     console.error("GET /api/admin/security error:", error);
     return NextResponse.json(
-      { success: false, error: "Gagal memuat konfigurasi keamanan." },
+      { success: false, error: "Failed to load security configuration." },
       { status: 500 }
     );
   }

@@ -235,23 +235,23 @@ export default function AdminUsersPage() {
 
   const handleDelete = async (u: AdminUser) => {
     if (currentAdmin?.id === u.id) {
-      alert("Anda tidak dapat menghapus akun administrator Anda sendiri.");
+      alert("You cannot delete your own administrator account.");
       return;
     }
 
-    if (!confirm(`Apakah Anda yakin ingin menghapus administrator "${u.name}" (@${u.username || u.email})? Aksi ini akan dicatat dalam audit log.`)) {
+    if (!confirm(`Are you sure you want to delete administrator "${u.name}" (@${u.username || u.email})? This action will be recorded in the audit log.`)) {
       return;
     }
 
     try {
       const res = await fetch(`/api/users/${u.id}`, { method: "DELETE" });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Gagal menghapus akun.");
+      if (!res.ok) throw new Error(data.error || "Failed to delete account.");
 
       setUsers((prev) => prev.filter((item) => item.id !== u.id));
-      showToast(`Administrator '${u.name}' berhasil dihapus.`);
+      showToast(`Administrator '${u.name}' has been deleted.`);
     } catch (err: any) {
-      alert(err.message || "Gagal menghapus akun.");
+      alert(err.message || "Failed to delete account.");
     }
   };
 
@@ -281,16 +281,16 @@ export default function AdminUsersPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Gagal mengirimkan kode OTP.");
+      if (!res.ok) throw new Error(data.error || "Failed to send OTP code.");
 
       setOtpSuccess(
         data.devCode
-          ? `[Simulation Code: ${data.devCode}] Kode OTP 6 digit telah dibuat. Berlaku 10 menit.`
-          : `Kode OTP verifikasi telah dikirim ke ${otpModalUser.email}.`
+          ? `[Simulation Code: ${data.devCode}] 6-digit OTP code generated. Valid for 10 minutes.`
+          : `Verification OTP code has been sent to ${otpModalUser.email}.`
       );
       setOtpCooldown(60);
     } catch (e: any) {
-      setOtpError(e.message || "Gagal mengirimkan kode OTP.");
+      setOtpError(e.message || "Failed to send OTP code.");
     } finally {
       setOtpLoading(false);
     }
@@ -316,7 +316,7 @@ export default function AdminUsersPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Kode OTP tidak valid.");
+      if (!res.ok) throw new Error(data.error || "Invalid OTP code.");
 
       // Update state
       setUsers((prev) =>
@@ -325,10 +325,10 @@ export default function AdminUsersPage() {
         )
       );
 
-      showToast(`Email ${otpModalUser.email} berhasil diverifikasi secara resmi!`);
+      showToast(`Email ${otpModalUser.email} has been officially verified!`);
       setOtpModalUser(null);
     } catch (e: any) {
-      setOtpError(e.message || "Gagal memverifikasi OTP.");
+      setOtpError(e.message || "Failed to verify OTP.");
     } finally {
       setOtpLoading(false);
     }
@@ -371,10 +371,10 @@ export default function AdminUsersPage() {
           <ShieldAlert className="w-7 h-7" />
         </div>
         <h3 className="text-lg font-black text-slate-900 dark:text-white">
-          Akses Khusus Super Admin
+          Super Admin Access Only
         </h3>
         <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-          Halaman pengelolaan akun administrator dan penetapan peran hanya dapat diakses oleh akun dengan wewenang Super Admin resmi.
+          The administrator account and role management page can only be accessed by an authorized Super Admin account.
         </p>
       </div>
     );
@@ -407,14 +407,14 @@ export default function AdminUsersPage() {
         ]}
         categoryTag="System & Security"
         title="Admin Accounts & Roles Management"
-        description="Kelola akun Super Admin & Admin, peran wewenang, verifikasi email OTP, serta kebijakan keamanan sistem."
+        description="Manage Super Admin & Admin accounts, role permissions, email OTP verification, and system security policies."
         action={
           <button
             onClick={openCreateDrawer}
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-sm hover:shadow transition cursor-pointer"
           >
             <Plus className="w-4 h-4" />
-            <span>Tambah Administrator Baru</span>
+            <span>Add New Administrator</span>
           </button>
         }
       />
@@ -422,7 +422,7 @@ export default function AdminUsersPage() {
       {/* Metrics Row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <AdminStatsCard
-          title="Total Administrator"
+          title="Total Administrators"
           value={totalCount}
           subtitle="Super Admin & Admin"
           theme="slate"
@@ -431,21 +431,21 @@ export default function AdminUsersPage() {
         <AdminStatsCard
           title="Super Admin"
           value={superAdminCount}
-          subtitle="Wewenang penuh sistem"
+          subtitle="Full system authority"
           theme="amber"
           icon={<Shield className="w-5 h-5" />}
         />
         <AdminStatsCard
-          title="Admin Operasional"
+          title="Operational Admin"
           value={adminCount}
-          subtitle="Katalog, tur, & moderasi"
+          subtitle="Catalog, tours, & moderation"
           theme="teal"
           icon={<UserCheck className="w-5 h-5" />}
         />
         <AdminStatsCard
-          title="Akun Aktif"
+          title="Active Accounts"
           value={activeCount}
-          subtitle={`${users.filter((u) => !u.isActive).length} akun dinonaktifkan`}
+          subtitle={`${users.filter((u) => !u.isActive).length} accounts deactivated`}
           theme="emerald"
           icon={<KeyRound className="w-5 h-5" />}
         />
@@ -457,7 +457,7 @@ export default function AdminUsersPage() {
           <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
-            placeholder="Cari berdasarkan nama, username, email, telepon..."
+            placeholder="Search by name, username, email, phone..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500"
@@ -471,7 +471,7 @@ export default function AdminUsersPage() {
             onChange={(e) => setRoleFilter(e.target.value as any)}
             className="px-3 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 focus:outline-none focus:border-amber-500 cursor-pointer"
           >
-            <option value="all">Semua Peran</option>
+            <option value="all">All Roles</option>
             <option value="SUPER_ADMIN">Super Admin Only</option>
             <option value="ADMIN">Admin Only</option>
           </select>
@@ -479,9 +479,9 @@ export default function AdminUsersPage() {
           {/* Status Tabs */}
           <div className="flex items-center gap-1">
             {[
-              { id: "all", label: "Semua" },
-              { id: "active", label: "Aktif" },
-              { id: "inactive", label: "Nonaktif" },
+              { id: "all", label: "All" },
+              { id: "active", label: "Active" },
+              { id: "inactive", label: "Inactive" },
             ].map((tab) => {
               const isActiveTab = statusFilter === tab.id;
               return (
@@ -510,7 +510,7 @@ export default function AdminUsersPage() {
           </div>
         ) : filteredUsers.length === 0 ? (
           <div className="py-20 text-center text-xs text-slate-400">
-            Tidak ada akun administrator yang sesuai dengan kriteria pencarian.
+            No administrator accounts match the search criteria.
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -518,12 +518,12 @@ export default function AdminUsersPage() {
               <thead>
                 <tr className="bg-slate-50/80 dark:bg-slate-800/60 border-b border-slate-200/80 dark:border-slate-800 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                   <th className="py-3.5 px-5">Administrator</th>
-                  <th className="py-3.5 px-5">Peran</th>
-                  <th className="py-3.5 px-5">Verifikasi Email</th>
-                  <th className="py-3.5 px-5">Kontak</th>
+                  <th className="py-3.5 px-5">Role</th>
+                  <th className="py-3.5 px-5">Email Verification</th>
+                  <th className="py-3.5 px-5">Contact</th>
                   <th className="py-3.5 px-5">Status</th>
-                  <th className="py-3.5 px-5">Dibuat</th>
-                  <th className="py-3.5 px-5 text-right">Aksi</th>
+                  <th className="py-3.5 px-5">Created</th>
+                  <th className="py-3.5 px-5 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -560,7 +560,7 @@ export default function AdminUsersPage() {
                               </span>
                               {isSelf && (
                                 <span className="px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-400 text-[10px] font-extrabold border border-amber-500/30">
-                                  Akun Anda
+                                  Your Account
                                 </span>
                               )}
                             </div>
@@ -604,18 +604,18 @@ export default function AdminUsersPage() {
                         {isVerified ? (
                           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800 text-[11px] font-bold">
                             <Check className="w-3 h-3" />
-                            <span>Terverifikasi</span>
+                            <span>Verified</span>
                           </span>
                         ) : (
                           <div className="flex items-center gap-2">
                             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 text-[10px] font-bold">
-                              Belum Terverifikasi
+                              Unverified
                             </span>
                             <button
                               onClick={() => openOtpModal(u)}
                               className="text-[10px] font-bold text-amber-600 hover:text-amber-700 dark:text-amber-400 underline cursor-pointer"
                             >
-                              Verifikasi OTP
+                              Verify OTP
                             </button>
                           </div>
                         )}
@@ -628,19 +628,19 @@ export default function AdminUsersPage() {
                             <span>{u.phone}</span>
                           </div>
                         ) : (
-                          <span className="text-slate-400 italic">Belum diisi</span>
+                          <span className="text-slate-400 italic">Not provided</span>
                         )}
                       </td>
 
                       <td className="py-4 px-5">
-                        <AdminBadge status={u.isActive ? "ACTIVE" : "CANCELLED"} label={u.isActive ? "Aktif" : "Nonaktif"} />
+                        <AdminBadge status={u.isActive ? "ACTIVE" : "CANCELLED"} label={u.isActive ? "Active" : "Inactive"} />
                       </td>
 
                       <td className="py-4 px-5 text-slate-500 font-medium">
                         <div className="flex items-center gap-1.5">
                           <Calendar className="w-3 h-3 text-slate-400" />
                           <span>
-                            {new Date(u.createdAt).toLocaleDateString("id-ID", {
+                            {new Date(u.createdAt).toLocaleDateString("en-US", {
                               day: "numeric",
                               month: "short",
                               year: "numeric",
@@ -661,7 +661,7 @@ export default function AdminUsersPage() {
                           <button
                             onClick={() => handleDelete(u)}
                             className="p-2 rounded-xl bg-red-50 hover:bg-red-100 dark:bg-red-950/40 dark:hover:bg-red-900/40 text-red-600 dark:text-red-400 inline-block transition cursor-pointer"
-                            title="Hapus administrator"
+                            title="Delete administrator"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -680,11 +680,11 @@ export default function AdminUsersPage() {
       <AdminDrawer
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
-        title={formMode === "create" ? "Tambah Administrator Baru" : "Edit Akun Administrator"}
+        title={formMode === "create" ? "Add New Administrator" : "Edit Administrator Account"}
         subtitle={
           formMode === "create"
-            ? "Buat kredensial login resmi bagi staf admin atau super admin baru."
-            : `Perbarui informasi profil dan wewenang untuk ${name || "administrator"}.`
+            ? "Create official login credentials for a new admin or super admin staff member."
+            : `Update profile details and permissions for ${name || "administrator"}.`
         }
         width="md"
         footer={
@@ -694,7 +694,7 @@ export default function AdminUsersPage() {
               onClick={() => setIsDrawerOpen(false)}
               className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 text-slate-700 dark:text-slate-300 font-semibold text-xs transition cursor-pointer"
             >
-              Batal
+              Cancel
             </button>
             <button
               type="submit"
@@ -703,7 +703,7 @@ export default function AdminUsersPage() {
               className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-sm flex items-center gap-1.5 transition cursor-pointer disabled:opacity-60"
             >
               <Save className="w-4 h-4" />
-              <span>{submitting ? "Menyimpan..." : formMode === "create" ? "Buat Akun" : "Simpan Perubahan"}</span>
+              <span>{submitting ? "Saving..." : formMode === "create" ? "Create Account" : "Save Changes"}</span>
             </button>
           </div>
         }
@@ -719,7 +719,7 @@ export default function AdminUsersPage() {
           {/* Username */}
           <div>
             <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 mb-1.5">
-              Username Administrator <span className="text-red-500">*</span>
+              Administrator Username <span className="text-red-500">*</span>
             </label>
             <div className="relative">
               <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-mono text-xs">@</span>
@@ -733,21 +733,21 @@ export default function AdminUsersPage() {
               />
             </div>
             <span className="text-[10px] text-slate-400 mt-1 block">
-              Digunakan untuk masuk ke panel admin. Huruf kecil, angka, dan garis bawah (_).
+              Used to sign in to the admin panel. Lowercase letters, numbers, and underscores (_) only.
             </span>
           </div>
 
           {/* Full Name */}
           <div>
             <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 mb-1.5">
-              Nama Lengkap <span className="text-red-500">*</span>
+              Full Name <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Siti Rahmawati"
+              placeholder="e.g. Sarah Johnson"
               className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500"
             />
           </div>
@@ -755,7 +755,7 @@ export default function AdminUsersPage() {
           {/* Email */}
           <div>
             <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 mb-1.5">
-              Alamat Email <span className="text-red-500">*</span>
+              Email Address <span className="text-red-500">*</span>
             </label>
             <input
               type="email"
@@ -766,21 +766,21 @@ export default function AdminUsersPage() {
               className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500"
             />
             <span className="text-[10px] text-slate-400 mt-1 block">
-              Digunakan untuk menerima notifikasi sistem & verifikasi OTP.
+              Used for receiving system notifications & OTP verification.
             </span>
           </div>
 
           {/* Role Selection */}
           <div>
             <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 mb-1.5">
-              Peran Administrator (Role)
+              Administrator Role
             </label>
             {formMode === "create" ? (
               <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between">
                 <div>
-                  <span className="text-xs font-extrabold text-slate-900 dark:text-white">Admin (Operasional)</span>
+                  <span className="text-xs font-extrabold text-slate-900 dark:text-white">Admin (Operational)</span>
                   <p className="text-[10px] text-slate-500 mt-0.5">
-                    Akun baru otomatis dibuat dengan peran Admin. Pembuatan Super Admin tambahan tidak diizinkan melalui form biasa.
+                    New accounts are automatically assigned the Admin role. Creating additional Super Admins through this form is restricted.
                   </p>
                 </div>
                 <span className="px-2 py-0.5 text-[10px] font-bold rounded bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30">
@@ -808,7 +808,7 @@ export default function AdminUsersPage() {
                     />
                   </div>
                   <span className="text-[10px] text-slate-500 dark:text-slate-400">
-                    Operasional tur, reservasi booking, ulasan, & pesan.
+                    Tour operations, bookings, reviews, & messages.
                   </span>
                 </label>
 
@@ -831,7 +831,7 @@ export default function AdminUsersPage() {
                     />
                   </div>
                   <span className="text-[10px] text-slate-500 dark:text-slate-400">
-                    Wewenang penuh, kelola akun admin, & audit log.
+                    Full authority, manage admin accounts, & audit logs.
                   </span>
                 </label>
               </div>
@@ -841,7 +841,7 @@ export default function AdminUsersPage() {
           {/* Phone */}
           <div>
             <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 mb-1.5">
-              Nomor WhatsApp / Telepon
+              WhatsApp / Phone Number
             </label>
             <input
               type="text"
@@ -857,10 +857,10 @@ export default function AdminUsersPage() {
             <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 mb-1.5">
               {formMode === "create" ? (
                 <>
-                  Kata Sandi <span className="text-red-500">*</span>
+                  Password <span className="text-red-500">*</span>
                 </>
               ) : (
-                "Ubah Kata Sandi (Opsional)"
+                "Change Password (Optional)"
               )}
             </label>
             <div className="relative">
@@ -870,14 +870,14 @@ export default function AdminUsersPage() {
                 required={formMode === "create"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder={formMode === "create" ? "Min. 6 karakter" : "Biarkan kosong jika tidak ingin mengubah"}
+                placeholder={formMode === "create" ? "Min. 6 characters" : "Leave blank to keep current password"}
                 className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500"
               />
             </div>
             <span className="text-[10px] text-slate-400 mt-1 block">
               {formMode === "create"
-                ? "Wajib diisi minimal 6 karakter."
-                : "Hanya diisi jika ingin mereset password akun ini."}
+                ? "Minimum 6 characters required."
+                : "Fill in only if you want to reset this account's password."}
             </span>
           </div>
 
@@ -885,7 +885,7 @@ export default function AdminUsersPage() {
           <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
             <div className="flex items-center gap-1.5 text-xs font-extrabold text-slate-800 dark:text-slate-200">
               <BellRing className="w-3.5 h-3.5 text-amber-500" />
-              <span>Preferensi Notifikasi Email (Super Admin Only)</span>
+              <span>Email Notification Preferences (Super Admin Only)</span>
             </div>
             <div className="grid grid-cols-2 gap-2 pt-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
               <label className="flex items-center gap-2 cursor-pointer">
@@ -895,7 +895,7 @@ export default function AdminUsersPage() {
                   onChange={(e) => setNotifPrefs({ ...notifPrefs, booking: e.target.checked })}
                   className="rounded text-amber-500"
                 />
-                <span>Reservasi Booking</span>
+                <span>Tour Bookings</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -913,7 +913,7 @@ export default function AdminUsersPage() {
                   onChange={(e) => setNotifPrefs({ ...notifPrefs, review: e.target.checked })}
                   className="rounded text-amber-500"
                 />
-                <span>Ulasan Wisatawan</span>
+                <span>Customer Reviews</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -922,7 +922,7 @@ export default function AdminUsersPage() {
                   onChange={(e) => setNotifPrefs({ ...notifPrefs, contact: e.target.checked })}
                   className="rounded text-amber-500"
                 />
-                <span>Pesan Kontak Masuk</span>
+                <span>Incoming Inquiries</span>
               </label>
             </div>
           </div>
@@ -938,9 +938,9 @@ export default function AdminUsersPage() {
                   className="w-4 h-4 rounded text-amber-500 focus:ring-amber-500"
                 />
                 <div>
-                  <span className="text-xs font-bold text-slate-900 dark:text-white block">Status Akun Aktif</span>
+                  <span className="text-xs font-bold text-slate-900 dark:text-white block">Active Account Status</span>
                   <span className="text-[10px] text-slate-500 dark:text-slate-400 block">
-                    Jika dinonaktifkan, akun ini tidak dapat masuk ke panel admin.
+                    If deactivated, this account cannot sign in to the admin panel.
                   </span>
                 </div>
               </label>
@@ -960,7 +960,7 @@ export default function AdminUsersPage() {
                 </div>
                 <div>
                   <h3 className="text-sm font-black text-slate-900 dark:text-white">
-                    Verifikasi Email Administrator
+                    Administrator Email Verification
                   </h3>
                   <p className="text-[11px] text-slate-400">{otpModalUser.email}</p>
                 </div>
@@ -989,7 +989,7 @@ export default function AdminUsersPage() {
             <form onSubmit={handleVerifyOtp} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                  Masukkan 6 Digit Kode OTP
+                  Enter 6-Digit OTP Code
                 </label>
                 <input
                   type="text"
@@ -1011,7 +1011,7 @@ export default function AdminUsersPage() {
                   className="text-amber-600 hover:text-amber-700 dark:text-amber-400 font-bold disabled:opacity-50 cursor-pointer flex items-center gap-1"
                 >
                   <Send className="w-3.5 h-3.5" />
-                  <span>{otpCooldown > 0 ? `Kirim ulang (${otpCooldown}s)` : "Kirim Kode OTP"}</span>
+                  <span>{otpCooldown > 0 ? `Resend (${otpCooldown}s)` : "Send OTP Code"}</span>
                 </button>
               </div>
 
@@ -1021,7 +1021,7 @@ export default function AdminUsersPage() {
                   onClick={() => setOtpModalUser(null)}
                   className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs"
                 >
-                  Tutup
+                  Close
                 </button>
                 <button
                   type="submit"
@@ -1029,7 +1029,7 @@ export default function AdminUsersPage() {
                   className="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition disabled:opacity-50 flex items-center gap-1.5 cursor-pointer"
                 >
                   {otpLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
-                  <span>Verifikasi Sekarang</span>
+                  <span>Verify Now</span>
                 </button>
               </div>
             </form>

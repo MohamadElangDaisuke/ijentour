@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ChevronDown, Menu, Search, X } from 'lucide-react'
@@ -22,6 +22,7 @@ export default function Navbar() {
   const { openBookingModal } = useBookingModal()
   const navRef = useRef<HTMLElement>(null)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const handleCloseSidebar = useCallback(() => setIsSidebarOpen(false), [])
 
   // Track scroll position to toggle transparency & hide/show motion effect
   useMotionValueEvent(scrollY, 'change', (current) => {
@@ -335,7 +336,7 @@ export default function Navbar() {
       {/* Mobile Drawer Sidebar */}
       <Sidebar
         isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
+        onClose={handleCloseSidebar}
       />
     </>
   )

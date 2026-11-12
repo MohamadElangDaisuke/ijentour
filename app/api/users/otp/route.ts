@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
     const adminSession = await requireAdminSession(request);
     if (!adminSession) {
       return NextResponse.json(
-        { success: false, error: "Akses ditolak. Silakan masuk terlebih dahulu." },
+        { success: false, error: "Access denied. Please sign in first." },
         { status: 401 }
       );
     }
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "Terlalu banyak permintaan verifikasi OTP. Mohon tunggu beberapa saat sebelum mencoba lagi.",
+          error: "Too many OTP verification requests. Please wait a moment before trying again.",
         },
         { status: 429 }
       );
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json().catch(() => null);
     if (!body || !body.action) {
       return NextResponse.json(
-        { success: false, error: "Action 'send' atau 'verify' wajib disertakan." },
+        { success: false, error: "Action 'send' or 'verify' is required." },
         { status: 400 }
       );
     }
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     if (action === "send") {
       if (!email) {
         return NextResponse.json(
-          { success: false, error: "Alamat email wajib diisi." },
+          { success: false, error: "Email address is required." },
           { status: 400 }
         );
       }
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error: "Akses ditolak. Anda hanya berwenang meminta kode OTP untuk alamat email akun Anda sendiri.",
+            error: "Access denied. You are only authorized to request an OTP code for your own account email.",
           },
           { status: 403 }
         );
@@ -163,7 +163,7 @@ export async function POST(request: NextRequest) {
 
       const response = NextResponse.json({
         success: true,
-        message: `Email '${updatedUser.email}' berhasil diverifikasi secara resmi! Hak akses administratif penuh telah aktif.`,
+        message: `Email '${updatedUser.email}' has been officially verified! Full administrative access is now active.`,
         user: updatedUser,
       });
 
@@ -193,13 +193,13 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(
-      { success: false, error: "Action tidak dikenal." },
+      { success: false, error: "Unknown action." },
       { status: 400 }
     );
   } catch (error: any) {
     console.error("POST /api/users/otp error:", error);
     return NextResponse.json(
-      { success: false, error: "Terjadi kesalahan internal pada pemrosesan OTP." },
+      { success: false, error: "An internal error occurred while processing the OTP." },
       { status: 500 }
     );
   }

@@ -139,10 +139,7 @@ export async function POST(request: Request) {
     // 3. Query Booking by Code
     const booking = await prisma.booking.findFirst({
       where: {
-        bookingCode: {
-          equals: bookingCode.trim(),
-          mode: "insensitive",
-        },
+        bookingCode: bookingCode.trim(),
       },
     });
 

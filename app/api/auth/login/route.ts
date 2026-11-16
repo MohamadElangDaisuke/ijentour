@@ -36,13 +36,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Lookup user by unique username (case-insensitive)
+    // Lookup user by username OR email (compatible with SQLite and PostgreSQL)
     const user = await (prisma as any).user.findFirst({
       where: {
-        username: {
-          equals: username,
-          mode: "insensitive",
-        },
+        OR: [
+          { username: username },
+          { email: username },
+        ],
       },
     });
 

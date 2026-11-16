@@ -124,8 +124,8 @@ export async function LocalGuidesSection() {
       where: { isActive: true },
       orderBy: { sortOrder: "asc" },
     });
-  } catch (error) {
-    console.warn("Could not load staff from database, using fallback:", error);
+  } catch (error: any) {
+    console.warn("Could not load staff from database, using fallback:", error?.message || "Database connection error");
   }
 
   const displayGuides = guides && guides.length > 0 ? guides : localGuides;

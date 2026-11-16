@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
         const matchingBooking = await prisma.booking.findFirst({
           where: {
             OR: [
-              ...(cleanEmail ? [{ customerEmail: { equals: cleanEmail, mode: "insensitive" as const } }] : []),
+              ...(cleanEmail ? [{ customerEmail: cleanEmail }] : []),
               ...(cleanPhone
                 ? [{ customerPhone: { contains: cleanPhone } }, { whatsappNumber: { contains: cleanPhone } }]
                 : []),

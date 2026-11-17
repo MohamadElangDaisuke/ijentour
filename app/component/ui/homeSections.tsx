@@ -6,6 +6,8 @@ import {
   UserRound,
 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import { serializeTravelResource } from "@/lib/travel-resources-validation";
+import type { TravelResourceDTO } from "@/lib/travel-resources-defaults";
 
 const interests = [
   {
@@ -191,7 +193,18 @@ export async function LocalGuidesSection() {
 
 
 
-export function TravelResourcesSection() {
+export async function TravelResourcesSection() {
+  let resources: TravelResourceDTO[] = [];
+  try {
+    const rows = await prisma.travelResource.findMany({
+      where: { isActive: true },
+      orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
+    });
+    resources = rows.map(serializeTravelResource);
+  } catch (error) {
+    console.error("[TravelResourcesSection] Failed to load from database, using defaults:", error);
+  }
+
   return (
     <section
       id="travel-resources"
@@ -209,7 +222,7 @@ export function TravelResourcesSection() {
           </p>
         </div>
 
-        <TravelResourcesInteractive />
+        <TravelResourcesInteractive resources={resources} />
       </div>
     </section>
   );

@@ -368,7 +368,7 @@ export default function DestinationForm({
               </div>
             </div>
 
-            <label className="flex items-start gap-3 p-3.5 rounded-2xl border border-secondary-200 bg-secondary-50 hover:bg-primary-50/40 cursor-pointer transition">
+            <label className="flex items-start gap-3 p-3.5 rounded-2xl border border-secondary-200 dark:border-border bg-secondary-50 hover:bg-primary-50/40 dark:hover:bg-primary-500/10 cursor-pointer transition">
               <input
                 type="checkbox"
                 checked={isFeatured}

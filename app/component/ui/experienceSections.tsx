@@ -45,7 +45,7 @@ export default function ExperienceSections() {
             return (
               <div
                 key={stepItem.step}
-                className="overflow-hidden rounded-2xl border border-secondary-200/80 bg-secondary-50/70 shadow-2xs transition-all duration-200"
+                className="overflow-hidden rounded-2xl border border-secondary-200/80 dark:border-border bg-secondary-50/70 dark:bg-surface-secondary shadow-2xs transition-all duration-200"
               >
                 <button
                   type="button"
@@ -62,8 +62,8 @@ export default function ExperienceSections() {
                     </span>
                   </div>
                   <div
-                    className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-secondary-200/70 transition-transform duration-200 ${
-                      isOpen ? "rotate-180 bg-primary-500 text-secondary-950" : "text-secondary-700"
+                    className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-secondary-200/70 dark:bg-muted transition-transform duration-200 ${
+                      isOpen ? "rotate-180 bg-primary-500 dark:bg-primary-500 text-secondary-950 dark:text-secondary-950" : "text-secondary-700 dark:text-secondary-200"
                     }`}
                   >
                     <ChevronDown className="w-4 h-4" />

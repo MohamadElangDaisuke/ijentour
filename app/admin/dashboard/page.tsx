@@ -686,7 +686,7 @@ export default function AdminDashboardPage() {
               </div>
               <Link
                 href="/admin/bookings"
-                className="px-3.5 py-1.5 rounded-xl border border-slate-200 hover:border-amber-400 hover:bg-amber-50/50 text-slate-700 hover:text-amber-900 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+                className="px-3.5 py-1.5 rounded-xl border border-slate-200 dark:border-border hover:border-amber-400 hover:bg-amber-50/50 dark:hover:bg-amber-500/10 text-slate-700 dark:text-secondary-200 hover:text-amber-900 dark:hover:text-primary-300 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
               >
                 <span>View All</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -708,7 +708,7 @@ export default function AdminDashboardPage() {
                     <th className="pb-3 text-right pr-2">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 dark:divide-border">
                   {recentBookings.length > 0 ? (
                     recentBookings.map((b) => {
                       const customerInitials = b.customerName
@@ -727,7 +727,7 @@ export default function AdminDashboardPage() {
                       return (
                         <tr
                           key={b.id}
-                          className="hover:bg-slate-50/80 transition cursor-pointer group"
+                          className="hover:bg-slate-50/80 dark:hover:bg-surface-secondary/70 transition cursor-pointer group"
                           onClick={() => setActiveBooking(b)}
                         >
                           {/* Booking ID */}
@@ -1024,12 +1024,12 @@ export default function AdminDashboardPage() {
                 </span>
               </div>
 
-              <div className="flex items-center justify-between p-2 rounded-xl bg-amber-50/60 border border-amber-200/40">
-                <span className="flex items-center gap-2 text-amber-950 font-semibold">
+              <div className="flex items-center justify-between p-2 rounded-xl bg-amber-50/60 dark:bg-amber-500/15 border border-amber-200/40 dark:border-amber-500/30">
+                <span className="flex items-center gap-2 text-amber-950 dark:text-amber-200 font-semibold">
                   <span className="w-2 h-2 rounded-full bg-[#FBA102] animate-pulse" />
                   Pending Confirmation
                 </span>
-                <span className="font-extrabold text-amber-950">
+                <span className="font-extrabold text-amber-950 dark:text-amber-200">
                   {stats.pendingBookings}
                 </span>
               </div>
@@ -1071,7 +1071,7 @@ export default function AdminDashboardPage() {
                 popularDestinations.map((dest) => (
                   <div
                     key={dest.id}
-                    className="flex items-center justify-between p-2 rounded-xl bg-slate-50 hover:bg-slate-100/80 border border-slate-100 transition group"
+                    className="flex items-center justify-between p-2 rounded-xl bg-slate-50 hover:bg-slate-100/80 dark:hover:bg-muted border border-slate-100 dark:border-border transition group"
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       {/* Image Thumbnail */}

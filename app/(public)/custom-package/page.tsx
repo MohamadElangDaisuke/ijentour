@@ -365,12 +365,12 @@ function CustomPackageBuilderContent() {
       {/* TOUR ASSISTANT PREFILL BANNER */}
       {loadedFromAssistant && (
         <div className="max-w-5xl mx-auto px-4 -mt-2 mb-4 relative z-30">
-          <div className="p-4 rounded-2xl bg-amber-500/15 border border-amber-500/30 backdrop-blur-sm text-secondary-950 flex items-center justify-between gap-3 shadow-md animate-fade-in">
+          <div className="p-4 rounded-2xl bg-amber-500/15 border border-amber-500/30 backdrop-blur-sm text-secondary-950 dark:text-foreground flex items-center justify-between gap-3 shadow-md animate-fade-in">
             <div className="flex items-center gap-3">
-              <Sparkles className="w-5 h-5 text-amber-600 shrink-0" />
+              <Sparkles className="w-5 h-5 text-amber-600 dark:text-primary-400 shrink-0" />
               <p className="text-xs sm:text-sm font-bold">
                 ✨ Synchronized with Ijen Tour Assistant:
-                <span className="font-normal text-secondary-700 ml-1">
+                <span className="font-normal text-secondary-700 dark:text-muted-foreground ml-1">
                   Your destination, date, transport, and participant preferences have been prefilled into the custom builder.
                 </span>
               </p>
@@ -378,7 +378,7 @@ function CustomPackageBuilderContent() {
             <button
               type="button"
               onClick={() => setLoadedFromAssistant(false)}
-              className="text-secondary-500 hover:text-secondary-900 text-xs font-bold px-2 py-1 rounded-lg hover:bg-white/60 transition cursor-pointer shrink-0"
+              className="text-secondary-500 dark:text-muted-foreground hover:text-secondary-900 dark:hover:text-foreground text-xs font-bold px-2 py-1 rounded-lg hover:bg-white/60 dark:hover:bg-white/10 transition cursor-pointer shrink-0"
             >
               Dismiss
             </button>
@@ -388,7 +388,7 @@ function CustomPackageBuilderContent() {
 
       {/* STEPPER PROGRESS INDICATOR */}
       <div className="max-w-5xl mx-auto px-4 -mt-6 relative z-20">
-        <div className="bg-white rounded-3xl p-4 sm:p-6 shadow-xl border border-secondary-200">
+        <div className="bg-surface rounded-3xl p-4 sm:p-6 shadow-xl border border-border">
           <div className="grid grid-cols-4 gap-2 text-center text-xs">
             {[
               { num: 1, label: "Destinations", icon: MapPin },
@@ -406,10 +406,10 @@ function CustomPackageBuilderContent() {
                   onClick={() => setCurrentStep(step.num)}
                   className={`flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-2.5 py-2 px-1 rounded-2xl transition cursor-pointer ${
                     isCurrent
-                      ? "bg-secondary-950 text-white font-black shadow-sm"
+                      ? "bg-secondary-950 dark:bg-primary-500/15 dark:border dark:border-primary-500/50 text-white dark:text-primary-300 font-black shadow-sm"
                       : isDone
-                      ? "bg-emerald-50 text-emerald-800 font-bold"
-                      : "bg-secondary-50 text-secondary-500 font-medium hover:bg-secondary-100"
+                      ? "bg-emerald-50 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 font-bold"
+                      : "bg-surface-secondary text-muted-foreground font-medium hover:bg-muted"
                   }`}
                 >
                   <div
@@ -418,7 +418,7 @@ function CustomPackageBuilderContent() {
                         ? "bg-primary-500 text-secondary-950 font-black"
                         : isDone
                         ? "bg-emerald-500 text-white"
-                        : "bg-secondary-200 text-secondary-700"
+                        : "bg-secondary-200 dark:bg-muted text-secondary-700 dark:text-secondary-200"
                     }`}
                   >
                     {isDone ? <Check className="w-3.5 h-3.5" /> : step.num}
@@ -434,8 +434,8 @@ function CustomPackageBuilderContent() {
       {/* ERROR BANNER */}
       {errorMsg && (
         <div className="max-w-5xl mx-auto px-4 mt-6">
-          <div className="p-4 rounded-2xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-3">
-            <AlertCircle className="w-5 h-5 shrink-0 text-red-600" />
+          <div className="p-4 rounded-2xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800/60 text-red-700 dark:text-red-300 text-xs flex items-center gap-3">
+            <AlertCircle className="w-5 h-5 shrink-0 text-red-600 dark:text-red-400" />
             <span className="font-semibold">{errorMsg}</span>
           </div>
         </div>
@@ -447,21 +447,21 @@ function CustomPackageBuilderContent() {
         {/* STEP 1: SELECT DESTINATIONS */}
         {/* ========================================================= */}
         {currentStep === 1 && (
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200 shadow-sm space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b border-secondary-100">
+          <div className="bg-surface rounded-3xl p-6 sm:p-8 border border-border shadow-sm space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b border-border">
               <div>
-                <span className="text-[11px] font-black uppercase tracking-wider text-primary-600">
+                <span className="text-[11px] font-black uppercase tracking-wider text-primary-600 dark:text-primary-400">
                   Step 1 of 4
                 </span>
-                <h2 className="text-2xl font-black text-secondary-950">
+                <h2 className="text-2xl font-black text-foreground">
                   Choose Your Destinations
                 </h2>
-                <p className="text-xs text-secondary-600 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   Select one or multiple destinations you want to explore during your private trip.
                 </p>
               </div>
-              <div className="inline-flex items-center gap-2 bg-primary-50 text-primary-900 border border-primary-200 px-3.5 py-1.5 rounded-full text-xs font-bold shrink-0 self-start sm:self-auto">
-                <CheckCircle2 className="w-4 h-4 text-primary-600" />
+              <div className="inline-flex items-center gap-2 bg-primary-50 dark:bg-primary-500/15 text-primary-900 dark:text-primary-300 border border-primary-200 dark:border-primary-500/35 px-3.5 py-1.5 rounded-full text-xs font-bold shrink-0 self-start sm:self-auto">
+                <CheckCircle2 className="w-4 h-4 text-primary-600 dark:text-primary-400" />
                 <span>{selectedDestIds.length} Selected</span>
               </div>
             </div>
@@ -478,12 +478,12 @@ function CustomPackageBuilderContent() {
                       onClick={() => toggleDestination(dest.id)}
                       className={`group relative rounded-2xl border p-4 transition-all cursor-pointer overflow-hidden flex flex-col justify-between ${
                         isSelected
-                          ? "border-primary-500 bg-primary-50/20 ring-2 ring-primary-500/20 shadow-md"
-                          : "border-secondary-200 bg-white hover:border-secondary-300 hover:shadow-xs"
+                          ? "border-primary-500 bg-primary-50/20 dark:bg-primary-500/12 ring-2 ring-primary-500/20 dark:ring-primary-500/30 shadow-md"
+                          : "border-border bg-white dark:bg-surface-secondary hover:border-secondary-300 dark:hover:border-primary-400/50 hover:shadow-xs"
                       }`}
                     >
                       <div>
-                        <div className="relative aspect-16/10 rounded-xl overflow-hidden mb-3 bg-secondary-100">
+                        <div className="relative aspect-16/10 rounded-xl overflow-hidden mb-3 bg-muted">
                           <img
                             src={dest.image || "/images/pkg-bluefire.png"}
                             alt={dest.name}
@@ -499,27 +499,27 @@ function CustomPackageBuilderContent() {
                             className={`absolute top-2.5 right-2.5 w-6 h-6 rounded-full flex items-center justify-center transition ${
                               isSelected
                                 ? "bg-primary-500 text-secondary-950 font-black shadow-md scale-110"
-                                : "bg-white/90 text-secondary-400"
+                                : "bg-white/90 dark:bg-surface/90 text-secondary-400 dark:text-muted-foreground border border-transparent dark:border-border"
                             }`}
                           >
                             <Check className="w-3.5 h-3.5" />
                           </div>
                         </div>
 
-                        <h3 className="font-extrabold text-secondary-950 text-base leading-snug mb-1 group-hover:text-primary-600 transition">
+                        <h3 className="font-extrabold text-foreground text-base leading-snug mb-1 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition">
                           {dest.name}
                         </h3>
-                        <p className="text-xs text-secondary-600 line-clamp-2 leading-relaxed">
+                        <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
                           {dest.description}
                         </p>
                       </div>
 
-                      <div className="mt-4 pt-3 border-t border-secondary-100 flex justify-end text-xs">
+                      <div className="mt-4 pt-3 border-t border-border/70 flex justify-end text-xs">
                         <span
                           className={`px-3 py-1.5 rounded-xl font-bold text-[11px] transition ${
                             isSelected
                               ? "bg-primary-500 text-secondary-950"
-                              : "bg-secondary-100 text-secondary-700 group-hover:bg-secondary-950 group-hover:text-white"
+                              : "bg-secondary-100 dark:bg-muted text-secondary-700 dark:text-secondary-200 group-hover:bg-secondary-950 dark:group-hover:bg-primary-500 group-hover:text-white dark:group-hover:text-secondary-950"
                           }`}
                         >
                           {isSelected ? "Selected ✓" : "Add to Trip"}
@@ -532,8 +532,8 @@ function CustomPackageBuilderContent() {
             )}
 
             {/* Step 1 Actions */}
-            <div className="pt-6 border-t border-secondary-100 flex justify-between items-center">
-              <span className="text-xs text-secondary-500">
+            <div className="pt-6 border-t border-border flex justify-between items-center gap-3">
+              <span className="text-xs text-muted-foreground">
                 Tip: You can combine mountain treks with safari savannas or tropical beaches.
               </span>
               <button
@@ -546,7 +546,7 @@ function CustomPackageBuilderContent() {
                   setErrorMsg("");
                   setCurrentStep(2);
                 }}
-                className="px-6 py-3 rounded-2xl bg-secondary-950 hover:bg-primary-500 hover:text-secondary-950 text-white font-extrabold text-xs transition shadow-md flex items-center gap-2 cursor-pointer"
+                className="px-6 py-3 rounded-2xl bg-secondary-950 dark:bg-primary-500 hover:bg-primary-500 dark:hover:bg-primary-400 hover:text-secondary-950 text-white dark:text-secondary-950 font-extrabold text-xs transition shadow-md flex items-center gap-2 cursor-pointer shrink-0"
               >
                 <span>Continue to Trip Setup</span>
                 <ArrowRight className="w-4 h-4" />
@@ -559,15 +559,15 @@ function CustomPackageBuilderContent() {
         {/* STEP 2: JOURNEY PARAMETERS & SETUP */}
         {/* ========================================================= */}
         {currentStep === 2 && (
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200 shadow-sm space-y-8">
-            <div className="pb-5 border-b border-secondary-100">
-              <span className="text-[11px] font-black uppercase tracking-wider text-primary-600">
+          <div className="bg-surface rounded-3xl p-6 sm:p-8 border border-border shadow-sm space-y-8">
+            <div className="pb-5 border-b border-border">
+              <span className="text-[11px] font-black uppercase tracking-wider text-primary-600 dark:text-primary-400">
                 Step 2 of 4
               </span>
-              <h2 className="text-2xl font-black text-secondary-950">
+              <h2 className="text-2xl font-black text-foreground">
                 Setup Travel Details & Services
               </h2>
-              <p className="text-xs text-secondary-600 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Configure your dates, participants, private vehicle charter, and guide preferences.
               </p>
             </div>
@@ -575,11 +575,11 @@ function CustomPackageBuilderContent() {
             {/* PART 1: DATE & PARTICIPANTS */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
-                <label className="block text-xs font-black uppercase tracking-wider text-secondary-950 mb-1.5">
+                <label className="block text-xs font-black uppercase tracking-wider text-foreground mb-1.5">
                   Departure Date <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-secondary-400">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground">
                     <Calendar className="w-4 h-4" />
                   </div>
                   <input
@@ -588,17 +588,17 @@ function CustomPackageBuilderContent() {
                     min={todayStr}
                     value={departureDate}
                     onChange={(e) => setDepartureDate(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 rounded-2xl text-xs font-semibold bg-secondary-50 border border-secondary-200 text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full pl-10 pr-4 py-3 rounded-2xl text-xs font-semibold bg-input border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-black uppercase tracking-wider text-secondary-950 mb-1.5">
+                <label className="block text-xs font-black uppercase tracking-wider text-foreground mb-1.5">
                   Number of Participants <span className="text-red-500">*</span>
                 </label>
                 <div className="relative flex items-center">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-secondary-400">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground">
                     <Users className="w-4 h-4" />
                   </div>
                   <input
@@ -609,20 +609,22 @@ function CustomPackageBuilderContent() {
                     onChange={(e) =>
                       setNumParticipants(Math.max(1, Math.min(50, Number(e.target.value) || 1)))
                     }
-                    className="w-full pl-10 pr-24 py-3 rounded-2xl text-xs font-bold bg-secondary-50 border border-secondary-200 text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full pl-10 pr-24 py-3 rounded-2xl text-xs font-bold bg-input border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
                   />
                   <div className="absolute right-2 flex items-center gap-1">
                     <button
                       type="button"
+                      aria-label="Decrease participants"
                       onClick={() => setNumParticipants((prev) => Math.max(1, prev - 1))}
-                      className="w-7 h-7 rounded-xl bg-secondary-200 hover:bg-secondary-300 text-secondary-800 flex items-center justify-center transition cursor-pointer"
+                      className="w-7 h-7 rounded-xl bg-secondary-200 dark:bg-muted hover:bg-secondary-300 dark:hover:bg-secondary-700 text-secondary-800 dark:text-foreground flex items-center justify-center transition cursor-pointer"
                     >
                       <Minus className="w-3 h-3" />
                     </button>
                     <button
                       type="button"
+                      aria-label="Increase participants"
                       onClick={() => setNumParticipants((prev) => Math.min(50, prev + 1))}
-                      className="w-7 h-7 rounded-xl bg-secondary-200 hover:bg-secondary-300 text-secondary-800 flex items-center justify-center transition cursor-pointer"
+                      className="w-7 h-7 rounded-xl bg-secondary-200 dark:bg-muted hover:bg-secondary-300 dark:hover:bg-secondary-700 text-secondary-800 dark:text-foreground flex items-center justify-center transition cursor-pointer"
                     >
                       <Plus className="w-3 h-3" />
                     </button>
@@ -633,7 +635,7 @@ function CustomPackageBuilderContent() {
 
             {/* PART 2: DURATION */}
             <div className="space-y-3">
-              <label className="block text-xs font-black uppercase tracking-wider text-secondary-950">
+              <label className="block text-xs font-black uppercase tracking-wider text-foreground">
                 Trip Duration & Schedule
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -645,18 +647,18 @@ function CustomPackageBuilderContent() {
                       onClick={() => setSelectedDurationId(dur.id)}
                       className={`p-4 rounded-2xl border transition cursor-pointer flex flex-col justify-between ${
                         isSelected
-                          ? "border-primary-500 bg-primary-50/30 ring-2 ring-primary-500/20"
-                          : "border-secondary-200 bg-secondary-50/50 hover:border-secondary-300"
+                          ? "border-primary-500 bg-primary-50/30 dark:bg-primary-500/15 ring-2 ring-primary-500/20 dark:ring-primary-500/35 shadow-sm"
+                          : "border-border bg-secondary-50/50 dark:bg-surface-secondary hover:border-secondary-300 dark:hover:border-secondary-600"
                       }`}
                     >
                       <div>
                         <div className="flex items-center justify-between mb-1">
-                          <span className="font-extrabold text-xs text-secondary-950">
+                          <span className="font-extrabold text-xs text-foreground">
                             {dur.name}
                           </span>
-                          {isSelected && <Check className="w-4 h-4 text-primary-600 font-bold" />}
+                          {isSelected && <Check className="w-4 h-4 text-primary-600 dark:text-primary-400 font-bold" />}
                         </div>
-                        <p className="text-[11px] text-secondary-600 leading-relaxed">
+                        <p className="text-[11px] text-muted-foreground leading-relaxed">
                           {dur.description}
                         </p>
                       </div>
@@ -668,7 +670,7 @@ function CustomPackageBuilderContent() {
 
             {/* PART 3: TRANSPORTATION */}
             <div className="space-y-3">
-              <label className="block text-xs font-black uppercase tracking-wider text-secondary-950">
+              <label className="block text-xs font-black uppercase tracking-wider text-foreground">
                 Private Transportation (Driver + Fuel Included)
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -680,20 +682,21 @@ function CustomPackageBuilderContent() {
                       onClick={() => setSelectedTransportId(trans.id)}
                       className={`p-4 rounded-2xl border transition cursor-pointer flex flex-col justify-between ${
                         isSelected
-                          ? "border-primary-500 bg-primary-50/30 ring-2 ring-primary-500/20"
-                          : "border-secondary-200 bg-secondary-50/50 hover:border-secondary-300"
+                          ? "border-primary-500 bg-primary-50/30 dark:bg-primary-500/15 ring-2 ring-primary-500/20 dark:ring-primary-500/35 shadow-sm"
+                          : "border-border bg-secondary-50/50 dark:bg-surface-secondary hover:border-secondary-300 dark:hover:border-secondary-600"
                       }`}
                     >
                       <div>
                         <div className="flex items-center justify-between mb-1">
-                          <span className="font-extrabold text-xs text-secondary-950">
+                          <span className="font-extrabold text-xs text-foreground">
                             {trans.name}
                           </span>
+                          {isSelected && <Check className="w-4 h-4 text-primary-600 dark:text-primary-400 font-bold" />}
                         </div>
-                        <span className="text-[10px] bg-secondary-200/80 text-secondary-700 px-2 py-0.5 rounded font-bold inline-block mb-1">
+                        <span className="text-[10px] bg-secondary-200/80 dark:bg-muted text-secondary-700 dark:text-secondary-200 px-2 py-0.5 rounded font-bold inline-block mb-1.5">
                           {trans.capacity}
                         </span>
-                        <p className="text-[11px] text-secondary-600 leading-relaxed">
+                        <p className="text-[11px] text-muted-foreground leading-relaxed">
                           {trans.description}
                         </p>
                       </div>
@@ -705,7 +708,7 @@ function CustomPackageBuilderContent() {
 
             {/* PART 4: GUIDE */}
             <div className="space-y-3">
-              <label className="block text-xs font-black uppercase tracking-wider text-secondary-950">
+              <label className="block text-xs font-black uppercase tracking-wider text-foreground">
                 Tour Guide & Assistant Service
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -717,18 +720,18 @@ function CustomPackageBuilderContent() {
                       onClick={() => setSelectedGuideId(guide.id)}
                       className={`p-4 rounded-2xl border transition cursor-pointer flex flex-col justify-between ${
                         isSelected
-                          ? "border-primary-500 bg-primary-50/30 ring-2 ring-primary-500/20"
-                          : "border-secondary-200 bg-secondary-50/50 hover:border-secondary-300"
+                          ? "border-primary-500 bg-primary-50/30 dark:bg-primary-500/15 ring-2 ring-primary-500/20 dark:ring-primary-500/35 shadow-sm"
+                          : "border-border bg-secondary-50/50 dark:bg-surface-secondary hover:border-secondary-300 dark:hover:border-secondary-600"
                       }`}
                     >
                       <div>
                         <div className="flex items-center justify-between mb-1">
-                          <span className="font-extrabold text-xs text-secondary-950">
+                          <span className="font-extrabold text-xs text-foreground">
                             {guide.name}
                           </span>
-                          {isSelected && <Check className="w-4 h-4 text-primary-600" />}
+                          {isSelected && <Check className="w-4 h-4 text-primary-600 dark:text-primary-400" />}
                         </div>
-                        <p className="text-[11px] text-secondary-600 leading-relaxed">
+                        <p className="text-[11px] text-muted-foreground leading-relaxed">
                           {guide.description}
                         </p>
                       </div>
@@ -740,7 +743,7 @@ function CustomPackageBuilderContent() {
 
             {/* PART 5: OPERATIONAL ADDONS */}
             <div className="space-y-3">
-              <label className="block text-xs font-black uppercase tracking-wider text-secondary-950">
+              <label className="block text-xs font-black uppercase tracking-wider text-foreground">
                 Optional Facilities & Gear Add-ons
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -752,24 +755,24 @@ function CustomPackageBuilderContent() {
                       onClick={() => toggleAddon(addon.id)}
                       className={`p-3.5 rounded-2xl border transition cursor-pointer flex items-start gap-3 ${
                         isSelected
-                          ? "border-primary-500 bg-primary-50/20"
-                          : "border-secondary-200 bg-secondary-50/40 hover:border-secondary-300"
+                          ? "border-primary-500 bg-primary-50/20 dark:bg-primary-500/15 ring-1 ring-primary-500/30"
+                          : "border-border bg-secondary-50/40 dark:bg-surface-secondary hover:border-secondary-300 dark:hover:border-secondary-600"
                       }`}
                     >
                       <div
                         className={`w-5 h-5 rounded-lg flex items-center justify-center mt-0.5 shrink-0 transition ${
                           isSelected
                             ? "bg-primary-500 text-secondary-950 font-bold"
-                            : "border border-secondary-300 bg-white"
+                            : "border border-secondary-300 dark:border-secondary-600 bg-white dark:bg-input"
                         }`}
                       >
                         {isSelected && <Check className="w-3.5 h-3.5" />}
                       </div>
                       <div className="grow text-xs">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="font-bold text-secondary-950">{addon.name}</span>
+                          <span className="font-bold text-foreground">{addon.name}</span>
                         </div>
-                        <p className="text-[11px] text-secondary-600 mt-0.5 leading-relaxed">
+                        <p className="text-[11px] text-muted-foreground mt-0.5 leading-relaxed">
                           {addon.description}
                         </p>
                       </div>
@@ -781,7 +784,7 @@ function CustomPackageBuilderContent() {
 
             {/* Special Requests */}
             <div>
-              <label className="block text-xs font-black uppercase tracking-wider text-secondary-950 mb-1.5">
+              <label className="block text-xs font-black uppercase tracking-wider text-foreground mb-1.5">
                 Special Requests / Dietary / Notes
               </label>
               <textarea
@@ -789,16 +792,16 @@ function CustomPackageBuilderContent() {
                 value={specialRequests}
                 onChange={(e) => setSpecialRequests(e.target.value)}
                 placeholder="e.g. Vegetarian meal preferences, child car seat requirement, pickup flight details..."
-                className="w-full px-4 py-3 rounded-2xl text-xs bg-secondary-50 border border-secondary-200 text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-4 py-3 rounded-2xl text-xs bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
 
             {/* Step 2 Actions */}
-            <div className="pt-6 border-t border-secondary-100 flex justify-between items-center">
+            <div className="pt-6 border-t border-border flex justify-between items-center">
               <button
                 type="button"
                 onClick={() => setCurrentStep(1)}
-                className="px-5 py-2.5 rounded-xl border border-secondary-300 text-secondary-700 font-bold text-xs hover:bg-secondary-100 transition flex items-center gap-1.5 cursor-pointer"
+                className="px-5 py-2.5 rounded-xl border border-secondary-300 dark:border-border text-secondary-700 dark:text-secondary-200 font-bold text-xs hover:bg-secondary-100 dark:hover:bg-muted transition flex items-center gap-1.5 cursor-pointer"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Back</span>
@@ -813,7 +816,7 @@ function CustomPackageBuilderContent() {
                   setErrorMsg("");
                   setCurrentStep(3);
                 }}
-                className="px-6 py-3 rounded-2xl bg-secondary-950 hover:bg-primary-500 hover:text-secondary-950 text-white font-extrabold text-xs transition shadow-md flex items-center gap-2 cursor-pointer"
+                className="px-6 py-3 rounded-2xl bg-secondary-950 dark:bg-primary-500 hover:bg-primary-500 dark:hover:bg-primary-400 hover:text-secondary-950 text-white dark:text-secondary-950 font-extrabold text-xs transition shadow-md flex items-center gap-2 cursor-pointer"
               >
                 <span>Review Trip Request</span>
                 <ArrowRight className="w-4 h-4" />
@@ -826,36 +829,36 @@ function CustomPackageBuilderContent() {
         {/* STEP 3: REQUEST SUMMARY */}
         {/* ========================================================= */}
         {currentStep === 3 && (
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200 shadow-sm space-y-6">
-            <div className="pb-5 border-b border-secondary-100">
-              <span className="text-[11px] font-black uppercase tracking-wider text-primary-600">
+          <div className="bg-surface rounded-3xl p-6 sm:p-8 border border-border shadow-sm space-y-6">
+            <div className="pb-5 border-b border-border">
+              <span className="text-[11px] font-black uppercase tracking-wider text-primary-600 dark:text-primary-400">
                 Step 3 of 4
               </span>
-              <h2 className="text-2xl font-black text-secondary-950">Review Your Trip Request</h2>
-              <p className="text-xs text-secondary-600 mt-1">
+              <h2 className="text-2xl font-black text-foreground">Review Your Trip Request</h2>
+              <p className="text-xs text-muted-foreground mt-1">
                 Our travel team will review your preferences and prepare a personalized proposal.
                 No price is calculated or displayed here.
               </p>
             </div>
 
-            <div className="p-4 bg-secondary-50 rounded-2xl border border-secondary-200 text-xs space-y-3">
+            <div className="p-4 bg-surface-secondary rounded-2xl border border-border text-xs space-y-3">
               <div>
-                <span className="text-secondary-500 block text-[10px]">Destinations</span>
-                <p className="font-bold text-secondary-950">
+                <span className="text-muted-foreground block text-[10px]">Destinations</span>
+                <p className="font-bold text-foreground">
                   {selectedDestinations.map((destination) => destination.name).join(" • ")}
                 </p>
               </div>
               <div>
-                <span className="text-secondary-500 block text-[10px]">Schedule & Party</span>
-                <p className="font-bold text-secondary-950">
+                <span className="text-muted-foreground block text-[10px]">Schedule & Party</span>
+                <p className="font-bold text-foreground">
                   {departureDate} • {numParticipants} Guests •{" "}
                   {DURATION_OPTIONS.find((duration) => duration.id === selectedDurationId)?.name ??
                     "Duration not specified"}
                 </p>
               </div>
               <div>
-                <span className="text-secondary-500 block text-[10px]">Logistics</span>
-                <p className="font-bold text-secondary-950">
+                <span className="text-muted-foreground block text-[10px]">Logistics</span>
+                <p className="font-bold text-foreground">
                   {TRANSPORT_OPTIONS.find((transport) => transport.id === selectedTransportId)?.name ??
                     "Transport not specified"}{" "}
                   •{" "}
@@ -864,8 +867,8 @@ function CustomPackageBuilderContent() {
                 </p>
               </div>
               <div>
-                <span className="text-secondary-500 block text-[10px]">Additional preferences</span>
-                <p className="font-bold text-secondary-950">
+                <span className="text-muted-foreground block text-[10px]">Additional preferences</span>
+                <p className="font-bold text-foreground">
                   {ADDON_OPTIONS.filter((addon) => selectedAddonIds.includes(addon.id))
                     .map((addon) => addon.name)
                     .join(" • ") || "None specified"}
@@ -873,11 +876,11 @@ function CustomPackageBuilderContent() {
               </div>
             </div>
 
-            <div className="pt-6 border-t border-secondary-100 flex justify-between items-center">
+            <div className="pt-6 border-t border-border flex justify-between items-center">
               <button
                 type="button"
                 onClick={() => setCurrentStep(2)}
-                className="px-5 py-2.5 rounded-xl border border-secondary-300 text-secondary-700 font-bold text-xs hover:bg-secondary-100 transition flex items-center gap-1.5 cursor-pointer"
+                className="px-5 py-2.5 rounded-xl border border-secondary-300 dark:border-border text-secondary-700 dark:text-secondary-200 font-bold text-xs hover:bg-secondary-100 dark:hover:bg-muted transition flex items-center gap-1.5 cursor-pointer"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Adjust Trip Details</span>
@@ -885,7 +888,7 @@ function CustomPackageBuilderContent() {
               <button
                 type="button"
                 onClick={() => setCurrentStep(4)}
-                className="px-6 py-3 rounded-2xl bg-secondary-950 hover:bg-primary-500 hover:text-secondary-950 text-white font-extrabold text-xs transition shadow-md flex items-center gap-2 cursor-pointer"
+                className="px-6 py-3 rounded-2xl bg-secondary-950 dark:bg-primary-500 hover:bg-primary-500 dark:hover:bg-primary-400 hover:text-secondary-950 text-white dark:text-secondary-950 font-extrabold text-xs transition shadow-md flex items-center gap-2 cursor-pointer"
               >
                 <span>Enter Contact Details</span>
                 <ArrowRight className="w-4 h-4" />
@@ -900,16 +903,16 @@ function CustomPackageBuilderContent() {
         {currentStep === 4 && (
           <form
             onSubmit={handleSubmitBooking}
-            className="bg-white rounded-3xl p-6 sm:p-8 border border-secondary-200 shadow-sm space-y-8"
+            className="bg-surface rounded-3xl p-6 sm:p-8 border border-border shadow-sm space-y-8"
           >
-            <div className="pb-5 border-b border-secondary-100">
-              <span className="text-[11px] font-black uppercase tracking-wider text-primary-600">
+            <div className="pb-5 border-b border-border">
+              <span className="text-[11px] font-black uppercase tracking-wider text-primary-600 dark:text-primary-400">
                 Step 4 of 4
               </span>
-              <h2 className="text-2xl font-black text-secondary-950">
+              <h2 className="text-2xl font-black text-foreground">
                 Contact Details & Final Review
               </h2>
-              <p className="text-xs text-secondary-600 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Provide your WhatsApp number and pickup location so our team can send your custom
                 itinerary proposal.
               </p>
@@ -920,11 +923,11 @@ function CustomPackageBuilderContent() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Full Name */}
                 <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-secondary-950 mb-1.5">
+                  <label className="block text-xs font-black uppercase tracking-wider text-foreground mb-1.5">
                     Lead Traveler Name <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-secondary-400">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground">
                       <User className="w-4 h-4" />
                     </div>
                     <input
@@ -936,17 +939,17 @@ function CustomPackageBuilderContent() {
                         if (formErrors.fullName) setFormErrors((prev) => ({ ...prev, fullName: "" }));
                       }}
                       placeholder="e.g. Johnathan Smith"
-                      className="w-full pl-10 pr-4 py-3 rounded-2xl text-xs bg-secondary-50 border border-secondary-200 text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full pl-10 pr-4 py-3 rounded-2xl text-xs bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
                     />
                   </div>
                   {formErrors.fullName && (
-                    <p className="text-[11px] text-red-500 mt-1">{formErrors.fullName}</p>
+                    <p className="text-[11px] text-red-500 dark:text-red-400 mt-1">{formErrors.fullName}</p>
                   )}
                 </div>
 
                 {/* WhatsApp Number */}
                 <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-secondary-950 mb-1.5">
+                  <label className="block text-xs font-black uppercase tracking-wider text-foreground mb-1.5">
                     WhatsApp Number <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
@@ -963,11 +966,11 @@ function CustomPackageBuilderContent() {
                           setFormErrors((prev) => ({ ...prev, whatsappNumber: "" }));
                       }}
                       placeholder="e.g. +62 812 3456 7890"
-                      className="w-full pl-10 pr-4 py-3 rounded-2xl text-xs bg-secondary-50 border border-secondary-200 text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full pl-10 pr-4 py-3 rounded-2xl text-xs bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
                     />
                   </div>
                   {formErrors.whatsappNumber && (
-                    <p className="text-[11px] text-red-500 mt-1">{formErrors.whatsappNumber}</p>
+                    <p className="text-[11px] text-red-500 dark:text-red-400 mt-1">{formErrors.whatsappNumber}</p>
                   )}
                 </div>
               </div>
@@ -975,11 +978,11 @@ function CustomPackageBuilderContent() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Email Address */}
                 <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-secondary-950 mb-1.5">
+                  <label className="block text-xs font-black uppercase tracking-wider text-foreground mb-1.5">
                     Email Address <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-secondary-400">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground">
                       <Mail className="w-4 h-4" />
                     </div>
                     <input
@@ -991,21 +994,21 @@ function CustomPackageBuilderContent() {
                         if (formErrors.email) setFormErrors((prev) => ({ ...prev, email: "" }));
                       }}
                       placeholder="johnathan@example.com"
-                      className="w-full pl-10 pr-4 py-3 rounded-2xl text-xs bg-secondary-50 border border-secondary-200 text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full pl-10 pr-4 py-3 rounded-2xl text-xs bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
                     />
                   </div>
                   {formErrors.email && (
-                    <p className="text-[11px] text-red-500 mt-1">{formErrors.email}</p>
+                    <p className="text-[11px] text-red-500 dark:text-red-400 mt-1">{formErrors.email}</p>
                   )}
                 </div>
 
                 {/* Nationality */}
                 <div>
-                  <label className="block text-xs font-black uppercase tracking-wider text-secondary-950 mb-1.5">
+                  <label className="block text-xs font-black uppercase tracking-wider text-foreground mb-1.5">
                     Nationality / Country
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-secondary-400">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground">
                       <Globe className="w-4 h-4" />
                     </div>
                     <input
@@ -1013,12 +1016,12 @@ function CustomPackageBuilderContent() {
                       value={nationality}
                       onChange={(e) => setNationality(e.target.value)}
                       placeholder="e.g. France, Singapore"
-                      className="w-full pl-10 pr-4 py-3 rounded-2xl text-xs bg-secondary-50 border border-secondary-200 text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      className="w-full pl-10 pr-4 py-3 rounded-2xl text-xs bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
                     />
                   </div>
                   {/* Quick Pills */}
                   <div className="mt-2 flex flex-wrap gap-1 items-center">
-                    <span className="text-[10px] text-secondary-500 mr-1">Quick:</span>
+                    <span className="text-[10px] text-muted-foreground mr-1">Quick:</span>
                     {POPULAR_NATIONALITIES.map((nation) => (
                       <button
                         key={nation}
@@ -1027,7 +1030,7 @@ function CustomPackageBuilderContent() {
                         className={`text-[10px] font-semibold px-2 py-0.5 rounded-lg border transition cursor-pointer ${
                           nationality === nation
                             ? "bg-primary-500 text-secondary-950 font-bold border-primary-500"
-                            : "bg-secondary-50 border-secondary-200 text-secondary-700 hover:border-primary-400"
+                            : "bg-surface-secondary border-border text-secondary-700 dark:text-secondary-200 hover:border-primary-400"
                         }`}
                       >
                         {nation}
@@ -1039,7 +1042,7 @@ function CustomPackageBuilderContent() {
 
               {/* Pickup Location */}
               <div>
-                <label className="block text-xs font-black uppercase tracking-wider text-secondary-950 mb-1.5">
+                <label className="block text-xs font-black uppercase tracking-wider text-foreground mb-1.5">
                   Pickup Location in Banyuwangi / East Java <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
@@ -1056,12 +1059,12 @@ function CustomPackageBuilderContent() {
                         setFormErrors((prev) => ({ ...prev, pickupLocation: "" }));
                     }}
                     placeholder="Hotel name, airport, or train station"
-                    className="w-full pl-10 pr-4 py-3 rounded-2xl text-xs bg-secondary-50 border border-secondary-200 text-secondary-950 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full pl-10 pr-4 py-3 rounded-2xl text-xs bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-500"
                   />
                 </div>
                 {/* Quick Pickup Pills */}
                 <div className="mt-2 flex flex-wrap gap-1 items-center">
-                  <span className="text-[10px] text-secondary-500 mr-1">Quick:</span>
+                  <span className="text-[10px] text-muted-foreground mr-1">Quick:</span>
                   {QUICK_PICKUPS.map((spot) => (
                     <button
                       key={spot}
@@ -1070,7 +1073,7 @@ function CustomPackageBuilderContent() {
                       className={`text-[10px] font-semibold px-2.5 py-1 rounded-lg border transition cursor-pointer ${
                         pickupLocation === spot
                           ? "bg-primary-500 text-secondary-950 font-bold border-primary-500"
-                          : "bg-secondary-50 border-secondary-200 text-secondary-700 hover:border-primary-400"
+                          : "bg-surface-secondary border-border text-secondary-700 dark:text-secondary-200 hover:border-primary-400"
                       }`}
                     >
                       {spot}
@@ -1081,28 +1084,28 @@ function CustomPackageBuilderContent() {
             </div>
 
             {/* ORDER SUMMARY RECAP */}
-            <div className="p-4 bg-secondary-50 rounded-2xl border border-secondary-200 text-xs space-y-3">
-              <span className="font-extrabold text-secondary-900 block">
+            <div className="p-4 bg-surface-secondary rounded-2xl border border-border text-xs space-y-3">
+              <span className="font-extrabold text-foreground block">
                 Itinerary Overview to be Requested:
               </span>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-secondary-700">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-muted-foreground">
                 <div>
-                  <span className="text-secondary-500 block text-[10px]">Destinations:</span>
-                  <p className="font-bold text-secondary-950">
+                  <span className="text-muted-foreground block text-[10px]">Destinations:</span>
+                  <p className="font-bold text-foreground">
                     {selectedDestinations.map((d) => d.name).join(" • ")}
                   </p>
                 </div>
                 <div>
-                  <span className="text-secondary-500 block text-[10px]">Schedule & Party:</span>
-                  <p className="font-bold text-secondary-950">
+                  <span className="text-muted-foreground block text-[10px]">Schedule & Party:</span>
+                  <p className="font-bold text-foreground">
                     {departureDate} • {numParticipants} Guests •{" "}
                     {DURATION_OPTIONS.find((duration) => duration.id === selectedDurationId)?.name ??
                       "Duration not specified"}
                   </p>
                 </div>
                 <div>
-                  <span className="text-secondary-500 block text-[10px]">Logistics:</span>
-                  <p className="font-bold text-secondary-950">
+                  <span className="text-muted-foreground block text-[10px]">Logistics:</span>
+                  <p className="font-bold text-foreground">
                     {TRANSPORT_OPTIONS.find((transport) => transport.id === selectedTransportId)?.name ??
                       "Transport not specified"}{" "}
                     •{" "}
@@ -1114,11 +1117,11 @@ function CustomPackageBuilderContent() {
             </div>
 
             {/* Step 4 Actions */}
-            <div className="pt-6 border-t border-secondary-100 flex flex-col sm:flex-row justify-between sm:items-center gap-3">
+            <div className="pt-6 border-t border-border flex flex-col sm:flex-row justify-between sm:items-center gap-3">
               <button
                 type="button"
                 onClick={() => setCurrentStep(3)}
-                className="px-5 py-2.5 rounded-xl border border-secondary-300 text-secondary-700 font-bold text-xs hover:bg-secondary-100 transition flex items-center justify-center gap-1.5 cursor-pointer"
+                className="px-5 py-2.5 rounded-xl border border-secondary-300 dark:border-border text-secondary-700 dark:text-secondary-200 font-bold text-xs hover:bg-secondary-100 dark:hover:bg-muted transition flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Back to Request Summary</span>
@@ -1150,44 +1153,44 @@ function CustomPackageBuilderContent() {
         {/* STEP 5: SUCCESS & CONFIRMATION */}
         {/* ========================================================= */}
         {currentStep === 5 && submittedBooking && (
-          <div className="bg-white rounded-3xl p-6 sm:p-10 border border-secondary-200 shadow-xl text-center space-y-6">
-            <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+          <div className="bg-surface rounded-3xl p-6 sm:p-10 border border-border shadow-xl text-center space-y-6">
+            <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto">
               <CheckCircle2 className="w-10 h-10" />
             </div>
 
             <div className="space-y-2 max-w-lg mx-auto">
-              <span className="text-[11px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">
+              <span className="text-[11px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-500/15 px-3 py-1 rounded-full inline-block">
                 Request Successfully Received
               </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-secondary-950">
+              <h2 className="text-2xl sm:text-3xl font-black text-foreground">
                 Your Custom Expedition is in Motion!
               </h2>
-              <p className="text-xs sm:text-sm text-secondary-600 leading-relaxed">
-                Thank you, <strong>{submittedBooking.customerName}</strong>. Our head tour
+              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                Thank you, <strong className="text-foreground">{submittedBooking.customerName}</strong>. Our head tour
                 coordinator has received your custom trip request and is preparing your personalized
                 itinerary proposal.
               </p>
             </div>
 
             {/* Official Booking Code Box */}
-            <div className="max-w-md mx-auto p-4 bg-secondary-50 border border-secondary-200 rounded-2xl flex items-center justify-between gap-3">
+            <div className="max-w-md mx-auto p-4 bg-surface-secondary border border-border rounded-2xl flex items-center justify-between gap-3">
               <div className="text-left">
-                <span className="text-[10px] text-secondary-500 uppercase font-bold block">
+                <span className="text-[10px] text-muted-foreground uppercase font-bold block">
                   Official Reservation Code
                 </span>
-                <span className="font-mono text-base font-black text-primary-600">
+                <span className="font-mono text-base font-black text-primary-600 dark:text-primary-400">
                   {submittedBooking.bookingCode}
                 </span>
               </div>
               <button
                 type="button"
                 onClick={copyBookingCode}
-                className="px-3 py-2 bg-white hover:bg-secondary-100 text-secondary-800 border border-secondary-200 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                className="px-3 py-2 bg-surface hover:bg-muted text-foreground border border-border rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs"
               >
                 {copiedCode ? (
                   <>
-                    <Check className="w-3.5 h-3.5 text-emerald-600" />
-                    <span className="text-emerald-700">Copied!</span>
+                    <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                    <span className="text-emerald-700 dark:text-emerald-300">Copied!</span>
                   </>
                 ) : (
                   <>
@@ -1199,17 +1202,17 @@ function CustomPackageBuilderContent() {
             </div>
 
             {/* Itinerary Summary */}
-            <div className="max-w-md mx-auto bg-secondary-50/80 p-4 rounded-2xl border border-secondary-100 text-left text-xs space-y-2">
-              <p className="font-bold text-secondary-950">
+            <div className="max-w-md mx-auto bg-surface-secondary p-4 rounded-2xl border border-border text-left text-xs space-y-2">
+              <p className="font-bold text-foreground">
                 🗺️ {submittedBooking.packageName}
               </p>
-              <p className="text-secondary-600">
+              <p className="text-muted-foreground">
                 📅 Date: {submittedBooking.departureDate} • {submittedBooking.numParticipants} Person(s)
               </p>
-              <p className="text-secondary-600">
+              <p className="text-muted-foreground">
                 📍 Pickup: {submittedBooking.pickupLocation}
               </p>
-              <p className="text-secondary-600 pt-1 border-t border-secondary-200/80">
+              <p className="text-muted-foreground pt-1 border-t border-border">
                 Our travel team will contact you with a personalized proposal after reviewing your
                 request.
               </p>
@@ -1231,7 +1234,7 @@ function CustomPackageBuilderContent() {
 
               <Link
                 href="/booking"
-                className="px-5 py-3.5 rounded-2xl border border-secondary-300 hover:bg-secondary-100 text-secondary-800 font-bold text-xs flex items-center justify-center transition"
+                className="px-5 py-3.5 rounded-2xl border border-secondary-300 dark:border-border hover:bg-secondary-100 dark:hover:bg-muted text-secondary-800 dark:text-secondary-200 font-bold text-xs flex items-center justify-center transition"
               >
                 <span>Track Reservation Status</span>
               </Link>

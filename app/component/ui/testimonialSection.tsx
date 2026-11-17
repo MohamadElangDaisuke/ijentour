@@ -91,11 +91,10 @@ export default function TestimonialSection() {
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star
                     key={i}
-                    className={`w-4 h-4 ${
-                      i < (featuredTestimonial.rating || 5)
+                    className={`w-4 h-4 ${i < (featuredTestimonial.rating || 5)
                         ? "fill-amber-400 text-amber-400"
                         : "text-slate-300"
-                    }`}
+                      }`}
                   />
                 ))}
               </div>
@@ -137,7 +136,7 @@ export default function TestimonialSection() {
             </div>
           </article>
         ) : (
-          <div className="rounded-3xl border border-dashed border-secondary-200 bg-white/50 p-12 text-center text-secondary-600">
+          <div className="rounded-3xl border border-dashed border-secondary-200 dark:border-border bg-white/50 dark:bg-surface/60 p-12 text-center text-secondary-600">
             <p className="text-sm font-semibold text-secondary-800">No verified traveler reviews published yet.</p>
             <p className="text-xs text-secondary-500 mt-1">Be the first to share your Mount Ijen adventure story!</p>
           </div>

@@ -142,10 +142,10 @@ export default function ImageUpload({
         onDrop={handleDrop}
         className={`group relative overflow-hidden rounded-2xl border-2 transition-all cursor-pointer ${aspectClass} ${
           isDragging
-            ? "border-primary-500 bg-primary-50/50 scale-[0.99]"
+            ? "border-primary-500 bg-primary-50/50 dark:bg-primary-500/15 scale-[0.99]"
             : value
-            ? "border-secondary-200 bg-secondary-900"
-            : "border-dashed border-secondary-300 bg-secondary-50/60 hover:border-primary-500 hover:bg-primary-50/30"
+            ? "border-secondary-200 dark:border-border bg-secondary-900"
+            : "border-dashed border-secondary-300 dark:border-border bg-secondary-50/60 dark:bg-surface-secondary hover:border-primary-500 hover:bg-primary-50/30 dark:hover:bg-primary-500/10"
         }`}
       >
         <input

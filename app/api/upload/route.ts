@@ -79,14 +79,17 @@ export async function POST(request: NextRequest) {
 
     // 6. Ensure Supabase Storage is configured
     const targetClient = supabaseAdmin || supabase;
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://xuoazdinvasiglkmrbbq.supabase.co";
+    const supabaseUrl =
+      process.env.NEXT_PUBLIC_SUPABASE_URL ||
+      process.env.SUPABASE_URL ||
+      "https://xuoazdinvasiglkmrbbq.supabase.co";
 
     if (!targetClient) {
       return NextResponse.json(
         {
           success: false,
           error:
-            "Supabase Storage credentials are not configured on the server. Please ensure SUPABASE_SERVICE_ROLE_KEY and NEXT_PUBLIC_SUPABASE_URL are set.",
+            "Supabase Storage credentials are not configured on the server. Please ensure SUPABASE_SECRET_KEY and NEXT_PUBLIC_SUPABASE_URL are set.",
         },
         { status: 503 }
       );
@@ -105,7 +108,7 @@ export async function POST(request: NextRequest) {
       });
 
     if (uploadError || !uploadData) {
-      console.error("Supabase Storage upload error:", uploadError);
+      console.error("Supabase Storage upload error:", uploadError?.message || "Upload failed");
       return NextResponse.json(
         {
           success: false,
@@ -116,7 +119,10 @@ export async function POST(request: NextRequest) {
     }
 
     // 9. Construct canonical public CDN URL
-    const publicUrl = `${supabaseUrl}/storage/v1/object/public/images/${storagePath}`;
+    const { data: publicUrlData } = targetClient.storage.from("images").getPublicUrl(storagePath);
+    const publicUrl =
+      publicUrlData?.publicUrl ||
+      `${supabaseUrl.replace(/\/+$/, "")}/storage/v1/object/public/images/${storagePath}`;
 
     return NextResponse.json({
       success: true,

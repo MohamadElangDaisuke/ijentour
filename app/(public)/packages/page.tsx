@@ -234,8 +234,8 @@ function PackagesContent() {
                   key={pkg.id}
                   onClick={() => setSelectedPackageId(pkg.id)}
                   className={`group relative rounded-2xl border p-4 transition-all cursor-pointer overflow-hidden flex flex-col justify-between ${isSelected
-                      ? 'border-primary-500 bg-primary-50/20 ring-2 ring-primary-500/20 shadow-md'
-                      : 'border-secondary-100 bg-white hover:border-secondary-300 hover:shadow-sm'
+                      ? 'border-primary-500 bg-primary-50/20 dark:bg-primary-500/15 ring-2 ring-primary-500/20 dark:ring-primary-500/35 shadow-md'
+                      : 'border-secondary-100 dark:border-border bg-white dark:bg-surface-secondary hover:border-secondary-300 dark:hover:border-primary-400/50 hover:shadow-sm'
                     }`}
                 >
                   <div>
@@ -246,7 +246,7 @@ function PackagesContent() {
                         alt={pkg.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                       />
-                      <span className="absolute top-2.5 left-2.5 bg-white/90 backdrop-blur-sm text-secondary-950 text-[10px] font-bold px-2.5 py-1 rounded-md">
+                      <span className="absolute top-2.5 left-2.5 bg-white/90 dark:bg-surface/90 backdrop-blur-sm text-secondary-950 dark:text-foreground text-[10px] font-bold px-2.5 py-1 rounded-md">
                         {pkg.badge || pkg.duration}
                       </span>
                     </div>

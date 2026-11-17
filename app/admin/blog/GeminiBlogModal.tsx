@@ -393,7 +393,7 @@ export default function GeminiBlogModal({
               </div>
 
               {/* 1. TOPIK ARTIKEL */}
-              <div className="p-4 rounded-2xl bg-secondary-50/70 border border-secondary-200/80 space-y-3">
+              <div className="p-4 rounded-2xl bg-secondary-50/70 dark:bg-surface-secondary border border-secondary-200/80 dark:border-border space-y-3">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <label className="text-xs font-black uppercase tracking-wider text-secondary-900 flex items-center gap-1.5">
                     <span>1. Article Topic *</span>
@@ -475,7 +475,7 @@ export default function GeminiBlogModal({
               </div>
 
               {/* 2. KATEGORI */}
-              <div className="p-4 rounded-2xl bg-secondary-50/70 border border-secondary-200/80 space-y-3">
+              <div className="p-4 rounded-2xl bg-secondary-50/70 dark:bg-surface-secondary border border-secondary-200/80 dark:border-border space-y-3">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <label className="text-xs font-black uppercase tracking-wider text-secondary-900 flex items-center gap-1.5">
                     <Layers className="w-3.5 h-3.5 text-primary-600" />
@@ -483,7 +483,7 @@ export default function GeminiBlogModal({
                   </label>
 
                   {/* Mode Selector */}
-                  <div className="flex items-center gap-1 bg-secondary-200/60 p-0.5 rounded-lg text-[11px] font-bold">
+                  <div className="flex items-center gap-1 bg-secondary-200/60 dark:bg-muted p-0.5 rounded-lg text-[11px] font-bold">
                     <button
                       type="button"
                       onClick={() => setCategoryMode("select")}
@@ -609,7 +609,7 @@ export default function GeminiBlogModal({
               </div>
 
               {/* 3. FOKUS / SUDUT ARTIKEL */}
-              <div className="p-4 rounded-2xl bg-secondary-50/70 border border-secondary-200/80 space-y-3">
+              <div className="p-4 rounded-2xl bg-secondary-50/70 dark:bg-surface-secondary border border-secondary-200/80 dark:border-border space-y-3">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <label className="text-xs font-black uppercase tracking-wider text-secondary-900 flex items-center gap-1.5">
                     <Target className="w-3.5 h-3.5 text-primary-600" />
@@ -617,7 +617,7 @@ export default function GeminiBlogModal({
                   </label>
 
                   {/* Mode Selector */}
-                  <div className="flex items-center gap-1 bg-secondary-200/60 p-0.5 rounded-lg text-[11px] font-bold">
+                  <div className="flex items-center gap-1 bg-secondary-200/60 dark:bg-muted p-0.5 rounded-lg text-[11px] font-bold">
                     <button
                       type="button"
                       onClick={() => setFocusMode("manual")}
@@ -715,14 +715,14 @@ export default function GeminiBlogModal({
               </div>
 
               {/* 4. TARGET AUDIENCE */}
-              <div className="p-4 rounded-2xl bg-secondary-50/70 border border-secondary-200/80 space-y-3">
+              <div className="p-4 rounded-2xl bg-secondary-50/70 dark:bg-surface-secondary border border-secondary-200/80 dark:border-border space-y-3">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <label className="text-xs font-black uppercase tracking-wider text-secondary-900 flex items-center gap-1.5">
                     <span>4. Target Audience</span>
                   </label>
 
                   {/* Mode Selector */}
-                  <div className="flex items-center gap-1 bg-secondary-200/60 p-0.5 rounded-lg text-[11px] font-bold">
+                  <div className="flex items-center gap-1 bg-secondary-200/60 dark:bg-muted p-0.5 rounded-lg text-[11px] font-bold">
                     <button
                       type="button"
                       onClick={() => {
@@ -892,14 +892,14 @@ export default function GeminiBlogModal({
               </div>
 
               {/* 5. TUJUAN ARTIKEL */}
-              <div className="p-4 rounded-2xl bg-secondary-50/70 border border-secondary-200/80 space-y-3">
+              <div className="p-4 rounded-2xl bg-secondary-50/70 dark:bg-surface-secondary border border-secondary-200/80 dark:border-border space-y-3">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <label className="text-xs font-black uppercase tracking-wider text-secondary-900 flex items-center gap-1.5">
                     <span>5. Article Purpose</span>
                   </label>
 
                   {/* Mode Selector */}
-                  <div className="flex items-center gap-1 bg-secondary-200/60 p-0.5 rounded-lg text-[11px] font-bold">
+                  <div className="flex items-center gap-1 bg-secondary-200/60 dark:bg-muted p-0.5 rounded-lg text-[11px] font-bold">
                     <button
                       type="button"
                       onClick={() => setPurposeMode("manual")}
@@ -999,7 +999,7 @@ export default function GeminiBlogModal({
               {/* 6 & 7. GAYA PENULISAN & PANJANG ARTIKEL */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Gaya Penulisan */}
-                <div className="p-4 rounded-2xl bg-secondary-50/70 border border-secondary-200/80 space-y-2">
+                <div className="p-4 rounded-2xl bg-secondary-50/70 dark:bg-surface-secondary border border-secondary-200/80 dark:border-border space-y-2">
                   <label className="block text-xs font-black uppercase tracking-wider text-secondary-900">
                     6. Writing Style *
                   </label>
@@ -1017,7 +1017,7 @@ export default function GeminiBlogModal({
                 </div>
 
                 {/* Panjang Artikel */}
-                <div className="p-4 rounded-2xl bg-secondary-50/70 border border-secondary-200/80 space-y-2">
+                <div className="p-4 rounded-2xl bg-secondary-50/70 dark:bg-surface-secondary border border-secondary-200/80 dark:border-border space-y-2">
                   <label className="block text-xs font-black uppercase tracking-wider text-secondary-900">
                     7. Article Length *
                   </label>
@@ -1047,14 +1047,14 @@ export default function GeminiBlogModal({
               </div>
 
               {/* 8. PRIMARY KEYWORD */}
-              <div className="p-4 rounded-2xl bg-secondary-50/70 border border-secondary-200/80 space-y-3">
+              <div className="p-4 rounded-2xl bg-secondary-50/70 dark:bg-surface-secondary border border-secondary-200/80 dark:border-border space-y-3">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <label className="text-xs font-black uppercase tracking-wider text-secondary-900 flex items-center gap-1.5">
                     <Key className="w-3.5 h-3.5 text-primary-600" />
                     <span>8. Primary Keyword</span>
                   </label>
 
-                  <div className="flex items-center gap-1 bg-secondary-200/60 p-0.5 rounded-lg text-[11px] font-bold">
+                  <div className="flex items-center gap-1 bg-secondary-200/60 dark:bg-muted p-0.5 rounded-lg text-[11px] font-bold">
                     <button
                       type="button"
                       onClick={() => {
@@ -1145,14 +1145,14 @@ export default function GeminiBlogModal({
               </div>
 
               {/* 9. SECONDARY KEYWORDS */}
-              <div className="p-4 rounded-2xl bg-secondary-50/70 border border-secondary-200/80 space-y-3">
+              <div className="p-4 rounded-2xl bg-secondary-50/70 dark:bg-surface-secondary border border-secondary-200/80 dark:border-border space-y-3">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <label className="text-xs font-black uppercase tracking-wider text-secondary-900 flex items-center gap-1.5">
                     <Tag className="w-3.5 h-3.5 text-primary-600" />
                     <span>9. Secondary Keywords & LSI</span>
                   </label>
 
-                  <div className="flex items-center gap-1 bg-secondary-200/60 p-0.5 rounded-lg text-[11px] font-bold">
+                  <div className="flex items-center gap-1 bg-secondary-200/60 dark:bg-muted p-0.5 rounded-lg text-[11px] font-bold">
                     <button
                       type="button"
                       onClick={() => {
@@ -1286,7 +1286,7 @@ export default function GeminiBlogModal({
               </div>
 
               {/* 10. SEO OPTIONS & BOOKING CTA */}
-              <div className="p-4 rounded-2xl bg-secondary-50/70 border border-secondary-200/80 space-y-3">
+              <div className="p-4 rounded-2xl bg-secondary-50/70 dark:bg-surface-secondary border border-secondary-200/80 dark:border-border space-y-3">
                 <div className="flex items-center gap-2 pb-2 border-b border-secondary-200">
                   <Search className="w-4 h-4 text-primary-600" />
                   <span className="text-xs font-black uppercase tracking-wider text-secondary-900">
@@ -1458,7 +1458,7 @@ export default function GeminiBlogModal({
 
               {/* Tab 1: Preview Artikel */}
               {activeTab === "preview" && (
-                <div className="space-y-6 bg-secondary-50/60 p-6 rounded-2xl border border-secondary-200/80">
+                <div className="space-y-6 bg-secondary-50/60 dark:bg-surface-secondary p-6 rounded-2xl border border-secondary-200/80 dark:border-border">
                   <div className="flex items-center gap-2">
                     <span className="px-2.5 py-0.5 rounded-full bg-primary-500 text-secondary-950 font-black text-[10px] uppercase tracking-wider">
                       {generatedResult.category || category}
@@ -1511,7 +1511,7 @@ export default function GeminiBlogModal({
 
               {/* Tab 2: SEO & Meta */}
               {activeTab === "seo" && (
-                <div className="space-y-4 bg-secondary-50/60 p-6 rounded-2xl border border-secondary-200/80">
+                <div className="space-y-4 bg-secondary-50/60 dark:bg-surface-secondary p-6 rounded-2xl border border-secondary-200/80 dark:border-border">
                   <div className="bg-white p-5 rounded-xl border border-secondary-200/80 space-y-3 shadow-2xs">
                     <div>
                       <span className="text-[10px] font-bold text-secondary-400 uppercase tracking-wider block mb-1">
@@ -1615,7 +1615,7 @@ export default function GeminiBlogModal({
         </div>
 
         {/* Modal Footer */}
-        <div className="px-5 sm:px-6 py-4 border-t border-secondary-100 flex flex-col sm:flex-row items-center justify-between gap-3 bg-secondary-50/50 shrink-0">
+        <div className="px-5 sm:px-6 py-4 border-t border-secondary-100 dark:border-border flex flex-col sm:flex-row items-center justify-between gap-3 bg-secondary-50/50 dark:bg-surface-secondary shrink-0">
           <div className="text-[11px] text-secondary-500">
             {generatedResult ? (
               <span>

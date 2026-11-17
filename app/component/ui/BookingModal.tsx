@@ -463,7 +463,7 @@ export default function BookingModal() {
                         placeholder="Your full name"
                         className={`w-full pl-10 pr-4 py-3 rounded-2xl text-sm font-medium bg-secondary-50 dark:bg-secondary-800/80 border text-secondary-950 dark:text-white placeholder:text-secondary-400 focus:outline-none focus:ring-2 transition-all ${
                           errors.fullName
-                            ? 'border-red-400 focus:ring-red-400 bg-red-50/30'
+                            ? 'border-red-400 focus:ring-red-400 bg-red-50/30 dark:bg-red-950/30'
                             : 'border-secondary-200 dark:border-secondary-700 focus:ring-primary-500 focus:border-primary-500'
                         }`}
                       />
@@ -500,7 +500,7 @@ export default function BookingModal() {
                         placeholder="e.g. French, Singaporean"
                         className={`w-full pl-10 pr-4 py-3 rounded-2xl text-sm font-medium bg-secondary-50 dark:bg-secondary-800/80 border text-secondary-950 dark:text-white placeholder:text-secondary-400 focus:outline-none focus:ring-2 transition-all ${
                           errors.nationality
-                            ? 'border-red-400 focus:ring-red-400 bg-red-50/30'
+                            ? 'border-red-400 focus:ring-red-400 bg-red-50/30 dark:bg-red-950/30'
                             : 'border-secondary-200 dark:border-secondary-700 focus:ring-primary-500 focus:border-primary-500'
                         }`}
                       />
@@ -560,7 +560,7 @@ export default function BookingModal() {
                           placeholder="Your email address"
                           className={`w-full pl-10 pr-4 py-3 rounded-2xl text-sm font-medium bg-secondary-50 dark:bg-secondary-800/80 border text-secondary-950 dark:text-white placeholder:text-secondary-400 focus:outline-none focus:ring-2 transition-all ${
                             errors.email
-                              ? 'border-red-400 focus:ring-red-400 bg-red-50/30'
+                              ? 'border-red-400 focus:ring-red-400 bg-red-50/30 dark:bg-red-950/30'
                               : 'border-secondary-200 dark:border-secondary-700 focus:ring-primary-500 focus:border-primary-500'
                           }`}
                         />
@@ -597,7 +597,7 @@ export default function BookingModal() {
                           placeholder="e.g. +62 812..."
                           className={`w-full pl-10 pr-4 py-3 rounded-2xl text-sm font-medium bg-secondary-50 dark:bg-secondary-800/80 border text-secondary-950 dark:text-white placeholder:text-secondary-400 focus:outline-none focus:ring-2 transition-all ${
                             errors.whatsapp
-                              ? 'border-red-400 focus:ring-red-400 bg-red-50/30'
+                              ? 'border-red-400 focus:ring-red-400 bg-red-50/30 dark:bg-red-950/30'
                               : 'border-secondary-200 dark:border-secondary-700 focus:ring-primary-500 focus:border-primary-500'
                           }`}
                         />
@@ -633,7 +633,7 @@ export default function BookingModal() {
                         }}
                         className={`w-full pl-10 pr-10 py-3 rounded-2xl text-sm font-semibold bg-secondary-50 dark:bg-secondary-800/80 border text-secondary-950 dark:text-white focus:outline-none focus:ring-2 transition-all appearance-none cursor-pointer ${
                           errors.selectedPackage
-                            ? 'border-red-400 focus:ring-red-400 bg-red-50/30'
+                            ? 'border-red-400 focus:ring-red-400 bg-red-50/30 dark:bg-red-950/30'
                             : 'border-secondary-200 dark:border-secondary-700 focus:ring-primary-500 focus:border-primary-500'
                         }`}
                       >
@@ -690,7 +690,7 @@ export default function BookingModal() {
                           placeholder="dd/mm/yyyy"
                           className={`w-full pl-10 pr-4 py-3 rounded-2xl text-sm font-medium bg-secondary-50 dark:bg-secondary-800/80 border text-secondary-950 dark:text-white placeholder:text-secondary-400 focus:outline-none focus:ring-2 transition-all ${
                             errors.tourDate
-                              ? 'border-red-400 focus:ring-red-400 bg-red-50/30'
+                              ? 'border-red-400 focus:ring-red-400 bg-red-50/30 dark:bg-red-950/30'
                               : 'border-secondary-200 dark:border-secondary-700 focus:ring-primary-500 focus:border-primary-500'
                           }`}
                         />
@@ -735,7 +735,7 @@ export default function BookingModal() {
                           placeholder="Number of people"
                           className={`w-full pl-10 pr-20 py-3 rounded-2xl text-sm font-semibold bg-secondary-50 dark:bg-secondary-800/80 border text-secondary-950 dark:text-white placeholder:text-secondary-400 focus:outline-none focus:ring-2 transition-all ${
                             errors.participants
-                              ? 'border-red-400 focus:ring-red-400 bg-red-50/30'
+                              ? 'border-red-400 focus:ring-red-400 bg-red-50/30 dark:bg-red-950/30'
                               : 'border-secondary-200 dark:border-secondary-700 focus:ring-primary-500 focus:border-primary-500'
                           }`}
                         />
@@ -792,7 +792,7 @@ export default function BookingModal() {
                         placeholder="Hotel or Airport name"
                         className={`w-full pl-10 pr-4 py-3 rounded-2xl text-sm font-medium bg-secondary-50 dark:bg-secondary-800/80 border text-secondary-950 dark:text-white placeholder:text-secondary-400 focus:outline-none focus:ring-2 transition-all ${
                           errors.pickupLocation
-                            ? 'border-red-400 focus:ring-red-400 bg-red-50/30'
+                            ? 'border-red-400 focus:ring-red-400 bg-red-50/30 dark:bg-red-950/30'
                             : 'border-secondary-200 dark:border-secondary-700 focus:ring-primary-500 focus:border-primary-500'
                         }`}
                       />

@@ -92,8 +92,8 @@ export default function FaqSection() {
                     {faq.q}
                   </span>
                   <div
-                    className={`w-7 h-7 rounded-full bg-secondary-200/70 flex items-center justify-center shrink-0 transition-transform duration-200 ${
-                      isOpen ? "rotate-180 bg-primary-500 text-secondary-950" : "text-secondary-700"
+                    className={`w-7 h-7 rounded-full bg-secondary-200/70 dark:bg-muted flex items-center justify-center shrink-0 transition-transform duration-200 ${
+                      isOpen ? "rotate-180 bg-primary-500 dark:bg-primary-500 text-secondary-950 dark:text-secondary-950" : "text-secondary-700 dark:text-secondary-200"
                     }`}
                   >
                     <ChevronDown className="w-4 h-4" />

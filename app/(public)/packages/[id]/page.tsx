@@ -363,7 +363,7 @@ export default function PackageDetailPage({ params }: PageProps) {
               <span>View Full Photo</span>
             </button>
 
-            <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-xl text-xs font-black text-secondary-950 shadow-md">
+            <div className="absolute top-4 left-4 z-10 bg-white/95 dark:bg-surface/95 backdrop-blur-md px-3.5 py-1.5 rounded-xl text-xs font-black text-secondary-950 dark:text-foreground shadow-md border border-transparent dark:border-border">
               From {currentPkg.price || `Rp ${cleanPrice.toLocaleString('id-ID')}`} {currentPkg.pricingUnit ? `/ ${currentPkg.pricingUnit}` : '/ person'}
             </div>
           </div>
@@ -439,7 +439,7 @@ export default function PackageDetailPage({ params }: PageProps) {
                   onClick={() => setActiveTab(tab.id as any)}
                   className={`px-4 py-3 text-xs sm:text-sm font-extrabold transition-all border-b-2 whitespace-nowrap cursor-pointer ${
                     activeTab === tab.id
-                      ? 'border-primary-500 text-primary-700 bg-primary-50/50 rounded-t-xl'
+                      ? 'border-primary-500 text-primary-700 dark:text-primary-400 bg-primary-50/50 dark:bg-primary-500/15 rounded-t-xl'
                       : 'border-transparent text-secondary-600 hover:text-secondary-950 hover:border-secondary-300'
                   }`}
                 >
@@ -474,7 +474,7 @@ export default function PackageDetailPage({ params }: PageProps) {
                       {currentPkg.highlights.map((highlight: string, idx: number) => (
                         <div
                           key={idx}
-                          className="flex items-start gap-3.5 p-4 rounded-2xl bg-secondary-50 border border-secondary-200/60 hover:border-primary-400 hover:bg-primary-50/20 transition-all"
+                          className="flex items-start gap-3.5 p-4 rounded-2xl bg-secondary-50 dark:bg-surface-secondary border border-secondary-200/60 dark:border-border hover:border-primary-400 hover:bg-primary-50/20 dark:hover:bg-primary-500/10 transition-all"
                         >
                           <div className="w-6 h-6 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center shrink-0 mt-0.5 font-black text-xs">
                             ✓
@@ -489,7 +489,7 @@ export default function PackageDetailPage({ params }: PageProps) {
                 )}
 
                 {/* Safety & Meeting Point Card */}
-                <div className="bg-linear-to-br from-primary-500/10 via-white to-secondary-100 rounded-3xl p-6 sm:p-8 border border-primary-200/80 shadow-sm">
+                <div className="bg-linear-to-br from-primary-500/10 via-white to-secondary-100 dark:from-primary-500/15 dark:via-surface dark:to-surface-secondary rounded-3xl p-6 sm:p-8 border border-primary-200/80 dark:border-primary-500/30 shadow-sm">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-2xl bg-primary-500 text-secondary-950 flex items-center justify-center shrink-0 shadow-md">
                       <ShieldCheck className="w-6 h-6" />
@@ -505,10 +505,10 @@ export default function PackageDetailPage({ params }: PageProps) {
 
                       <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-secondary-800 pt-1">
                         <span className="flex items-center gap-1.5">
-                          <Check className="w-4 h-4 text-emerald-600" /> Pickup & Drop-off: {currentPkg.pickupArea || 'Banyuwangi Area'}
+                          <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Pickup & Drop-off: {currentPkg.pickupArea || 'Banyuwangi Area'}
                         </span>
                         <span className="flex items-center gap-1.5">
-                          <Check className="w-4 h-4 text-emerald-600" /> Official Visitor Insurance
+                          <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Official Visitor Insurance
                         </span>
                       </div>
                     </div>
@@ -517,14 +517,14 @@ export default function PackageDetailPage({ params }: PageProps) {
 
                 {/* Important Notes if provided */}
                 {currentPkg.importantNotes && (
-                  <div className="bg-amber-50/60 border border-amber-200 rounded-3xl p-6 sm:p-8 text-secondary-950">
+                  <div className="bg-amber-50/60 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 rounded-3xl p-6 sm:p-8 text-secondary-950 dark:text-foreground">
                     <div className="flex items-start gap-3">
-                      <Info className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                      <Info className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
                       <div>
-                        <h4 className="text-sm font-black text-amber-900 uppercase tracking-wider mb-1">
+                        <h4 className="text-sm font-black text-amber-900 dark:text-amber-300 uppercase tracking-wider mb-1">
                           Important Travel Notes
                         </h4>
-                        <p className="text-xs sm:text-sm text-amber-800 leading-relaxed whitespace-pre-line">
+                        <p className="text-xs sm:text-sm text-amber-800 dark:text-amber-200/90 leading-relaxed whitespace-pre-line">
                           {currentPkg.importantNotes}
                         </p>
                       </div>
@@ -661,14 +661,14 @@ export default function PackageDetailPage({ params }: PageProps) {
                       key={idx}
                       className="p-4 rounded-2xl bg-secondary-50 border border-secondary-200/70 flex items-start gap-3"
                     >
-                      <div className="w-7 h-7 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 font-black text-xs mt-0.5">
+                      <div className="w-7 h-7 rounded-xl bg-amber-100 dark:bg-amber-500/20 text-amber-800 dark:text-amber-300 flex items-center justify-center shrink-0 font-black text-xs mt-0.5">
                         {idx + 1}
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
                           <h5 className="font-black text-sm text-secondary-950 truncate">{pack.item}</h5>
                           {pack.category && (
-                            <span className="text-[10px] bg-secondary-200/70 text-secondary-700 px-2 py-0.5 rounded-md font-bold">
+                            <span className="text-[10px] bg-secondary-200/70 dark:bg-muted text-secondary-700 dark:text-secondary-200 px-2 py-0.5 rounded-md font-bold">
                               {pack.category}
                             </span>
                           )}
@@ -702,7 +702,7 @@ export default function PackageDetailPage({ params }: PageProps) {
                         <button
                           type="button"
                           onClick={() => setOpenFaq(isOpen ? null : idx)}
-                          className="w-full text-left p-4 sm:p-5 bg-secondary-50/50 hover:bg-secondary-100 flex items-center justify-between gap-4 font-bold text-sm sm:text-base text-secondary-950 cursor-pointer"
+                          className="w-full text-left p-4 sm:p-5 bg-secondary-50/50 dark:bg-surface-secondary hover:bg-secondary-100 dark:hover:bg-muted flex items-center justify-between gap-4 font-bold text-sm sm:text-base text-secondary-950 cursor-pointer"
                         >
                           <span className="flex items-center gap-2">
                             <HelpCircle className="w-4 h-4 text-primary-600 shrink-0" />
@@ -796,8 +796,8 @@ export default function PackageDetailPage({ params }: PageProps) {
                         key={addon.id}
                         className={`flex items-start gap-3 p-3 rounded-xl border transition cursor-pointer ${
                           selectedAddons[addon.id]
-                            ? 'border-primary-500 bg-primary-50/40'
-                            : 'border-secondary-200/80 bg-white hover:border-secondary-300'
+                            ? 'border-primary-500 bg-primary-50/40 dark:bg-primary-500/15'
+                            : 'border-secondary-200/80 dark:border-border bg-white dark:bg-surface-secondary hover:border-secondary-300 dark:hover:border-secondary-600'
                         }`}
                       >
                         <input

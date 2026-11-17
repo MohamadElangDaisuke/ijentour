@@ -137,8 +137,8 @@ export default function BookingLookupPage() {
           </div>
 
           {error && (
-            <div className="mt-4 p-4 rounded-2xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2.5">
-              <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
+            <div className="mt-4 p-4 rounded-2xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800/60 text-red-700 dark:text-red-300 text-xs flex items-center gap-2.5">
+              <AlertCircle className="w-4 h-4 shrink-0 text-red-600 dark:text-red-400" />
               <span>{error}</span>
             </div>
           )}
@@ -151,20 +151,20 @@ export default function BookingLookupPage() {
       {/* NEW RESERVATION CTA WHEN NO SEARCH PERFORMED */}
       {!loading && !booking && (
         <div className="max-w-2xl mx-auto px-4 mt-8">
-          <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 border border-secondary-200 text-center space-y-3">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-primary-600">
+          <div className="bg-white/80 dark:bg-surface/90 backdrop-blur-sm rounded-3xl p-6 border border-secondary-200 dark:border-border text-center space-y-3">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-primary-600 dark:text-primary-400">
               Don't Have a Reservation Yet?
             </span>
-            <h2 className="text-lg font-black text-secondary-950">
+            <h2 className="text-lg font-black text-secondary-950 dark:text-foreground">
               Begin Your Adventure to the Blue Fire Today
             </h2>
-            <p className="text-xs text-secondary-600 max-w-md mx-auto">
+            <p className="text-xs text-secondary-600 dark:text-muted-foreground max-w-md mx-auto">
               Choose from our midnight hiking adventures, private family tours, or Bali return overland packages.
             </p>
             <div className="pt-2">
               <Link
                 href="/packages"
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-secondary-950 hover:bg-primary-500 hover:text-secondary-950 text-white font-bold text-xs transition shadow-sm"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-secondary-950 dark:bg-primary-500 hover:bg-primary-500 dark:hover:bg-primary-400 hover:text-secondary-950 text-white dark:text-secondary-950 font-bold text-xs transition shadow-sm"
               >
                 <span>Explore Tour Packages Catalog</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -224,8 +224,8 @@ export default function BookingLookupPage() {
               if (!parsed) return null;
 
               return (
-                <div className="mb-6 p-4 rounded-2xl bg-purple-50/60 border border-purple-200/80 text-xs space-y-3">
-                  <span className="text-[11px] font-black uppercase tracking-wider text-purple-900 block">
+                <div className="mb-6 p-4 rounded-2xl bg-purple-50/60 dark:bg-purple-950/30 border border-purple-200/80 dark:border-purple-800/50 text-xs space-y-3">
+                  <span className="text-[11px] font-black uppercase tracking-wider text-purple-900 dark:text-purple-300 block">
                     Customized Itinerary & Logistics
                   </span>
 

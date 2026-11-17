@@ -378,7 +378,7 @@ export default function ContactPage() {
                     />
                   </button>
                   {isOpen && (
-                    <div className="px-5 pb-5 text-xs sm:text-sm text-secondary-700 leading-relaxed border-t border-secondary-100/60 pt-3 bg-white/70">
+                    <div className="px-5 pb-5 text-xs sm:text-sm text-secondary-700 leading-relaxed border-t border-secondary-100/60 dark:border-border pt-3 bg-white/70 dark:bg-surface-secondary">
                       {faq.answer}
                     </div>
                   )}

@@ -109,7 +109,7 @@ export default function AdminLoginPage() {
         </div>
 
         {/* Card Container */}
-        <div className="bg-white/95 backdrop-blur-xl rounded-3xl p-7 sm:p-9 shadow-2xl border border-white/20 text-secondary-950">
+        <div className="bg-white/95 dark:bg-surface/95 backdrop-blur-xl rounded-3xl p-7 sm:p-9 shadow-2xl border border-white/20 dark:border-border text-secondary-950 dark:text-foreground">
           {error && (
             <div className="mb-5 p-3.5 rounded-2xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2.5 animate-in fade-in duration-200">
               <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />

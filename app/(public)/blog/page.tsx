@@ -187,7 +187,7 @@ function ArticlesContent() {
                         className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                       />
                       <div className="absolute top-4 left-4">
-                        <span className="bg-white/90 backdrop-blur-sm text-secondary-950 text-xs font-bold px-3 py-1.5 rounded-md shadow-xs">
+                        <span className="bg-white/90 dark:bg-surface/90 backdrop-blur-sm text-secondary-950 dark:text-foreground text-xs font-bold px-3 py-1.5 rounded-md shadow-xs">
                           {article.category}
                         </span>
                       </div>

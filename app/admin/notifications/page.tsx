@@ -240,7 +240,7 @@ export default function AdminNotificationsPage() {
                   key={n.id}
                   className={`p-4 sm:p-5 transition flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${n.unread
                       ? "bg-amber-500/[0.03] hover:bg-amber-500/[0.06] border-l-4 border-l-amber-500"
-                      : "hover:bg-slate-50/70 border-l-4 border-l-transparent"
+                      : "hover:bg-slate-50/70 dark:hover:bg-surface-secondary/70 border-l-4 border-l-transparent"
                     }`}
                 >
                   <div className="flex items-start gap-3.5">

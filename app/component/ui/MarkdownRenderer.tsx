@@ -66,12 +66,12 @@ export default function MarkdownRenderer({
             </strong>
           ),
           em: ({ children }) => (
-            <em className="italic text-secondary-800">
+            <em className="italic text-secondary-800 dark:text-secondary-200">
               {children}
             </em>
           ),
           blockquote: ({ children }) => (
-            <blockquote className="border-l-4 border-primary-500 bg-primary-50/50 rounded-r-2xl py-3 px-5 my-6 italic text-secondary-800 text-sm sm:text-base">
+            <blockquote className="border-l-4 border-primary-500 bg-primary-50/50 dark:bg-primary-500/10 rounded-r-2xl py-3 px-5 my-6 italic text-secondary-800 dark:text-secondary-200 text-sm sm:text-base">
               {children}
             </blockquote>
           ),
@@ -80,7 +80,7 @@ export default function MarkdownRenderer({
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary-600 hover:text-primary-700 underline font-semibold transition"
+              className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 underline font-semibold transition"
             >
               {children}
             </a>

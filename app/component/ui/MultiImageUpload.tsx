@@ -127,7 +127,7 @@ export default function MultiImageUpload({
         {value.length < maxFiles && (
           <div
             onClick={() => !isUploading && fileInputRef.current?.click()}
-            className="rounded-2xl border-2 border-dashed border-secondary-300 hover:border-primary-500 bg-secondary-50/60 hover:bg-primary-50/30 flex flex-col items-center justify-center aspect-4/3 cursor-pointer transition p-3 text-center"
+            className="rounded-2xl border-2 border-dashed border-secondary-300 dark:border-border hover:border-primary-500 bg-secondary-50/60 dark:bg-surface-secondary hover:bg-primary-50/30 dark:hover:bg-primary-500/10 flex flex-col items-center justify-center aspect-4/3 cursor-pointer transition p-3 text-center"
           >
             {isUploading ? (
               <Loader2 className="w-6 h-6 animate-spin text-primary-500 mb-1" />

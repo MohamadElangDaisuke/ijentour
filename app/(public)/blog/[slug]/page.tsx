@@ -194,7 +194,7 @@ export default function BlogDetailPage({ params }: PageProps) {
         {/* Content Body */}
         <article className="bg-white rounded-3xl p-8 sm:p-12 border border-secondary-200/80 shadow-xs mb-12">
           {article.excerpt && article.excerpt !== articleContent && (
-            <div className="p-5 mb-8 rounded-2xl bg-primary-50/60 border-l-4 border-primary-500 text-secondary-800 italic text-sm sm:text-base leading-relaxed">
+            <div className="p-5 mb-8 rounded-2xl bg-primary-50/60 dark:bg-primary-500/10 border-l-4 border-primary-500 text-secondary-800 dark:text-secondary-200 italic text-sm sm:text-base leading-relaxed">
               "{article.excerpt}"
             </div>
           )}
@@ -260,7 +260,7 @@ export default function BlogDetailPage({ params }: PageProps) {
                           alt={item.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                         />
-                        <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-md bg-white/90 text-secondary-950 text-[10px] font-bold">
+                        <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-md bg-white/90 dark:bg-surface/90 text-secondary-950 dark:text-foreground text-[10px] font-bold">
                           {item.category}
                         </span>
                       </div>

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import ScrollManager from "./component/ui/ScrollManager";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -85,6 +86,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={plusJakartaSans.variable} data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className={`${plusJakartaSans.className} font-sans text-secondary-950 bg-secondary-50 min-h-screen flex flex-col antialiased overflow-x-clip`}>
+        <ScrollManager />
         <script
           id="theme-init"
           dangerouslySetInnerHTML={{

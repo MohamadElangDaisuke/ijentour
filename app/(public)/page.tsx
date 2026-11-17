@@ -14,6 +14,8 @@ import {
   TravelResourcesSection,
 } from "../component/ui/homeSections";
 
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   const structuredData = {
     "@context": "https://schema.org",
@@ -36,7 +38,7 @@ export default function Home() {
   };
 
   return (
-    <>
+    <div className="w-full">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -79,6 +81,6 @@ export default function Home() {
 
       {/* 13. FAQ Accordion */}
       <FaqSection />
-    </>
+    </div>
   );
 }

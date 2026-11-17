@@ -671,18 +671,18 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
       )}
 
       {/* ENGLISH CONTENT GUIDANCE */}
-      <div className="p-4 bg-blue-50/80 border border-blue-200/90 text-blue-950 rounded-2xl text-xs flex items-start gap-3">
-        <Globe className="w-4 h-4 shrink-0 text-blue-600 mt-0.5" />
+      <div className="p-4 bg-blue-50/80 dark:bg-blue-950/35 border border-blue-200/90 dark:border-blue-800/60 text-blue-950 dark:text-blue-100 rounded-2xl text-xs flex items-start gap-3">
+        <Globe className="w-4 h-4 shrink-0 text-blue-600 dark:text-blue-400 mt-0.5" />
         <div className="space-y-0.5">
           <p className="font-bold">English Public Content Guidance</p>
-          <p className="text-blue-800 leading-relaxed">
+          <p className="text-blue-800 dark:text-blue-200 leading-relaxed">
             Please manually enter all public-facing package content in clear, natural English (package title, descriptions, itinerary, inclusions, exclusions, highlights, packing list, add-ons, FAQs, and SEO metadata). Database content is displayed directly to visitors without automatic translation.
           </p>
         </div>
       </div>
 
       {/* TAB NAVIGATION HEADER (RESPONSIVE HORIZONTAL SCROLL) */}
-      <div className="border-b border-secondary-200/80 w-full overflow-x-auto no-scrollbar">
+      <div className="border-b border-secondary-200/80 dark:border-border w-full overflow-x-auto no-scrollbar">
         <div className="flex gap-1 sm:gap-2 pb-px min-w-max">
           {TABS.map((tab) => {
             const isCurrent = activeTab === tab.id;
@@ -695,7 +695,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                 className={`px-3.5 py-2.5 text-xs font-bold transition-all border-b-2 rounded-t-xl cursor-pointer inline-flex items-center gap-2 shrink-0 ${
                   isCurrent
                     ? "border-primary-500 text-secondary-950 bg-white font-extrabold shadow-2xs"
-                    : "border-transparent text-secondary-600 hover:text-secondary-950 hover:bg-secondary-100/60"
+                    : "border-transparent text-secondary-600 hover:text-secondary-950 hover:bg-secondary-100/60 dark:hover:bg-muted"
                 }`}
               >
                 <Icon className={`w-3.5 h-3.5 shrink-0 ${isCurrent ? "text-primary-600" : "text-secondary-400"}`} />
@@ -1179,7 +1179,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
               {itinerary.map((item, idx) => (
                 <div
                   key={idx}
-                  className="p-4 sm:p-5 rounded-2xl border border-secondary-200 bg-secondary-50/50 space-y-3 relative transition hover:border-primary-400"
+                  className="p-4 sm:p-5 rounded-2xl border border-secondary-200 dark:border-border bg-secondary-50/50 dark:bg-surface-secondary space-y-3 relative transition hover:border-primary-400"
                 >
                   <div className="flex items-center justify-between gap-2 border-b border-secondary-200/80 pb-2.5">
                     <div className="flex items-center gap-2">
@@ -1323,7 +1323,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                     value={inc.item}
                     onChange={(e) => updateInclusion(i, e.target.value)}
                     placeholder="e.g. Medical Gas Respirator Mask"
-                    className="w-full px-3.5 py-2 bg-emerald-50/40 border border-emerald-200 rounded-xl text-xs font-semibold text-secondary-950 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full px-3.5 py-2 bg-emerald-50/40 dark:bg-emerald-950/25 border border-emerald-200 dark:border-emerald-800/50 rounded-xl text-xs font-semibold text-secondary-950 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                   <button
                     type="button"
@@ -1732,7 +1732,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
 
             {/* Status Toggles */}
             <div className="md:col-span-2 pt-4 border-t border-secondary-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <label className="flex items-center gap-2.5 p-3 rounded-2xl border border-secondary-200 bg-secondary-50 cursor-pointer hover:bg-primary-50/30 transition">
+              <label className="flex items-center gap-2.5 p-3 rounded-2xl border border-secondary-200 dark:border-border bg-secondary-50 cursor-pointer hover:bg-primary-50/30 dark:hover:bg-primary-500/10 transition">
                 <input
                   type="checkbox"
                   checked={isActive}
@@ -1745,7 +1745,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                 </div>
               </label>
 
-              <label className="flex items-center gap-2.5 p-3 rounded-2xl border border-secondary-200 bg-secondary-50 cursor-pointer hover:bg-primary-50/30 transition">
+              <label className="flex items-center gap-2.5 p-3 rounded-2xl border border-secondary-200 dark:border-border bg-secondary-50 cursor-pointer hover:bg-primary-50/30 dark:hover:bg-primary-500/10 transition">
                 <input
                   type="checkbox"
                   checked={isFeatured}
@@ -1758,7 +1758,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                 </div>
               </label>
 
-              <label className="flex items-center gap-2.5 p-3 rounded-2xl border border-secondary-200 bg-secondary-50 cursor-pointer hover:bg-primary-50/30 transition">
+              <label className="flex items-center gap-2.5 p-3 rounded-2xl border border-secondary-200 dark:border-border bg-secondary-50 cursor-pointer hover:bg-primary-50/30 dark:hover:bg-primary-500/10 transition">
                 <input
                   type="checkbox"
                   checked={isTrending}
@@ -1771,7 +1771,7 @@ export default function PackageForm({ initialData, mode, packageId }: PackageFor
                 </div>
               </label>
 
-              <label className="flex items-center gap-2.5 p-3 rounded-2xl border border-secondary-200 bg-secondary-50 cursor-pointer hover:bg-primary-50/30 transition">
+              <label className="flex items-center gap-2.5 p-3 rounded-2xl border border-secondary-200 dark:border-border bg-secondary-50 cursor-pointer hover:bg-primary-50/30 dark:hover:bg-primary-500/10 transition">
                 <input
                   type="checkbox"
                   checked={isRecent}

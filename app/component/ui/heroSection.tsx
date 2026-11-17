@@ -68,25 +68,25 @@ export default function HeroSection() {
             <button
               type="button"
               onClick={() => openBookingModal()}
-              className="inline-flex items-center gap-2 rounded-full border border-secondary-300 bg-white/70 px-5 py-3.5 text-sm font-bold text-secondary-800 transition hover:border-[#25D366] hover:bg-white hover:text-[#25D366] cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-full border border-secondary-300 dark:border-border bg-white/70 dark:bg-surface/80 px-5 py-3.5 text-sm font-bold text-secondary-800 dark:text-foreground transition hover:border-[#25D366] hover:bg-white dark:hover:bg-surface-elevated hover:text-[#25D366] dark:hover:text-[#25D366] cursor-pointer"
             >
               <FaWhatsapp className="h-4 w-4 text-[#25D366]" /> Chat on WhatsApp
             </button>
           </div>
 
           {/* Trust Badges */}
-          <div className="mt-4 flex flex-wrap items-center justify-center sm:justify-start gap-2.5 text-[11px] font-semibold text-secondary-600">
+          <div className="mt-4 flex flex-wrap items-center justify-center sm:justify-start gap-2.5 text-[11px] font-semibold text-secondary-600 dark:text-muted-foreground">
             <button
               type="button"
               onClick={() => window.dispatchEvent(new CustomEvent('open-ai-assistant'))}
-              className="px-3 py-1 rounded-full bg-primary-100/80 border border-primary-300 text-secondary-900 shadow-2xs hover:bg-primary-200 transition cursor-pointer flex items-center gap-1.5"
+              className="px-3 py-1 rounded-full bg-primary-100/80 dark:bg-primary-500/15 border border-primary-300 dark:border-primary-500/40 text-secondary-900 dark:text-primary-200 shadow-2xs hover:bg-primary-200 dark:hover:bg-primary-500/25 transition cursor-pointer flex items-center gap-1.5"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="font-bold text-secondary-950">AI Travel Assistant (Live)</span>
+              <span className="font-bold text-secondary-950 dark:text-primary-200">AI Travel Assistant (Live)</span>
             </button>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-secondary-200 shadow-2xs"><Check className="h-3.5 w-3.5 text-emerald-600" aria-hidden="true" /> Licensed Local Guides</span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-secondary-200 shadow-2xs"><Check className="h-3.5 w-3.5 text-emerald-600" aria-hidden="true" /> Free Gas Masks & Headlamps</span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-secondary-200 shadow-2xs"><Check className="h-3.5 w-3.5 text-emerald-600" aria-hidden="true" /> 24/7 WhatsApp Support</span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface border border-border shadow-2xs"><Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" /> Licensed Local Guides</span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface border border-border shadow-2xs"><Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" /> Free Gas Masks & Headlamps</span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface border border-border shadow-2xs"><Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" /> 24/7 WhatsApp Support</span>
           </div>
 
           <div className="mx-auto mt-7 grid max-w-lg grid-cols-3 gap-4 border-t border-secondary-200 pt-4 text-center sm:text-left sm:mx-0">
@@ -107,10 +107,10 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
           className="relative h-80 sm:h-112 lg:h-[min(72svh,38rem)]"
         >
-          <div className="absolute inset-0 rounded-[2.5rem] bg-secondary-100 sm:rounded-[3.5rem]" />
-          <div className="absolute -bottom-4 -left-4 -z-10 h-32 w-32 rounded-4xl bg-primary-200 sm:-bottom-6 sm:-left-6" />
-          <div className="absolute -right-1 sm:-right-5 top-8 z-20 flex items-center gap-2 rounded-full border border-white/70 bg-white/90 px-3 sm:px-4 py-2 sm:py-3 text-[11px] sm:text-xs font-bold text-secondary-950 shadow-xl shadow-secondary-950/10 backdrop-blur sm:top-14">
-            <Compass className="h-4 w-4 text-primary-600 shrink-0" /> Local guide, real stories
+          <div className="absolute inset-0 rounded-[2.5rem] bg-secondary-100 dark:bg-surface-secondary sm:rounded-[3.5rem]" />
+          <div className="absolute -bottom-4 -left-4 -z-10 h-32 w-32 rounded-4xl bg-primary-200 dark:bg-primary-500/20 sm:-bottom-6 sm:-left-6" />
+          <div className="absolute -right-1 sm:-right-5 top-8 z-20 flex items-center gap-2 rounded-full border border-white/70 dark:border-border bg-white/90 dark:bg-surface-elevated/90 px-3 sm:px-4 py-2 sm:py-3 text-[11px] sm:text-xs font-bold text-secondary-950 dark:text-foreground shadow-xl shadow-secondary-950/10 backdrop-blur sm:top-14">
+            <Compass className="h-4 w-4 text-primary-600 dark:text-primary-400 shrink-0" /> Local guide, real stories
           </div>
           <div className="absolute inset-3 overflow-hidden rounded-[2.2rem] sm:inset-5 sm:rounded-[3rem]">
             <AnimatePresence mode="wait" initial={false}>
